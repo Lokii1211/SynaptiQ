@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEMORIA — AI-Powered Cognitive Companion & Digital Memory Archive</title>
+    <meta name="description"
+        content="Memoria: Remember Everything. Forget Nothing. Live Forever. An AI system that serves as your second brain — predicting, recalling, and preserving your memories.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <canvas id="neuralCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="url(#logoGrad)" stroke-width="2" />
+                        <path d="M12 20C12 15 16 12 20 12C24 12 28 15 28 20C28 25 24 28 20 28" stroke="url(#logoGrad)"
+                            stroke-width="2" stroke-linecap="round" />
+                        <circle cx="20" cy="20" r="3" fill="url(#logoGrad)" />
+                        <circle cx="14" cy="16" r="1.5" fill="#7C5CFC" opacity="0.6" />
+                        <circle cx="26" cy="16" r="1.5" fill="#00D4FF" opacity="0.6" />
+                        <circle cx="14" cy="24" r="1.5" fill="#FF6B9D" opacity="0.6" />
+                        <circle cx="26" cy="24" r="1.5" fill="#00F5A0" opacity="0.6" />
+                        <line x1="14" y1="16" x2="20" y2="20" stroke="#7C5CFC" stroke-width="0.5" opacity="0.4" />
+                        <line x1="26" y1="16" x2="20" y2="20" stroke="#00D4FF" stroke-width="0.5" opacity="0.4" />
+                        <line x1="14" y1="24" x2="20" y2="20" stroke="#FF6B9D" stroke-width="0.5" opacity="0.4" />
+                        <line x1="26" y1="24" x2="20" y2="20" stroke="#00F5A0" stroke-width="0.5" opacity="0.4" />
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#7C5CFC" />
+                                <stop offset="100%" stop-color="#00D4FF" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">MEMORIA</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pillar1" class="nav-link">Memory AI</a>
+                <a href="#pillar2" class="nav-link">Health Guardian</a>
+                <a href="#pillar3" class="nav-link">Legacy</a>
+                <a href="#demo" class="nav-link">Live Demo</a>
+                <a href="#impact" class="nav-link">Impact</a>
+                <a href="echo.html" class="nav-link" style="color:#00D4FF;font-weight:600">🎤 Echo →</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn-ghost" id="themeToggle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="5" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                    </svg>
+                </button>
+                <button class="btn-primary" id="tryDemoBtn">Try Live Demo</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-bg-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge animate-in">
+                <span class="badge-pulse"></span>
+                <span>🧠 AI-Powered Cognitive Companion</span>
+            </div>
+            <h1 class="hero-title animate-in">
+                <span class="title-line">Remember</span>
+                <span class="title-line gradient-text">Everything.</span>
+                <span class="title-line">Forget</span>
+                <span class="title-line gradient-text-alt">Nothing.</span>
+            </h1>
+            <p class="hero-subtitle animate-in">
+                Your AI second brain that predicts what you need to remember, detects cognitive decline before symptoms
+                appear, and preserves your knowledge for future generations.
+            </p>
+            <div class="hero-stats animate-in">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="55">0</span><span class="stat-suffix">M+</span>
+                    <span class="stat-label">People with dementia</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="70">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">Info forgotten in 24hrs</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="40">0</span><span class="stat-suffix">%</span>
+                    <span class="stat-label">Dementia preventable</span>
+                </div>
+            </div>
+            <div class="hero-cta animate-in">
+                <button class="btn-primary btn-lg"
+                    onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+                    <span>Experience Memoria</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <button class="btn-outline btn-lg"
+                    onclick="document.getElementById('pillar1').scrollIntoView({behavior:'smooth'})">
+                    <span>How It Works</span>
+                </button>
+            </div>
+        </div>
+        <div class="hero-visual animate-in">
+            <div class="brain-container" id="brainContainer">
+                <canvas id="brainCanvas" width="600" height="600"></canvas>
+                <div class="brain-label brain-label-1">Episodic Memory</div>
+                <div class="brain-label brain-label-2">Semantic Memory</div>
+                <div class="brain-label brain-label-3">Emotional Tags</div>
+                <div class="brain-label brain-label-4">Predictions</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-dot"></div>
+            </div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section id="features" class="section features-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Three Pillars of Innovation</span>
+                <h2 class="section-title">One Platform. <span class="gradient-text">Three Revolutions.</span></h2>
+                <p class="section-desc">Memoria isn't just another app. It's a complete cognitive ecosystem that
+                    remembers, protects, and preserves.</p>
+            </div>
+            <div class="pillars-grid">
+                <div class="pillar-card" data-pillar="1">
+                    <div class="pillar-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="url(#p1Grad)" stroke-width="2" opacity="0.3" />
+                            <path d="M32 16v32M16 32h32" stroke="url(#p1Grad)" stroke-width="2" opacity="0.2" />
+                            <circle cx="32" cy="20" r="4" fill="#7C5CFC" />
+                            <circle cx="42" cy="28" r="3" fill="#9D7CFC" />
+                            <circle cx="22" cy="28" r="3" fill="#5C3CFC" />
+                            <circle cx="32" cy="38" r="5" fill="url(#p1Grad)" />
+                            <circle cx="40" cy="42" r="2.5" fill="#B39CFC" />
+                            <circle cx="24" cy="42" r="2.5" fill="#7C5CFC" />
+                            <line x1="32" y1="20" x2="42" y2="28" stroke="#7C5CFC" stroke-width="1" opacity="0.5" />
+                            <line x1="32" y1="20" x2="22" y2="28" stroke="#7C5CFC" stroke-width="1" opacity="0.5" />
+                            <line x1="42" y1="28" x2="32" y2="38" stroke="#9D7CFC" stroke-width="1" opacity="0.5" />
+                            <line x1="22" y1="28" x2="32" y2="38" stroke="#5C3CFC" stroke-width="1" opacity="0.5" />
+                            <line x1="32" y1="38" x2="40" y2="42" stroke="#B39CFC" stroke-width="1" opacity="0.5" />
+                            <line x1="32" y1="38" x2="24" y2="42" stroke="#7C5CFC" stroke-width="1" opacity="0.5" />
+                            <defs>
+                                <linearGradient id="p1Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#7C5CFC" />
+                                    <stop offset="100%" stop-color="#B39CFC" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="pillar-number">01</div>
+                    <h3 class="pillar-title">Adaptive Memory Companion</h3>
+                    <p class="pillar-desc">Your AI remembers everything and intelligently predicts when you need to
+                        recall it. Context-aware, proactive, and always learning.</p>
+                    <ul class="pillar-features">
+                        <li>Multimodal Memory Capture</li>
+                        <li>Neural Knowledge Graph</li>
+                        <li>Predictive Recall System</li>
+                        <li>Context-Aware Surfacing</li>
+                    </ul>
+                    <a href="#pillar1" class="pillar-link">Explore →</a>
+                </div>
+
+                <div class="pillar-card featured" data-pillar="2">
+                    <div class="pillar-badge">Game Changer</div>
+                    <div class="pillar-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="url(#p2Grad)" stroke-width="2" opacity="0.3" />
+                            <path d="M20 40L28 24L36 36L44 20" stroke="url(#p2Grad)" stroke-width="2.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="20" cy="40" r="3" fill="#00D4FF" />
+                            <circle cx="28" cy="24" r="3" fill="#00E5C3" />
+                            <circle cx="36" cy="36" r="3" fill="#00D4FF" />
+                            <circle cx="44" cy="20" r="3" fill="#00F5A0" />
+                            <path d="M16 44h32" stroke="#00D4FF" stroke-width="1" opacity="0.3"
+                                stroke-dasharray="4 4" />
+                            <defs>
+                                <linearGradient id="p2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#00D4FF" />
+                                    <stop offset="100%" stop-color="#00F5A0" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="pillar-number">02</div>
+                    <h3 class="pillar-title">Cognitive Health Guardian</h3>
+                    <p class="pillar-desc">Detects cognitive decline 12-18 months before clinical symptoms using
+                        non-invasive AI biomarkers. Your brain's early warning system.</p>
+                    <ul class="pillar-features">
+                        <li>Baseline Cognitive Profiling</li>
+                        <li>Continuous Subtle Monitoring</li>
+                        <li>Non-Invasive Biomarkers</li>
+                        <li>Multi-Tier Alert System</li>
+                    </ul>
+                    <a href="#pillar2" class="pillar-link">Explore →</a>
+                </div>
+
+                <div class="pillar-card" data-pillar="3">
+                    <div class="pillar-icon">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <circle cx="32" cy="32" r="28" stroke="url(#p3Grad)" stroke-width="2" opacity="0.3" />
+                            <path d="M32 16C32 16 24 22 24 30C24 38 32 48 32 48C32 48 40 38 40 30C40 22 32 16 32 16Z"
+                                fill="url(#p3Grad)" opacity="0.2" stroke="url(#p3Grad)" stroke-width="2" />
+                            <circle cx="32" cy="30" r="4" fill="#FF6B9D" />
+                            <path d="M28 28C28 28 32 24 36 28" stroke="#FF6B9D" stroke-width="1.5" fill="none" />
+                            <defs>
+                                <linearGradient id="p3Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#FF6B9D" />
+                                    <stop offset="100%" stop-color="#FFB347" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="pillar-number">03</div>
+                    <h3 class="pillar-title">Digital Legacy Preservation</h3>
+                    <p class="pillar-desc">Creates a living digital archive of a person's knowledge, personality, and
+                        wisdom. Your memories deserve immortality.</p>
+                    <ul class="pillar-features">
+                        <li>Personality Capture Engine</li>
+                        <li>Interactive Memory Archive</li>
+                        <li>Knowledge Graph of Expertise</li>
+                        <li>Generational Knowledge Transfer</li>
+                    </ul>
+                    <a href="#pillar3" class="pillar-link">Explore →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 1: Adaptive Memory Companion -->
+    <section id="pillar1" class="section pillar-section pillar-1-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag purple-tag">Pillar 01</span>
+                <h2 class="section-title">Your AI <span class="gradient-text">Second Brain</span></h2>
+                <p class="section-desc">Memoria captures, indexes, and intelligently surfaces your memories exactly when
+                    you need them.</p>
+            </div>
+
+            <div class="memory-demo-container">
+                <!-- Knowledge Graph Visualization -->
+                <div class="knowledge-graph-panel glass-card">
+                    <div class="panel-header">
+                        <h3>🕸️ Neural Knowledge Graph</h3>
+                        <span class="live-badge">LIVE</span>
+                    </div>
+                    <canvas id="knowledgeGraph" width="700" height="400"></canvas>
+                    <div class="graph-legend">
+                        <span class="legend-item"><span class="legend-dot"
+                                style="background:#7C5CFC"></span>People</span>
+                        <span class="legend-item"><span class="legend-dot"
+                                style="background:#00D4FF"></span>Events</span>
+                        <span class="legend-item"><span class="legend-dot"
+                                style="background:#FF6B9D"></span>Emotions</span>
+                        <span class="legend-item"><span class="legend-dot"
+                                style="background:#00F5A0"></span>Locations</span>
+                        <span class="legend-item"><span class="legend-dot"
+                                style="background:#FFB347"></span>Tasks</span>
+                    </div>
+                </div>
+
+                <!-- Chat Demo -->
+                <div class="chat-demo-panel glass-card">
+                    <div class="panel-header">
+                        <h3>💬 Talk to Memoria</h3>
+                        <div class="panel-actions">
+                            <button class="icon-btn" title="Voice Input">🎤</button>
+                            <button class="icon-btn" title="Settings">⚙️</button>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="chat-msg ai-msg">
+                            <div class="msg-avatar ai-avatar">🧠</div>
+                            <div class="msg-content">
+                                <p>Hello! I'm Memoria, your cognitive companion. I remember everything so you don't have
+                                    to. How can I help you today?</p>
+                                <span class="msg-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-suggestions" id="chatSuggestions">
+                        <button class="suggestion-chip" data-msg="I need to prepare for tomorrow's client meeting">📋
+                            Prepare for meeting</button>
+                        <button class="suggestion-chip" data-msg="What did I discuss with Sarah last week?">👩 About
+                            Sarah</button>
+                        <button class="suggestion-chip" data-msg="Show me my memory patterns this month">📊 Memory
+                            patterns</button>
+                        <button class="suggestion-chip" data-msg="What should I not forget today?">⏰ Today's
+                            reminders</button>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chatInput" placeholder="Ask me anything about your memories..."
+                            autocomplete="off">
+                        <button class="send-btn" id="sendBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Memory Capture Features -->
+            <div class="capture-features">
+                <h3 class="sub-section-title">Multimodal Memory Capture</h3>
+                <div class="capture-grid">
+                    <div class="capture-card glass-card-sm">
+                        <div class="capture-icon">🗣️</div>
+                        <h4>Conversational</h4>
+                        <p>Talk naturally about your day</p>
+                        <div class="capture-bar">
+                            <div class="capture-progress" style="width:95%"></div>
+                        </div>
+                    </div>
+                    <div class="capture-card glass-card-sm">
+                        <div class="capture-icon">📸</div>
+                        <h4>Visual</h4>
+                        <p>Photos & videos auto-tagged</p>
+                        <div class="capture-bar">
+                            <div class="capture-progress" style="width:88%"></div>
+                        </div>
+                    </div>
+                    <div class="capture-card glass-card-sm">
+                        <div class="capture-icon">📄</div>
+                        <h4>Documents</h4>
+                        <p>Scan receipts, notes, letters</p>
+                        <div class="capture-bar">
+                            <div class="capture-progress" style="width:92%"></div>
+                        </div>
+                    </div>
+                    <div class="capture-card glass-card-sm">
+                        <div class="capture-icon">🎵</div>
+                        <h4>Audio</h4>
+                        <p>Voice memos with emotion AI</p>
+                        <div class="capture-bar">
+                            <div class="capture-progress" style="width:85%"></div>
+                        </div>
+                    </div>
+                    <div class="capture-card glass-card-sm">
+                        <div class="capture-icon">📅</div>
+                        <h4>Calendar</h4>
+                        <p>Meetings & events synced</p>
+                        <div class="capture-bar">
+                            <div class="capture-progress" style="width:97%"></div>
+                        </div>
+                    </div>
+                    <div class="capture-card glass-card-sm">
+                        <div class="capture-icon">✉️</div>
+                        <h4>Messages</h4>
+                        <p>Commitments extracted</p>
+                        <div class="capture-bar">
+                            <div class="capture-progress" style="width:90%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 2: Cognitive Health Guardian -->
+    <section id="pillar2" class="section pillar-section pillar-2-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag cyan-tag">Pillar 02</span>
+                <h2 class="section-title">Cognitive <span class="gradient-text-cyan">Health Guardian</span></h2>
+                <p class="section-desc">Detects cognitive decline 12-18 months before clinical symptoms using
+                    non-invasive AI biomarkers.</p>
+            </div>
+
+            <!-- Cognitive Dashboard -->
+            <div class="cognitive-dashboard">
+                <div class="dashboard-main glass-card">
+                    <div class="panel-header">
+                        <h3>🧠 Cognitive Health Dashboard</h3>
+                        <div class="panel-tabs">
+                            <button class="tab-btn active" data-tab="overview">Overview</button>
+                            <button class="tab-btn" data-tab="timeline">Timeline</button>
+                            <button class="tab-btn" data-tab="details">Details</button>
+                        </div>
+                    </div>
+                    <!-- Overall Score -->
+                    <div class="cog-score-container">
+                        <div class="cog-score-ring" id="cogScoreRing">
+                            <svg viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="85" fill="none" stroke="rgba(0,212,255,0.1)"
+                                    stroke-width="12" />
+                                <circle cx="100" cy="100" r="85" fill="none" stroke="url(#scoreGrad)" stroke-width="12"
+                                    stroke-linecap="round" stroke-dasharray="534" stroke-dashoffset="534"
+                                    class="score-circle" />
+                                <defs>
+                                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#00D4FF" />
+                                        <stop offset="100%" stop-color="#00F5A0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="score-inner">
+                                <span class="score-number" id="cogScore">0</span>
+                                <span class="score-label">Cognitive Score</span>
+                            </div>
+                        </div>
+                        <div class="score-breakdown">
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Memory Retention</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill green" style="width:0%" data-width="92%"></div>
+                                </div>
+                                <span class="breakdown-value">92%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Processing Speed</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill cyan" style="width:0%" data-width="88%"></div>
+                                </div>
+                                <span class="breakdown-value">88%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Language Complexity</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill purple" style="width:0%" data-width="95%"></div>
+                                </div>
+                                <span class="breakdown-value">95%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Attention Span</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill amber" style="width:0%" data-width="85%"></div>
+                                </div>
+                                <span class="breakdown-value">85%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <span class="breakdown-label">Vocabulary Diversity</span>
+                                <div class="breakdown-bar">
+                                    <div class="breakdown-fill pink" style="width:0%" data-width="91%"></div>
+                                </div>
+                                <span class="breakdown-value">91%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trend Chart -->
+                    <div class="trend-chart-container">
+                        <h4>📈 6-Month Cognitive Trend</h4>
+                        <canvas id="trendChart" width="800" height="250"></canvas>
+                    </div>
+                </div>
+
+                <!-- Alert System -->
+                <div class="alert-panel glass-card">
+                    <div class="panel-header">
+                        <h3>🚦 Alert System</h3>
+                    </div>
+                    <div class="alert-zones">
+                        <div class="alert-zone green-zone active-zone">
+                            <div class="zone-indicator"></div>
+                            <div class="zone-info">
+                                <h4>Green Zone</h4>
+                                <p>Normal cognitive function. All metrics within healthy range.</p>
+                            </div>
+                            <span class="zone-status">Current</span>
+                        </div>
+                        <div class="alert-zone yellow-zone">
+                            <div class="zone-indicator"></div>
+                            <div class="zone-info">
+                                <h4>Yellow Zone</h4>
+                                <p>Mild cognitive changes detected. Stress-related patterns observed.</p>
+                            </div>
+                            <span class="zone-status">Monitoring</span>
+                        </div>
+                        <div class="alert-zone orange-zone">
+                            <div class="zone-indicator"></div>
+                            <div class="zone-info">
+                                <h4>Orange Zone</h4>
+                                <p>Concerning memory patterns. Medical consultation recommended.</p>
+                            </div>
+                            <span class="zone-status">Alert</span>
+                        </div>
+                        <div class="alert-zone red-zone">
+                            <div class="zone-indicator"></div>
+                            <div class="zone-info">
+                                <h4>Red Zone</h4>
+                                <p>Urgent intervention. Family & doctor notified immediately.</p>
+                            </div>
+                            <span class="zone-status">Emergency</span>
+                        </div>
+                    </div>
+
+                    <!-- Biomarkers -->
+                    <div class="biomarkers">
+                        <h4>🔬 Non-Invasive Biomarkers</h4>
+                        <div class="biomarker-list">
+                            <div class="biomarker-item">
+                                <span class="bio-icon">⌨️</span>
+                                <span class="bio-label">Typing Speed</span>
+                                <span class="bio-value stable">Stable</span>
+                            </div>
+                            <div class="biomarker-item">
+                                <span class="bio-icon">🖱️</span>
+                                <span class="bio-label">Mouse Precision</span>
+                                <span class="bio-value stable">Normal</span>
+                            </div>
+                            <div class="biomarker-item">
+                                <span class="bio-icon">🗣️</span>
+                                <span class="bio-label">Voice Tremor</span>
+                                <span class="bio-value stable">None</span>
+                            </div>
+                            <div class="biomarker-item">
+                                <span class="bio-icon">📝</span>
+                                <span class="bio-label">Speech Coherence</span>
+                                <span class="bio-value good">Excellent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Study Timeline -->
+            <div class="case-study glass-card">
+                <div class="panel-header">
+                    <h3>📋 Case Study: Early Detection Success</h3>
+                    <span class="case-badge">Real Impact</span>
+                </div>
+                <div class="timeline-container">
+                    <div class="timeline-track">
+                        <div class="timeline-progress" id="timelineProgress"></div>
+                    </div>
+                    <div class="timeline-events">
+                        <div class="timeline-event" data-month="0">
+                            <div class="event-dot green-dot"></div>
+                            <div class="event-content">
+                                <span class="event-date">Month 0</span>
+                                <h5>Baseline Established</h5>
+                                <p>John starts using Memoria. Cognitive score: 94/100</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event" data-month="3">
+                            <div class="event-dot green-dot"></div>
+                            <div class="event-content">
+                                <span class="event-date">Month 3</span>
+                                <h5>Normal Patterns</h5>
+                                <p>All metrics stable. Memory recall at 93%.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event" data-month="6">
+                            <div class="event-dot yellow-dot"></div>
+                            <div class="event-content">
+                                <span class="event-date">Month 6</span>
+                                <h5>⚠️ Subtle Change Detected</h5>
+                                <p>Memoria detects 8% increase in repetitive questioning. Vocabulary diversity drops 5%.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="timeline-event" data-month="9">
+                            <div class="event-dot orange-dot"></div>
+                            <div class="event-content">
+                                <span class="event-date">Month 9</span>
+                                <h5>⚠️ Medical Alert Triggered</h5>
+                                <p>Cognitive score declined to 78. Memoria recommends neurological consultation. Report
+                                    generated.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event" data-month="12">
+                            <div class="event-dot cyan-dot"></div>
+                            <div class="event-content">
+                                <span class="event-date">Month 12</span>
+                                <h5>✅ Early Intervention</h5>
+                                <p>Doctor confirms mild cognitive impairment. Treatment started. Progression slowed by
+                                    60%.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-event" data-month="20">
+                            <div class="event-dot red-dot"></div>
+                            <div class="event-content">
+                                <span class="event-date">Month 20</span>
+                                <h5>Clinical Diagnosis (Without Memoria)</h5>
+                                <p>Without Memoria, symptoms would have appeared here. <strong>14 months of early
+                                        intervention gained.</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 3: Digital Legacy -->
+    <section id="pillar3" class="section pillar-section pillar-3-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag pink-tag">Pillar 03</span>
+                <h2 class="section-title">Your Memories Deserve <span class="gradient-text-pink">Immortality</span></h2>
+                <p class="section-desc">Create a living digital archive of personality, wisdom, and knowledge that
+                    future generations can interact with.</p>
+            </div>
+
+            <div class="legacy-demo-container">
+                <!-- Legacy Chat -->
+                <div class="legacy-chat glass-card">
+                    <div class="panel-header">
+                        <h3>💜 Talk to Grandma Lakshmi</h3>
+                        <div class="legacy-status">
+                            <span class="legacy-dot"></span>
+                            <span>Personality Model Active</span>
+                        </div>
+                    </div>
+                    <div class="legacy-profile">
+                        <div class="profile-avatar">👵</div>
+                        <div class="profile-info">
+                            <h4>Lakshmi Devi</h4>
+                            <p>1945 - 2023 • 2,847 memories preserved • Personality confidence: 94%</p>
+                        </div>
+                    </div>
+                    <div class="chat-messages" id="legacyChatMessages">
+                        <div class="chat-msg ai-msg legacy-msg">
+                            <div class="msg-avatar legacy-avatar">👵</div>
+                            <div class="msg-content">
+                                <p>Hello, beta! It's so nice to talk to you. How are you doing today? Tell me
+                                    everything!</p>
+                                <span class="msg-time">Personality model active</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-suggestions" id="legacySuggestions">
+                        <button class="suggestion-chip legacy-chip" data-msg="I'm scared about my exams, grandma">📚
+                            Exam anxiety</button>
+                        <button class="suggestion-chip legacy-chip" data-msg="What was your recipe for biryani?">🍛
+                            Grandma's biryani</button>
+                        <button class="suggestion-chip legacy-chip" data-msg="Tell me about when you met grandpa">💕 How
+                            you met grandpa</button>
+                        <button class="suggestion-chip legacy-chip" data-msg="I miss you so much, grandma">😢 I miss
+                            you</button>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="legacyChatInput" placeholder="Talk to Grandma Lakshmi..."
+                            autocomplete="off">
+                        <button class="send-btn legacy-send" id="legacySendBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Preservation Stats -->
+                <div class="legacy-stats">
+                    <div class="legacy-stat-card glass-card-sm">
+                        <div class="lstat-icon">🧬</div>
+                        <div class="lstat-info">
+                            <h4>Personality Traits</h4>
+                            <div class="trait-bars">
+                                <div class="trait-row"><span>Warmth</span>
+                                    <div class="trait-bar">
+                                        <div class="trait-fill" style="width:96%"></div>
+                                    </div>
+                                </div>
+                                <div class="trait-row"><span>Humor</span>
+                                    <div class="trait-bar">
+                                        <div class="trait-fill" style="width:88%"></div>
+                                    </div>
+                                </div>
+                                <div class="trait-row"><span>Wisdom</span>
+                                    <div class="trait-bar">
+                                        <div class="trait-fill" style="width:94%"></div>
+                                    </div>
+                                </div>
+                                <div class="trait-row"><span>Patience</span>
+                                    <div class="trait-bar">
+                                        <div class="trait-fill" style="width:91%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legacy-stat-card glass-card-sm">
+                        <div class="lstat-icon">📖</div>
+                        <div class="lstat-info">
+                            <h4>Knowledge Domains</h4>
+                            <div class="domain-tags">
+                                <span class="domain-tag">Indian Cooking</span>
+                                <span class="domain-tag">Family History</span>
+                                <span class="domain-tag">Home Remedies</span>
+                                <span class="domain-tag">Life Wisdom</span>
+                                <span class="domain-tag">Telugu Poetry</span>
+                                <span class="domain-tag">Festival Traditions</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="legacy-stat-card glass-card-sm">
+                        <div class="lstat-icon">🗂️</div>
+                        <div class="lstat-info">
+                            <h4>Memory Archive</h4>
+                            <div class="archive-stats">
+                                <div class="archive-row"><span>Stories</span><strong>342</strong></div>
+                                <div class="archive-row"><span>Recipes</span><strong>67</strong></div>
+                                <div class="archive-row"><span>Life Lessons</span><strong>128</strong></div>
+                                <div class="archive-row"><span>Photos</span><strong>1,847</strong></div>
+                                <div class="archive-row"><span>Voice Clips</span><strong>463</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section id="demo" class="section demo-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag gradient-tag">Interactive Demo</span>
+                <h2 class="section-title">Experience <span class="gradient-text">Memoria</span> Now</h2>
+                <p class="section-desc">Try a quick cognitive assessment. Answer 5 questions to build your initial
+                    cognitive profile.</p>
+            </div>
+
+            <div class="demo-container glass-card">
+                <div class="demo-sidebar">
+                    <div class="demo-steps">
+                        <div class="demo-step active" data-step="1">
+                            <div class="step-number">1</div>
+                            <div class="step-info">
+                                <h5>Memory Input</h5>
+                                <p>Tell us about yesterday</p>
+                            </div>
+                        </div>
+                        <div class="demo-step" data-step="2">
+                            <div class="step-number">2</div>
+                            <div class="step-info">
+                                <h5>Word Recall</h5>
+                                <p>Quick memory test</p>
+                            </div>
+                        </div>
+                        <div class="demo-step" data-step="3">
+                            <div class="step-number">3</div>
+                            <div class="step-info">
+                                <h5>Pattern Recognition</h5>
+                                <p>Spot the sequence</p>
+                            </div>
+                        </div>
+                        <div class="demo-step" data-step="4">
+                            <div class="step-number">4</div>
+                            <div class="step-info">
+                                <h5>Response Speed</h5>
+                                <p>Reaction time test</p>
+                            </div>
+                        </div>
+                        <div class="demo-step" data-step="5">
+                            <div class="step-number">5</div>
+                            <div class="step-info">
+                                <h5>Results</h5>
+                                <p>Your cognitive profile</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="demo-main">
+                    <!-- Step 1: Memory Input -->
+                    <div class="demo-panel active" id="demoStep1">
+                        <div class="demo-panel-header">
+                            <h3>📝 Step 1: Memory Capture</h3>
+                            <p>Describe what you did yesterday. Memoria will create a knowledge graph from your
+                                description.</p>
+                        </div>
+                        <textarea id="memoryInput" class="demo-textarea"
+                            placeholder="Example: Yesterday I had a meeting with Rajesh at 2 PM to discuss the Q3 budget. After that, I went to Café Blue with Sarah for coffee. She told me about her new promotion. In the evening, I called my mom to wish her on her birthday..."></textarea>
+                        <div class="demo-actions">
+                            <button class="btn-primary" id="analyzeMemoryBtn">
+                                <span>Analyze Memory</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="memory-analysis-result" id="memoryAnalysis" style="display:none">
+                            <h4>🧠 Memoria Analysis</h4>
+                            <div class="analysis-grid" id="analysisGrid"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Word Recall -->
+                    <div class="demo-panel" id="demoStep2">
+                        <div class="demo-panel-header">
+                            <h3>🔤 Step 2: Word Recall Challenge</h3>
+                            <p>You'll see 10 words for 15 seconds. Then type as many as you can remember.</p>
+                        </div>
+                        <div class="word-recall-area" id="wordRecallArea">
+                            <div class="words-display" id="wordsDisplay">
+                                <button class="btn-primary" id="startWordRecall">Start Word Recall Test</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Pattern Recognition -->
+                    <div class="demo-panel" id="demoStep3">
+                        <div class="demo-panel-header">
+                            <h3>🔢 Step 3: Pattern Recognition</h3>
+                            <p>What comes next in the sequence?</p>
+                        </div>
+                        <div class="pattern-area" id="patternArea">
+                            <div class="pattern-sequence" id="patternSequence"></div>
+                            <div class="pattern-options" id="patternOptions"></div>
+                            <div class="pattern-feedback" id="patternFeedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Reaction Time -->
+                    <div class="demo-panel" id="demoStep4">
+                        <div class="demo-panel-header">
+                            <h3>⚡ Step 4: Processing Speed</h3>
+                            <p>Click/tap as fast as you can when the circle turns green!</p>
+                        </div>
+                        <div class="reaction-area">
+                            <div class="reaction-circle" id="reactionCircle">
+                                <span id="reactionText">Click to Start</span>
+                            </div>
+                            <div class="reaction-results" id="reactionResults"></div>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Results -->
+                    <div class="demo-panel" id="demoStep5">
+                        <div class="demo-panel-header">
+                            <h3>📊 Your Cognitive Profile</h3>
+                            <p>Based on your assessment, here's your initial cognitive baseline.</p>
+                        </div>
+                        <div class="results-area" id="resultsArea">
+                            <div class="result-card">
+                                <canvas id="resultsRadar" width="400" height="400"></canvas>
+                            </div>
+                            <div class="result-insights" id="resultInsights"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact & Metrics -->
+    <section id="impact" class="section impact-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Proven Impact</span>
+                <h2 class="section-title">The Numbers <span class="gradient-text">Speak</span></h2>
+            </div>
+            <div class="impact-grid">
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="95">0</span>%</div>
+                    <div class="impact-label">Recall Accuracy</div>
+                    <div class="impact-desc">For captured events and commitments</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="14">0</span> mo</div>
+                    <div class="impact-label">Earlier Detection</div>
+                    <div class="impact-desc">Before clinical symptoms appear</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="89">0</span>%</div>
+                    <div class="impact-label">Detection Sensitivity</div>
+                    <div class="impact-desc">For mild cognitive impairment</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="70">0</span>%</div>
+                    <div class="impact-label">Fewer Forgotten Tasks</div>
+                    <div class="impact-desc">Reduction in missed commitments</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="55">0</span>M</div>
+                    <div class="impact-label">People Impacted</div>
+                    <div class="impact-desc">Global dementia population helped</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="92">0</span>%</div>
+                    <div class="impact-label">Specificity</div>
+                    <div class="impact-desc">Low false positive rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech" class="section tech-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Technical Architecture</span>
+                <h2 class="section-title">Built with <span class="gradient-text">Cutting-Edge AI</span></h2>
+            </div>
+            <div class="tech-architecture">
+                <div class="arch-layer glass-card-sm">
+                    <div class="arch-icon">🎨</div>
+                    <h4>Presentation Layer</h4>
+                    <div class="tech-tags">
+                        <span>React/Next.js</span>
+                        <span>Three.js</span>
+                        <span>D3.js</span>
+                        <span>WebGL</span>
+                    </div>
+                </div>
+                <div class="arch-connector">↕️</div>
+                <div class="arch-layer glass-card-sm">
+                    <div class="arch-icon">⚙️</div>
+                    <h4>AI Engine</h4>
+                    <div class="tech-tags">
+                        <span>GPT-4 / LLaMA</span>
+                        <span>Vision Transformers</span>
+                        <span>Whisper ASR</span>
+                        <span>BERT/RoBERTa</span>
+                    </div>
+                </div>
+                <div class="arch-connector">↕️</div>
+                <div class="arch-layer glass-card-sm">
+                    <div class="arch-icon">🧠</div>
+                    <h4>Cognitive Analysis</h4>
+                    <div class="tech-tags">
+                        <span>Time-Series LSTM</span>
+                        <span>Anomaly Detection</span>
+                        <span>Federated Learning</span>
+                        <span>Reinforcement Learning</span>
+                    </div>
+                </div>
+                <div class="arch-connector">↕️</div>
+                <div class="arch-layer glass-card-sm">
+                    <div class="arch-icon">🗄️</div>
+                    <h4>Data Layer</h4>
+                    <div class="tech-tags">
+                        <span>Neo4j Graph DB</span>
+                        <span>Pinecone Vector DB</span>
+                        <span>PostgreSQL</span>
+                        <span>Redis Cache</span>
+                    </div>
+                </div>
+                <div class="arch-connector">↕️</div>
+                <div class="arch-layer glass-card-sm">
+                    <div class="arch-icon">🔒</div>
+                    <h4>Security & Privacy</h4>
+                    <div class="tech-tags">
+                        <span>E2E Encryption</span>
+                        <span>Zero-Knowledge</span>
+                        <span>HIPAA Compliant</span>
+                        <span>On-Device ML</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model -->
+    <section id="business" class="section business-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Business Model</span>
+                <h2 class="section-title">Viable. <span class="gradient-text">Scalable.</span> Impactful.</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card glass-card-sm">
+                    <div class="pricing-tier">Free</div>
+                    <div class="pricing-price">$0<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>✅ Basic memory capture</li>
+                        <li>✅ 1,000 memory limit</li>
+                        <li>✅ Simple reminders</li>
+                        <li>✅ Basic cognitive tracking</li>
+                        <li>❌ Advanced AI predictions</li>
+                        <li>❌ Digital legacy</li>
+                    </ul>
+                    <button class="btn-outline btn-sm">Get Started</button>
+                </div>
+                <div class="pricing-card glass-card-sm featured-price">
+                    <div class="pricing-badge">Most Popular</div>
+                    <div class="pricing-tier">Premium</div>
+                    <div class="pricing-price">$9.99<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>✅ Unlimited memories</li>
+                        <li>✅ Advanced AI predictions</li>
+                        <li>✅ Cognitive health monitoring</li>
+                        <li>✅ Priority support</li>
+                        <li>✅ Neural knowledge graph</li>
+                        <li>❌ Digital legacy</li>
+                    </ul>
+                    <button class="btn-primary btn-sm">Start Free Trial</button>
+                </div>
+                <div class="pricing-card glass-card-sm">
+                    <div class="pricing-tier">Family</div>
+                    <div class="pricing-price">$24.99<span>/mo</span></div>
+                    <ul class="pricing-features">
+                        <li>✅ 5 family members</li>
+                        <li>✅ Shared family memories</li>
+                        <li>✅ Caregiver alerts</li>
+                        <li>✅ Digital legacy features</li>
+                        <li>✅ Legacy personality model</li>
+                        <li>✅ Family knowledge transfer</li>
+                    </ul>
+                    <button class="btn-outline btn-sm">Choose Plan</button>
+                </div>
+            </div>
+            <div class="market-stats">
+                <div class="market-item">
+                    <strong>$660B</strong>
+                    <span>Digital Health Market</span>
+                </div>
+                <div class="market-item">
+                    <strong>$11B</strong>
+                    <span>Memory Care Market</span>
+                </div>
+                <div class="market-item">
+                    <strong>280M</strong>
+                    <span>Cognitive Issues Globally</span>
+                </div>
+                <div class="market-item">
+                    <strong>7%</strong>
+                    <span>Annual Growth Rate</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="cta" class="section cta-section">
+        <div class="container">
+            <div class="cta-content glass-card">
+                <div class="cta-orbs">
+                    <div class="cta-orb cta-orb-1"></div>
+                    <div class="cta-orb cta-orb-2"></div>
+                </div>
+                <h2 class="cta-title">
+                    <em>"The saddest thing in the world isn't death.<br />It's being forgotten."</em>
+                </h2>
+                <p class="cta-desc">
+                    Memoria isn't just an app. It's a time machine, a guardian angel, and a love letter to everyone
+                    we'll ever be and everyone who'll remember us.
+                </p>
+                <div class="cta-tagline">
+                    <span class="tagline-main">Remember Everything. Forget Nothing. Live Forever.</span>
+                </div>
+                <div class="cta-buttons" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+                    <button class="btn-primary btn-lg glow-btn"
+                        onclick="document.getElementById('demo').scrollIntoView({behavior:'smooth'})">
+                        <span>Start Your Journey</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <a href="echo.html" class="btn-outline btn-lg">🎤 Explore Echo</a>
+                </div>
+                <div class="team-info">
+                    <p>Built with 💙 for the 23rd National Level Hackathon</p>
+                    <p class="team-tagline">🧠 MEMORIA + 🎤 ECHO — The Complete Cognitive & Communication Platform</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="footer-logo">🧠 MEMORIA × 🎤 ECHO</span>
+                    <p>AI-Powered Cognitive & Communication Platform</p>
+                </div>
+                <div class="footer-links-group">
+                    <h5>Memoria</h5>
+                    <a href="#pillar1">Memory AI</a>
+                    <a href="#pillar2">Health Guardian</a>
+                    <a href="#pillar3">Digital Legacy</a>
+                    <a href="#demo">Live Demo</a>
+                </div>
+                <div class="footer-links-group">
+                    <h5>Echo</h5>
+                    <a href="echo.html#nonverbal">Non-Verbal AI</a>
+                    <a href="echo.html#translator">Translator</a>
+                    <a href="echo.html#emotion">Emotion AI</a>
+                    <a href="echo.html#language">Languages</a>
+                </div>
+                <div class="footer-links-group">
+                    <h5>Impact</h5>
+                    <a href="#impact">Metrics</a>
+                    <a href="#business">Business Model</a>
+                    <a href="echo.html#impact-echo">Echo Impact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 MEMORIA × ECHO — National Level Hackathon Project</p>
+                <p>Unified AI for Cognitive Wellness & Universal Communication</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

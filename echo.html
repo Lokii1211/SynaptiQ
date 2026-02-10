@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECHO — Universal Communication Intelligence | Every Voice Matters</title>
+    <meta name="description"
+        content="Echo: Breaking every barrier to human expression. AI-powered universal communication bridge for disabilities, languages, and emotions.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="echo.css">
+</head>
+
+<body>
+    <canvas id="neuralCanvas"></canvas>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" stroke="url(#eLogo)" stroke-width="2" />
+                        <path d="M14 20C14 14 20 10 20 10C20 10 26 14 26 20C26 26 20 30 20 30C20 30 14 26 14 20Z"
+                            stroke="url(#eLogo)" stroke-width="2" fill="none" />
+                        <circle cx="20" cy="20" r="3" fill="url(#eLogo)" />
+                        <path d="M10 20h4M26 20h4M20 10v4M20 26v4" stroke="url(#eLogo)" stroke-width="1.5"
+                            stroke-linecap="round" opacity="0.5" />
+                        <defs>
+                            <linearGradient id="eLogo" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#00D4FF" />
+                                <stop offset="100%" stop-color="#7C5CFC" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">ECHO</span>
+            </a>
+            <div class="nav-links">
+                <a href="#hero" class="nav-link">Home</a>
+                <a href="#nonverbal" class="nav-link">Non-Verbal AI</a>
+                <a href="#translator" class="nav-link">Translator</a>
+                <a href="#emotion" class="nav-link">Emotion AI</a>
+                <a href="#language" class="nav-link">Languages</a>
+                <a href="#demo-echo" class="nav-link">Live Demo</a>
+                <a href="index.html" class="nav-link memoria-link">← Memoria</a>
+            </div>
+            <div class="nav-actions">
+                <a href="index.html" class="btn-ghost" title="Switch to Memoria">🧠</a>
+                <button class="btn-primary"
+                    onclick="document.getElementById('demo-echo').scrollIntoView({behavior:'smooth'})">Try Live
+                    Demo</button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero" class="hero-section">
+        <div class="hero-bg-orbs">
+            <div class="orb orb-1" style="background:var(--cyan)"></div>
+            <div class="orb orb-2" style="background:var(--purple)"></div>
+            <div class="orb orb-3" style="background:var(--green)"></div>
+        </div>
+        <div class="hero-content echo-hero">
+            <div class="hero-badge animate-in">
+                <span class="badge-pulse"></span>
+                <span>🎤 Universal Communication Intelligence</span>
+            </div>
+            <h1 class="hero-title animate-in">
+                <span class="title-line">Every</span>
+                <span class="title-line gradient-text-cyan">Voice</span>
+                <span class="title-line gradient-text">Matters.</span>
+            </h1>
+            <p class="hero-subtitle animate-in">
+                Breaking every barrier to human expression. AI that translates thoughts, emotions, gestures, and sounds
+                into perfect communication — regardless of disability, language, or literacy.
+            </p>
+            <div class="hero-stats animate-in">
+                <div class="stat-item">
+                    <span class="stat-number" data-target="460">0</span><span class="stat-suffix">M</span>
+                    <span class="stat-label">Hearing loss globally</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="2">0</span><span class="stat-suffix">M</span>
+                    <span class="stat-label">Non-verbal in India</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <span class="stat-number" data-target="7000">0</span><span class="stat-suffix">+</span>
+                    <span class="stat-label">Languages at risk</span>
+                </div>
+            </div>
+            <div class="hero-cta animate-in">
+                <button class="btn-primary btn-lg"
+                    onclick="document.getElementById('demo-echo').scrollIntoView({behavior:'smooth'})">
+                    <span>Experience Echo</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <button class="btn-outline btn-lg"
+                    onclick="document.getElementById('nonverbal').scrollIntoView({behavior:'smooth'})">
+                    <span>How It Works</span>
+                </button>
+            </div>
+        </div>
+        <div class="hero-visual animate-in">
+            <div class="echo-visual-container">
+                <canvas id="echoWaveCanvas" width="550" height="550"></canvas>
+                <div class="echo-float-label e-label-1">🤟 Sign Language</div>
+                <div class="echo-float-label e-label-2">🌏 40+ Languages</div>
+                <div class="echo-float-label e-label-3">😊 Emotion AI</div>
+                <div class="echo-float-label e-label-4">👁️ Eye Tracking</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-dot"></div>
+            </div><span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Five Pillars Overview -->
+    <section id="pillars-overview" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag cyan-tag">Five Pillars of Communication</span>
+                <h2 class="section-title">One Voice. <span class="gradient-text-cyan">Zero Barriers.</span></h2>
+                <p class="section-desc">Echo combines five revolutionary AI systems to create the world's first truly
+                    universal communication platform.</p>
+            </div>
+            <div class="echo-pillars-grid">
+                <div class="echo-pillar-card" style="--accent:#00D4FF">
+                    <span class="ep-num">01</span>
+                    <div class="ep-icon">🤟</div>
+                    <h3>Non-Verbal Translator</h3>
+                    <p>Eye tracking, gesture recognition, and predictive communication for non-verbal individuals.</p>
+                    <a href="#nonverbal" class="pillar-link">Explore →</a>
+                </div>
+                <div class="echo-pillar-card" style="--accent:#7C5CFC">
+                    <span class="ep-num">02</span>
+                    <div class="ep-icon">🌐</div>
+                    <h3>Universal Translator</h3>
+                    <p>Context-aware medical translation with emotion & urgency preservation in 40+ languages.</p>
+                    <a href="#translator" class="pillar-link">Explore →</a>
+                </div>
+                <div class="echo-pillar-card" style="--accent:#00F5A0">
+                    <span class="ep-num">03</span>
+                    <div class="ep-icon">🧩</div>
+                    <h3>Cognitive Assistant</h3>
+                    <p>Thought-to-speech pipeline for dementia, aphasia, and brain injury patients.</p>
+                    <a href="#cognitive" class="pillar-link">Explore →</a>
+                </div>
+                <div class="echo-pillar-card" style="--accent:#FF6B9D">
+                    <span class="ep-num">04</span>
+                    <div class="ep-icon">💖</div>
+                    <h3>Emotional Intelligence</h3>
+                    <p>Micro-expression analysis, vocal stress detection, and empathetic response generation.</p>
+                    <a href="#emotion" class="pillar-link">Explore →</a>
+                </div>
+                <div class="echo-pillar-card" style="--accent:#FFB347">
+                    <span class="ep-num">05</span>
+                    <div class="ep-icon">📜</div>
+                    <h3>Language Preservation</h3>
+                    <p>AI documentation and revival of 3,000+ endangered languages worldwide.</p>
+                    <a href="#language" class="pillar-link">Explore →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 1: Non-Verbal Communication -->
+    <section id="nonverbal" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag cyan-tag">Pillar 01</span>
+                <h2 class="section-title">Non-Verbal <span class="gradient-text-cyan">Communication AI</span></h2>
+                <p class="section-desc">Give voice to the voiceless — eye tracking, gesture recognition, and predictive
+                    AI for those who can't speak.</p>
+            </div>
+            <div class="nv-demo-grid">
+                <!-- Eye Tracking Simulator -->
+                <div class="glass-card nv-eye-panel">
+                    <div class="panel-header">
+                        <h3>👁️ Eye-Tracking AAC Simulator</h3>
+                        <span class="live-badge">INTERACTIVE</span>
+                    </div>
+                    <p class="nv-instructions">Hover over the communication icons below to simulate eye-gaze selection.
+                        The AI predicts what you want to say.</p>
+                    <div class="eye-grid" id="eyeGrid">
+                        <button class="eye-cell" data-word="Pain" data-emoji="😣">😣<span>Pain</span></button>
+                        <button class="eye-cell" data-word="Hungry" data-emoji="🍽️">🍽️<span>Hungry</span></button>
+                        <button class="eye-cell" data-word="Thirsty" data-emoji="💧">💧<span>Thirsty</span></button>
+                        <button class="eye-cell" data-word="Cold" data-emoji="🥶">🥶<span>Cold</span></button>
+                        <button class="eye-cell" data-word="Hot" data-emoji="🥵">🥵<span>Hot</span></button>
+                        <button class="eye-cell" data-word="Help" data-emoji="🆘">🆘<span>Help</span></button>
+                        <button class="eye-cell" data-word="Happy" data-emoji="😊">😊<span>Happy</span></button>
+                        <button class="eye-cell" data-word="Sad" data-emoji="😢">😢<span>Sad</span></button>
+                        <button class="eye-cell" data-word="Yes" data-emoji="✅">✅<span>Yes</span></button>
+                        <button class="eye-cell" data-word="No" data-emoji="❌">❌<span>No</span></button>
+                        <button class="eye-cell" data-word="Tired" data-emoji="😴">😴<span>Tired</span></button>
+                        <button class="eye-cell" data-word="Love" data-emoji="❤️">❤️<span>Love</span></button>
+                    </div>
+                    <div class="eye-output glass-card-sm" id="eyeOutput">
+                        <div class="eye-label-row">
+                            <span class="eye-status">👁️ Gaze Tracking Active</span>
+                            <span class="eye-confidence">AI Confidence: <strong>--</strong></span>
+                        </div>
+                        <div class="eye-sentence" id="eyeSentence">Select icons to build your message...</div>
+                        <div class="eye-prediction" id="eyePrediction"></div>
+                        <div class="eye-actions">
+                            <button class="btn-primary btn-sm" id="eyeSpeak">🔊 Speak</button>
+                            <button class="btn-outline btn-sm" id="eyeClear">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Real-World Scenario -->
+                <div class="glass-card nv-scenario-panel">
+                    <div class="panel-header">
+                        <h3>🏥 ICU Patient Scenario</h3>
+                    </div>
+                    <div class="scenario-demo" id="scenarioDemo">
+                        <div class="scenario-patient">
+                            <div class="patient-avatar">🧑‍🦽</div>
+                            <div class="patient-info">
+                                <h4>Raj — Cerebral Palsy, Non-verbal</h4>
+                                <p>Currently in ICU, intubated, experiencing chest pain</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary scenario-start" id="startScenario">▶ Run Live Scenario</button>
+                        <div class="scenario-timeline" id="scenarioTimeline"></div>
+                    </div>
+
+                    <!-- Gesture Recognition -->
+                    <div class="gesture-section">
+                        <h4>✋ Gesture Recognition Engine</h4>
+                        <div class="gesture-grid">
+                            <div class="gesture-item">
+                                <div class="gesture-visual">👆</div>
+                                <span>Point Up = Yes</span>
+                                <div class="gesture-bar">
+                                    <div class="gesture-fill" style="width:97%"></div>
+                                </div>
+                            </div>
+                            <div class="gesture-item">
+                                <div class="gesture-visual">✊</div>
+                                <span>Fist = Stop/No</span>
+                                <div class="gesture-bar">
+                                    <div class="gesture-fill" style="width:95%"></div>
+                                </div>
+                            </div>
+                            <div class="gesture-item">
+                                <div class="gesture-visual">🖐️</div>
+                                <span>Open Hand = Help</span>
+                                <div class="gesture-bar">
+                                    <div class="gesture-fill" style="width:93%"></div>
+                                </div>
+                            </div>
+                            <div class="gesture-item">
+                                <div class="gesture-visual">🤟</div>
+                                <span>ILY = I Love You</span>
+                                <div class="gesture-bar">
+                                    <div class="gesture-fill" style="width:98%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 2: Universal Translator -->
+    <section id="translator" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag purple-tag">Pillar 02</span>
+                <h2 class="section-title">Universal <span class="gradient-text">Medical Translator</span></h2>
+                <p class="section-desc">Context-aware, emotion-preserving translation that saves lives in medical
+                    emergencies.</p>
+            </div>
+            <div class="translator-demo glass-card">
+                <div class="panel-header">
+                    <h3>🌐 Live Translation Engine</h3>
+                    <span class="live-badge">REAL-TIME</span>
+                </div>
+                <div class="translator-grid">
+                    <div class="trans-input-panel">
+                        <div class="trans-lang-select">
+                            <span class="lang-flag">🇮🇳</span>
+                            <select id="inputLang" class="lang-dropdown">
+                                <option value="tamil">Tamil</option>
+                                <option value="telugu">Telugu</option>
+                                <option value="hindi">Hindi</option>
+                                <option value="japanese">Japanese</option>
+                                <option value="spanish">Spanish</option>
+                            </select>
+                        </div>
+                        <textarea id="transInput" class="trans-textarea"
+                            placeholder="Type in source language or click a scenario..."></textarea>
+                        <div class="trans-scenarios">
+                            <button class="scenario-btn" data-scenario="chest_pain">🫀 Chest Pain Emergency</button>
+                            <button class="scenario-btn" data-scenario="allergy">🤧 Allergic Reaction</button>
+                            <button class="scenario-btn" data-scenario="accident">🚑 Road Accident</button>
+                        </div>
+                    </div>
+                    <div class="trans-arrow">
+                        <div class="arrow-circle">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                        <div class="trans-features">
+                            <span class="tf-badge emotion-badge">😰 Emotion: Distress</span>
+                            <span class="tf-badge urgency-badge">🚨 Urgency: CRITICAL</span>
+                            <span class="tf-badge context-badge">🏥 Context: Medical</span>
+                        </div>
+                    </div>
+                    <div class="trans-output-panel">
+                        <div class="trans-lang-select">
+                            <span class="lang-flag">🇬🇧</span>
+                            <select id="outputLang" class="lang-dropdown">
+                                <option value="english">English (Medical)</option>
+                                <option value="hindi">Hindi</option>
+                                <option value="tamil">Tamil</option>
+                            </select>
+                        </div>
+                        <div class="trans-output" id="transOutput">
+                            <p class="trans-placeholder">Translation will appear here with medical context, emotional
+                                tone, and urgency indicators...</p>
+                        </div>
+                        <div class="trans-actions-row">
+                            <button class="btn-primary btn-sm" id="transSpeak">🔊 Speak</button>
+                            <button class="btn-outline btn-sm" id="transAlert">🚨 Alert Medical Team</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Medical Alert -->
+                <div class="medical-alert" id="medicalAlert" style="display:none">
+                    <div class="alert-icon">🚨</div>
+                    <div class="alert-content">
+                        <h4>MEDICAL ALERT GENERATED</h4>
+                        <p id="alertText"></p>
+                    </div>
+                    <div class="alert-actions-list">
+                        <span>✅ Cardiac team notified</span>
+                        <span>✅ Patient vitals requested</span>
+                        <span>✅ Medical record updated</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 4: Emotion AI -->
+    <section id="emotion" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag pink-tag">Pillar 04</span>
+                <h2 class="section-title">Emotional <span class="gradient-text-pink">Intelligence Layer</span></h2>
+                <p class="section-desc">AI that understands not just WHAT you're saying, but HOW you're feeling —
+                    detecting hidden emotions in real-time.</p>
+            </div>
+            <div class="emotion-demo-grid">
+                <!-- Emotion Detector -->
+                <div class="glass-card emotion-detector">
+                    <div class="panel-header">
+                        <h3>💖 Real-Time Emotion Analysis</h3>
+                        <span class="live-badge"
+                            style="color:var(--pink);background:rgba(255,107,157,0.1);border-color:rgba(255,107,157,0.3)">AI
+                            ACTIVE</span>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px">Type any sentence and
+                        Echo will analyze the hidden emotions behind your words.</p>
+                    <div class="emotion-input-area">
+                        <input type="text" id="emotionInput" placeholder='Try: "I\' m fine, everything is great"'
+                            autocomplete="off">
+                        <button class="btn-primary btn-sm" id="analyzeEmotion">Analyze</button>
+                    </div>
+                    <div class="emotion-presets">
+                        <button class="emotion-preset" data-text="I'm fine, don't worry about me">😶 "I'm fine"</button>
+                        <button class="emotion-preset"
+                            data-text="I can handle everything by myself, I don't need anyone's help">💪 "I can handle
+                            it"</button>
+                        <button class="emotion-preset"
+                            data-text="Whatever, it doesn't matter anyway, nothing ever works out">🤷
+                            "Whatever"</button>
+                        <button class="emotion-preset"
+                            data-text="I'm so happy for them, they really deserve this promotion more than me">😊 "Happy
+                            for them"</button>
+                    </div>
+                    <div class="emotion-result" id="emotionResult" style="display:none">
+                        <h4>🔍 Echo Emotion Analysis</h4>
+                        <div class="emotion-bars" id="emotionBars"></div>
+                        <div class="emotion-insight" id="emotionInsight"></div>
+                    </div>
+                </div>
+
+                <!-- Emotion Radar -->
+                <div class="glass-card emotion-radar-panel">
+                    <div class="panel-header">
+                        <h3>📊 Emotion Spectrum</h3>
+                    </div>
+                    <canvas id="emotionRadar" width="400" height="400"></canvas>
+                    <div class="emotion-legend">
+                        <span><span class="legend-dot" style="background:#FF6B9D"></span>Surface Emotion</span>
+                        <span><span class="legend-dot" style="background:#7C5CFC"></span>Hidden Emotion</span>
+                    </div>
+
+                    <!-- Vocal Stress -->
+                    <div class="vocal-stress">
+                        <h4>🎙️ Vocal Stress Indicators</h4>
+                        <div class="stress-meters">
+                            <div class="stress-item">
+                                <span>Voice Tremor</span>
+                                <div class="stress-bar">
+                                    <div class="stress-fill" id="tremorBar" style="width:15%"></div>
+                                </div>
+                            </div>
+                            <div class="stress-item">
+                                <span>Pitch Variation</span>
+                                <div class="stress-bar">
+                                    <div class="stress-fill" id="pitchBar" style="width:30%"></div>
+                                </div>
+                            </div>
+                            <div class="stress-item">
+                                <span>Speech Rate</span>
+                                <div class="stress-bar">
+                                    <div class="stress-fill" id="rateBar" style="width:55%"></div>
+                                </div>
+                            </div>
+                            <div class="stress-item">
+                                <span>Breath Pattern</span>
+                                <div class="stress-bar">
+                                    <div class="stress-fill" id="breathBar" style="width:20%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Depression Detection Case -->
+            <div class="glass-card depression-case">
+                <div class="panel-header">
+                    <h3>📋 Case Study: Depression Detection in Elderly</h3>
+                    <span class="case-badge"
+                        style="color:var(--pink);background:rgba(255,107,157,0.1);border-color:rgba(255,107,157,0.3)">AI
+                        Detection</span>
+                </div>
+                <div class="depression-timeline">
+                    <div class="dep-week">
+                        <h5>Week 1 (Baseline)</h5>
+                        <div class="dep-metrics">
+                            <span class="dep-metric good">Speech: Normal</span>
+                            <span class="dep-metric good">Tone: Varied</span>
+                            <span class="dep-metric good">Engagement: High</span>
+                        </div>
+                    </div>
+                    <div class="dep-arrow">→</div>
+                    <div class="dep-week">
+                        <h5>Week 2</h5>
+                        <div class="dep-metrics">
+                            <span class="dep-metric warn">Speech: -20%</span>
+                            <span class="dep-metric good">Tone: Slightly flat</span>
+                            <span class="dep-metric warn">Engagement: Medium</span>
+                        </div>
+                    </div>
+                    <div class="dep-arrow">→</div>
+                    <div class="dep-week alert-week">
+                        <h5>Week 3 ⚠️</h5>
+                        <div class="dep-metrics">
+                            <span class="dep-metric danger">Speech: -40%</span>
+                            <span class="dep-metric danger">Tone: Flat</span>
+                            <span class="dep-metric danger">Engagement: Low</span>
+                        </div>
+                        <div class="dep-alert">🚨 Echo Alert: "Concerning patterns detected. Recommend wellness check."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 5: Language Preservation -->
+    <section id="language" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" style="color:var(--amber)">Pillar 05</span>
+                <h2 class="section-title">Endangered Language <span class="gradient-text-pink">Preservation</span></h2>
+                <p class="section-desc">43% of the world's 7,000 languages are endangered. Echo AI documents, preserves,
+                    and revives them.</p>
+            </div>
+            <div class="lang-preserve-grid">
+                <div class="glass-card lang-map-panel">
+                    <div class="panel-header">
+                        <h3>🗺️ Language Risk Map — India</h3>
+                    </div>
+                    <div class="lang-counters">
+                        <div class="lang-counter"><span class="lc-num"
+                                style="color:var(--red)">197</span><span>Endangered</span></div>
+                        <div class="lang-counter"><span class="lc-num"
+                                style="color:var(--amber)">89</span><span>Vulnerable</span></div>
+                        <div class="lang-counter"><span class="lc-num" style="color:var(--green)">42</span><span>Being
+                                Preserved</span></div>
+                    </div>
+                    <div class="endangered-list">
+                        <div class="endo-lang"><span class="el-name">Toda</span><span class="el-speakers">~1,500
+                                speakers</span>
+                            <div class="el-bar">
+                                <div class="el-fill critical" style="width:12%"></div>
+                            </div><span class="el-status critical-text">Critical</span>
+                        </div>
+                        <div class="endo-lang"><span class="el-name">Nihali</span><span class="el-speakers">~2,000
+                                speakers</span>
+                            <div class="el-bar">
+                                <div class="el-fill critical" style="width:15%"></div>
+                            </div><span class="el-status critical-text">Critical</span>
+                        </div>
+                        <div class="endo-lang"><span class="el-name">Great Andamanese</span><span
+                                class="el-speakers">~10 speakers</span>
+                            <div class="el-bar">
+                                <div class="el-fill critical" style="width:2%"></div>
+                            </div><span class="el-status critical-text">Nearly Extinct</span>
+                        </div>
+                        <div class="endo-lang"><span class="el-name">Kurukh</span><span class="el-speakers">~2M
+                                speakers</span>
+                            <div class="el-bar">
+                                <div class="el-fill vulnerable" style="width:45%"></div>
+                            </div><span class="el-status warn-text">Vulnerable</span>
+                        </div>
+                        <div class="endo-lang"><span class="el-name">Tulu</span><span class="el-speakers">~2M
+                                speakers</span>
+                            <div class="el-bar">
+                                <div class="el-fill safe" style="width:60%"></div>
+                            </div><span class="el-status good-text">Preserving</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card lang-story-panel">
+                    <div class="panel-header">
+                        <h3>💬 A Story of Preservation</h3>
+                    </div>
+                    <div class="story-card">
+                        <div class="story-avatar">👵🏾</div>
+                        <div class="story-info">
+                            <h4>Amma Kanathi</h4>
+                            <p>Age 87 — Last fluent speaker of Toda language</p>
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-stat"><strong>200+</strong> hours of speech captured</div>
+                        <div class="story-stat"><strong>5,000+</strong> words documented</div>
+                        <div class="story-stat"><strong>47</strong> traditional songs preserved</div>
+                        <div class="story-stat"><strong>128</strong> stories of ancestors recorded</div>
+                    </div>
+                    <blockquote class="story-quote">
+                        "I thought our language would die with me. Now it will live forever."
+                        <cite>— Amma Kanathi, 2025</cite>
+                    </blockquote>
+                    <div class="story-result">
+                        <span class="sr-badge">✅ AI Model Trained</span>
+                        <span class="sr-badge">✅ Teaching App Live</span>
+                        <span class="sr-badge">✅ 34 Youth Learning</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo -->
+    <section id="demo-echo" class="section demo-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag gradient-tag">Interactive Demo</span>
+                <h2 class="section-title">Experience <span class="gradient-text-cyan">Echo</span> Live</h2>
+                <p class="section-desc">See how Echo bridges communication gaps in real-time emergency scenarios.</p>
+            </div>
+            <div class="glass-card emergency-demo">
+                <div class="panel-header">
+                    <h3>🚨 Emergency Scenario Simulator</h3>
+                    <div class="panel-tabs">
+                        <button class="tab-btn active" data-etab="cardiac">🫀 Cardiac</button>
+                        <button class="tab-btn" data-etab="allergy">🤧 Allergy</button>
+                        <button class="tab-btn" data-etab="stroke">🧠 Stroke</button>
+                    </div>
+                </div>
+                <div class="emergency-container">
+                    <div class="em-patient-side">
+                        <div class="em-header patient-header">
+                            <span class="em-role">👤 Patient (Tamil)</span>
+                            <span class="em-badge" style="background:rgba(255,71,87,0.1);color:var(--red)">IN
+                                DISTRESS</span>
+                        </div>
+                        <div class="em-messages" id="patientMessages"></div>
+                    </div>
+                    <div class="em-echo-center">
+                        <div class="echo-processor" id="echoProcessor">
+                            <div class="echo-ring">
+                                <svg viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(0,212,255,0.2)"
+                                        stroke-width="3" />
+                                    <circle cx="50" cy="50" r="42" fill="none" stroke="url(#echoGrad)" stroke-width="3"
+                                        stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264"
+                                        class="echo-progress-ring" />
+                                    <defs>
+                                        <linearGradient id="echoGrad">
+                                            <stop offset="0%" stop-color="#00D4FF" />
+                                            <stop offset="100%" stop-color="#7C5CFC" />
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <span class="echo-label">ECHO</span>
+                            </div>
+                        </div>
+                        <div class="echo-meta" id="echoMeta">
+                            <span class="em-tag">🔄 Processing...</span>
+                        </div>
+                        <button class="btn-primary" id="startEmergency">▶ Start Emergency Scenario</button>
+                    </div>
+                    <div class="em-doctor-side">
+                        <div class="em-header doctor-header">
+                            <span class="em-role">👨‍⚕️ Doctor (English)</span>
+                            <span class="em-badge"
+                                style="background:rgba(0,245,160,0.1);color:var(--green)">RECEIVING</span>
+                        </div>
+                        <div class="em-messages" id="doctorMessages"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact -->
+    <section id="impact-echo" class="section impact-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Global Impact</span>
+                <h2 class="section-title">Breaking <span class="gradient-text-cyan">Every Barrier</span></h2>
+            </div>
+            <div class="impact-grid">
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="460">0</span>M</div>
+                    <div class="impact-label">Hearing Impaired Helped</div>
+                    <div class="impact-desc">Real-time transcription & sign language AI</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="50">0</span>%</div>
+                    <div class="impact-label">Fewer Medical Errors</div>
+                    <div class="impact-desc">From communication breakdowns</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="95">0</span>%</div>
+                    <div class="impact-label">Gesture Accuracy</div>
+                    <div class="impact-desc">Sign language & custom gesture recognition</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="40">0</span>+</div>
+                    <div class="impact-label">Languages</div>
+                    <div class="impact-desc">At launch, expandable to 7,000+</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number"><span class="count-up" data-target="200">0</span>ms</div>
+                    <div class="impact-label">Latency</div>
+                    <div class="impact-desc">Real-time translation speed</div>
+                </div>
+                <div class="impact-card glass-card-sm">
+                    <div class="impact-number">$<span class="count-up" data-target="75">0</span>B</div>
+                    <div class="impact-label">Market Size</div>
+                    <div class="impact-desc">AAC + Translation + Healthcare</div>
+                </div>
+            </div>
+            <!-- SDG Alignment -->
+            <div class="sdg-section glass-card" style="margin-top:40px">
+                <div class="panel-header">
+                    <h3>🌍 UN Sustainable Development Goals Alignment</h3>
+                </div>
+                <div class="sdg-grid">
+                    <div class="sdg-item" style="--sdg-color:#4C9F38"><span class="sdg-num">3</span><span>Good
+                            Health</span></div>
+                    <div class="sdg-item" style="--sdg-color:#C5192D"><span class="sdg-num">4</span><span>Quality
+                            Education</span></div>
+                    <div class="sdg-item" style="--sdg-color:#DD1367"><span class="sdg-num">10</span><span>Reduced
+                            Inequalities</span></div>
+                    <div class="sdg-item" style="--sdg-color:#00689D"><span class="sdg-num">16</span><span>Peace &
+                            Justice</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-content glass-card">
+                <div class="cta-orbs">
+                    <div class="cta-orb cta-orb-1" style="background:var(--cyan)"></div>
+                    <div class="cta-orb cta-orb-2" style="background:var(--purple)"></div>
+                </div>
+                <h2 class="cta-title"><em>"Communication isn't about mouths and tongues.<br />It's about minds and
+                        hearts. It's about being human."</em></h2>
+                <p class="cta-desc">Echo doesn't just translate languages or enable devices. Echo says to every human
+                    being on Earth: <strong>Your voice matters. Your thoughts matter. YOU matter. And you WILL be
+                        heard.</strong></p>
+                <div class="cta-tagline"><span class="tagline-main">Echo: Every Voice Matters.</span></div>
+                <div class="cta-buttons" style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+                    <button class="btn-primary btn-lg glow-btn"
+                        onclick="document.getElementById('demo-echo').scrollIntoView({behavior:'smooth'})">Experience
+                        Echo</button>
+                    <a href="index.html" class="btn-outline btn-lg">🧠 Explore Memoria</a>
+                </div>
+                <div class="team-info">
+                    <p>Built with 💙 for the 23rd National Level Hackathon</p>
+                    <p class="team-tagline">🎤 ECHO + 🧠 MEMORIA — The Complete Cognitive & Communication Platform</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand"><span class="footer-logo">🎤 ECHO × 🧠 MEMORIA</span>
+                    <p>Unified AI Platform for Communication & Cognition</p>
+                </div>
+                <div class="footer-links-group">
+                    <h5>Echo</h5><a href="#nonverbal">Non-Verbal AI</a><a href="#translator">Translator</a><a
+                        href="#emotion">Emotion AI</a><a href="#language">Languages</a>
+                </div>
+                <div class="footer-links-group">
+                    <h5>Memoria</h5><a href="index.html#pillar1">Memory AI</a><a href="index.html#pillar2">Health
+                        Guardian</a><a href="index.html#pillar3">Digital Legacy</a>
+                </div>
+                <div class="footer-links-group">
+                    <h5>Demo</h5><a href="#demo-echo">Echo Demo</a><a href="index.html#demo">Memoria Demo</a><a
+                        href="#impact-echo">Impact</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 ECHO × MEMORIA — National Level Hackathon Project</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="echo.js"></script>
+</body>
+
+</html>

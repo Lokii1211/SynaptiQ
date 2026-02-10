@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db
+.env
+logs/
+uploads/
+node_modules/
+.DS_Store
+test_results.txt
+backend/memoria_echo.db
+backend/logs/
+backend/uploads/

@@ -1,0 +1,78 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "api/index.py",
+            "use": "@vercel/python"
+        },
+        {
+            "src": "index.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "echo.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "*.css",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "*.js",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "assets/**",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/index.py"
+        },
+        {
+            "src": "/echo",
+            "dest": "/echo.html"
+        },
+        {
+            "src": "/(.*\\.css)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/(.*\\.js)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/(.*\\.png)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/(.*\\.jpg)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/(.*\\.svg)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/(.*\\.ico)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/(.*\\.webp)",
+            "dest": "/$1"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/assets/$1"
+        },
+        {
+            "src": "/",
+            "dest": "/index.html"
+        }
+    ],
+    "env": {
+        "PYTHONPATH": "backend"
+    }
+}
