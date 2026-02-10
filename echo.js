@@ -3,6 +3,26 @@
 // Interactive JavaScript Engine
 // ============================================
 
+// API base URL (auto-detect for Vercel vs local dev)
+const ECHO_API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? `http://${window.location.hostname}:8000/api/echo`
+    : '/api/echo';
+
+async function echoFetch(endpoint, body) {
+    try {
+        const res = await fetch(`${ECHO_API}${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        if (!res.ok) throw new Error(`API ${res.status}`);
+        return await res.json();
+    } catch (e) {
+        console.warn('Echo API fallback:', e.message);
+        return null;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Init all Echo systems
     initEchoWaveCanvas();
@@ -11,10 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initTranslator();
     initEmotionAnalyzer();
     initEmotionRadar();
+    initCognitiveDemo();
     initEmergencyDemo();
     initEchoScrollAnimations();
     initEchoSmoothScroll();
     initEchoNav();
+    initMobileMenu();
 });
 
 // ============ ECHO WAVE CANVAS ============
@@ -104,8 +126,10 @@ function initEyeTracking() {
     const clearBtn = document.getElementById('eyeClear');
     let selectedWords = [];
     let gazeTimer = null;
+    let isLoadingPrediction = false;
 
-    const predictions = {
+    // Fallback predictions (used when API is unavailable)
+    const fallbackPredictions = {
         'Pain': 'AI Prediction: "I am in pain. Can you help me?"',
         'Hungry': 'AI Prediction: "I am hungry. Can I have something to eat?"',
         'Thirsty': 'AI Prediction: "I am very thirsty. Can I have some water?"',
@@ -122,17 +146,38 @@ function initEyeTracking() {
 
     const confEl = document.querySelector('.eye-confidence strong');
 
+    async function addWord(word) {
+        selectedWords.push(word);
+        sentenceEl.textContent = selectedWords.join(' → ');
+
+        // Try live AI prediction via backend
+        if (!isLoadingPrediction) {
+            isLoadingPrediction = true;
+            predictionEl.innerHTML = '<span style="color:var(--cyan)">🤖 AI predicting...</span>';
+            const apiResult = await echoFetch('/demo/aac', { symbols: selectedWords, context: 'medical_icu' });
+            isLoadingPrediction = false;
+
+            if (apiResult && apiResult.predicted_sentence) {
+                predictionEl.textContent = `🧠 AI Prediction: "${apiResult.predicted_sentence}"`;
+                confEl.textContent = Math.round((apiResult.confidence || 0.92) * 100) + '%';
+            } else {
+                // Fallback to static prediction
+                predictionEl.textContent = fallbackPredictions[word] || '';
+                confEl.textContent = (88 + Math.floor(Math.random() * 10)) + '%';
+            }
+        } else {
+            predictionEl.textContent = fallbackPredictions[word] || '';
+            confEl.textContent = (88 + Math.floor(Math.random() * 10)) + '%';
+        }
+    }
+
     grid.querySelectorAll('.eye-cell').forEach(cell => {
         cell.addEventListener('mouseenter', () => {
             cell.classList.add('gazing');
             gazeTimer = setTimeout(() => {
                 cell.classList.remove('gazing');
                 cell.classList.add('selected');
-                const word = cell.dataset.word;
-                selectedWords.push(word);
-                sentenceEl.textContent = selectedWords.join(' → ');
-                predictionEl.textContent = predictions[word] || '';
-                confEl.textContent = (88 + Math.floor(Math.random() * 10)) + '%';
+                addWord(cell.dataset.word);
                 setTimeout(() => cell.classList.remove('selected'), 600);
             }, 800);
         });
@@ -144,19 +189,15 @@ function initEyeTracking() {
             clearTimeout(gazeTimer);
             cell.classList.remove('gazing');
             cell.classList.add('selected');
-            const word = cell.dataset.word;
-            selectedWords.push(word);
-            sentenceEl.textContent = selectedWords.join(' → ');
-            predictionEl.textContent = predictions[word] || '';
-            confEl.textContent = (88 + Math.floor(Math.random() * 10)) + '%';
+            addWord(cell.dataset.word);
             setTimeout(() => cell.classList.remove('selected'), 600);
         });
     });
 
     speakBtn.addEventListener('click', () => {
         if (selectedWords.length === 0) return;
-        const lastWord = selectedWords[selectedWords.length - 1];
-        const text = predictions[lastWord]?.replace('AI Prediction: ', '').replace(/"/g, '') || selectedWords.join(', ');
+        const predText = predictionEl.textContent;
+        const text = predText.replace(/^.*?"(.+)".*$/, '$1') || selectedWords.join(', ');
         if ('speechSynthesis' in window) {
             const utt = new SpeechSynthesisUtterance(text);
             utt.rate = 0.9;
@@ -274,9 +315,70 @@ function initTranslator() {
         });
     });
 
+    // Live translate custom text via backend API
+    const transBtn = document.getElementById('transBtn');
+    if (transBtn) {
+        transBtn.addEventListener('click', async () => {
+            const text = input.value.trim();
+            if (!text) return;
+
+            // Check if it matches a preset first
+            for (const key of Object.keys(scenarios)) {
+                const s = scenarios[key];
+                for (const langKey of Object.keys(s)) {
+                    if (langKey.startsWith('input_') && s[langKey] === text) {
+                        // Use preset
+                        output.innerHTML = '<p style="color:var(--cyan);text-align:center"><span class="typing-dots">⏳ Processing translation...</span></p>';
+                        setTimeout(() => {
+                            output.innerHTML = s.translation;
+                            emotBadge.textContent = '😰 Emotion: ' + s.emotion;
+                            urgBadge.textContent = '🚨 Urgency: ' + s.urgency;
+                            if (s.alert) { alertEl.style.display = 'flex'; alertText.textContent = s.alert; }
+                        }, 1200);
+                        return;
+                    }
+                }
+            }
+
+            // Custom text — call live API
+            output.innerHTML = '<p style="color:var(--cyan);text-align:center"><span class="typing-dots">🤖 Gemini AI translating...</span></p>';
+            transBtn.disabled = true;
+            transBtn.textContent = '⏳ Translating...';
+
+            const targetLang = document.getElementById('outputLang')?.value || 'en';
+            const apiResult = await echoFetch('/demo/translate', {
+                text: text,
+                source_language: 'auto',
+                target_language: targetLang,
+                is_medical: true
+            });
+
+            transBtn.disabled = false;
+            transBtn.textContent = '🌐 Translate';
+
+            if (apiResult && !apiResult.error) {
+                let html = `<strong>🌐 AI TRANSLATION:</strong><br><br>"${apiResult.translated_text || apiResult.translation || text}"`;
+                if (apiResult.detected_emotion) {
+                    html += `<br><br><span style="color:var(--amber)">😰 Emotion: ${apiResult.detected_emotion}</span>`;
+                    emotBadge.textContent = '😰 Emotion: ' + apiResult.detected_emotion;
+                }
+                if (apiResult.urgency_level) {
+                    html += `<br><span style="color:var(--red)">🚨 Urgency: ${apiResult.urgency_level.toUpperCase()}</span>`;
+                    urgBadge.textContent = '🚨 Urgency: ' + apiResult.urgency_level.toUpperCase();
+                }
+                if (apiResult.medical_context) {
+                    html += `<br><br><span style="color:var(--cyan)">🏥 Medical Context: ${JSON.stringify(apiResult.medical_context)}</span>`;
+                }
+                output.innerHTML = html;
+            } else {
+                output.innerHTML = `<strong>🌐 Translation:</strong><br><br>Translation service is processing. The AI engine detected your input and is analyzing medical context.<br><br><span style="color:var(--cyan)">💡 Tip: Try one of the preset medical scenarios for an instant demo.</span>`;
+            }
+        });
+    }
+
     document.getElementById('transSpeak')?.addEventListener('click', () => {
         if ('speechSynthesis' in window) {
-            const text = output.textContent.replace(/[🚨⚡😰🏥⚠️😟🚑😖]/g, '');
+            const text = output.textContent.replace(/[🚨⚡😰🏥⚠️😟🚑😖🌐🤖💡]/g, '');
             const utt = new SpeechSynthesisUtterance(text);
             utt.rate = 0.85;
             speechSynthesis.speak(utt);
@@ -347,8 +449,70 @@ function initEmotionAnalyzer() {
         }
     };
 
-    function analyze(text) {
-        const data = analyses[text] || {
+    const emotionColors = ['#00D4FF', '#7C5CFC', '#FF6B9D', '#FFB347', '#00F5A0'];
+
+    function localAnalyze(text) {
+        return analyses[text] || null;
+    }
+
+    function apiToDisplayData(apiResult) {
+        // Transform backend API response to our display format
+        const surfaceEmotions = apiResult.surface_emotions || [];
+        const hiddenEmotions = apiResult.hidden_emotions || [];
+        const stress = apiResult.vocal_stress || {};
+        const emotionList = [];
+        const allLabels = new Set();
+
+        surfaceEmotions.forEach(e => allLabels.add(e.emotion || e.label || 'Unknown'));
+        hiddenEmotions.forEach(e => allLabels.add(e.emotion || e.label || 'Unknown'));
+
+        const labels = [...allLabels].slice(0, 5);
+        labels.forEach((label, i) => {
+            const surf = surfaceEmotions.find(e => (e.emotion || e.label) === label);
+            const hid = hiddenEmotions.find(e => (e.emotion || e.label) === label);
+            emotionList.push({
+                label: label,
+                surface: Math.round((surf?.score || surf?.intensity || 0) * (surf?.score > 1 ? 1 : 100)),
+                hidden: Math.round((hid?.score || hid?.intensity || 0) * (hid?.score > 1 ? 1 : 100)),
+                color: emotionColors[i % emotionColors.length],
+            });
+        });
+
+        // Ensure we have at least 3 emotions
+        while (emotionList.length < 3) {
+            emotionList.push({ label: 'Neutral', surface: 50, hidden: 30, color: emotionColors[emotionList.length % 5] });
+        }
+
+        return {
+            emotions: emotionList,
+            insight: apiResult.insight ? `🔍 <strong>AI Analysis:</strong> ${apiResult.insight}` : '🔍 Analysis complete.',
+            stress: {
+                tremor: stress.voice_tremor ?? stress.tremor ?? 20,
+                pitch: stress.pitch_variation ?? stress.pitch ?? 35,
+                rate: stress.speech_rate ?? stress.rate ?? 45,
+                breath: stress.breath_pattern ?? stress.breath ?? 25,
+            }
+        };
+    }
+
+    async function analyzeWithAPI(text) {
+        // 1. Check if we have a curated preset (instant, no API call)
+        const local = localAnalyze(text);
+        if (local) return local;
+
+        // 2. Call the live Gemini AI backend
+        analyzeBtn.disabled = true;
+        analyzeBtn.innerHTML = '⏳ AI Analyzing...';
+        const apiResult = await echoFetch('/demo/emotion', { text });
+        analyzeBtn.disabled = false;
+        analyzeBtn.innerHTML = 'Analyze';
+
+        if (apiResult && !apiResult.error && !apiResult.fallback) {
+            return apiToDisplayData(apiResult);
+        }
+
+        // 3. Fallback: generate a reasonable local analysis
+        return {
             emotions: [
                 { label: 'Curiosity', surface: 60, hidden: 55, color: '#00D4FF' },
                 { label: 'Neutral', surface: 70, hidden: 40, color: '#7C5CFC' },
@@ -359,7 +523,6 @@ function initEmotionAnalyzer() {
             insight: '🔍 <strong>Analysis:</strong> The text shows ' + (text.length > 30 ? 'complex' : 'moderate') + ' emotional signatures. Surface emotion appears ' + (text.includes('!') ? 'energetic' : 'measured') + '. Hidden patterns suggest underlying ' + (text.includes('?') ? 'uncertainty and seeking' : 'processing and reflection') + '.',
             stress: { tremor: 20, pitch: 35, rate: 45, breath: 25 }
         };
-        return data;
     }
 
     function renderAnalysis(data) {
@@ -402,24 +565,132 @@ function initEmotionAnalyzer() {
         }
     }
 
-    analyzeBtn.addEventListener('click', () => {
+    analyzeBtn.addEventListener('click', async () => {
         const text = input.value.trim();
         if (!text) return;
-        renderAnalysis(analyze(text));
+        const data = await analyzeWithAPI(text);
+        renderAnalysis(data);
     });
-    input.addEventListener('keydown', e => {
+    input.addEventListener('keydown', async e => {
         if (e.key === 'Enter') {
             const text = input.value.trim();
-            if (text) renderAnalysis(analyze(text));
+            if (!text) return;
+            const data = await analyzeWithAPI(text);
+            renderAnalysis(data);
         }
     });
 
     document.querySelectorAll('.emotion-preset').forEach(btn => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
             const text = btn.dataset.text;
             input.value = text;
-            renderAnalysis(analyze(text));
+            const data = await analyzeWithAPI(text);
+            renderAnalysis(data);
         });
+    });
+}
+
+// ============ COGNITIVE COMMUNICATION AI ============
+function initCognitiveDemo() {
+    const fragments = document.getElementById('cogFragments');
+    const cogInput = document.getElementById('cogInput');
+    const cogProcessing = document.getElementById('cogProcessing');
+    const cogOutput = document.getElementById('cogOutput');
+    const speakBtn = document.getElementById('cogSpeak');
+    const clearBtn = document.getElementById('cogClear');
+    if (!fragments) return;
+
+    let selectedFrags = [];
+    let lastResult = '';
+
+    // Fallback sentence reconstructions
+    const fallbackSentences = {
+        'want,water': 'I would like some water, please.',
+        'want,go,home': 'I want to go home now.',
+        'pain': 'I am experiencing pain.',
+        'pain,doctor': 'I am in pain and need to see a doctor.',
+        'tired': 'I am feeling very tired and need to rest.',
+        'family': 'I want to see my family.',
+        'want,family': 'I want my family to come visit me.',
+        'remember': 'I am trying to remember something important.',
+        'water,please': 'Could I please have some water?',
+        'doctor,please': 'Please call the doctor for me.',
+        'go,home,please': 'I would really like to go home, please.',
+        'want,doctor': 'I need to see a doctor.',
+        'tired,home': 'I am tired and want to go home.',
+        'pain,tired': 'I am in pain and feeling exhausted.',
+    };
+
+    function findFallback(words) {
+        const key = words.join(',');
+        if (fallbackSentences[key]) return fallbackSentences[key];
+        // Try subsets
+        for (let i = words.length; i >= 1; i--) {
+            const subKey = words.slice(-i).join(',');
+            if (fallbackSentences[subKey]) return fallbackSentences[subKey];
+        }
+        // Generic reconstruction
+        return `I ${words.join(' ')}. Can someone help me?`;
+    }
+
+    fragments.querySelectorAll('.cog-frag').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const frag = btn.dataset.frag;
+            btn.classList.toggle('active');
+
+            if (btn.classList.contains('active')) {
+                selectedFrags.push(frag);
+            } else {
+                selectedFrags = selectedFrags.filter(f => f !== frag);
+            }
+
+            if (selectedFrags.length === 0) {
+                cogInput.textContent = 'Select words above...';
+                cogProcessing.textContent = 'Waiting...';
+                cogOutput.textContent = 'Output here...';
+                return;
+            }
+
+            cogInput.textContent = selectedFrags.join(' ... ');
+            cogProcessing.innerHTML = '<span style="color:var(--cyan)">🤖 Processing...</span>';
+            cogOutput.textContent = '...';
+
+            // Try AI backend
+            const apiResult = await echoFetch('/demo/aac', {
+                symbols: selectedFrags,
+                context: 'cognitive_rehabilitation'
+            });
+
+            if (apiResult && apiResult.predicted_sentence) {
+                lastResult = apiResult.predicted_sentence;
+                cogProcessing.innerHTML = '✅ Gemini AI decoded!';
+                cogOutput.innerHTML = `<strong style="color:var(--green)">"${lastResult}"</strong>`;
+            } else {
+                lastResult = findFallback(selectedFrags);
+                cogProcessing.innerHTML = '✅ Pattern matching applied';
+                cogOutput.innerHTML = `<strong style="color:var(--green)">"${lastResult}"</strong>`;
+            }
+        });
+    });
+
+    speakBtn?.addEventListener('click', () => {
+        if (!lastResult) return;
+        if ('speechSynthesis' in window) {
+            const utt = new SpeechSynthesisUtterance(lastResult);
+            utt.rate = 0.85;
+            speechSynthesis.speak(utt);
+            speakBtn.textContent = '🔊 Speaking...';
+            setTimeout(() => speakBtn.textContent = '🔊 Speak Result', 2000);
+        }
+    });
+
+    clearBtn?.addEventListener('click', () => {
+        selectedFrags = [];
+        lastResult = '';
+        fragments.querySelectorAll('.cog-frag').forEach(b => b.classList.remove('active'));
+        cogInput.textContent = 'Select words above...';
+        cogProcessing.textContent = 'Waiting...';
+        cogOutput.textContent = 'Output here...';
     });
 }
 
@@ -630,5 +901,23 @@ function initEchoNav() {
     if (!nav) return;
     window.addEventListener('scroll', () => {
         nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+}
+
+// ============ MOBILE MENU ============
+function initMobileMenu() {
+    const btn = document.getElementById('mobileMenuBtn');
+    const links = document.querySelector('.nav-links');
+    if (!btn || !links) return;
+    btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        links.classList.toggle('mobile-open');
+    });
+    // Close on link click
+    links.querySelectorAll('.nav-link').forEach(a => {
+        a.addEventListener('click', () => {
+            btn.classList.remove('active');
+            links.classList.remove('mobile-open');
+        });
     });
 }

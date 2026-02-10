@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime, timezone
 import json
+from loguru import logger
 
 from database import get_db
 from auth.models import User
@@ -442,6 +443,68 @@ async def echo_stats(
         "total_emergency_sessions": emergency_count.scalar() or 0,
         "total_aac_sessions": aac_count.scalar() or 0,
     }
+
+
+# ---- Public Demo Endpoints (no auth required) ----
+
+class DemoEmotionRequest(BaseModel):
+    text: str
+
+class DemoTranslateRequest(BaseModel):
+    text: str
+    source_language: str = "auto"
+    target_language: str = "en"
+    is_medical: bool = False
+
+class DemoAACRequest(BaseModel):
+    symbols: List[str]
+    context: str = ""
+
+
+@router.post("/demo/emotion")
+async def demo_emotion_analysis(req: DemoEmotionRequest):
+    """Public demo: Analyze emotions in text (no auth required)."""
+    try:
+        result = await analyze_emotion(req.text)
+        return {
+            "input_text": req.text,
+            "surface_emotions": result.get("surface_emotions", []),
+            "hidden_emotions": result.get("hidden_emotions", []),
+            "incongruence_detected": result.get("incongruence_detected", False),
+            "insight": result.get("insight", ""),
+            "depression_risk_score": result.get("depression_risk", 0),
+            "vocal_stress": result.get("vocal_stress"),
+        }
+    except Exception as e:
+        logger.error(f"Demo emotion error: {e}")
+        return {"error": str(e), "fallback": True}
+
+
+@router.post("/demo/translate")
+async def demo_translate(req: DemoTranslateRequest):
+    """Public demo: Translate text (no auth required)."""
+    try:
+        result = await translate_text(
+            text=req.text,
+            source_lang=req.source_language,
+            target_lang=req.target_language,
+            is_medical=req.is_medical,
+        )
+        return result
+    except Exception as e:
+        logger.error(f"Demo translate error: {e}")
+        return {"error": str(e), "fallback": True}
+
+
+@router.post("/demo/aac")
+async def demo_aac_predict(req: DemoAACRequest):
+    """Public demo: Predict sentence from symbols (no auth required)."""
+    try:
+        result = await predict_sentence(req.symbols, req.context)
+        return result
+    except Exception as e:
+        logger.error(f"Demo AAC error: {e}")
+        return {"error": str(e), "fallback": True}
 
 
 # ---- WebSocket for real-time emergency communication ----

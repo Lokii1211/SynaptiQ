@@ -45,6 +45,7 @@
                 <a href="#hero" class="nav-link">Home</a>
                 <a href="#nonverbal" class="nav-link">Non-Verbal AI</a>
                 <a href="#translator" class="nav-link">Translator</a>
+                <a href="#cognitive" class="nav-link">Cognitive AI</a>
                 <a href="#emotion" class="nav-link">Emotion AI</a>
                 <a href="#language" class="nav-link">Languages</a>
                 <a href="#demo-echo" class="nav-link">Live Demo</a>
@@ -307,6 +308,8 @@
                         <textarea id="transInput" class="trans-textarea"
                             placeholder="Type in source language or click a scenario..."></textarea>
                         <div class="trans-scenarios">
+                            <button class="btn-primary btn-sm" id="transBtn" style="margin-right:8px">🌐
+                                Translate</button>
                             <button class="scenario-btn" data-scenario="chest_pain">🫀 Chest Pain Emergency</button>
                             <button class="scenario-btn" data-scenario="allergy">🤧 Allergic Reaction</button>
                             <button class="scenario-btn" data-scenario="accident">🚑 Road Accident</button>
@@ -329,9 +332,9 @@
                         <div class="trans-lang-select">
                             <span class="lang-flag">🇬🇧</span>
                             <select id="outputLang" class="lang-dropdown">
-                                <option value="english">English (Medical)</option>
-                                <option value="hindi">Hindi</option>
-                                <option value="tamil">Tamil</option>
+                                <option value="en">English (Medical)</option>
+                                <option value="hi">Hindi</option>
+                                <option value="ta">Tamil</option>
                             </select>
                         </div>
                         <div class="trans-output" id="transOutput">
@@ -355,6 +358,128 @@
                         <span>✅ Cardiac team notified</span>
                         <span>✅ Patient vitals requested</span>
                         <span>✅ Medical record updated</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pillar 3: Cognitive Communication Assistant -->
+    <section id="cognitive" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" style="color:var(--green)">Pillar 03</span>
+                <h2 class="section-title">Cognitive <span class="gradient-text-green">Communication AI</span></h2>
+                <p class="section-desc">Thought-to-speech assistive pipeline for dementia, aphasia, and brain injury
+                    patients who struggle to find and form words.</p>
+            </div>
+            <div class="cognitive-demo-grid">
+                <!-- Thought-to-Speech Pipeline -->
+                <div class="glass-card cog-pipeline-panel">
+                    <div class="panel-header">
+                        <h3>🧩 Thought-to-Speech Pipeline</h3>
+                        <span class="live-badge"
+                            style="color:var(--green);background:rgba(0,245,160,0.1);border-color:rgba(0,245,160,0.3)">INTERACTIVE</span>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px">Choose fragmented
+                        thoughts and watch Echo AI reconstruct coherent sentences.</p>
+                    <div class="cog-fragments" id="cogFragments">
+                        <button class="cog-frag" data-frag="want">want</button>
+                        <button class="cog-frag" data-frag="go">go</button>
+                        <button class="cog-frag" data-frag="home">home</button>
+                        <button class="cog-frag" data-frag="water">water</button>
+                        <button class="cog-frag" data-frag="doctor">doctor</button>
+                        <button class="cog-frag" data-frag="family">family</button>
+                        <button class="cog-frag" data-frag="pain">pain</button>
+                        <button class="cog-frag" data-frag="tired">tired</button>
+                        <button class="cog-frag" data-frag="remember">remember</button>
+                        <button class="cog-frag" data-frag="please">please</button>
+                    </div>
+                    <div class="cog-pipeline-visual">
+                        <div class="pipeline-step">
+                            <div class="pipe-icon">🧠</div>
+                            <span>Fragmented Thought</span>
+                            <div class="pipe-content" id="cogInput">Select words above...</div>
+                        </div>
+                        <div class="pipe-arrow">→</div>
+                        <div class="pipeline-step">
+                            <div class="pipe-icon">🤖</div>
+                            <span>Echo AI Processing</span>
+                            <div class="pipe-content" id="cogProcessing" style="color:var(--green)">Waiting...</div>
+                        </div>
+                        <div class="pipe-arrow">→</div>
+                        <div class="pipeline-step">
+                            <div class="pipe-icon">🔊</div>
+                            <span>Coherent Speech</span>
+                            <div class="pipe-content" id="cogOutput">Output here...</div>
+                        </div>
+                    </div>
+                    <div class="cog-actions">
+                        <button class="btn-primary btn-sm" id="cogSpeak">🔊 Speak Result</button>
+                        <button class="btn-outline btn-sm" id="cogClear">Clear</button>
+                    </div>
+                </div>
+
+                <!-- Aphasia Word-Finding Aid -->
+                <div class="glass-card cog-aphasia-panel">
+                    <div class="panel-header">
+                        <h3>🔤 Aphasia Word-Finding Aid</h3>
+                    </div>
+                    <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:16px">For patients who know the
+                        concept but can't find the word — Echo suggests likely matches.</p>
+                    <div class="aphasia-scenarios">
+                        <div class="aphasia-case">
+                            <div class="aphasia-attempt">Patient says: <em>"the thing... you drink from... not a
+                                    cup..."</em></div>
+                            <div class="aphasia-suggestions">
+                                <span class="sug-chip active">🥤 Glass <small>92%</small></span>
+                                <span class="sug-chip">🍶 Bottle <small>78%</small></span>
+                                <span class="sug-chip">🫗 Mug <small>45%</small></span>
+                            </div>
+                        </div>
+                        <div class="aphasia-case">
+                            <div class="aphasia-attempt">Patient says: <em>"the person... fixes teeth...
+                                    hospital..."</em></div>
+                            <div class="aphasia-suggestions">
+                                <span class="sug-chip active">🦷 Dentist <small>95%</small></span>
+                                <span class="sug-chip">👨‍⚕️ Doctor <small>70%</small></span>
+                                <span class="sug-chip">💊 Surgeon <small>35%</small></span>
+                            </div>
+                        </div>
+                        <div class="aphasia-case">
+                            <div class="aphasia-attempt">Patient says: <em>"tall... green... outside... leaves..."</em>
+                            </div>
+                            <div class="aphasia-suggestions">
+                                <span class="sug-chip active">🌳 Tree <small>97%</small></span>
+                                <span class="sug-chip">🌿 Plant <small>65%</small></span>
+                                <span class="sug-chip">🌻 Flower <small>30%</small></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recovery Tracker -->
+                    <div class="recovery-tracker" style="margin-top:20px">
+                        <h4>📈 Communication Recovery Progress</h4>
+                        <div class="recovery-bars">
+                            <div class="recovery-item"><span>Word Retrieval</span>
+                                <div class="recovery-bar">
+                                    <div class="recovery-fill" style="width:72%;background:var(--green)"></div>
+                                </div>
+                                <span>72%</span>
+                            </div>
+                            <div class="recovery-item"><span>Sentence Formation</span>
+                                <div class="recovery-bar">
+                                    <div class="recovery-fill" style="width:58%;background:var(--cyan)"></div>
+                                </div>
+                                <span>58%</span>
+                            </div>
+                            <div class="recovery-item"><span>Conversational Flow</span>
+                                <div class="recovery-bar">
+                                    <div class="recovery-fill" style="width:45%;background:var(--purple)"></div>
+                                </div>
+                                <span>45%</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
