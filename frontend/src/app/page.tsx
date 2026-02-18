@@ -25,10 +25,18 @@ export default function Home() {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const [mobileMenu, setMobileMenu] = useState(false);
 
-  // Redirect logged-in users to dashboard
+  // Redirect logged-in users to dashboard (validate token first)
   useEffect(() => {
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (token) router.replace("/dashboard");
+    if (token) {
+      fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
+        .then(r => r.json())
+        .then(data => {
+          if (data.id) router.replace("/dashboard");
+          else { localStorage.removeItem("token"); localStorage.removeItem("user"); }
+        })
+        .catch(() => { localStorage.removeItem("token"); localStorage.removeItem("user"); });
+    }
   }, [router]);
 
   const features = [

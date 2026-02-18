@@ -11,10 +11,18 @@ export default function LoginPage() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Redirect if already logged in
+    // Redirect if already logged in (validate token first)
     useEffect(() => {
         const token = localStorage.getItem("token");
-        if (token) router.replace("/dashboard");
+        if (token) {
+            fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.id) router.replace("/dashboard");
+                    else { localStorage.removeItem("token"); localStorage.removeItem("user"); }
+                })
+                .catch(() => { localStorage.removeItem("token"); localStorage.removeItem("user"); });
+        }
     }, [router]);
 
     const handleSubmit = async (e: React.FormEvent) => {

@@ -19,7 +19,7 @@ export default function DashboardPage() {
             api.getResults().catch(() => null),
             api.getTrendingSkills().catch(() => ({ skills: [] })),
         ]).then(([u, r, t]) => {
-            if (!u) { window.location.href = "/login"; return; }
+            if (!u) { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "/login"; return; }
             setUser(u); setResults(r); setTrending(t?.skills || []); setLoading(false);
         });
     }, []);
