@@ -10,6 +10,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [streak] = useState(Math.floor(Math.random() * 7) + 1);
     const [points] = useState(Math.floor(Math.random() * 500) + 100);
+    const [showProfile, setShowProfile] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -62,7 +63,7 @@ export default function DashboardPage() {
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.2rem" }}>SkillSync <span style={{ color: "var(--accent-primary)" }}>AI</span></span>
                 </Link>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     {user?.role === "admin" && (
                         <Link href="/admin" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", fontSize: "0.8rem", fontWeight: 700 }}>
                             🛡️ Admin
@@ -74,9 +75,76 @@ export default function DashboardPage() {
                     <Link href="/leaderboard" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(99,102,241,0.1)", color: "var(--accent-primary)", fontSize: "0.8rem", fontWeight: 700 }}>
                         ⭐ {points} pts
                     </Link>
-                    <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>Hi, <strong style={{ color: "var(--text-primary)" }}>{user?.name?.split(" ")[0]}</strong></span>
-                    <button onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "/login"; }}
-                        style={{ padding: "0.35rem 0.75rem", borderRadius: 8, background: "var(--bg-card)", border: "1px solid var(--border-color)", color: "var(--text-secondary)", fontSize: "0.75rem", cursor: "pointer" }}>Logout</button>
+                    {/* Profile Avatar */}
+                    <div style={{ position: "relative" }}>
+                        <button onClick={() => setShowProfile(!showProfile)}
+                            style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, var(--accent-primary), #8b5cf6)", border: "2px solid rgba(99,102,241,0.3)", color: "white", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
+                            {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                        </button>
+                        {showProfile && (
+                            <>
+                                <div style={{ position: "fixed", inset: 0, zIndex: 199 }} onClick={() => setShowProfile(false)} />
+                                <div style={{ position: "absolute", top: "calc(100% + 0.5rem)", right: 0, width: 280, borderRadius: 16, background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.5)", zIndex: 200, overflow: "hidden", animation: "fadeIn 0.2s ease" }}>
+                                    {/* Profile Header */}
+                                    <div style={{ padding: "1.25rem", background: "linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1))", borderBottom: "1px solid var(--border-color)" }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                                            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, var(--accent-primary), #8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 800, fontSize: "1.1rem" }}>
+                                                {user?.name?.charAt(0)?.toUpperCase() || "U"}
+                                            </div>
+                                            <div>
+                                                <p style={{ fontWeight: 700, fontSize: "0.95rem" }}>{user?.name}</p>
+                                                <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{user?.email}</p>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.75rem" }}>
+                                            <span style={{ padding: "0.15rem 0.5rem", borderRadius: 999, background: user?.role === "admin" ? "rgba(239,68,68,0.15)" : user?.role === "mentor" ? "rgba(245,158,11,0.15)" : "rgba(34,197,94,0.15)", color: user?.role === "admin" ? "#ef4444" : user?.role === "mentor" ? "#f59e0b" : "#22c55e", fontSize: "0.68rem", fontWeight: 700, textTransform: "uppercase" }}>
+                                                {user?.role === "admin" ? "🛡️ Admin" : user?.role === "mentor" ? "👨‍🏫 Mentor" : "🎓 Student"}
+                                            </span>
+                                            <span style={{ padding: "0.15rem 0.5rem", borderRadius: 999, background: "rgba(234,179,8,0.1)", color: "#eab308", fontSize: "0.68rem", fontWeight: 700 }}>
+                                                ⭐ {points} pts
+                                            </span>
+                                        </div>
+                                    </div>
+                                    {/* Profile Actions */}
+                                    <div style={{ padding: "0.5rem" }}>
+                                        {user?.role === "admin" && (
+                                            <Link href="/admin" onClick={() => setShowProfile(false)}
+                                                style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "#ef4444", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
+                                                onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
+                                                onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                                                <span>🛡️</span> Admin Dashboard
+                                            </Link>
+                                        )}
+                                        <Link href="/analytics" onClick={() => setShowProfile(false)}
+                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
+                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.08)"}
+                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                                            <span>📊</span> My Analytics
+                                        </Link>
+                                        <Link href="/daily" onClick={() => setShowProfile(false)}
+                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
+                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.08)"}
+                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                                            <span>📝</span> Daily Challenge
+                                        </Link>
+                                        <Link href="/leaderboard" onClick={() => setShowProfile(false)}
+                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
+                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.08)"}
+                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                                            <span>🏆</span> Leaderboard
+                                        </Link>
+                                        <div style={{ height: 1, background: "var(--border-color)", margin: "0.35rem 0" }} />
+                                        <button onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "/login"; }}
+                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, fontSize: "0.85rem", fontWeight: 600, color: "#ef4444", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", transition: "background 0.15s" }}
+                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
+                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                                            <span>🚪</span> Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
                 </div>
             </nav>
 

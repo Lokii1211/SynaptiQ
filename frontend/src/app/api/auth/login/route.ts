@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         const token = await createToken({ sub: user.id, email: user.email });
         return jsonResponse({
             token,
-            user: { id: user.id, email: user.email, name: user.name, age: user.age, education_level: user.education_level, city: user.city },
+            user: { id: user.id, email: user.email, name: user.name, role: user.role || "student", age: user.age, education_level: user.education_level, city: user.city },
         });
     } catch {
         return errorResponse("Invalid request", 400);
