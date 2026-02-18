@@ -5,7 +5,7 @@ import { hashPassword, createToken, jsonResponse, errorResponse } from "@/lib/se
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-        const { email, name, password, age, education_level, city } = body;
+        const { email, name, password, age, education_level, city, institution, careerInterest } = body;
 
         if (!email || !name || !password) return errorResponse("Email, name and password are required");
         if (password.length < 6) return errorResponse("Password must be at least 6 characters");
@@ -14,10 +14,10 @@ export async function POST(req: NextRequest) {
         if (existing) return errorResponse("Email already registered", 409);
 
         const id = crypto.randomUUID();
-        store.addUser({ id, email, name, passwordHash: hashPassword(password), age, education_level, city });
+        store.addUser({ id, email, name, passwordHash: hashPassword(password), age, education_level, city, institution, careerChoice: careerInterest });
 
         const token = await createToken({ sub: id, email });
-        return jsonResponse({ token, user: { id, email, name, age, education_level, city } });
+        return jsonResponse({ token, user: { id, email, name, age, education_level, city, institution, careerChoice: careerInterest } });
     } catch {
         return errorResponse("Invalid request", 400);
     }

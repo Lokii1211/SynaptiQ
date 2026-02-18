@@ -244,16 +244,185 @@ export const ASSESSMENT_QUESTIONS = [
     },
 ];
 
-// ─── CODING CHALLENGES (LeetCode/HackerRank Style) ──────────
+// ─── CODING CHALLENGES (Company-Specific, Career-Based) ──────────
 export const CODING_CHALLENGES = [
-    { id: "cc1", title: "Two Sum", difficulty: "Easy", category: "Arrays", description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.", examples: [{ input: "nums = [2,7,11,15], target = 9", output: "[0,1]" }], hints: ["Use a hash map for O(n) solution"], starterCode: "function twoSum(nums, target) {\n  // Your code here\n}", testCases: [{ input: [[2, 7, 11, 15], 9], expected: [0, 1] }, { input: [[3, 2, 4], 6], expected: [1, 2] }], tags: ["hash-map", "array"], points: 10 },
-    { id: "cc2", title: "Reverse String", difficulty: "Easy", category: "Strings", description: "Write a function that reverses a string.", examples: [{ input: '"hello"', output: '"olleh"' }], hints: ["Try two-pointer approach"], starterCode: "function reverseString(s) {\n  // Your code here\n}", testCases: [{ input: ["hello"], expected: "olleh" }], tags: ["string", "two-pointers"], points: 10 },
-    { id: "cc3", title: "Valid Parentheses", difficulty: "Easy", category: "Stacks", description: "Given a string containing just '(', ')', '{', '}', '[' and ']', determine if the input string is valid.", examples: [{ input: '"([])"', output: "true" }], hints: ["Use a stack"], starterCode: "function isValid(s) {\n  // Your code here\n}", testCases: [{ input: ["()[]{}"], expected: true }], tags: ["stack"], points: 10 },
-    { id: "cc4", title: "Maximum Subarray", difficulty: "Medium", category: "Dynamic Programming", description: "Find the contiguous subarray which has the largest sum.", examples: [{ input: "[-2,1,-3,4,-1,2,1,-5,4]", output: "6" }], hints: ["Kadane's Algorithm"], starterCode: "function maxSubArray(nums) {\n  // Your code here\n}", testCases: [{ input: [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], expected: 6 }], tags: ["dp", "greedy"], points: 20 },
-    { id: "cc5", title: "Linked List Cycle", difficulty: "Medium", category: "Linked Lists", description: "Given a linked list, determine if it has a cycle in it.", examples: [{ input: "[3,2,0,-4], pos=1", output: "true" }], hints: ["Floyd's cycle detection (tortoise and hare)"], starterCode: "function hasCycle(head) {\n  // Your code here\n}", testCases: [], tags: ["linked-list", "two-pointers"], points: 20 },
-    { id: "cc6", title: "Binary Search", difficulty: "Easy", category: "Searching", description: "Implement binary search on a sorted array.", examples: [{ input: "nums = [-1,0,3,5,9,12], target = 9", output: "4" }], hints: ["Use left and right pointers"], starterCode: "function search(nums, target) {\n  // Your code here\n}", testCases: [{ input: [[-1, 0, 3, 5, 9, 12], 9], expected: 4 }], tags: ["binary-search"], points: 10 },
-    { id: "cc7", title: "Merge Intervals", difficulty: "Medium", category: "Arrays", description: "Given an array of intervals, merge all overlapping intervals.", examples: [{ input: "[[1,3],[2,6],[8,10],[15,18]]", output: "[[1,6],[8,10],[15,18]]" }], hints: ["Sort by start time first"], starterCode: "function merge(intervals) {\n  // Your code here\n}", testCases: [], tags: ["sorting", "intervals"], points: 25 },
-    { id: "cc8", title: "LRU Cache", difficulty: "Hard", category: "Design", description: "Design a data structure that follows the constraints of a Least Recently Used cache.", examples: [{ input: "capacity = 2", output: "LRUCache object" }], hints: ["Use HashMap + Doubly Linked List"], starterCode: "class LRUCache {\n  constructor(capacity) {\n    // Your code here\n  }\n  get(key) {}\n  put(key, value) {}\n}", testCases: [], tags: ["design", "hash-map"], points: 40 },
+    // ─── EASY ────────────────────────────────────────────────────
+    { id: "cc1", title: "Two Sum", difficulty: "Easy", category: "Arrays", company: ["Google", "Amazon", "Meta"], career: "technology",
+        description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.\n\nConstraints:\n- 2 ≤ nums.length ≤ 10⁴\n- Each input has exactly one solution\n- You may not use the same element twice",
+        examples: [{ input: "nums = [2,7,11,15], target = 9", output: "[0,1]" }, { input: "nums = [3,2,4], target = 6", output: "[1,2]" }],
+        hints: ["Use a hash map for O(n) solution", "Store complement values as you iterate"],
+        starterCode: { javascript: "function twoSum(nums, target) {\n  // Your code here\n}", python: "def two_sum(nums, target):\n    # Your code here\n    pass", java: "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        // Your code here\n        return new int[]{};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        // Your code here\n        return {};\n    }\n};", c: "int* twoSum(int* nums, int numsSize, int target, int* returnSize) {\n    // Your code here\n    return NULL;\n}" },
+        testCases: [{ input: [[2, 7, 11, 15], 9], expected: [0, 1] }, { input: [[3, 2, 4], 6], expected: [1, 2] }, { input: [[3, 3], 6], expected: [0, 1] }], tags: ["hash-map", "array"], points: 10 },
+
+    { id: "cc2", title: "Reverse String", difficulty: "Easy", category: "Strings", company: ["Microsoft", "Amazon"], career: "technology",
+        description: "Write a function that reverses a string. The input string is given as an array of characters.\n\nDo not allocate extra space for another array.",
+        examples: [{ input: '"hello"', output: '"olleh"' }, { input: '"world"', output: '"dlrow"' }],
+        hints: ["Try two-pointer approach", "Swap characters from both ends"],
+        starterCode: { javascript: "function reverseString(s) {\n  // Your code here\n}", python: "def reverse_string(s):\n    # Your code here\n    pass", java: "class Solution {\n    public String reverseString(String s) {\n        // Your code here\n        return \"\";\n    }\n}", cpp: "class Solution {\npublic:\n    string reverseString(string s) {\n        // Your code here\n        return \"\";\n    }\n};", c: "char* reverseString(char* s) {\n    // Your code here\n    return s;\n}" },
+        testCases: [{ input: ["hello"], expected: "olleh" }, { input: ["world"], expected: "dlrow" }], tags: ["string", "two-pointers"], points: 10 },
+
+    { id: "cc3", title: "Valid Parentheses", difficulty: "Easy", category: "Stacks", company: ["Google", "Amazon", "Bloomberg"], career: "technology",
+        description: "Given a string containing just '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets are closed by the same type\n2. Open brackets are closed in the correct order",
+        examples: [{ input: '"()[]{}"', output: "true" }, { input: '"(]"', output: "false" }],
+        hints: ["Use a stack", "Push opening brackets, pop for closing"],
+        starterCode: { javascript: "function isValid(s) {\n  // Your code here\n}", python: "def is_valid(s):\n    # Your code here\n    pass", java: "class Solution {\n    public boolean isValid(String s) {\n        // Your code here\n        return false;\n    }\n}", cpp: "class Solution {\npublic:\n    bool isValid(string s) {\n        // Your code here\n        return false;\n    }\n};", c: "bool isValid(char* s) {\n    // Your code here\n    return false;\n}" },
+        testCases: [{ input: ["()[]{}"], expected: true }, { input: ["(]"], expected: false }, { input: ["([])"], expected: true }], tags: ["stack"], points: 10 },
+
+    { id: "cc4", title: "Binary Search", difficulty: "Easy", category: "Searching", company: ["Google", "Microsoft", "Apple"], career: "technology",
+        description: "Given a sorted array of integers nums and a target value, return the index of the target if found. If not, return -1.\n\nYou must write an algorithm with O(log n) runtime complexity.",
+        examples: [{ input: "nums = [-1,0,3,5,9,12], target = 9", output: "4" }],
+        hints: ["Use left and right pointers", "Check mid element each iteration"],
+        starterCode: { javascript: "function search(nums, target) {\n  // Your code here\n}", python: "def search(nums, target):\n    # Your code here\n    pass", java: "class Solution {\n    public int search(int[] nums, int target) {\n        // Your code here\n        return -1;\n    }\n}", cpp: "class Solution {\npublic:\n    int search(vector<int>& nums, int target) {\n        // Your code here\n        return -1;\n    }\n};", c: "int search(int* nums, int numsSize, int target) {\n    // Your code here\n    return -1;\n}" },
+        testCases: [{ input: [[-1, 0, 3, 5, 9, 12], 9], expected: 4 }, { input: [[-1, 0, 3, 5, 9, 12], 2], expected: -1 }], tags: ["binary-search"], points: 10 },
+
+    { id: "cc5", title: "Palindrome Check", difficulty: "Easy", category: "Strings", company: ["TCS", "Infosys", "Wipro"], career: "technology",
+        description: "Given a string, determine if it is a palindrome. Consider only alphanumeric characters and ignore cases.",
+        examples: [{ input: '"racecar"', output: "true" }, { input: '"hello"', output: "false" }],
+        hints: ["Compare from both ends", "Convert to lowercase first"],
+        starterCode: { javascript: "function isPalindrome(s) {\n  // Your code here\n}", python: "def is_palindrome(s):\n    # Your code here\n    pass", java: "class Solution {\n    public boolean isPalindrome(String s) {\n        return false;\n    }\n}", cpp: "class Solution {\npublic:\n    bool isPalindrome(string s) {\n        return false;\n    }\n};", c: "bool isPalindrome(char* s) {\n    return false;\n}" },
+        testCases: [{ input: ["racecar"], expected: true }, { input: ["hello"], expected: false }, { input: ["madam"], expected: true }], tags: ["string", "two-pointers"], points: 10 },
+
+    { id: "cc6", title: "FizzBuzz", difficulty: "Easy", category: "Basics", company: ["TCS", "Cognizant", "Accenture"], career: "technology",
+        description: "Given integer n, return a string array answer where:\n- answer[i] = 'FizzBuzz' if i is divisible by 3 and 5\n- answer[i] = 'Fizz' if i is divisible by 3\n- answer[i] = 'Buzz' if i is divisible by 5\n- answer[i] = i (as string) otherwise",
+        examples: [{ input: "n = 5", output: '["1","2","Fizz","4","Buzz"]' }],
+        hints: ["Check divisibility by 15 first, then 3, then 5"],
+        starterCode: { javascript: "function fizzBuzz(n) {\n  // Your code here\n}", python: "def fizz_buzz(n):\n    # Your code here\n    pass", java: "class Solution {\n    public List<String> fizzBuzz(int n) {\n        return new ArrayList<>();\n    }\n}", cpp: "class Solution {\npublic:\n    vector<string> fizzBuzz(int n) {\n        return {};\n    }\n};", c: "char** fizzBuzz(int n, int* returnSize) {\n    return NULL;\n}" },
+        testCases: [{ input: [5], expected: ["1", "2", "Fizz", "4", "Buzz"] }, { input: [15], expected: ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"] }], tags: ["basics", "interview-classic"], points: 5 },
+
+    { id: "cc7", title: "Maximum Element in Array", difficulty: "Easy", category: "Arrays", company: ["Infosys", "Wipro", "HCL"], career: "technology",
+        description: "Find the maximum element in an unsorted array of integers.",
+        examples: [{ input: "[3, 7, 2, 9, 1]", output: "9" }],
+        hints: ["Track max while iterating"],
+        starterCode: { javascript: "function findMax(arr) {\n  // Your code here\n}", python: "def find_max(arr):\n    # Your code here\n    pass", java: "class Solution {\n    public int findMax(int[] arr) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int findMax(vector<int>& arr) {\n        return 0;\n    }\n};", c: "int findMax(int* arr, int size) {\n    return 0;\n}" },
+        testCases: [{ input: [[3, 7, 2, 9, 1]], expected: 9 }, { input: [[-5, -2, -8, -1]], expected: -1 }], tags: ["array", "basics"], points: 5 },
+
+    { id: "cc8", title: "Remove Duplicates from Sorted Array", difficulty: "Easy", category: "Arrays", company: ["Microsoft", "Facebook", "LinkedIn"], career: "technology",
+        description: "Given a sorted array, remove duplicates in-place and return the new length.",
+        examples: [{ input: "[1,1,2]", output: "2 (array becomes [1,2])" }],
+        hints: ["Use two pointers — slow and fast"],
+        starterCode: { javascript: "function removeDuplicates(nums) {\n  // Return new length\n}", python: "def remove_duplicates(nums):\n    # Return new length\n    pass", java: "class Solution {\n    public int removeDuplicates(int[] nums) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int removeDuplicates(vector<int>& nums) {\n        return 0;\n    }\n};", c: "int removeDuplicates(int* nums, int numsSize) {\n    return 0;\n}" },
+        testCases: [{ input: [[1, 1, 2]], expected: 2 }, { input: [[0, 0, 1, 1, 1, 2, 2, 3, 3, 4]], expected: 5 }], tags: ["array", "two-pointers"], points: 10 },
+
+    // ─── MEDIUM ──────────────────────────────────────────────────
+    { id: "cc9", title: "Maximum Subarray (Kadane's)", difficulty: "Medium", category: "Dynamic Programming", company: ["Amazon", "Microsoft", "Goldman Sachs"], career: "technology",
+        description: "Find the contiguous subarray which has the largest sum and return its sum.\n\nConstraints:\n- 1 ≤ nums.length ≤ 10⁵\n- -10⁴ ≤ nums[i] ≤ 10⁴",
+        examples: [{ input: "[-2,1,-3,4,-1,2,1,-5,4]", output: "6 (subarray [4,-1,2,1])" }],
+        hints: ["Kadane's Algorithm — keep running sum, reset when negative", "Track global maximum separately"],
+        starterCode: { javascript: "function maxSubArray(nums) {\n  // Your code here\n}", python: "def max_sub_array(nums):\n    # Your code here\n    pass", java: "class Solution {\n    public int maxSubArray(int[] nums) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int maxSubArray(vector<int>& nums) {\n        return 0;\n    }\n};", c: "int maxSubArray(int* nums, int numsSize) {\n    return 0;\n}" },
+        testCases: [{ input: [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], expected: 6 }, { input: [[1]], expected: 1 }, { input: [[-1]], expected: -1 }], tags: ["dp", "greedy", "kadane"], points: 20 },
+
+    { id: "cc10", title: "Longest Substring Without Repeating Characters", difficulty: "Medium", category: "Strings", company: ["Amazon", "Google", "Bloomberg", "Uber"], career: "technology",
+        description: "Given a string s, find the length of the longest substring without repeating characters.",
+        examples: [{ input: '"abcabcbb"', output: "3 (abc)" }, { input: '"bbbbb"', output: "1 (b)" }],
+        hints: ["Sliding window technique", "Use a Set or Map to track characters"],
+        starterCode: { javascript: "function lengthOfLongestSubstring(s) {\n  // Your code here\n}", python: "def length_of_longest_substring(s):\n    # Your code here\n    pass", java: "class Solution {\n    public int lengthOfLongestSubstring(String s) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int lengthOfLongestSubstring(string s) {\n        return 0;\n    }\n};", c: "int lengthOfLongestSubstring(char* s) {\n    return 0;\n}" },
+        testCases: [{ input: ["abcabcbb"], expected: 3 }, { input: ["bbbbb"], expected: 1 }, { input: ["pwwkew"], expected: 3 }], tags: ["sliding-window", "hash-map"], points: 25 },
+
+    { id: "cc11", title: "Merge Intervals", difficulty: "Medium", category: "Arrays", company: ["Google", "Facebook", "Bloomberg", "Palantir"], career: "technology",
+        description: "Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals.",
+        examples: [{ input: "[[1,3],[2,6],[8,10],[15,18]]", output: "[[1,6],[8,10],[15,18]]" }],
+        hints: ["Sort by start time first", "Compare current end with next start"],
+        starterCode: { javascript: "function merge(intervals) {\n  // Your code here\n}", python: "def merge(intervals):\n    # Your code here\n    pass", java: "class Solution {\n    public int[][] merge(int[][] intervals) {\n        return new int[][]{};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<vector<int>> merge(vector<vector<int>>& intervals) {\n        return {};\n    }\n};", c: "int** merge(int** intervals, int intervalsSize, int* intervalsColSize, int* returnSize, int** returnColumnSizes) {\n    return NULL;\n}" },
+        testCases: [], tags: ["sorting", "intervals"], points: 25 },
+
+    { id: "cc12", title: "3Sum", difficulty: "Medium", category: "Arrays", company: ["Amazon", "Google", "Apple", "Uber"], career: "technology",
+        description: "Given an integer array nums, return all triplets [nums[i], nums[j], nums[k]] such that i ≠ j ≠ k and nums[i] + nums[j] + nums[k] == 0.",
+        examples: [{ input: "[-1,0,1,2,-1,-4]", output: "[[-1,-1,2],[-1,0,1]]" }],
+        hints: ["Sort the array first", "Fix one element, use two pointers for remaining"],
+        starterCode: { javascript: "function threeSum(nums) {\n  // Your code here\n}", python: "def three_sum(nums):\n    # Your code here\n    pass", java: "class Solution {\n    public List<List<Integer>> threeSum(int[] nums) {\n        return new ArrayList<>();\n    }\n}", cpp: "class Solution {\npublic:\n    vector<vector<int>> threeSum(vector<int>& nums) {\n        return {};\n    }\n};", c: "int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes) {\n    return NULL;\n}" },
+        testCases: [], tags: ["two-pointers", "sorting"], points: 25 },
+
+    { id: "cc13", title: "Linked List Cycle Detection", difficulty: "Medium", category: "Linked Lists", company: ["Amazon", "Microsoft", "Oracle"], career: "technology",
+        description: "Given head of a linked list, determine if it has a cycle.",
+        examples: [{ input: "[3,2,0,-4], pos=1", output: "true" }],
+        hints: ["Floyd's cycle detection (tortoise and hare)", "Slow moves 1, fast moves 2 — if they meet, cycle exists"],
+        starterCode: { javascript: "function hasCycle(head) {\n  // Your code here\n}", python: "def has_cycle(head):\n    # Your code here\n    pass", java: "public class Solution {\n    public boolean hasCycle(ListNode head) {\n        return false;\n    }\n}", cpp: "class Solution {\npublic:\n    bool hasCycle(ListNode *head) {\n        return false;\n    }\n};", c: "bool hasCycle(struct ListNode *head) {\n    return false;\n}" },
+        testCases: [], tags: ["linked-list", "two-pointers", "floyd"], points: 20 },
+
+    { id: "cc14", title: "Product of Array Except Self", difficulty: "Medium", category: "Arrays", company: ["Amazon", "Apple", "Facebook", "Razorpay"], career: "technology",
+        description: "Given integer array nums, return array answer where answer[i] is the product of all elements except nums[i]. Must run in O(n) without division.",
+        examples: [{ input: "[1,2,3,4]", output: "[24,12,8,6]" }],
+        hints: ["Use prefix and suffix products", "Two-pass approach — left products then right products"],
+        starterCode: { javascript: "function productExceptSelf(nums) {\n  // Your code here\n}", python: "def product_except_self(nums):\n    # Your code here\n    pass", java: "class Solution {\n    public int[] productExceptSelf(int[] nums) {\n        return new int[]{};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<int> productExceptSelf(vector<int>& nums) {\n        return {};\n    }\n};", c: "int* productExceptSelf(int* nums, int numsSize, int* returnSize) {\n    return NULL;\n}" },
+        testCases: [{ input: [[1, 2, 3, 4]], expected: [24, 12, 8, 6] }], tags: ["array", "prefix-sum"], points: 25 },
+
+    { id: "cc15", title: "Rotate Matrix 90°", difficulty: "Medium", category: "Matrix", company: ["Amazon", "Microsoft", "Google"], career: "technology",
+        description: "You are given an n x n 2D matrix. Rotate the image by 90 degrees clockwise in-place.",
+        examples: [{ input: "[[1,2,3],[4,5,6],[7,8,9]]", output: "[[7,4,1],[8,5,2],[9,6,3]]" }],
+        hints: ["Transpose the matrix, then reverse each row"],
+        starterCode: { javascript: "function rotate(matrix) {\n  // Modify in-place\n}", python: "def rotate(matrix):\n    # Modify in-place\n    pass", java: "class Solution {\n    public void rotate(int[][] matrix) {\n        // Your code here\n    }\n}", cpp: "class Solution {\npublic:\n    void rotate(vector<vector<int>>& matrix) {\n        // Your code here\n    }\n};", c: "void rotate(int** matrix, int matrixSize, int* matrixColSize) {\n    // Your code here\n}" },
+        testCases: [], tags: ["matrix", "in-place"], points: 20 },
+
+    { id: "cc16", title: "Coin Change", difficulty: "Medium", category: "Dynamic Programming", company: ["Google", "Amazon", "Goldman Sachs", "Flipkart"], career: "technology",
+        description: "Given coins of different denominations and a total amount, return the fewest number of coins needed. Return -1 if not possible.",
+        examples: [{ input: "coins = [1,5,10], amount = 12", output: "3 (10+1+1)" }],
+        hints: ["DP bottom-up: dp[i] = min coins for amount i", "Initialize dp[0] = 0, rest = Infinity"],
+        starterCode: { javascript: "function coinChange(coins, amount) {\n  // Your code here\n}", python: "def coin_change(coins, amount):\n    # Your code here\n    pass", java: "class Solution {\n    public int coinChange(int[] coins, int amount) {\n        return -1;\n    }\n}", cpp: "class Solution {\npublic:\n    int coinChange(vector<int>& coins, int amount) {\n        return -1;\n    }\n};", c: "int coinChange(int* coins, int coinsSize, int amount) {\n    return -1;\n}" },
+        testCases: [{ input: [[1, 5, 10], 12], expected: 3 }, { input: [[2], 3], expected: -1 }], tags: ["dp", "greedy"], points: 25 },
+
+    { id: "cc17", title: "Number of Islands", difficulty: "Medium", category: "Graphs", company: ["Amazon", "Google", "Microsoft", "Uber"], career: "technology",
+        description: "Given a 2D grid map of '1's (land) and '0's (water), count the number of islands.",
+        examples: [{ input: "grid = [[1,1,0],[0,1,0],[0,0,1]]", output: "2" }],
+        hints: ["BFS or DFS from each unvisited land cell", "Mark visited cells to avoid counting twice"],
+        starterCode: { javascript: "function numIslands(grid) {\n  // Your code here\n}", python: "def num_islands(grid):\n    # Your code here\n    pass", java: "class Solution {\n    public int numIslands(char[][] grid) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int numIslands(vector<vector<char>>& grid) {\n        return 0;\n    }\n};", c: "int numIslands(char** grid, int gridSize, int* gridColSize) {\n    return 0;\n}" },
+        testCases: [], tags: ["bfs", "dfs", "graph"], points: 25 },
+
+    { id: "cc18", title: "Sort Array of 0s, 1s, 2s (Dutch National Flag)", difficulty: "Medium", category: "Arrays", company: ["TCS", "Infosys", "Microsoft", "Amazon"], career: "technology",
+        description: "Sort an array of 0s, 1s, and 2s in a single pass (Dutch National Flag problem).",
+        examples: [{ input: "[2,0,2,1,1,0]", output: "[0,0,1,1,2,2]" }],
+        hints: ["Three pointers: low, mid, high", "Swap elements based on value at mid"],
+        starterCode: { javascript: "function sortColors(nums) {\n  // Sort in-place\n  return nums;\n}", python: "def sort_colors(nums):\n    # Sort in-place\n    return nums", java: "class Solution {\n    public void sortColors(int[] nums) {\n    }\n}", cpp: "class Solution {\npublic:\n    void sortColors(vector<int>& nums) {\n    }\n};", c: "void sortColors(int* nums, int numsSize) {\n}" },
+        testCases: [{ input: [[2, 0, 2, 1, 1, 0]], expected: [0, 0, 1, 1, 2, 2] }, { input: [[2, 0, 1]], expected: [0, 1, 2] }], tags: ["dutch-flag", "in-place"], points: 20 },
+
+    { id: "cc19", title: "Stock Buy Sell (Max Profit)", difficulty: "Medium", category: "Arrays", company: ["Amazon", "Goldman Sachs", "Morgan Stanley", "Flipkart"], career: "finance",
+        description: "Given array of stock prices on each day, find max profit from one buy and one sell. You must buy before sell.",
+        examples: [{ input: "[7,1,5,3,6,4]", output: "5 (buy at 1, sell at 6)" }],
+        hints: ["Track minimum price so far", "Calculate profit at each step"],
+        starterCode: { javascript: "function maxProfit(prices) {\n  // Your code here\n}", python: "def max_profit(prices):\n    # Your code here\n    pass", java: "class Solution {\n    public int maxProfit(int[] prices) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int maxProfit(vector<int>& prices) {\n        return 0;\n    }\n};", c: "int maxProfit(int* prices, int pricesSize) {\n    return 0;\n}" },
+        testCases: [{ input: [[7, 1, 5, 3, 6, 4]], expected: 5 }, { input: [[7, 6, 4, 3, 1]], expected: 0 }], tags: ["array", "greedy"], points: 20 },
+
+    { id: "cc20", title: "Find First and Last Position in Sorted Array", difficulty: "Medium", category: "Searching", company: ["Google", "Amazon", "Uber"], career: "technology",
+        description: "Given a sorted array and target, find the starting and ending position of target. Return [-1,-1] if not found. Must be O(log n).",
+        examples: [{ input: "nums=[5,7,7,8,8,10], target=8", output: "[3,4]" }],
+        hints: ["Two binary searches — one for first, one for last occurrence"],
+        starterCode: { javascript: "function searchRange(nums, target) {\n  // Your code here\n}", python: "def search_range(nums, target):\n    # Your code here\n    pass", java: "class Solution {\n    public int[] searchRange(int[] nums, int target) {\n        return new int[]{-1,-1};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<int> searchRange(vector<int>& nums, int target) {\n        return {-1,-1};\n    }\n};", c: "int* searchRange(int* nums, int numsSize, int target, int* returnSize) {\n    return NULL;\n}" },
+        testCases: [{ input: [[5, 7, 7, 8, 8, 10], 8], expected: [3, 4] }, { input: [[5, 7, 7, 8, 8, 10], 6], expected: [-1, -1] }], tags: ["binary-search"], points: 25 },
+
+    // ─── HARD ────────────────────────────────────────────────────
+    { id: "cc21", title: "LRU Cache", difficulty: "Hard", category: "Design", company: ["Google", "Amazon", "Microsoft", "Facebook", "Flipkart"], career: "technology",
+        description: "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.\n\nImplement get(key) and put(key, value) in O(1) time.",
+        examples: [{ input: "capacity = 2", output: "LRUCache object" }],
+        hints: ["Use HashMap + Doubly Linked List", "HashMap gives O(1) lookup, DLL gives O(1) removal"],
+        starterCode: { javascript: "class LRUCache {\n  constructor(capacity) {\n    // Your code here\n  }\n  get(key) {}\n  put(key, value) {}\n}", python: "class LRUCache:\n    def __init__(self, capacity):\n        pass\n    def get(self, key):\n        pass\n    def put(self, key, value):\n        pass", java: "class LRUCache {\n    public LRUCache(int capacity) {}\n    public int get(int key) { return -1; }\n    public void put(int key, int value) {}\n}", cpp: "class LRUCache {\npublic:\n    LRUCache(int capacity) {}\n    int get(int key) { return -1; }\n    void put(int key, int value) {}\n};", c: "// Use struct for LRU Cache implementation\ntypedef struct {\n    int capacity;\n} LRUCache;" },
+        testCases: [], tags: ["design", "hash-map", "linked-list"], points: 40 },
+
+    { id: "cc22", title: "Median of Two Sorted Arrays", difficulty: "Hard", category: "Searching", company: ["Google", "Amazon", "Goldman Sachs"], career: "technology",
+        description: "Given two sorted arrays nums1 and nums2, return the median of the two sorted arrays. Must be O(log(m+n)).",
+        examples: [{ input: "nums1=[1,3], nums2=[2]", output: "2.0" }],
+        hints: ["Binary search on the smaller array", "Partition both arrays such that left half ≤ right half"],
+        starterCode: { javascript: "function findMedianSortedArrays(nums1, nums2) {\n  // Your code here\n}", python: "def find_median_sorted_arrays(nums1, nums2):\n    # Your code here\n    pass", java: "class Solution {\n    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        return 0.0;\n    }\n}", cpp: "class Solution {\npublic:\n    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n        return 0.0;\n    }\n};", c: "double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {\n    return 0.0;\n}" },
+        testCases: [], tags: ["binary-search", "divide-conquer"], points: 45 },
+
+    { id: "cc23", title: "Trapping Rain Water", difficulty: "Hard", category: "Arrays", company: ["Google", "Amazon", "Microsoft", "Goldman Sachs", "Uber"], career: "technology",
+        description: "Given n non-negative integers representing an elevation map, compute how much water it can trap after raining.",
+        examples: [{ input: "[0,1,0,2,1,0,1,3,2,1,2,1]", output: "6" }],
+        hints: ["Two-pointer approach", "Or use prefix max arrays from left and right"],
+        starterCode: { javascript: "function trap(height) {\n  // Your code here\n}", python: "def trap(height):\n    # Your code here\n    pass", java: "class Solution {\n    public int trap(int[] height) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int trap(vector<int>& height) {\n        return 0;\n    }\n};", c: "int trap(int* height, int heightSize) {\n    return 0;\n}" },
+        testCases: [{ input: [[0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1]], expected: 6 }], tags: ["two-pointers", "stack"], points: 40 },
+
+    { id: "cc24", title: "Word Ladder", difficulty: "Hard", category: "Graphs", company: ["Amazon", "Google", "Facebook"], career: "technology",
+        description: "Given beginWord, endWord, and wordList, return the number of words in the shortest transformation sequence where only one letter can change at a time.",
+        examples: [{ input: 'begin="hit", end="cog", list=["hot","dot","dog","lot","log","cog"]', output: "5" }],
+        hints: ["BFS — each word is a node, edges connect words differing by one letter"],
+        starterCode: { javascript: "function ladderLength(beginWord, endWord, wordList) {\n  // Your code here\n}", python: "def ladder_length(begin_word, end_word, word_list):\n    # Your code here\n    pass", java: "class Solution {\n    public int ladderLength(String beginWord, String endWord, List<String> wordList) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {\n        return 0;\n    }\n};", c: "int ladderLength(char* beginWord, char* endWord, char** wordList, int wordListSize) {\n    return 0;\n}" },
+        testCases: [], tags: ["bfs", "graph"], points: 40 },
+
+    { id: "cc25", title: "Serialize and Deserialize Binary Tree", difficulty: "Hard", category: "Trees", company: ["Google", "Amazon", "Microsoft", "Uber"], career: "technology",
+        description: "Design an algorithm to serialize and deserialize a binary tree.",
+        examples: [{ input: "[1,2,3,null,null,4,5]", output: "Same tree reconstructed" }],
+        hints: ["Use pre-order traversal with null markers", "BFS level-order also works"],
+        starterCode: { javascript: "function serialize(root) {\n  // Your code\n}\nfunction deserialize(data) {\n  // Your code\n}", python: "class Codec:\n    def serialize(self, root):\n        pass\n    def deserialize(self, data):\n        pass", java: "public class Codec {\n    public String serialize(TreeNode root) { return \"\"; }\n    public TreeNode deserialize(String data) { return null; }\n}", cpp: "class Codec {\npublic:\n    string serialize(TreeNode* root) { return \"\"; }\n    TreeNode* deserialize(string data) { return nullptr; }\n};", c: "char* serialize(struct TreeNode* root) { return NULL; }\nstruct TreeNode* deserialize(char* data) { return NULL; }" },
+        testCases: [], tags: ["tree", "design", "bfs"], points: 45 },
 ];
 
 // ─── DAILY QUIZ QUESTIONS (MCQ) ──────────────────────────────
@@ -308,7 +477,7 @@ export const JOB_LISTINGS = [
 // ─── IN-MEMORY STORE ────────────────────────────────────────
 interface User {
     id: string; email: string; name: string; passwordHash: string;
-    age?: number; education_level?: string; city?: string;
+    age?: number; education_level?: string; city?: string; institution?: string;
     isPremium?: boolean; premiumExpiry?: string; streak?: number; lastActive?: string;
     points?: number; careerChoice?: string;
 }

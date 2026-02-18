@@ -49,6 +49,7 @@ export default function DashboardPage() {
         { icon: "💼", title: "Jobs & Internships", desc: "Fresh openings daily", href: "/jobs", color: "#f43f5e", badge: "HOT" },
         { icon: "🏆", title: "Leaderboard", desc: "Top learners rankings", href: "/leaderboard", color: "#eab308", badge: "NEW" },
         { icon: "🔮", title: "AI Career Chat", desc: "Ask anything career", href: "/chat", color: "#14b8a6" },
+        { icon: "📊", title: "Analytics", desc: "Track your growth", href: "/analytics", color: "#f59e0b", badge: "NEW" },
         { icon: "🗺️", title: "Skill Gap Finder", desc: "Your learning roadmap", href: "/skills", color: "#64748b" },
         { icon: "🧭", title: "Explore Careers", desc: "Browse 12+ paths", href: "/careers", color: "#0ea5e9" },
     ];

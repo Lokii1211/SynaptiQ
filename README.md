@@ -1,153 +1,221 @@
-# SkillSync AI 🎯
+# 🧠 SkillSync AI — India's AI-Powered Career Intelligence Platform
 
-**AI-Powered Career Guidance Platform for Indian Students**
+> **The most comprehensive career guidance platform built for Indian students & freshers.**
 
-> Discover. Plan. Achieve.
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://typescriptlang.org)
+[![React](https://img.shields.io/badge/React-18-blue?logo=react)](https://reactjs.org)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-SkillSync AI helps students discover their ideal career path through AI-powered psychometric assessments, real-time job market data, and personalized learning roadmaps.
+---
 
-## 🚀 Live Demo
+## 🚀 What is SkillSync AI?
 
-- **Frontend**: `http://localhost:3000`
-- **Backend API**: `http://localhost:8000`
-- **API Docs**: `http://localhost:8000/docs`
+SkillSync AI is a **full-stack career intelligence platform** that helps Indian students make data-driven career decisions. Unlike generic career tests, SkillSync combines AI-powered assessments, coding practice, community learning, salary intelligence, and gamification into a single, life-changing platform.
 
-## ✨ Features
+**Built to solve the #1 problem of Indian students:** *"What career should I choose, and how do I prepare?"*
 
-### 🧠 AI Career Assessment
-- 15-question psychometric test
-- AI-powered personality analysis (Gemini)
-- Top 5 career recommendations with match scores
-- Personality trait visualization (Holland's RIASEC model)
+---
 
-### 🔍 Career Explorer
-- 12+ detailed career profiles (200+ planned)
-- Real salary data in Indian Rupees (LPA)
-- Growth outlook & market demand scores
-- Day-in-life descriptions, required skills, education paths
-- Top hiring companies & entrance exams
+## ✨ Features (18+ Modules)
 
-### 📊 Skill Gap Analyzer
-- Input current skills → Get gap analysis
-- AI-generated personalized learning roadmap
-- Free & paid resource recommendations (NPTEL, Coursera, etc.)
-- Timeline estimation for job-readiness
+### 🎯 Core Modules
+| Module | Description | Status |
+|--------|-------------|--------|
+| � **4D Career Assessment** | 45-question deep personality + aptitude profiling | ✅ Live |
+| 💻 **Code Practice Arena** | 25 LeetCode-style problems, 5 languages (JS/Python/Java/C++/C), company-tagged | ✅ Live |
+| 📝 **Daily Career Quiz** | 5 daily questions with streak gamification | ✅ Live |
+| 🎓 **Learning Courses** | Industry-aligned courses (DSA, Full Stack, ML, etc.) | ✅ Live |
+| 💼 **Jobs & Internships** | Fresh openings from top MNCs with freemium model | ✅ Live |
+| 🌐 **Community Hub** | Share, learn, discuss — with admin moderation | ✅ Live |
 
-### 💬 AI Career Chat
-- 24/7 AI career counselor
-- Context-aware conversations
-- India-specific job market advice
-- Conversation history
+### 🧰 Career Intelligence
+| Module | Description | Status |
+|--------|-------------|--------|
+| 🎮 **Career Day Simulator** | Experience a real day in different roles | ✅ Live |
+| 💰 **Salary Negotiation Sim** | Practice with AI recruiter | ✅ Live |
+| 🏛️ **College ROI Calculator** | Is your ₹20L degree worth it? | ✅ Live |
+| 👨‍👩‍👧 **Parent Toolkit** | Data-backed reports for family conversations | ✅ Live |
+| 🗺️ **Skill Gap Analyzer** | Current skills vs dream career roadmap | ✅ Live |
+| � **AI Career Counselor** | 24/7 AI career advisor (India-focused) | ✅ Live |
+| 🧭 **Career Explorer** | 12+ career paths with honest data | ✅ Live |
 
-### 📈 Market Intelligence
-- Trending skills with growth %
-- Salary benchmarks by role & experience
-- Top cities for each career
+### � Analytics & Social
+| Module | Description | Status |
+|--------|-------------|--------|
+| 📊 **Analytics Dashboard** | Daily/Weekly/Monthly performance tracking | ✅ Live |
+| 🏆 **Leaderboard** | Compete with students across India (Bronze → Diamond) | ✅ Live |
+| 🏢 **Company Prep Mode** | Curated problems from Google, Amazon, Microsoft, etc. | ✅ Live |
 
-### 📝 AI Resume Builder
-- ATS-optimized resume creation
-- AI suggestions for improvement
-- ATS score calculation
+---
 
 ## 🏗️ Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | Next.js 14 (App Router) + TypeScript + Tailwind CSS |
-| Backend | FastAPI (Python) |
-| Database | SQLite (dev) / PostgreSQL (prod) |
-| ORM | SQLAlchemy 2.0 |
-| Auth | JWT (python-jose) + bcrypt |
-| AI | Google Gemini API |
+| **Frontend** | Next.js 14, React 18, TypeScript |
+| **Styling** | CSS Variables + Glassmorphism Design System |
+| **API** | Next.js API Routes (16 REST endpoints) |
+| **Auth** | JWT + bcrypt password hashing |
+| **Data** | In-memory store (production-ready for DB migration) |
+| **Deployment** | Vercel-optimized |
 
-## 📂 Project Structure
+---
+
+## � Project Structure
 
 ```
-skillsync-ai/
-├── backend/
-│   ├── main.py              # FastAPI app entry
-│   ├── routes.py             # All API routes
-│   ├── models.py             # SQLAlchemy models
-│   ├── database.py           # DB config
-│   ├── auth.py               # JWT authentication
-│   ├── ai_engine.py          # Gemini AI integration
-│   ├── career_data.py        # Career profiles & assessment questions
-│   ├── requirements.txt      # Python dependencies
-│   └── .env                  # Environment variables
-│
-├── frontend/
-│   └── src/
-│       ├── app/
-│       │   ├── page.tsx          # Landing page
-│       │   ├── signup/page.tsx   # Signup
-│       │   ├── login/page.tsx    # Login
-│       │   ├── careers/page.tsx  # Career explorer
-│       │   ├── careers/[slug]/   # Career detail
-│       │   ├── assessment/       # AI assessment
-│       │   ├── skills/page.tsx   # Skill gap analyzer
-│       │   ├── chat/page.tsx     # AI chat
-│       │   ├── dashboard/        # User dashboard
-│       │   ├── layout.tsx        # Root layout + SEO
-│       │   └── globals.css       # Design system
-│       └── lib/
-│           └── api.ts            # API client
-│
-└── PRODUCT_SPEC.md           # Product specification
+cybershield-campus/frontend/
+├── src/
+│   ├── app/
+│   │   ├── api/                    # 16 API routes
+│   │   │   ├── auth/               # signup, login, me
+│   │   │   ├── assessment/         # questions, submit, results
+│   │   │   ├── careers/            # list, categories, detail
+│   │   │   ├── practice/           # coding challenges (GET/POST)
+│   │   │   ├── community/          # posts + interaction
+│   │   │   ├── daily-quiz/         # daily quiz engine
+│   │   │   ├── courses/            # course catalog
+│   │   │   ├── jobs/               # job listings
+│   │   │   ├── chat/               # AI career counselor
+│   │   │   ├── skills/             # gap analysis
+│   │   │   ├── market/             # trending skills, salary insights
+│   │   │   ├── leaderboard/        # rankings
+│   │   │   ├── negotiate/          # salary negotiation sim
+│   │   │   ├── simulate/           # career day simulation
+│   │   │   ├── college-roi/        # ROI calculator
+│   │   │   └── parent-report/      # parent toolkit
+│   │   ├── analytics/              # Analytics dashboard
+│   │   ├── assessment/             # 4D Assessment page
+│   │   ├── careers/                # Career explorer
+│   │   ├── chat/                   # AI counselor
+│   │   ├── community/              # Community hub
+│   │   ├── courses/                # Courses catalog
+│   │   ├── daily/                  # Daily quiz
+│   │   ├── dashboard/              # Main dashboard
+│   │   ├── jobs/                   # Jobs & internships
+│   │   ├── leaderboard/            # Rankings
+│   │   ├── login/                  # Login page
+│   │   ├── practice/               # Code practice arena
+│   │   ├── signup/                 # Multi-step onboarding
+│   │   ├── simulator/              # Career simulator
+│   │   ├── skills/                 # Skill gap finder
+│   │   ├── negotiate/              # Salary negotiation
+│   │   ├── college-roi/            # College ROI
+│   │   └── parent/                 # Parent toolkit
+│   ├── lib/
+│   │   ├── api.ts                  # Frontend API client
+│   │   ├── server-data.ts          # Data store + seed data
+│   │   └── server-auth.ts          # Auth utilities
+│   └── globals.css                 # Design system
+├── next.config.mjs
+├── tsconfig.json
+└── package.json
 ```
 
-## 🛠️ Setup & Run
+---
+
+## � Getting Started
 
 ### Prerequisites
-- Python 3.10+
 - Node.js 18+
-- Google Gemini API Key (optional — works with mock data)
+- npm or yarn
 
-### Backend
+### Installation
 ```bash
-cd backend
-pip install -r requirements.txt
-# Edit .env with your GOOGLE_API_KEY
-python -m uvicorn main:app --reload --port 8000
-```
+# Clone the repo
+git clone https://github.com/your-username/cybershield-campus.git
+cd cybershield-campus/frontend
 
-### Frontend
-```bash
-cd frontend
+# Install dependencies
 npm install
+
+# Start development server
 npm run dev
 ```
 
-### Access
-- Frontend: http://localhost:3000
-- API Docs: http://localhost:8000/docs
+Open [http://localhost:3000](http://localhost:3000) to see the platform.
 
-## 🔑 API Endpoints
+### Production Build
+```bash
+npx next build
+npx next start
+```
+
+---
+
+## � API Endpoints (16 Routes)
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/auth/signup` | Create account |
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/me` | Get profile |
-| GET | `/api/assessment/questions` | Get quiz questions |
-| POST | `/api/assessment/submit` | Submit & get results |
-| GET | `/api/assessment/results` | Get past results |
-| GET | `/api/careers` | Browse careers |
-| GET | `/api/careers/{slug}` | Career detail |
+| POST | `/api/auth/signup` | User registration (multi-step onboarding) |
+| POST | `/api/auth/login` | User authentication |
+| GET | `/api/auth/me` | Get current user profile |
+| GET | `/api/assessment/questions` | Fetch assessment questions |
+| POST | `/api/assessment/submit` | Submit assessment answers |
+| GET | `/api/assessment/results` | Get career profiling results |
+| GET | `/api/careers` | Browse career paths |
 | GET | `/api/careers/categories` | Career categories |
+| GET | `/api/practice` | Coding challenges (filter by difficulty/company/career) |
+| POST | `/api/practice` | Submit & evaluate code |
+| GET | `/api/community` | Community posts (with category filter) |
+| POST | `/api/community` | Create post (admin approval required) |
+| GET | `/api/daily-quiz` | Daily quiz questions |
+| GET | `/api/courses` | Course catalog |
+| GET | `/api/jobs` | Job & internship listings |
+| POST | `/api/chat` | AI career counselor |
+| GET | `/api/leaderboard` | Rankings & points |
+| GET | `/api/market/trending-skills` | Trending skills in India |
+| GET | `/api/market/salary-insights` | Salary data by role |
 | POST | `/api/skills/gap-analysis` | Skill gap analysis |
-| POST | `/api/resume/create` | Create resume |
-| POST | `/api/chat` | AI career chat |
-| GET | `/api/market/trending-skills` | Trending skills |
-| GET | `/api/market/salary-insights` | Salary data |
+| POST | `/api/negotiate` | Salary negotiation sim |
+| POST | `/api/simulate` | Career day simulation |
+| GET | `/api/college-roi` | College ROI calculator |
+| POST | `/api/parent-report` | Parent toolkit report |
 
-## 🎨 Design
+---
 
-- **Theme**: Dark mode with glassmorphism
-- **Colors**: Indigo/Purple gradient palette
-- **Typography**: Inter font family
-- **Animations**: Smooth fade-ins, progress bars, floating effects
-- **Responsive**: Mobile-first design
+## � Coding Practice Highlights
 
-## 📝 License
+- **25 problems** across Easy (8), Medium (12), Hard (5)
+- **Company-tagged**: Google, Amazon, Microsoft, Meta, Apple, Goldman Sachs, TCS, Infosys, Flipkart, Razorpay, Uber, and more
+- **5 language support**: JavaScript, Python, Java, C++, C
+- **Categories**: Arrays, Strings, Dynamic Programming, Graphs, Trees, Stacks, Searching, Design, Matrix, Linked Lists
+- **Company Prep Mode**: Select a target company → see curated problems from their actual interviews
+- **Career-based filtering**: Problems aligned with your career path
 
-MIT © 2026 SkillSync AI
+---
+
+## 🌟 Key Design Decisions
+
+1. **Glassmorphism UI** — Dark theme with translucent cards, accent glows, and smooth animations
+2. **Gamification** — Points, streaks, levels (Bronze→Diamond), leaderboard
+3. **Admin moderation** — Community posts require review before publishing
+4. **Multi-step onboarding** — Captures education, institution, career interest
+5. **India-focused** — Real salary data, Indian company names, IIT/NIT/VIT colleges
+6. **Responsive** — Mobile-first design across all 18+ pages
+
+---
+
+## � Roadmap
+
+- [ ] Database integration (PostgreSQL/MongoDB)
+- [ ] Secure code sandbox for multi-language execution
+- [ ] Admin panel for community moderation
+- [ ] Push notifications for daily quiz reminders
+- [ ] Company-specific interview preparation modules
+- [ ] Resume builder with ATS optimization
+- [ ] Peer-to-peer mentorship matching
+- [ ] Real-time collaborative coding
+
+---
+
+## 👥 Team
+
+Built with ❤️ for Indian students who deserve better career guidance.
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE) for details.
