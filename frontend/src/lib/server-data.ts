@@ -745,5 +745,12 @@ class Store {
     }
 }
 
-export const store = new Store();
+// Use globalThis to ensure the Store singleton survives Next.js HMR reloads
+// Without this, each hot reload creates a new Store instance and users are lost
+const globalForStore = globalThis as unknown as { __skillsync_store?: Store };
 
+if (!globalForStore.__skillsync_store) {
+    globalForStore.__skillsync_store = new Store();
+}
+
+export const store = globalForStore.__skillsync_store;

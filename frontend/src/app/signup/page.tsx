@@ -21,19 +21,29 @@ export default function SignupPage() {
         setError("");
         setLoading(true);
         try {
-            const data = await api.signup({
-                ...form,
-                age: form.age ? parseInt(form.age) : undefined,
-                education_level: form.education_level || undefined,
-                city: form.city || undefined,
-                institution: form.institution || undefined,
-                careerInterest: form.careerInterest || undefined,
+            const res = await fetch("/api/auth/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...form,
+                    age: form.age ? parseInt(form.age) : undefined,
+                    education_level: form.education_level || undefined,
+                    city: form.city || undefined,
+                    institution: form.institution || undefined,
+                    careerInterest: form.careerInterest || undefined,
+                }),
             });
+            const data = await res.json();
+            if (!res.ok) {
+                setError(data.detail || "Signup failed. Please try again.");
+                setLoading(false);
+                return;
+            }
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
             router.push("/dashboard");
         } catch (err: any) {
-            setError(err.message);
+            setError(err.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
