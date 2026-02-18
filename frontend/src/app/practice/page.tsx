@@ -92,19 +92,19 @@ export default function PracticePage() {
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
             {/* Navbar */}
-            <nav style={{ padding: "0.75rem 1.5rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.5rem, 2vw, 1.5rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.3rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.15rem" }}>SkillSync <span style={{ color: "#22c55e" }}>Code</span></span>
                 </Link>
-                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                <div className="practice-tabs scroll-x" style={{ display: "flex", gap: "0.4rem", alignItems: "center" }}>
                     <button onClick={() => setTab("challenges")} style={{ padding: "0.35rem 0.9rem", borderRadius: 8, background: tab === "challenges" ? "rgba(34,197,94,0.15)" : "transparent", border: "1px solid", borderColor: tab === "challenges" ? "#22c55e" : "var(--border-color)", color: tab === "challenges" ? "#22c55e" : "var(--text-secondary)", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>📋 Problems</button>
                     <button onClick={() => setTab("editor")} style={{ padding: "0.35rem 0.9rem", borderRadius: 8, background: tab === "editor" ? "rgba(34,197,94,0.15)" : "transparent", border: "1px solid", borderColor: tab === "editor" ? "#22c55e" : "var(--border-color)", color: tab === "editor" ? "#22c55e" : "var(--text-secondary)", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>⌨️ Editor</button>
                     <button onClick={() => setShowCompanyPrep(!showCompanyPrep)} style={{ padding: "0.35rem 0.9rem", borderRadius: 8, background: showCompanyPrep ? "rgba(99,102,241,0.15)" : "transparent", border: "1px solid", borderColor: showCompanyPrep ? "var(--accent-primary)" : "var(--border-color)", color: showCompanyPrep ? "var(--accent-primary)" : "var(--text-secondary)", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}>🏢 Company Prep</button>
                 </div>
             </nav>
 
-            <div style={{ maxWidth: 1400, margin: "0 auto", padding: "1rem" }}>
+            <div style={{ maxWidth: 1400, margin: "0 auto", padding: "clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Company Prep Panel */}
                 {showCompanyPrep && (
                     <div style={{ marginBottom: "1.25rem", padding: "1.25rem", borderRadius: 16, background: "linear-gradient(135deg, rgba(99,102,241,0.08), rgba(139,92,246,0.08))", border: "1px solid rgba(99,102,241,0.2)" }}>
@@ -136,7 +136,7 @@ export default function PracticePage() {
                 {tab === "challenges" ? (
                     <>
                         {/* Stats Bar */}
-                        <div style={{ display: "flex", gap: "1rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))", gap: "0.5rem", marginBottom: "1rem" }}>
                             <div style={{ padding: "0.75rem 1.25rem", borderRadius: 12, background: "var(--bg-card)", border: "1px solid var(--border-color)", flex: 1, minWidth: 120, textAlign: "center" }}>
                                 <div style={{ fontSize: "1.5rem", fontWeight: 800 }}>{stats.total}</div>
                                 <div style={{ fontSize: "0.7rem", color: "var(--text-secondary)", fontWeight: 600 }}>Total Problems</div>
@@ -158,14 +158,14 @@ export default function PracticePage() {
                         {/* Filters */}
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", flexWrap: "wrap", gap: "0.75rem" }}>
                             <div>
-                                <h1 style={{ fontSize: "1.5rem", fontWeight: 800 }}>💻 Coding Challenges</h1>
+                                <h1 style={{ fontSize: "clamp(1.1rem, 3vw, 1.5rem)", fontWeight: 800 }}>💻 Coding Challenges</h1>
                                 <p style={{ color: "var(--text-secondary)", fontSize: "0.8rem" }}>From top MNCs → Google, Amazon, Microsoft, TCS & more</p>
                             </div>
-                            <input placeholder="🔍 Search problems, tags, companies..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-                                style={{ padding: "0.5rem 1rem", borderRadius: 10, background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)", color: "var(--text-primary)", fontSize: "0.85rem", outline: "none", minWidth: 240, boxSizing: "border-box" }} />
+                            <input placeholder="🔍 Search problems, tags..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                                style={{ padding: "0.5rem 1rem", borderRadius: 10, background: "rgba(255,255,255,0.05)", border: "1px solid var(--border-color)", color: "var(--text-primary)", fontSize: "0.85rem", outline: "none", width: "100%", maxWidth: 280, boxSizing: "border-box" }} />
                         </div>
 
-                        <div style={{ display: "flex", gap: "0.4rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
+                        <div className="scroll-x" style={{ display: "flex", gap: "0.4rem", marginBottom: "0.75rem", flexWrap: "wrap" }}>
                             {["All", "Easy", "Medium", "Hard"].map(d => (
                                 <button key={d} onClick={() => setDiffFilter(d)} style={{ padding: "0.3rem 0.7rem", borderRadius: 8, background: diffFilter === d ? "rgba(99,102,241,0.15)" : "transparent", border: "1px solid", borderColor: diffFilter === d ? "var(--accent-primary)" : "var(--border-color)", color: diffFilter === d ? "var(--accent-primary)" : "var(--text-secondary)", cursor: "pointer", fontSize: "0.75rem", fontWeight: 600 }}>{d}</button>
                             ))}
@@ -204,7 +204,7 @@ export default function PracticePage() {
                         </div>
                     </>
                 ) : (
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", minHeight: "calc(100vh - 100px)" }}>
+                    <div className="editor-layout" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", minHeight: "calc(100vh - 100px)" }}>
                         {/* Problem Description */}
                         <div style={{ padding: "1.25rem", borderRadius: 14, background: "rgba(26,26,46,0.6)", border: "1px solid var(--border-color)", overflowY: "auto", maxHeight: "calc(100vh - 120px)" }}>
                             {selected ? (
@@ -251,8 +251,8 @@ export default function PracticePage() {
                         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                             <div style={{ borderRadius: 14, overflow: "hidden", border: "1px solid var(--border-color)", flex: 1, display: "flex", flexDirection: "column", background: "rgba(26,26,46,0.6)" }}>
                                 {/* Editor Header */}
-                                <div style={{ padding: "0.5rem 0.75rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <div style={{ display: "flex", gap: "0.35rem", alignItems: "center" }}>
+                                <div style={{ padding: "0.5rem 0.75rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.35rem" }}>
+                                    <div className="scroll-x" style={{ display: "flex", gap: "0.25rem", alignItems: "center" }}>
                                         {LANGUAGES.map(l => (
                                             <button key={l.id} onClick={() => onLanguageChange(l.id)}
                                                 style={{ padding: "0.25rem 0.55rem", borderRadius: 6, background: language === l.id ? "rgba(34,197,94,0.15)" : "transparent", border: "1px solid", borderColor: language === l.id ? "#22c55e" : "transparent", color: language === l.id ? "#22c55e" : "var(--text-secondary)", cursor: "pointer", fontSize: "0.7rem", fontWeight: 600 }}>
@@ -291,7 +291,12 @@ export default function PracticePage() {
 
             <style jsx>{`
                 @media (max-width: 768px) {
-                    div[style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+                    .editor-layout { grid-template-columns: 1fr !important; }
+                    .editor-layout > div:first-child { max-height: 40vh !important; }
+                }
+                @media (max-width: 480px) {
+                    .practice-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap !important; }
+                    .practice-tabs button { white-space: nowrap; font-size: 0.72rem !important; }
                 }
             `}</style>
         </div>

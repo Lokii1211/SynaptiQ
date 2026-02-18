@@ -30,13 +30,13 @@ export default function ParentPage() {
 
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
-            <nav style={{ padding: "1rem 2rem", borderBottom: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100 }}>
                 <Link href="/dashboard" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>← Back</Link>
                 <h1 style={{ fontSize: "1.25rem", fontWeight: 700 }}>👨‍👩‍👧 Parent Conversation Toolkit</h1>
                 <div />
             </nav>
 
-            <div style={{ maxWidth: 800, margin: "0 auto", padding: "2rem" }}>
+            <div style={{ maxWidth: 800, margin: "0 auto", padding: "clamp(1rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {!report ? (
                     <div style={{ animation: "fadeInUp 0.6s ease" }}>
                         <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>

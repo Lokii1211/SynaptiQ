@@ -44,7 +44,7 @@ export default function DailyQuizPage() {
 
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
-            <nav style={{ padding: "1rem 2rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.25rem" }}>SkillSync <span style={{ color: "#eab308" }}>Daily</span></span>
@@ -54,7 +54,7 @@ export default function DailyQuizPage() {
                 </div>
             </nav>
 
-            <div style={{ maxWidth: 700, margin: "0 auto", padding: "2rem 1rem" }}>
+            <div style={{ maxWidth: 700, margin: "0 auto", padding: "clamp(1rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Category Selector */}
                 <div style={{ display: "flex", gap: "0.5rem", marginBottom: "2rem", justifyContent: "center", flexWrap: "wrap" }}>
                     {[{ id: "technology", label: "💻 Tech", color: "#6366f1" }, { id: "business", label: "📊 Business", color: "#22c55e" }, { id: "design", label: "🎨 Design", color: "#f43f5e" }].map(c => (

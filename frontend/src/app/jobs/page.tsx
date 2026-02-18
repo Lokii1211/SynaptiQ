@@ -28,7 +28,7 @@ export default function JobsPage() {
 
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
-            <nav style={{ padding: "1rem 2rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.25rem" }}>SkillSync <span style={{ color: "#f43f5e" }}>Jobs</span></span>
@@ -38,7 +38,7 @@ export default function JobsPage() {
                 </button>
             </nav>
 
-            <div style={{ maxWidth: 1000, margin: "0 auto", padding: "2rem 1rem" }}>
+            <div style={{ maxWidth: 1000, margin: "0 auto", padding: "clamp(1rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Free Trial Banner */}
                 <div className="glass-card" style={{ padding: "1.25rem 1.5rem", borderRadius: 14, marginBottom: "1.5rem", background: "linear-gradient(135deg, rgba(234,179,8,0.08), rgba(249,115,22,0.05))", border: "1px solid rgba(234,179,8,0.2)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "0.75rem" }}>
                     <div>
@@ -65,7 +65,7 @@ export default function JobsPage() {
                                     </div>
                                 ))}
                             </div>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.5rem" }}>
+                            <div className="job-detail-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.5rem" }}>
                                 <div style={{ padding: "1rem", borderRadius: 14, border: "2px solid #eab308", background: "rgba(234,179,8,0.05)" }}>
                                     <p style={{ fontWeight: 800, fontSize: "1.5rem", color: "#eab308" }}>₹0</p>
                                     <p style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>7-Day Free Trial</p>
@@ -158,6 +158,12 @@ export default function JobsPage() {
                     </div>
                 )}
             </div>
+
+            <style jsx>{`
+                @media (max-width: 640px) {
+                    .job-detail-grid { grid-template-columns: 1fr !important; }
+                }
+            `}</style>
         </div>
     );
 }

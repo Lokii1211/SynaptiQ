@@ -31,18 +31,18 @@ export default function LeaderboardPage() {
 
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
-            <nav style={{ padding: "1rem 2rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100 }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.25rem" }}>SkillSync <span style={{ color: "#eab308" }}>Leaderboard</span></span>
                 </Link>
             </nav>
 
-            <div style={{ maxWidth: 800, margin: "0 auto", padding: "2rem 1rem" }}>
+            <div style={{ maxWidth: 800, margin: "0 auto", padding: "clamp(1rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Hero */}
-                <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-                    <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "0.5rem" }}>🏆 Leaderboard</h1>
-                    <p style={{ color: "var(--text-secondary)" }}>Top learners across SkillSync — compete, learn, and grow together</p>
+                <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+                    <h1 style={{ fontSize: "clamp(1.4rem, 4vw, 2rem)", fontWeight: 800, marginBottom: "0.4rem" }}>🏆 Leaderboard</h1>
+                    <p style={{ color: "var(--text-secondary)", fontSize: "clamp(0.8rem, 2.5vw, 1rem)" }}>Top learners across SkillSync — compete, learn, and grow together</p>
                 </div>
 
                 {/* Tab Switcher */}
@@ -56,9 +56,9 @@ export default function LeaderboardPage() {
                 </div>
 
                 {/* Top 3 Podium */}
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: "1rem", marginBottom: "2.5rem" }}>
+                <div className="podium" style={{ display: "flex", justifyContent: "center", alignItems: "flex-end", gap: "clamp(0.5rem, 2vw, 1rem)", marginBottom: "2rem" }}>
                     {/* 2nd */}
-                    <div className="glass-card" style={{ padding: "1.5rem 1rem", borderRadius: 16, textAlign: "center", width: 160, borderTop: "3px solid #c0c0c0" }}>
+                    <div className="glass-card" style={{ padding: "clamp(0.75rem, 2vw, 1.5rem) clamp(0.5rem, 1.5vw, 1rem)", borderRadius: 16, textAlign: "center", flex: 1, maxWidth: 160, borderTop: "3px solid #c0c0c0" }}>
                         <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🥈</div>
                         <h3 style={{ fontWeight: 700, fontSize: "0.95rem" }}>{leaderboard[1].name}</h3>
                         <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.5rem" }}>{leaderboard[1].college}</p>
@@ -66,7 +66,7 @@ export default function LeaderboardPage() {
                         <p style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>🔥 {leaderboard[1].streak}d streak</p>
                     </div>
                     {/* 1st */}
-                    <div className="glass-card" style={{ padding: "2rem 1rem", borderRadius: 20, textAlign: "center", width: 180, borderTop: "3px solid #eab308", transform: "translateY(-20px)" }}>
+                    <div className="glass-card" style={{ padding: "clamp(1rem, 3vw, 2rem) clamp(0.5rem, 1.5vw, 1rem)", borderRadius: 20, textAlign: "center", flex: 1, maxWidth: 180, borderTop: "3px solid #eab308", transform: "translateY(-15px)" }}>
                         <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🏆</div>
                         <h3 style={{ fontWeight: 800, fontSize: "1.1rem" }}>{leaderboard[0].name}</h3>
                         <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.5rem" }}>{leaderboard[0].college}</p>
@@ -74,7 +74,7 @@ export default function LeaderboardPage() {
                         <p style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>🔥 {leaderboard[0].streak}d streak</p>
                     </div>
                     {/* 3rd */}
-                    <div className="glass-card" style={{ padding: "1.5rem 1rem", borderRadius: 16, textAlign: "center", width: 160, borderTop: "3px solid #cd7f32" }}>
+                    <div className="glass-card" style={{ padding: "clamp(0.75rem, 2vw, 1.5rem) clamp(0.5rem, 1.5vw, 1rem)", borderRadius: 16, textAlign: "center", flex: 1, maxWidth: 160, borderTop: "3px solid #cd7f32" }}>
                         <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>🥉</div>
                         <h3 style={{ fontWeight: 700, fontSize: "0.95rem" }}>{leaderboard[2].name}</h3>
                         <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.5rem" }}>{leaderboard[2].college}</p>
@@ -108,7 +108,7 @@ export default function LeaderboardPage() {
                                     <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{user.college}</p>
                                 </div>
                             </div>
-                            <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+                            <div className="rank-meta" style={{ display: "flex", alignItems: "center", gap: "clamp(0.5rem, 2vw, 1.5rem)" }}>
                                 <span style={{ padding: "0.2rem 0.6rem", borderRadius: 999, background: `${levelColors[user.level]}15`, color: levelColors[user.level], fontSize: "0.7rem", fontWeight: 700 }}>{user.level}</span>
                                 <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>🔥 {user.streak}d</span>
                                 <span style={{ fontWeight: 800, color: rankColors[user.rank] || "var(--text-primary)" }}>{user.points} pts</span>
@@ -118,9 +118,9 @@ export default function LeaderboardPage() {
                 </div>
 
                 {/* How to Earn */}
-                <div className="glass-card" style={{ padding: "1.5rem", borderRadius: 16, marginTop: "2rem" }}>
-                    <h3 style={{ fontWeight: 700, marginBottom: "1rem" }}>✨ How to Earn Points</h3>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "0.75rem" }}>
+                <div className="glass-card" style={{ padding: "1.25rem", borderRadius: 16, marginTop: "1.5rem" }}>
+                    <h3 style={{ fontWeight: 700, marginBottom: "0.75rem" }}>✨ How to Earn Points</h3>
+                    <div className="earn-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(200px, 100%), 1fr))", gap: "0.75rem" }}>
                         {[
                             { action: "Complete Daily Quiz", pts: "+25 pts/day", icon: "📝" },
                             { action: "Solve Coding Challenge", pts: "+10-40 pts", icon: "💻" },
@@ -140,6 +140,16 @@ export default function LeaderboardPage() {
                     </div>
                 </div>
             </div>
+
+            <style jsx>{`
+                @media (max-width: 520px) {
+                    .podium > div { padding: 0.6rem 0.4rem !important; }
+                    .podium > div h3 { font-size: 0.8rem !important; }
+                    .podium > div p { font-size: 0.65rem !important; }
+                    .rank-meta { gap: 0.5rem !important; flex-wrap: wrap; }
+                    .rank-meta span { font-size: 0.7rem !important; }
+                }
+            `}</style>
         </div>
     );
 }

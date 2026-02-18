@@ -57,7 +57,7 @@ export default function DashboardPage() {
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
             {/* Header */}
-            <nav style={{ padding: "0.75rem 2rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.2rem" }}>SkillSync <span style={{ color: "var(--accent-primary)" }}>AI</span></span>
@@ -75,9 +75,9 @@ export default function DashboardPage() {
                 </div>
             </nav>
 
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "1.5rem 1rem" }}>
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(1rem, 3vw, 1.5rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Welcome + Daily Action */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "1rem", marginBottom: "1.5rem", alignItems: "stretch" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem", marginBottom: "1.25rem", alignItems: "stretch" }} className="dashboard-welcome">
                     <div className="glass-card" style={{ padding: "1.5rem", borderRadius: 18, background: "linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04))", border: "1px solid rgba(99,102,241,0.12)" }}>
                         <h1 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.35rem" }}>
                             {results?.has_results ? `${results.profile_type || "Career Explorer"}` : `Welcome back, ${user?.name?.split(" ")[0]} 👋`}
@@ -120,8 +120,8 @@ export default function DashboardPage() {
                 )}
 
                 {/* Primary Tools */}
-                <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.75rem" }}>⚡ Daily Actions</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                <h2 style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)", fontWeight: 700, marginBottom: "0.75rem" }}>⚡ Daily Actions</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
                     {primaryTools.map((t, i) => (
                         <Link key={i} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
                             <div className="glass-card" style={{ padding: "1.1rem", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", display: "flex", gap: "0.75rem", alignItems: "center", position: "relative" }}
@@ -139,8 +139,8 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Career Tools */}
-                <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.75rem" }}>🧰 Career Intelligence</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                <h2 style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)", fontWeight: 700, marginBottom: "0.75rem" }}>🧰 Career Intelligence</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
                     {secondaryTools.map((t, i) => (
                         <Link key={i} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
                             <div className="glass-card" style={{ padding: "1.1rem", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", display: "flex", gap: "0.75rem", alignItems: "center" }}
@@ -157,8 +157,8 @@ export default function DashboardPage() {
                 </div>
 
                 {/* Social & More */}
-                <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.75rem" }}>🌐 Community & Growth</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                <h2 style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)", fontWeight: 700, marginBottom: "0.75rem" }}>🌐 Community & Growth</h2>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(160px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
                     {socialTools.map((t, i) => (
                         <Link key={i} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
                             <div className="glass-card" style={{ padding: "1rem", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", textAlign: "center", position: "relative" }}
@@ -191,6 +191,12 @@ export default function DashboardPage() {
                     </div>
                 )}
             </div>
+
+            <style jsx>{`
+                @media (min-width: 640px) {
+                    .dashboard-welcome { grid-template-columns: 1fr auto !important; }
+                }
+            `}</style>
         </div>
     );
 }

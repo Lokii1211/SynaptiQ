@@ -111,7 +111,7 @@ export default function CommunityPage() {
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
             {/* Navbar */}
-            <nav style={{ padding: "0.75rem 1.5rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.5rem, 2vw, 1.5rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.3rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.15rem" }}>SkillSync <span style={{ color: "var(--accent-primary)" }}>Community</span></span>
@@ -128,7 +128,7 @@ export default function CommunityPage() {
                 </div>
             )}
 
-            <div style={{ maxWidth: 900, margin: "0 auto", padding: "1.5rem 1rem" }}>
+            <div style={{ maxWidth: 900, margin: "0 auto", padding: "clamp(0.75rem, 3vw, 1.5rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Search + Sort Bar */}
                 <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.25rem", flexWrap: "wrap", alignItems: "center" }}>
                     <div style={{ flex: 1, minWidth: 220, position: "relative" }}>
@@ -142,7 +142,7 @@ export default function CommunityPage() {
                 </div>
 
                 {/* Categories */}
-                <div style={{ display: "flex", gap: "0.4rem", overflowX: "auto", paddingBottom: "0.75rem", marginBottom: "1.25rem" }}>
+                <div className="scroll-x" style={{ display: "flex", gap: "0.35rem", paddingBottom: "0.75rem", marginBottom: "1.25rem" }}>
                     {CATEGORIES.map(c => (
                         <button key={c.id} onClick={() => setCategory(c.id)}
                             style={{ padding: "0.4rem 0.8rem", borderRadius: 999, border: "1px solid", borderColor: category === c.id ? "var(--accent-primary)" : "var(--border-color)", background: category === c.id ? "rgba(99,102,241,0.15)" : "var(--bg-card)", color: category === c.id ? "var(--accent-primary)" : "var(--text-secondary)", cursor: "pointer", whiteSpace: "nowrap", fontSize: "0.8rem", fontWeight: 600 }}>

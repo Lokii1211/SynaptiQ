@@ -32,14 +32,14 @@ export default function CoursesPage() {
 
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
-            <nav style={{ padding: "1rem 2rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.9)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.25rem" }}>SkillSync <span style={{ color: "#8b5cf6" }}>Learn</span></span>
                 </Link>
             </nav>
 
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 1rem" }}>
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(1rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Header */}
                 <div style={{ textAlign: "center", marginBottom: "2rem" }}>
                     <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: "0.5rem" }}>🎓 Learning Paths</h1>
@@ -65,7 +65,7 @@ export default function CoursesPage() {
                 </div>
 
                 {/* Stats Bar */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(200px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.5rem" }}>
                     {[
                         { label: "Total Courses", value: "8+", icon: "📚", color: "#8b5cf6" },
                         { label: "Students Enrolled", value: "92K+", icon: "👥", color: "#22c55e" },
@@ -86,7 +86,7 @@ export default function CoursesPage() {
                         <div style={{ width: 48, height: 48, border: "3px solid var(--border-color)", borderTopColor: "#8b5cf6", borderRadius: "50%", animation: "spin 1s linear infinite", margin: "0 auto" }} />
                     </div>
                 ) : (
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.25rem" }}>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(300px, 100%), 1fr))", gap: "1rem" }}>
                         {courses.map(course => (
                             <div key={course.id} className="glass-card" style={{ borderRadius: 16, overflow: "hidden", transition: "transform 0.2s" }}
                                 onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"}

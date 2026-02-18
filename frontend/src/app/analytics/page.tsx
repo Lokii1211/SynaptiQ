@@ -63,7 +63,7 @@ export default function AnalyticsPage() {
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
             {/* Navbar */}
-            <nav style={{ padding: "0.75rem 1.5rem", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100 }}>
+            <nav style={{ padding: "0.65rem clamp(0.5rem, 2vw, 1.5rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
                 <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.3rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.15rem" }}>SkillSync <span style={{ color: "#f59e0b" }}>Analytics</span></span>
@@ -76,9 +76,9 @@ export default function AnalyticsPage() {
                 </div>
             </nav>
 
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "1.5rem 1rem" }}>
+            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(0.75rem, 3vw, 1.5rem) clamp(0.5rem, 2vw, 1rem)" }}>
                 {/* Main Stats Cards */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.75rem", marginBottom: "1.5rem" }}>
+                <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.6rem", marginBottom: "1.25rem" }}>
                     <div style={{ padding: "1.25rem", borderRadius: 16, background: "linear-gradient(135deg, rgba(34,197,94,0.08), rgba(34,197,94,0.02))", border: "1px solid rgba(34,197,94,0.2)", textAlign: "center" }}>
                         <div style={{ fontSize: "2rem", fontWeight: 800, color: "#22c55e" }}>{period === "monthly" ? monthlyTotals.problems : weeklyTotals.problems}</div>
                         <div style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontWeight: 600 }}>Problems Solved</div>
@@ -101,7 +101,7 @@ export default function AnalyticsPage() {
                     </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "1rem", marginBottom: "1.5rem" }}>
+                <div className="chart-skill-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "0.75rem", marginBottom: "1.25rem" }}>
                     {/* Weekly Activity Chart */}
                     <div style={{ padding: "1.25rem", borderRadius: 16, background: "rgba(26,26,46,0.6)", border: "1px solid var(--border-color)" }}>
                         <h3 style={{ fontWeight: 800, fontSize: "1rem", marginBottom: "1rem" }}>📊 {period === "monthly" ? "Monthly Progress" : "Weekly Activity"}</h3>
@@ -150,7 +150,7 @@ export default function AnalyticsPage() {
                     </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="bottom-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                     {/* Leaderboard Preview */}
                     <div style={{ padding: "1.25rem", borderRadius: 16, background: "rgba(26,26,46,0.6)", border: "1px solid var(--border-color)" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
@@ -208,9 +208,14 @@ export default function AnalyticsPage() {
 
             <style jsx>{`
                 @media (max-width: 768px) {
-                    div[style*="gridTemplateColumns: repeat(4"] { grid-template-columns: repeat(2, 1fr) !important; }
-                    div[style*="gridTemplateColumns: 2fr 1fr"] { grid-template-columns: 1fr !important; }
-                    div[style*="gridTemplateColumns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
+                    .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                    .chart-skill-grid { grid-template-columns: 1fr !important; }
+                    .bottom-grid { grid-template-columns: 1fr !important; }
+                }
+                @media (max-width: 480px) {
+                    .stats-grid { gap: 0.4rem !important; }
+                    .stats-grid > div { padding: 0.85rem 0.5rem !important; }
+                    .stats-grid > div > div:first-child { font-size: 1.5rem !important; }
                 }
             `}</style>
         </div>
