@@ -1,4 +1,6 @@
 import { NextRequest } from "next/server";
+import { isSupabaseConfigured } from "@/lib/supabase";
+import { db } from "@/lib/db";
 import { store } from "@/lib/server-data";
 import { getUserFromRequest, jsonResponse, errorResponse } from "@/lib/server-auth";
 import { careerChat } from "@/lib/server-ai";
@@ -11,13 +13,28 @@ export async function POST(req: NextRequest) {
     if (!message) return errorResponse("Message is required");
 
     const sessionId = session_id || crypto.randomUUID();
-    const session = store.getOrCreateChat(sessionId, userId);
 
-    session.messages.push({ role: "user", content: message, timestamp: new Date().toISOString() });
+    if (isSupabaseConfigured()) {
+        const session = await db.getOrCreateChat(sessionId, userId);
+        const messages = session.messages || [];
 
-    const response = await careerChat(message, session.messages.slice(0, -1));
+        messages.push({ role: "user", content: message, timestamp: new Date().toISOString() });
 
-    session.messages.push({ role: "assistant", content: response, timestamp: new Date().toISOString() });
+        const response = await careerChat(message, messages.slice(0, -1));
 
-    return jsonResponse({ response, session_id: sessionId });
+        messages.push({ role: "assistant", content: response, timestamp: new Date().toISOString() });
+
+        await db.updateChatMessages(sessionId, messages);
+
+        return jsonResponse({ response, session_id: sessionId });
+    } else {
+        const session = store.getOrCreateChat(sessionId, userId);
+        session.messages.push({ role: "user", content: message, timestamp: new Date().toISOString() });
+
+        const response = await careerChat(message, session.messages.slice(0, -1));
+
+        session.messages.push({ role: "assistant", content: response, timestamp: new Date().toISOString() });
+
+        return jsonResponse({ response, session_id: sessionId });
+    }
 }
