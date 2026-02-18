@@ -10,13 +10,20 @@ export async function POST(req: NextRequest) {
         if (!email || !name || !password) return errorResponse("Email, name and password are required");
         if (password.length < 6) return errorResponse("Password must be at least 6 characters");
 
-        const passwordHash = hashPassword(password);
+        const useSupabase = isSupabaseConfigured();
+        console.log(`[Signup] Attempt for: ${email} (mode: ${useSupabase ? "supabase" : "file"})`);
 
-        if (isSupabaseConfigured()) {
-            // ─── Supabase Path ───
+        // Check if email exists in BOTH stores to prevent duplicates
+        if (useSupabase) {
             const existing = await db.getUserByEmail(email);
             if (existing) return errorResponse("Email already registered", 409);
+        }
+        if (store.getUserByEmail(email)) return errorResponse("Email already registered", 409);
 
+        const passwordHash = hashPassword(password);
+
+        if (useSupabase) {
+            // ─── Primary: Supabase Path ───
             const user = await db.createUser({
                 email, name, password_hash: passwordHash,
                 role: "student", age, education_level, city, institution,
@@ -31,9 +38,7 @@ export async function POST(req: NextRequest) {
                 user: { id: user.id, email: user.email, name: user.name, role: user.role },
             });
         } else {
-            // ─── File-based fallback ───
-            if (store.getUserByEmail(email)) return errorResponse("Email already registered", 409);
-
+            // ─── Fallback: File-based ───
             const id = crypto.randomUUID();
             store.addUser({
                 id, email, name, passwordHash, role: "student",
