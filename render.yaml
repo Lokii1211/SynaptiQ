@@ -1,0 +1,38 @@
+# Render Blueprint - SkillSync AI
+# Deploy both backend and frontend from one repo
+
+services:
+  # Backend API (FastAPI)
+  - type: web
+    name: skillsync-api
+    runtime: python
+    region: oregon
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./skillsync.db
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+
+  # Frontend (Next.js)
+  - type: web
+    name: skillsync-web
+    runtime: node
+    region: oregon
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        fromService:
+          name: skillsync-api
+          type: web
+          property: hostport
+      - key: NODE_VERSION
+        value: "20.11.0"
