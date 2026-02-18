@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 
@@ -10,6 +10,12 @@ export default function LoginPage() {
     const [form, setForm] = useState({ email: "", password: "" });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    // Redirect if already logged in
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) router.replace("/dashboard");
+    }, [router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

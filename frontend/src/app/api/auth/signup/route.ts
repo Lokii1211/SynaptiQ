@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
         if (existing) return errorResponse("Email already registered", 409);
 
         const id = crypto.randomUUID();
-        store.addUser({ id, email, name, passwordHash: hashPassword(password), age, education_level, city, institution, careerChoice: careerInterest });
+        store.addUser({ id, email, name, passwordHash: hashPassword(password), role: "student", age, education_level, city, institution, careerChoice: careerInterest });
 
         const token = await createToken({ sub: id, email });
         return jsonResponse({ token, user: { id, email, name, age, education_level, city, institution, careerChoice: careerInterest } });

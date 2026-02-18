@@ -58,11 +58,16 @@ export default function DashboardPage() {
         <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
             {/* Header */}
             <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
-                <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
+                <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
                     <span style={{ fontSize: "1.5rem" }}>🧠</span>
                     <span style={{ fontWeight: 800, fontSize: "1.2rem" }}>SkillSync <span style={{ color: "var(--accent-primary)" }}>AI</span></span>
                 </Link>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                    {user?.role === "admin" && (
+                        <Link href="/admin" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", fontSize: "0.8rem", fontWeight: 700 }}>
+                            🛡️ Admin
+                        </Link>
+                    )}
                     <Link href="/daily" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(234,179,8,0.1)", color: "#eab308", fontSize: "0.8rem", fontWeight: 700 }}>
                         🔥 {streak}d streak
                     </Link>
@@ -70,7 +75,7 @@ export default function DashboardPage() {
                         ⭐ {points} pts
                     </Link>
                     <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>Hi, <strong style={{ color: "var(--text-primary)" }}>{user?.name?.split(" ")[0]}</strong></span>
-                    <button onClick={() => { localStorage.removeItem("token"); window.location.href = "/login"; }}
+                    <button onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "/login"; }}
                         style={{ padding: "0.35rem 0.75rem", borderRadius: 8, background: "var(--bg-card)", border: "1px solid var(--border-color)", color: "var(--text-secondary)", fontSize: "0.75rem", cursor: "pointer" }}>Logout</button>
                 </div>
             </nav>

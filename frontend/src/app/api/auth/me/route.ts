@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     if (!user) return errorResponse("User not found", 404);
 
     return jsonResponse({
-        id: user.id, email: user.email, name: user.name,
+        id: user.id, email: user.email, name: user.name, role: user.role || "student",
         age: user.age, education_level: user.education_level, city: user.city,
     });
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -20,8 +21,15 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 }
 
 export default function Home() {
+  const router = useRouter();
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   const [mobileMenu, setMobileMenu] = useState(false);
+
+  // Redirect logged-in users to dashboard
+  useEffect(() => {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (token) router.replace("/dashboard");
+  }, [router]);
 
   const features = [
     { icon: "🧬", title: "4D Career Assessment", desc: "Not a generic quiz. A deep dive into your intelligence profile, work energy, values, and real circumstances. 45 questions that actually predict career success.", link: "/assessment", tag: "Most Popular", color: "#6366f1" },
