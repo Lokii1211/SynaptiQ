@@ -244,34 +244,88 @@ export const ASSESSMENT_QUESTIONS = [
     },
 ];
 
-// Simple in-memory store (resets on cold starts - fine for demo)
+// ─── CODING CHALLENGES (LeetCode/HackerRank Style) ──────────
+export const CODING_CHALLENGES = [
+    { id: "cc1", title: "Two Sum", difficulty: "Easy", category: "Arrays", description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.", examples: [{ input: "nums = [2,7,11,15], target = 9", output: "[0,1]" }], hints: ["Use a hash map for O(n) solution"], starterCode: "function twoSum(nums, target) {\n  // Your code here\n}", testCases: [{ input: [[2, 7, 11, 15], 9], expected: [0, 1] }, { input: [[3, 2, 4], 6], expected: [1, 2] }], tags: ["hash-map", "array"], points: 10 },
+    { id: "cc2", title: "Reverse String", difficulty: "Easy", category: "Strings", description: "Write a function that reverses a string.", examples: [{ input: '"hello"', output: '"olleh"' }], hints: ["Try two-pointer approach"], starterCode: "function reverseString(s) {\n  // Your code here\n}", testCases: [{ input: ["hello"], expected: "olleh" }], tags: ["string", "two-pointers"], points: 10 },
+    { id: "cc3", title: "Valid Parentheses", difficulty: "Easy", category: "Stacks", description: "Given a string containing just '(', ')', '{', '}', '[' and ']', determine if the input string is valid.", examples: [{ input: '"([])"', output: "true" }], hints: ["Use a stack"], starterCode: "function isValid(s) {\n  // Your code here\n}", testCases: [{ input: ["()[]{}"], expected: true }], tags: ["stack"], points: 10 },
+    { id: "cc4", title: "Maximum Subarray", difficulty: "Medium", category: "Dynamic Programming", description: "Find the contiguous subarray which has the largest sum.", examples: [{ input: "[-2,1,-3,4,-1,2,1,-5,4]", output: "6" }], hints: ["Kadane's Algorithm"], starterCode: "function maxSubArray(nums) {\n  // Your code here\n}", testCases: [{ input: [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], expected: 6 }], tags: ["dp", "greedy"], points: 20 },
+    { id: "cc5", title: "Linked List Cycle", difficulty: "Medium", category: "Linked Lists", description: "Given a linked list, determine if it has a cycle in it.", examples: [{ input: "[3,2,0,-4], pos=1", output: "true" }], hints: ["Floyd's cycle detection (tortoise and hare)"], starterCode: "function hasCycle(head) {\n  // Your code here\n}", testCases: [], tags: ["linked-list", "two-pointers"], points: 20 },
+    { id: "cc6", title: "Binary Search", difficulty: "Easy", category: "Searching", description: "Implement binary search on a sorted array.", examples: [{ input: "nums = [-1,0,3,5,9,12], target = 9", output: "4" }], hints: ["Use left and right pointers"], starterCode: "function search(nums, target) {\n  // Your code here\n}", testCases: [{ input: [[-1, 0, 3, 5, 9, 12], 9], expected: 4 }], tags: ["binary-search"], points: 10 },
+    { id: "cc7", title: "Merge Intervals", difficulty: "Medium", category: "Arrays", description: "Given an array of intervals, merge all overlapping intervals.", examples: [{ input: "[[1,3],[2,6],[8,10],[15,18]]", output: "[[1,6],[8,10],[15,18]]" }], hints: ["Sort by start time first"], starterCode: "function merge(intervals) {\n  // Your code here\n}", testCases: [], tags: ["sorting", "intervals"], points: 25 },
+    { id: "cc8", title: "LRU Cache", difficulty: "Hard", category: "Design", description: "Design a data structure that follows the constraints of a Least Recently Used cache.", examples: [{ input: "capacity = 2", output: "LRUCache object" }], hints: ["Use HashMap + Doubly Linked List"], starterCode: "class LRUCache {\n  constructor(capacity) {\n    // Your code here\n  }\n  get(key) {}\n  put(key, value) {}\n}", testCases: [], tags: ["design", "hash-map"], points: 40 },
+];
+
+// ─── DAILY QUIZ QUESTIONS (MCQ) ──────────────────────────────
+export const DAILY_QUIZZES: Record<string, any[]> = {
+    "technology": [
+        { id: "dq1", question: "What does API stand for?", options: ["Application Programming Interface", "Applied Programming Integration", "Automated Process Interface", "Application Process Integration"], correct: 0, explanation: "API stands for Application Programming Interface — it defines how software components communicate.", points: 5 },
+        { id: "dq2", question: "Which data structure uses FIFO?", options: ["Stack", "Queue", "Array", "Tree"], correct: 1, explanation: "Queue uses First-In-First-Out (FIFO) ordering.", points: 5 },
+        { id: "dq3", question: "What is the time complexity of binary search?", options: ["O(n)", "O(log n)", "O(n²)", "O(1)"], correct: 1, explanation: "Binary search halves the search space each step, giving O(log n).", points: 5 },
+        { id: "dq4", question: "Which protocol does HTTPS use for encryption?", options: ["SSL/TLS", "SSH", "AES", "RSA only"], correct: 0, explanation: "HTTPS uses SSL/TLS to encrypt communications between client and server.", points: 5 },
+        { id: "dq5", question: "What is a closure in JavaScript?", options: ["A function with access to its outer scope", "A way to close browser tabs", "A design pattern only", "A type of loop"], correct: 0, explanation: "A closure is a function that has access to its parent scope, even after the parent function has closed.", points: 5 },
+        { id: "dq6", question: "Which SQL command is used to retrieve data?", options: ["GET", "SELECT", "FETCH", "RETRIEVE"], correct: 1, explanation: "SELECT is the SQL command used to query and retrieve data from databases.", points: 5 },
+        { id: "dq7", question: "What does REST stand for?", options: ["Representational State Transfer", "Remote Execution Standard Technology", "Responsive Server Technology", "Real-time Event Stream Transfer"], correct: 0, explanation: "REST is an architectural style for designing networked applications.", points: 5 },
+        { id: "dq8", question: "Which company created React.js?", options: ["Google", "Facebook/Meta", "Microsoft", "Amazon"], correct: 1, explanation: "React was created by Facebook (now Meta) and is maintained as an open-source project.", points: 5 },
+    ],
+    "business": [
+        { id: "dq9", question: "What does ROI stand for?", options: ["Return on Investment", "Rate of Interest", "Return on Income", "Revenue on Investment"], correct: 0, explanation: "ROI measures the return (profit/loss) relative to the investment cost.", points: 5 },
+        { id: "dq10", question: "What is a balance sheet?", options: ["Summary of revenues", "Statement of assets, liabilities, and equity", "Cash flow report", "Profit and loss statement"], correct: 1, explanation: "A balance sheet shows assets, liabilities, and shareholders' equity at a point in time.", points: 5 },
+        { id: "dq11", question: "What is the full form of GST in India?", options: ["General Sales Tax", "Goods and Services Tax", "Government Service Tax", "Gross Standard Tax"], correct: 1, explanation: "GST stands for Goods and Services Tax, implemented in India on July 1, 2017.", points: 5 },
+    ],
+    "design": [
+        { id: "dq12", question: "What does UX stand for?", options: ["User Experience", "Universal Exchange", "User Extension", "Unified Experience"], correct: 0, explanation: "UX = User Experience — how a user interacts with and experiences a product.", points: 5 },
+        { id: "dq13", question: "Which tool is most used for UI design?", options: ["Photoshop", "Figma", "MS Paint", "PowerPoint"], correct: 1, explanation: "Figma has become the industry standard for collaborative interface design.", points: 5 },
+    ],
+};
+
+// ─── COURSES CATALOG ────────────────────────────────────────
+export const COURSES = [
+    { id: "crs1", title: "DSA Mastery: Arrays to Graphs", category: "technology", difficulty: "Beginner to Advanced", duration: "12 weeks", modules: 24, instructor: "SkillSync AI", rating: 4.8, enrolled: 12500, free: true, description: "Complete data structures and algorithms course with 200+ practice problems. Start from arrays, move through trees, graphs, and dynamic programming.", tags: ["DSA", "Coding", "Interview Prep"], image: "🏗️" },
+    { id: "crs2", title: "Full Stack Web Development", category: "technology", difficulty: "Intermediate", duration: "16 weeks", modules: 32, instructor: "SkillSync AI", rating: 4.7, enrolled: 8900, free: true, description: "Build production-ready applications with React, Next.js, Node.js, and databases. Includes 5 real-world projects.", tags: ["React", "Node.js", "MongoDB"], image: "🌐" },
+    { id: "crs3", title: "Machine Learning A-Z", category: "technology", difficulty: "Intermediate", duration: "10 weeks", modules: 20, instructor: "SkillSync AI", rating: 4.9, enrolled: 15600, free: true, description: "From linear regression to deep learning. Hands-on with Python, scikit-learn, TensorFlow.", tags: ["ML", "Python", "AI"], image: "🤖" },
+    { id: "crs4", title: "System Design for Interviews", category: "technology", difficulty: "Advanced", duration: "8 weeks", modules: 16, instructor: "SkillSync AI", rating: 4.6, enrolled: 6700, free: false, description: "Design scalable systems like Twitter, WhatsApp, and Uber. Essential for senior developer interviews.", tags: ["System Design", "Architecture"], image: "🏛️" },
+    { id: "crs5", title: "UI/UX Design Fundamentals", category: "design", difficulty: "Beginner", duration: "8 weeks", modules: 16, instructor: "SkillSync AI", rating: 4.7, enrolled: 5400, free: true, description: "Learn user research, wireframing, prototyping, and visual design with Figma.", tags: ["Figma", "UX", "Design"], image: "🎨" },
+    { id: "crs6", title: "Business Communication Mastery", category: "business", difficulty: "Beginner", duration: "4 weeks", modules: 8, instructor: "SkillSync AI", rating: 4.5, enrolled: 9800, free: true, description: "Master email writing, presentations, negotiation, and professional communication for Indian workplaces.", tags: ["Communication", "Soft Skills"], image: "🗣️" },
+    { id: "crs7", title: "Placement Preparation Bootcamp", category: "technology", difficulty: "Intermediate", duration: "6 weeks", modules: 18, instructor: "SkillSync AI", rating: 4.8, enrolled: 22000, free: true, description: "Comprehensive placement prep: aptitude, coding, group discussion, HR interview, and resume building.", tags: ["Placements", "Interview", "AMCAT"], image: "🎯" },
+    { id: "crs8", title: "Python for Data Science", category: "technology", difficulty: "Beginner", duration: "6 weeks", modules: 12, instructor: "SkillSync AI", rating: 4.7, enrolled: 18200, free: true, description: "Learn Python from scratch. Pandas, NumPy, Matplotlib, and real datasets. NPTEL certified equivalent.", tags: ["Python", "Data Science"], image: "🐍" },
+];
+
+// ─── JOB LISTINGS ───────────────────────────────────────────
+export const JOB_LISTINGS = [
+    { id: "j1", title: "Software Development Engineer", company: "Amazon", location: "Bangalore", type: "Full-time", salary: "₹14-25 LPA", experience: "0-2 years", skills: ["Java", "DSA", "System Design"], posted: "2 hours ago", category: "technology", isHot: true, applicants: 234, deadline: "7 days", url: "#" },
+    { id: "j2", title: "Frontend Developer Intern", company: "Razorpay", location: "Bangalore (Remote)", type: "Internship", salary: "₹40K/month", experience: "0-1 years", skills: ["React", "TypeScript", "CSS"], posted: "5 hours ago", category: "technology", isHot: true, applicants: 156, deadline: "14 days", url: "#" },
+    { id: "j3", title: "Data Analyst", company: "Flipkart", location: "Bangalore", type: "Full-time", salary: "₹8-15 LPA", experience: "0-3 years", skills: ["SQL", "Python", "Excel", "Tableau"], posted: "1 day ago", category: "technology", isHot: false, applicants: 312, deadline: "10 days", url: "#" },
+    { id: "j4", title: "ML Engineer Intern", company: "Google", location: "Hyderabad", type: "Internship", salary: "₹1.2L/month", experience: "0 years", skills: ["Python", "TensorFlow", "ML"], posted: "3 hours ago", category: "technology", isHot: true, applicants: 520, deadline: "5 days", url: "#" },
+    { id: "j5", title: "Product Manager Associate", company: "CRED", location: "Bangalore", type: "Full-time", salary: "₹18-30 LPA", experience: "1-3 years", skills: ["Product Strategy", "Analytics", "SQL"], posted: "1 day ago", category: "business", isHot: false, applicants: 89, deadline: "21 days", url: "#" },
+    { id: "j6", title: "UX Design Intern", company: "Swiggy", location: "Remote", type: "Internship", salary: "₹25K/month", experience: "0 years", skills: ["Figma", "User Research", "Prototyping"], posted: "6 hours ago", category: "design", isHot: true, applicants: 167, deadline: "10 days", url: "#" },
+    { id: "j7", title: "Cybersecurity Analyst", company: "Deloitte", location: "Mumbai", type: "Full-time", salary: "₹8-16 LPA", experience: "0-2 years", skills: ["SIEM", "Python", "Network Security"], posted: "2 days ago", category: "technology", isHot: false, applicants: 78, deadline: "15 days", url: "#" },
+    { id: "j8", title: "Backend Developer", company: "PhonePe", location: "Pune", type: "Full-time", salary: "₹12-22 LPA", experience: "1-3 years", skills: ["Java", "Spring Boot", "Microservices"], posted: "4 hours ago", category: "technology", isHot: true, applicants: 198, deadline: "7 days", url: "#" },
+    { id: "j9", title: "Business Analyst Intern", company: "McKinsey", location: "Delhi (Hybrid)", type: "Internship", salary: "₹80K/month", experience: "0 years", skills: ["Excel", "PowerPoint", "Analytics"], posted: "1 day ago", category: "business", isHot: true, applicants: 445, deadline: "3 days", url: "#" },
+    { id: "j10", title: "DevOps Engineer", company: "Zomato", location: "Gurugram", type: "Full-time", salary: "₹10-20 LPA", experience: "1-3 years", skills: ["Docker", "Kubernetes", "AWS", "CI/CD"], posted: "8 hours ago", category: "technology", isHot: false, applicants: 112, deadline: "12 days", url: "#" },
+];
+
+// ─── IN-MEMORY STORE ────────────────────────────────────────
 interface User {
-    id: string;
-    email: string;
-    name: string;
-    passwordHash: string;
-    age?: number;
-    education_level?: string;
-    city?: string;
+    id: string; email: string; name: string; passwordHash: string;
+    age?: number; education_level?: string; city?: string;
+    isPremium?: boolean; premiumExpiry?: string; streak?: number; lastActive?: string;
+    points?: number; careerChoice?: string;
 }
-
-interface Assessment {
-    id: string;
-    userId: string;
-    answers: Record<string, number>;
-    results: Record<string, unknown>;
-}
-
-interface ChatSession {
-    id: string;
-    userId: string;
-    messages: { role: string; content: string; timestamp: string }[];
-}
+interface Assessment { id: string; userId: string; answers: Record<string, number>; results: Record<string, unknown>; }
+interface ChatSession { id: string; userId: string; messages: { role: string; content: string; timestamp: string }[]; }
+interface CommunityPost { id: string; userId: string; userName: string; title: string; content: string; category: string; tags: string[]; likes: number; comments: { userId: string; userName: string; content: string; timestamp: string }[]; timestamp: string; }
 
 class Store {
     users: Map<string, User> = new Map();
     assessments: Map<string, Assessment[]> = new Map();
     chatSessions: Map<string, ChatSession> = new Map();
+    communityPosts: CommunityPost[] = [
+        { id: "p1", userId: "seed1", userName: "Priya S.", title: "How I got into Google as a fresher from a Tier-3 college", content: "I want to share my journey of cracking Google's interview. I started with zero DSA knowledge in 3rd year. Here's my exact preparation strategy...\n\n1. Spent 3 months on Striver's A2Z DSA Sheet\n2. Built 2 full-stack projects\n3. Did 50+ mock interviews on Pramp\n4. Got referral through LinkedIn networking\n\nTotal prep time: 8 months. Don't let your college name hold you back!", category: "success-stories", tags: ["google", "placement", "tier-3"], likes: 347, comments: [{ userId: "seed2", userName: "Rahul K.", content: "This is so inspiring! Which optional subject did you focus on?", timestamp: "2026-02-15T10:30:00Z" }], timestamp: "2026-02-14T08:00:00Z" },
+        { id: "p2", userId: "seed2", userName: "Rahul K.", title: "Best free resources for ML in 2026", content: "After trying 20+ courses, here are my top picks for learning ML for free in India:\n\n🥇 Andrew Ng's ML Specialization (Coursera audit)\n🥈 NPTEL ML by IIT Madras\n🥉 Fast.ai Practical Deep Learning\n\nHonorable mentions: Kaggle Learn, Google's ML Crash Course, 3Blue1Brown for math intuition.\n\nAvoid paid bootcamps unless they have placement guarantees.", category: "resources", tags: ["ml", "free-resources", "learning"], likes: 215, comments: [], timestamp: "2026-02-13T14:00:00Z" },
+        { id: "p3", userId: "seed3", userName: "Ananya M.", title: "Parents want me to do MBA, I want to be a designer - advice?", content: "I'm in my final year of B.Com and I've been doing freelance graphic design for 2 years. My parents are insisting on CAT prep for MBA. I genuinely enjoy design and have a portfolio of 15+ projects.\n\nHow do I convince them? Has anyone faced a similar situation?", category: "career-dilemma", tags: ["parents", "design", "mba", "career-choice"], likes: 189, comments: [{ userId: "seed1", userName: "Priya S.", content: "Show them the salary data! UX designers at good companies earn 12-25 LPA. Also, check SkillSync's Parent Toolkit feature.", timestamp: "2026-02-12T16:00:00Z" }], timestamp: "2026-02-12T12:00:00Z" },
+    ];
+    quizHistory: Map<string, { date: string; score: number; total: number }[]> = new Map();
 
     addUser(user: User) { this.users.set(user.id, user); }
     getUserByEmail(email: string) { return Array.from(this.users.values()).find(u => u.email === email); }
@@ -294,6 +348,26 @@ class Store {
             this.chatSessions.set(sessionId, session);
         }
         return session;
+    }
+
+    addCommunityPost(post: CommunityPost) { this.communityPosts.unshift(post); }
+    getCommunityPosts(category?: string) { return category ? this.communityPosts.filter(p => p.category === category) : this.communityPosts; }
+    likePost(postId: string) { const p = this.communityPosts.find(p => p.id === postId); if (p) p.likes++; return p; }
+    addComment(postId: string, comment: { userId: string; userName: string; content: string; timestamp: string }) {
+        const p = this.communityPosts.find(p => p.id === postId);
+        if (p) p.comments.push(comment);
+        return p;
+    }
+
+    addPoints(userId: string, points: number) {
+        const user = this.users.get(userId);
+        if (user) { user.points = (user.points || 0) + points; this.users.set(userId, user); }
+    }
+    getLeaderboard() {
+        return Array.from(this.users.values())
+            .map(u => ({ name: u.name, points: u.points || 0, streak: u.streak || 0 }))
+            .sort((a, b) => b.points - a.points)
+            .slice(0, 20);
     }
 }
 

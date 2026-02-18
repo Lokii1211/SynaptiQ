@@ -24,13 +24,19 @@ export default function Home() {
 
   const features = [
     { icon: "🧬", title: "4D Career Assessment", desc: "Not a generic quiz. A deep dive into your intelligence profile, work energy, values, and real circumstances. 45 questions that actually predict career success.", link: "/assessment", tag: "Most Popular", color: "#6366f1" },
-    { icon: "🎮", title: "Career Day Simulator", desc: "Stop guessing. Experience a real day as a Software Developer, Doctor, or Product Manager — with real decisions and trade-offs.", link: "/simulator", tag: "New", color: "#22c55e" },
-    { icon: "💰", title: "Salary Negotiation Sim", desc: "Negotiating ₹1 LPA more in your first job = ₹15-25 LPA more over 10 years. Practice with our AI recruiter.", link: "/negotiate", tag: "Pro", color: "#eab308" },
-    { icon: "🎓", title: "College ROI Calculator", desc: "Is that ₹20 lakh degree worth it? Get honest break-even analysis, salary percentiles, and alternative paths.", link: "/college-roi", tag: "New", color: "#ef4444" },
-    { icon: "👨‍👩‍👧", title: "Parent Toolkit", desc: "The biggest career barrier isn't information — it's parental alignment. Get data-backed reports for the family conversation.", link: "/parent", tag: "Unique", color: "#8b5cf6" },
-    { icon: "🗺️", title: "Skill Gap Analyzer", desc: "Your current skills vs. your dream career. Get a week-by-week roadmap with free Indian resources — NPTEL, YouTube, GitHub.", link: "/skills", tag: "Essential", color: "#06b6d4" },
-    { icon: "🔮", title: "AI Career Counselor", desc: "24/7 career advisor that knows the Indian job market. Ask anything — from 'Is MBA worth it?' to 'How do I switch to product?'", link: "/chat", tag: "AI-Powered", color: "#f43f5e" },
-    { icon: "🧭", title: "Career Explorer", desc: "12+ career profiles with honest salary data, day-in-life descriptions, entrance exams, and real company names. India-specific.", link: "/careers", tag: "Browse", color: "#14b8a6" },
+    { icon: "📝", title: "Daily Career Quiz", desc: "5 new questions every day matched to your career path. Streak-based gamification — earn points, climb the leaderboard.", link: "/daily", tag: "Daily", color: "#eab308" },
+    { icon: "💻", title: "Code Practice Arena", desc: "LeetCode-style coding challenges with instant test runner. From Two Sum to LRU Cache — level up for placement prep.", link: "/practice", tag: "New", color: "#22c55e" },
+    { icon: "🎓", title: "Learning Courses", desc: "DSA Mastery, Full Stack, ML A-Z, and more. Industry-aligned, practice-heavy courses — most are free. No fluff bootcamps.", link: "/courses", tag: "Free", color: "#8b5cf6" },
+    { icon: "💼", title: "Jobs & Internships", desc: "Fresh openings from Amazon, Google, Razorpay, Flipkart. Freemium job alerts with 7-day free trial. Updated daily.", link: "/jobs", tag: "Hot", color: "#f43f5e" },
+    { icon: "🌐", title: "Community Hub", desc: "Share success stories, ask career dilemmas, discover resources. Built by students, for students. Zero toxicity.", link: "/community", tag: "Social", color: "#3b82f6" },
+    { icon: "🎮", title: "Career Day Simulator", desc: "Stop guessing. Experience a real day as a Software Developer, Doctor, or Product Manager — with real decisions and trade-offs.", link: "/simulator", tag: "Immersive", color: "#06b6d4" },
+    { icon: "💰", title: "Salary Negotiation Sim", desc: "Negotiating ₹1 LPA more in your first job = ₹15-25 LPA more over 10 years. Practice with our AI recruiter.", link: "/negotiate", tag: "Pro", color: "#f59e0b" },
+    { icon: "🏛️", title: "College ROI Calculator", desc: "Is that ₹20 lakh degree worth it? Get honest break-even analysis, salary percentiles, and alternative paths.", link: "/college-roi", tag: "Data", color: "#ef4444" },
+    { icon: "👨‍👩‍👧", title: "Parent Toolkit", desc: "The biggest career barrier isn't parental alignment. Get data-backed reports for the family conversation.", link: "/parent", tag: "Unique", color: "#a855f7" },
+    { icon: "🗺️", title: "Skill Gap Analyzer", desc: "Your current skills vs. your dream career. Get a week-by-week roadmap with free Indian resources.", link: "/skills", tag: "Essential", color: "#14b8a6" },
+    { icon: "🔮", title: "AI Career Counselor", desc: "24/7 career advisor that knows the Indian job market. Ask anything — from MBA worth to career switches.", link: "/chat", tag: "AI-Powered", color: "#ec4899" },
+    { icon: "🧭", title: "Career Explorer", desc: "12+ career profiles with honest salary data, day-in-life descriptions, entrance exams, and real company names.", link: "/careers", tag: "Browse", color: "#0ea5e9" },
+    { icon: "🏆", title: "Leaderboard", desc: "Compete with students across India. Earn points from quizzes, coding, and community. Bronze to Diamond levels.", link: "/leaderboard", tag: "Gamified", color: "#eab308" },
   ];
 
   const steps = [
@@ -48,10 +54,11 @@ export default function Home() {
           <span style={{ fontSize: "1.5rem" }}>🧠</span>
           <span style={{ fontWeight: 800, fontSize: "1.25rem" }}>SkillSync <span style={{ color: "var(--accent-primary)" }}>AI</span></span>
         </div>
-        <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-          <Link href="/careers" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Careers</Link>
-          <Link href="/assessment" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Assessment</Link>
-          <Link href="/simulator" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Simulator</Link>
+        <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
+          <Link href="/practice" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Practice</Link>
+          <Link href="/courses" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Courses</Link>
+          <Link href="/jobs" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Jobs</Link>
+          <Link href="/community" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Community</Link>
           <Link href="/login" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", fontWeight: 500 }}>Login</Link>
           <Link href="/signup" style={{ padding: "0.5rem 1.25rem", borderRadius: 10, background: "linear-gradient(135deg, var(--accent-primary), #8b5cf6)", color: "white", textDecoration: "none", fontSize: "0.9rem", fontWeight: 600 }}>Get Started Free</Link>
         </div>
@@ -131,7 +138,7 @@ export default function Home() {
       <section style={{ padding: "5rem 2rem", maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
           <h2 style={{ fontSize: "2.25rem", fontWeight: 800, marginBottom: "0.5rem" }}>Everything You Need to <span className="gradient-text">Own Your Career</span></h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem" }}>8 life-changing tools. Zero fluff.</p>
+          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem" }}>14 life-changing tools. Zero fluff. Built for India.</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.25rem" }}>
@@ -209,9 +216,10 @@ export default function Home() {
       <footer style={{ padding: "2rem", borderTop: "1px solid var(--border-color)", textAlign: "center" }}>
         <div style={{ display: "flex", justifyContent: "center", gap: "2rem", flexWrap: "wrap", marginBottom: "1rem" }}>
           {[
-            { label: "Assessment", href: "/assessment" }, { label: "Careers", href: "/careers" },
-            { label: "Simulator", href: "/simulator" }, { label: "ROI Calculator", href: "/college-roi" },
-            { label: "Negotiate", href: "/negotiate" }, { label: "Parent Toolkit", href: "/parent" },
+            { label: "Assessment", href: "/assessment" }, { label: "Code Practice", href: "/practice" },
+            { label: "Daily Quiz", href: "/daily" }, { label: "Courses", href: "/courses" },
+            { label: "Jobs", href: "/jobs" }, { label: "Community", href: "/community" },
+            { label: "Leaderboard", href: "/leaderboard" }, { label: "Simulator", href: "/simulator" },
             { label: "AI Chat", href: "/chat" }, { label: "Dashboard", href: "/dashboard" },
           ].map(l => (
             <Link key={l.label} href={l.href} style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.85rem" }}>{l.label}</Link>
