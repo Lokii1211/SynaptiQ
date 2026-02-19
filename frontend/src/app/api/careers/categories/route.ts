@@ -10,6 +10,10 @@ const CATEGORY_META: Record<string, { name: string; icon: string; color: string 
     engineering: { name: "Engineering", icon: "⚙️", color: "orange" },
     healthcare: { name: "Healthcare", icon: "🩺", color: "red" },
     government: { name: "Government", icon: "🏛️", color: "blue" },
+    legal: { name: "Legal", icon: "⚖️", color: "slate" },
+    education: { name: "Education & Research", icon: "🎓", color: "violet" },
+    science: { name: "Science & Research", icon: "🔬", color: "teal" },
+    media: { name: "Media & Journalism", icon: "📰", color: "rose" },
 };
 
 export async function GET() {

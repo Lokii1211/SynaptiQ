@@ -41,6 +41,10 @@ export default function Home() {
 
   const features = [
     { icon: "🧬", title: "4D Career Assessment", desc: "Not a generic quiz. A deep dive into your intelligence profile, work energy, values, and real circumstances. 45 questions that actually predict career success.", link: "/assessment", tag: "Most Popular", color: "#6366f1" },
+    { icon: "📊", title: "SkillSync Score™", desc: "Your single career readiness number from 0-1000. Like CIBIL, but for your career. Unlock company challenges as you level up.", link: "/score", tag: "New ★", color: "#22c55e" },
+    { icon: "📈", title: "Skill Stock Market™", desc: "India's job market as a live ticker. Which skills are 📈 trending, which are cooling 📉 — updated every Monday. Share with friends.", link: "/skill-market", tag: "Viral", color: "#f59e0b" },
+    { icon: "👁️", title: "1000 People Like You", desc: "Each dot = someone with your profile. Same college tier, same city, same stream. Where did they end up 5 years later?", link: "/people-like-you", tag: "Jaw-Drop", color: "#ec4899" },
+    { icon: "⏱️", title: "First 90 Days™", desc: "You got the result. Now what? Week-by-week action plan with free Indian resources. From foundation to job-ready.", link: "/first-90-days", tag: "Action", color: "#8b5cf6" },
     { icon: "📝", title: "Daily Career Quiz", desc: "5 new questions every day matched to your career path. Streak-based gamification — earn points, climb the leaderboard.", link: "/daily", tag: "Daily", color: "#eab308" },
     { icon: "💻", title: "Code Practice Arena", desc: "LeetCode-style coding challenges with instant test runner. From Two Sum to LRU Cache — level up for placement prep.", link: "/practice", tag: "New", color: "#22c55e" },
     { icon: "🎓", title: "Learning Courses", desc: "DSA Mastery, Full Stack, ML A-Z, and more. Industry-aligned, practice-heavy courses — most are free. No fluff bootcamps.", link: "/courses", tag: "Free", color: "#8b5cf6" },
@@ -52,7 +56,7 @@ export default function Home() {
     { icon: "👨‍👩‍👧", title: "Parent Toolkit", desc: "The biggest career barrier isn't parental alignment. Get data-backed reports for the family conversation.", link: "/parent", tag: "Unique", color: "#a855f7" },
     { icon: "🗺️", title: "Skill Gap Analyzer", desc: "Your current skills vs. your dream career. Get a week-by-week roadmap with free Indian resources.", link: "/skills", tag: "Essential", color: "#14b8a6" },
     { icon: "🔮", title: "AI Career Counselor", desc: "24/7 career advisor that knows the Indian job market. Ask anything — from MBA worth to career switches.", link: "/chat", tag: "AI-Powered", color: "#ec4899" },
-    { icon: "🧭", title: "Career Explorer", desc: "12+ career profiles with honest salary data, day-in-life descriptions, entrance exams, and real company names.", link: "/careers", tag: "Browse", color: "#0ea5e9" },
+    { icon: "🧭", title: "Career Explorer", desc: "62+ career profiles with honest salary data, day-in-life descriptions, entrance exams, and real company names.", link: "/careers", tag: "Browse", color: "#0ea5e9" },
     { icon: "🏆", title: "Leaderboard", desc: "Compete with students across India. Earn points from quizzes, coding, and community. Bronze to Diamond levels.", link: "/leaderboard", tag: "Gamified", color: "#eab308" },
   ];
 

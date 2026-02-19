@@ -1,140 +1,10 @@
-// In-memory data store for Vercel serverless deployment
+﻿// In-memory data store for Vercel serverless deployment
 // Career data + user storage
 
-export const CAREERS = [
-    {
-        id: "c1", title: "Software Developer", slug: "software-developer", category: "technology",
-        description: "Design, develop, and maintain software applications. From mobile apps to enterprise systems, software developers build the digital tools that power modern life.",
-        day_in_life: "Start the day with a standup meeting, then dive into writing code — fixing bugs, building new features, or reviewing teammates' code. After lunch, you might join a design discussion or demo new functionality. Evenings could involve learning a new framework or contributing to open source.",
-        required_skills: ["Programming (Python/Java/JS)", "Data Structures & Algorithms", "Version Control (Git)", "Problem Solving", "System Design", "API Development"],
-        required_education: [{ degree: "B.Tech/BE", field: "Computer Science/IT", duration: "4 years" }, { degree: "BCA/MCA", field: "Computer Applications", duration: "3-5 years" }],
-        salary_range_min: 400000, salary_range_max: 2500000, growth_outlook: "high", demand_score: 95,
-        top_companies: ["Google", "Microsoft", "Amazon", "Flipkart", "TCS", "Infosys", "Wipro", "Zoho"],
-        entrance_exams: ["JEE Main", "JEE Advanced", "BITSAT", "VITEEE"],
-        related_courses: ["B.Tech CS", "BCA", "Full Stack Bootcamp", "NPTEL Programming"], icon: "💻"
-    },
-    {
-        id: "c2", title: "Data Scientist", slug: "data-scientist", category: "technology",
-        description: "Extract insights from large datasets using statistics, machine learning, and domain expertise. Data scientists help organizations make data-driven decisions.",
-        day_in_life: "Morning: explore a new dataset, clean and wrangle messy data. Afternoon: build and train ML models, run experiments. Present findings to stakeholders with clear visualizations. Late afternoon: read research papers, experiment with new techniques.",
-        required_skills: ["Python/R", "Machine Learning", "Statistics", "SQL", "Data Visualization", "Deep Learning", "NLP"],
-        required_education: [{ degree: "B.Tech/M.Tech", field: "CS/Mathematics/Statistics", duration: "4-6 years" }, { degree: "M.Sc", field: "Data Science/Statistics", duration: "2 years" }],
-        salary_range_min: 600000, salary_range_max: 3500000, growth_outlook: "high", demand_score: 92,
-        top_companies: ["Google", "Amazon", "Microsoft", "Flipkart", "Swiggy", "PhonePe", "Reliance Jio"],
-        entrance_exams: ["JEE Main", "GATE", "IIT JAM"],
-        related_courses: ["M.Tech AI/ML", "Google Data Analytics", "Andrew Ng ML Course"], icon: "📊"
-    },
-    {
-        id: "c3", title: "Product Manager", slug: "product-manager", category: "business",
-        description: "Own the strategy, roadmap, and feature definition for a product. Product managers bridge the gap between engineering, design, and business teams to deliver products users love.",
-        day_in_life: "Start with metrics review — how are users engaging? Sprint planning with engineers. Lunch meeting with design team on upcoming features. Afternoon: user interviews, competitive analysis, writing PRDs.",
-        required_skills: ["Product Strategy", "User Research", "Data Analytics", "Communication", "Roadmapping", "A/B Testing", "SQL"],
-        required_education: [{ degree: "B.Tech + MBA", field: "Any + Business", duration: "6 years" }, { degree: "Any degree", field: "With PM certification", duration: "3-4 years" }],
-        salary_range_min: 800000, salary_range_max: 4000000, growth_outlook: "high", demand_score: 85,
-        top_companies: ["Google", "Microsoft", "Razorpay", "CRED", "Swiggy", "Meesho", "Ola"],
-        entrance_exams: ["CAT", "XAT", "GMAT"],
-        related_courses: ["MBA", "ISB YLP", "Product School Certification"], icon: "🎯"
-    },
-    {
-        id: "c4", title: "UX/UI Designer", slug: "ux-ui-designer", category: "design",
-        description: "Create intuitive, beautiful digital experiences. UX/UI designers research user needs, design interfaces, and ensure products are both functional and delightful.",
-        day_in_life: "Morning: review user feedback and analytics. Design wireframes for a new feature in Figma. Afternoon: conduct usability testing with real users, iterate on designs. Collaborate with developers on implementation.",
-        required_skills: ["Figma/Sketch", "User Research", "Wireframing", "Prototyping", "Visual Design", "Information Architecture", "Design Systems"],
-        required_education: [{ degree: "B.Des", field: "Interaction/Communication Design", duration: "4 years" }, { degree: "Any degree", field: "With UX bootcamp", duration: "3-4 years" }],
-        salary_range_min: 400000, salary_range_max: 2000000, growth_outlook: "high", demand_score: 82,
-        top_companies: ["Google", "Flipkart", "Swiggy", "CRED", "Razorpay", "Adobe", "Freshworks"],
-        entrance_exams: ["UCEED", "NID DAT", "CEED"],
-        related_courses: ["B.Des Interaction Design", "Google UX Certificate", "IDF UX Course"], icon: "🎨"
-    },
-    {
-        id: "c5", title: "Chartered Accountant (CA)", slug: "chartered-accountant", category: "finance",
-        description: "Provide financial advisory, audit, taxation, and accounting services. CAs are trusted professionals who ensure financial integrity for businesses and individuals.",
-        day_in_life: "Review financial statements and audit reports. Meeting with clients on tax planning strategies. Afternoon: analyze complex financial transactions, prepare compliance reports.",
-        required_skills: ["Accounting", "Taxation", "Auditing", "Financial Analysis", "Indian GAAP/Ind AS", "MS Excel", "Tally"],
-        required_education: [{ degree: "CA Foundation + Inter + Final", field: "Chartered Accountancy", duration: "4-5 years" }],
-        salary_range_min: 600000, salary_range_max: 3000000, growth_outlook: "medium", demand_score: 80,
-        top_companies: ["Deloitte", "EY", "KPMG", "PwC", "Grant Thornton", "BDO India"],
-        entrance_exams: ["CA Foundation", "CA Intermediate", "CA Final"],
-        related_courses: ["B.Com", "CA Articleship", "ACCA"], icon: "📈"
-    },
-    {
-        id: "c6", title: "Digital Marketing Specialist", slug: "digital-marketing-specialist", category: "marketing",
-        description: "Plan and execute online marketing campaigns across channels like SEO, social media, email, and paid ads. Help brands reach and engage their target audience digitally.",
-        day_in_life: "Check campaign metrics first thing — clicks, conversions, ROAS. Create content for social media. Optimize Google Ads campaigns. Afternoon: SEO audit of website, keyword research.",
-        required_skills: ["SEO/SEM", "Social Media Marketing", "Google Ads", "Content Strategy", "Analytics", "Email Marketing", "Copywriting"],
-        required_education: [{ degree: "BBA/MBA", field: "Marketing", duration: "3-5 years" }, { degree: "Any degree", field: "With Digital Marketing certification", duration: "3-4 years" }],
-        salary_range_min: 300000, salary_range_max: 1500000, growth_outlook: "high", demand_score: 78,
-        top_companies: ["Google", "Meta", "Amazon", "Flipkart", "GroupM", "Dentsu", "Ogilvy India"],
-        entrance_exams: ["CAT", "XAT", "IPMAT"],
-        related_courses: ["Google Digital Marketing Certificate", "HubSpot Academy", "MBA Marketing"], icon: "📱"
-    },
-    {
-        id: "c7", title: "Mechanical Engineer", slug: "mechanical-engineer", category: "engineering",
-        description: "Design, analyze, and manufacture mechanical systems — from engines and robotics to HVAC and manufacturing processes. One of the broadest engineering disciplines.",
-        day_in_life: "Review CAD designs and run simulations. Visit the manufacturing floor to check prototype assembly. Afternoon: FEA analysis on a component, meeting with quality team.",
-        required_skills: ["AutoCAD/SolidWorks", "Thermodynamics", "Manufacturing Processes", "FEA/CFD", "Material Science", "GD&T", "Project Management"],
-        required_education: [{ degree: "B.Tech/BE", field: "Mechanical Engineering", duration: "4 years" }],
-        salary_range_min: 350000, salary_range_max: 1500000, growth_outlook: "medium", demand_score: 70,
-        top_companies: ["Tata Motors", "L&T", "Mahindra", "Bosch", "Siemens", "BHEL", "ISRO"],
-        entrance_exams: ["JEE Main", "JEE Advanced", "GATE"],
-        related_courses: ["B.Tech Mechanical", "NPTEL Courses", "SolidWorks Certification"], icon: "⚙️"
-    },
-    {
-        id: "c8", title: "Doctor (MBBS)", slug: "doctor-mbbs", category: "healthcare",
-        description: "Diagnose illnesses, prescribe treatments, and care for patients' health. Doctors play a critical role in society, combining deep medical knowledge with compassion.",
-        day_in_life: "Morning rounds checking on admitted patients. OPD hours seeing patients, diagnosing conditions. Afternoon: procedures or surgeries depending on specialization. Review lab reports.",
-        required_skills: ["Clinical Diagnosis", "Patient Communication", "Medical Knowledge", "Emergency Medicine", "Research", "Empathy", "Decision Making"],
-        required_education: [{ degree: "MBBS", field: "Medicine", duration: "5.5 years" }, { degree: "MBBS + MD/MS", field: "Specialization", duration: "5.5 + 3 years" }],
-        salary_range_min: 600000, salary_range_max: 3000000, growth_outlook: "high", demand_score: 90,
-        top_companies: ["AIIMS", "Apollo", "Fortis", "Max Healthcare", "Manipal Hospitals"],
-        entrance_exams: ["NEET UG", "NEET PG", "AIIMS"],
-        related_courses: ["MBBS", "MD/MS", "DNB"], icon: "🩺"
-    },
-    {
-        id: "c9", title: "Civil Services (IAS/IPS)", slug: "civil-services", category: "government",
-        description: "Serve the nation at the highest levels of government administration. Civil servants lead policy implementation, governance, and public welfare.",
-        day_in_life: "Review government circulars and policy briefs. Meet with department heads on ongoing projects. Field visit to inspect development work. Afternoon: public grievance hearings.",
-        required_skills: ["Administrative Skills", "Public Policy", "Leadership", "Decision Making", "Ethics", "Communication", "General Knowledge"],
-        required_education: [{ degree: "Any Graduation", field: "Any discipline", duration: "3-4 years" }],
-        salary_range_min: 800000, salary_range_max: 2500000, growth_outlook: "medium", demand_score: 88,
-        top_companies: ["Government of India", "State Governments", "Public Sector Enterprises"],
-        entrance_exams: ["UPSC CSE Prelims", "UPSC CSE Mains", "UPSC Interview"],
-        related_courses: ["UPSC Coaching", "Optional Subject Deep Study", "Current Affairs"], icon: "🏛️"
-    },
-    {
-        id: "c10", title: "AI/ML Engineer", slug: "ai-ml-engineer", category: "technology",
-        description: "Build intelligent systems that can learn, reason, and make decisions. AI/ML engineers develop models for recommendation systems, computer vision, NLP, and more.",
-        day_in_life: "Morning: review model training metrics from overnight runs. Prepare and clean datasets. Afternoon: experiment with new model architectures, fine-tune hyperparameters. Deploy a model to production.",
-        required_skills: ["Python", "TensorFlow/PyTorch", "Machine Learning", "Deep Learning", "Mathematics", "NLP/Computer Vision", "MLOps"],
-        required_education: [{ degree: "B.Tech/M.Tech", field: "CS/AI/ML", duration: "4-6 years" }, { degree: "M.Sc/PhD", field: "Computer Science/Mathematics", duration: "2-5 years" }],
-        salary_range_min: 800000, salary_range_max: 4000000, growth_outlook: "high", demand_score: 96,
-        top_companies: ["Google DeepMind", "OpenAI", "Microsoft", "NVIDIA", "Amazon", "Meta"],
-        entrance_exams: ["JEE", "GATE", "GRE"],
-        related_courses: ["M.Tech AI", "Stanford CS229", "Fast.ai", "DeepLearning.AI"], icon: "🤖"
-    },
-    {
-        id: "c11", title: "Graphic Designer", slug: "graphic-designer", category: "design",
-        description: "Create visual content for brands, products, and media. From logos and marketing materials to social media graphics and brand identities.",
-        day_in_life: "Morning briefing on new project requirements. Create mood boards and initial concepts. Design social media posts and banners. Afternoon: work on brand identity project.",
-        required_skills: ["Adobe Photoshop", "Illustrator", "Typography", "Color Theory", "Brand Design", "Layout Design", "Canva"],
-        required_education: [{ degree: "B.Des/BFA", field: "Graphic/Visual Design", duration: "4 years" }],
-        salary_range_min: 250000, salary_range_max: 1200000, growth_outlook: "medium", demand_score: 72,
-        top_companies: ["Ogilvy", "Dentsu", "WPP", "Adobe", "Canva", "Razorpay", "CRED"],
-        entrance_exams: ["NID DAT", "UCEED", "NIFT"],
-        related_courses: ["B.Des Visual Communication", "Adobe Certified", "Coursera Graphic Design"], icon: "✏️"
-    },
-    {
-        id: "c12", title: "Cybersecurity Analyst", slug: "cybersecurity-analyst", category: "technology",
-        description: "Protect organizations from cyber threats by monitoring systems, investigating incidents, and implementing security controls.",
-        day_in_life: "Monitor SIEM dashboard for security alerts. Investigate a phishing attempt targeting employees. Perform vulnerability assessment on new application. Afternoon: update firewall rules.",
-        required_skills: ["Network Security", "SIEM Tools", "Penetration Testing", "Python Scripting", "Incident Response", "Cloud Security", "Compliance (ISO 27001)"],
-        required_education: [{ degree: "B.Tech", field: "CS/IT/Cybersecurity", duration: "4 years" }],
-        salary_range_min: 500000, salary_range_max: 2500000, growth_outlook: "high", demand_score: 88,
-        top_companies: ["Palo Alto Networks", "CrowdStrike", "TCS", "Wipro", "KPMG", "Deloitte"],
-        entrance_exams: ["JEE Main", "GATE"],
-        related_courses: ["CEH", "CompTIA Security+", "OSCP", "B.Tech Cybersecurity"], icon: "🔐"
-    },
-];
+// Re-export comprehensive careers database (60+ profiles)
+import { CAREERS_DATABASE } from "./careers-data";
+export const CAREERS = CAREERS_DATABASE;
+
 
 export const ASSESSMENT_QUESTIONS = [
     {
@@ -146,10 +16,10 @@ export const ASSESSMENT_QUESTIONS = [
     },
     {
         id: 2, question: "In a group project, you naturally take the role of:", category: "work_style", options: [
-            { text: "Leader — organizing tasks and directing the team", trait: "enterprising", score: 5 },
-            { text: "Researcher — gathering data and analyzing information", trait: "analytical", score: 5 },
-            { text: "Mediator — ensuring everyone is heard and aligned", trait: "social", score: 5 },
-            { text: "Executor — doing the hands-on work to get things done", trait: "realistic", score: 5 }]
+            { text: "Leader â€” organizing tasks and directing the team", trait: "enterprising", score: 5 },
+            { text: "Researcher â€” gathering data and analyzing information", trait: "analytical", score: 5 },
+            { text: "Mediator â€” ensuring everyone is heard and aligned", trait: "social", score: 5 },
+            { text: "Executor â€” doing the hands-on work to get things done", trait: "realistic", score: 5 }]
     },
     {
         id: 3, question: "Which activity excites you the most?", category: "interests", options: [
@@ -162,7 +32,7 @@ export const ASSESSMENT_QUESTIONS = [
         id: 4, question: "When you achieve a goal, what matters most to you?", category: "values", options: [
             { text: "Financial reward and stability", trait: "conventional", score: 5 },
             { text: "Recognition and personal growth", trait: "enterprising", score: 5 },
-            { text: "Impact — knowing I made a difference", trait: "social", score: 5 },
+            { text: "Impact â€” knowing I made a difference", trait: "social", score: 5 },
             { text: "The learning and skills I gained along the way", trait: "analytical", score: 5 }]
     },
     {
@@ -244,12 +114,12 @@ export const ASSESSMENT_QUESTIONS = [
     },
 ];
 
-// ─── CODING CHALLENGES (Company-Specific, Career-Based) ──────────
+// â”€â”€â”€ CODING CHALLENGES (Company-Specific, Career-Based) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const CODING_CHALLENGES = [
-    // ─── EASY ────────────────────────────────────────────────────
+    // â”€â”€â”€ EASY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     {
         id: "cc1", title: "Two Sum", difficulty: "Easy", category: "Arrays", company: ["Google", "Amazon", "Meta"], career: "technology",
-        description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.\n\nConstraints:\n- 2 ≤ nums.length ≤ 10⁴\n- Each input has exactly one solution\n- You may not use the same element twice",
+        description: "Given an array of integers, return indices of the two numbers such that they add up to a specific target.\n\nConstraints:\n- 2 â‰¤ nums.length â‰¤ 10â´\n- Each input has exactly one solution\n- You may not use the same element twice",
         examples: [{ input: "nums = [2,7,11,15], target = 9", output: "[0,1]" }, { input: "nums = [3,2,4], target = 6", output: "[1,2]" }],
         hints: ["Use a hash map for O(n) solution", "Store complement values as you iterate"],
         starterCode: { javascript: "function twoSum(nums, target) {\n  // Your code here\n}", python: "def two_sum(nums, target):\n    # Your code here\n    pass", java: "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        // Your code here\n        return new int[]{};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        // Your code here\n        return {};\n    }\n};", c: "int* twoSum(int* nums, int numsSize, int target, int* returnSize) {\n    // Your code here\n    return NULL;\n}" },
@@ -314,17 +184,17 @@ export const CODING_CHALLENGES = [
         id: "cc8", title: "Remove Duplicates from Sorted Array", difficulty: "Easy", category: "Arrays", company: ["Microsoft", "Facebook", "LinkedIn"], career: "technology",
         description: "Given a sorted array, remove duplicates in-place and return the new length.",
         examples: [{ input: "[1,1,2]", output: "2 (array becomes [1,2])" }],
-        hints: ["Use two pointers — slow and fast"],
+        hints: ["Use two pointers â€” slow and fast"],
         starterCode: { javascript: "function removeDuplicates(nums) {\n  // Return new length\n}", python: "def remove_duplicates(nums):\n    # Return new length\n    pass", java: "class Solution {\n    public int removeDuplicates(int[] nums) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int removeDuplicates(vector<int>& nums) {\n        return 0;\n    }\n};", c: "int removeDuplicates(int* nums, int numsSize) {\n    return 0;\n}" },
         testCases: [{ input: [[1, 1, 2]], expected: 2 }, { input: [[0, 0, 1, 1, 1, 2, 2, 3, 3, 4]], expected: 5 }], tags: ["array", "two-pointers"], points: 10
     },
 
-    // ─── MEDIUM ──────────────────────────────────────────────────
+    // â”€â”€â”€ MEDIUM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     {
         id: "cc9", title: "Maximum Subarray (Kadane's)", difficulty: "Medium", category: "Dynamic Programming", company: ["Amazon", "Microsoft", "Goldman Sachs"], career: "technology",
-        description: "Find the contiguous subarray which has the largest sum and return its sum.\n\nConstraints:\n- 1 ≤ nums.length ≤ 10⁵\n- -10⁴ ≤ nums[i] ≤ 10⁴",
+        description: "Find the contiguous subarray which has the largest sum and return its sum.\n\nConstraints:\n- 1 â‰¤ nums.length â‰¤ 10âµ\n- -10â´ â‰¤ nums[i] â‰¤ 10â´",
         examples: [{ input: "[-2,1,-3,4,-1,2,1,-5,4]", output: "6 (subarray [4,-1,2,1])" }],
-        hints: ["Kadane's Algorithm — keep running sum, reset when negative", "Track global maximum separately"],
+        hints: ["Kadane's Algorithm â€” keep running sum, reset when negative", "Track global maximum separately"],
         starterCode: { javascript: "function maxSubArray(nums) {\n  // Your code here\n}", python: "def max_sub_array(nums):\n    # Your code here\n    pass", java: "class Solution {\n    public int maxSubArray(int[] nums) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int maxSubArray(vector<int>& nums) {\n        return 0;\n    }\n};", c: "int maxSubArray(int* nums, int numsSize) {\n    return 0;\n}" },
         testCases: [{ input: [[-2, 1, -3, 4, -1, 2, 1, -5, 4]], expected: 6 }, { input: [[1]], expected: 1 }, { input: [[-1]], expected: -1 }], tags: ["dp", "greedy", "kadane"], points: 20
     },
@@ -349,7 +219,7 @@ export const CODING_CHALLENGES = [
 
     {
         id: "cc12", title: "3Sum", difficulty: "Medium", category: "Arrays", company: ["Amazon", "Google", "Apple", "Uber"], career: "technology",
-        description: "Given an integer array nums, return all triplets [nums[i], nums[j], nums[k]] such that i ≠ j ≠ k and nums[i] + nums[j] + nums[k] == 0.",
+        description: "Given an integer array nums, return all triplets [nums[i], nums[j], nums[k]] such that i â‰  j â‰  k and nums[i] + nums[j] + nums[k] == 0.",
         examples: [{ input: "[-1,0,1,2,-1,-4]", output: "[[-1,-1,2],[-1,0,1]]" }],
         hints: ["Sort the array first", "Fix one element, use two pointers for remaining"],
         starterCode: { javascript: "function threeSum(nums) {\n  // Your code here\n}", python: "def three_sum(nums):\n    # Your code here\n    pass", java: "class Solution {\n    public List<List<Integer>> threeSum(int[] nums) {\n        return new ArrayList<>();\n    }\n}", cpp: "class Solution {\npublic:\n    vector<vector<int>> threeSum(vector<int>& nums) {\n        return {};\n    }\n};", c: "int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes) {\n    return NULL;\n}" },
@@ -360,7 +230,7 @@ export const CODING_CHALLENGES = [
         id: "cc13", title: "Linked List Cycle Detection", difficulty: "Medium", category: "Linked Lists", company: ["Amazon", "Microsoft", "Oracle"], career: "technology",
         description: "Given head of a linked list, determine if it has a cycle.",
         examples: [{ input: "[3,2,0,-4], pos=1", output: "true" }],
-        hints: ["Floyd's cycle detection (tortoise and hare)", "Slow moves 1, fast moves 2 — if they meet, cycle exists"],
+        hints: ["Floyd's cycle detection (tortoise and hare)", "Slow moves 1, fast moves 2 â€” if they meet, cycle exists"],
         starterCode: { javascript: "function hasCycle(head) {\n  // Your code here\n}", python: "def has_cycle(head):\n    # Your code here\n    pass", java: "public class Solution {\n    public boolean hasCycle(ListNode head) {\n        return false;\n    }\n}", cpp: "class Solution {\npublic:\n    bool hasCycle(ListNode *head) {\n        return false;\n    }\n};", c: "bool hasCycle(struct ListNode *head) {\n    return false;\n}" },
         testCases: [], tags: ["linked-list", "two-pointers", "floyd"], points: 20
     },
@@ -369,13 +239,13 @@ export const CODING_CHALLENGES = [
         id: "cc14", title: "Product of Array Except Self", difficulty: "Medium", category: "Arrays", company: ["Amazon", "Apple", "Facebook", "Razorpay"], career: "technology",
         description: "Given integer array nums, return array answer where answer[i] is the product of all elements except nums[i]. Must run in O(n) without division.",
         examples: [{ input: "[1,2,3,4]", output: "[24,12,8,6]" }],
-        hints: ["Use prefix and suffix products", "Two-pass approach — left products then right products"],
+        hints: ["Use prefix and suffix products", "Two-pass approach â€” left products then right products"],
         starterCode: { javascript: "function productExceptSelf(nums) {\n  // Your code here\n}", python: "def product_except_self(nums):\n    # Your code here\n    pass", java: "class Solution {\n    public int[] productExceptSelf(int[] nums) {\n        return new int[]{};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<int> productExceptSelf(vector<int>& nums) {\n        return {};\n    }\n};", c: "int* productExceptSelf(int* nums, int numsSize, int* returnSize) {\n    return NULL;\n}" },
         testCases: [{ input: [[1, 2, 3, 4]], expected: [24, 12, 8, 6] }], tags: ["array", "prefix-sum"], points: 25
     },
 
     {
-        id: "cc15", title: "Rotate Matrix 90°", difficulty: "Medium", category: "Matrix", company: ["Amazon", "Microsoft", "Google"], career: "technology",
+        id: "cc15", title: "Rotate Matrix 90Â°", difficulty: "Medium", category: "Matrix", company: ["Amazon", "Microsoft", "Google"], career: "technology",
         description: "You are given an n x n 2D matrix. Rotate the image by 90 degrees clockwise in-place.",
         examples: [{ input: "[[1,2,3],[4,5,6],[7,8,9]]", output: "[[7,4,1],[8,5,2],[9,6,3]]" }],
         hints: ["Transpose the matrix, then reverse each row"],
@@ -423,12 +293,12 @@ export const CODING_CHALLENGES = [
         id: "cc20", title: "Find First and Last Position in Sorted Array", difficulty: "Medium", category: "Searching", company: ["Google", "Amazon", "Uber"], career: "technology",
         description: "Given a sorted array and target, find the starting and ending position of target. Return [-1,-1] if not found. Must be O(log n).",
         examples: [{ input: "nums=[5,7,7,8,8,10], target=8", output: "[3,4]" }],
-        hints: ["Two binary searches — one for first, one for last occurrence"],
+        hints: ["Two binary searches â€” one for first, one for last occurrence"],
         starterCode: { javascript: "function searchRange(nums, target) {\n  // Your code here\n}", python: "def search_range(nums, target):\n    # Your code here\n    pass", java: "class Solution {\n    public int[] searchRange(int[] nums, int target) {\n        return new int[]{-1,-1};\n    }\n}", cpp: "class Solution {\npublic:\n    vector<int> searchRange(vector<int>& nums, int target) {\n        return {-1,-1};\n    }\n};", c: "int* searchRange(int* nums, int numsSize, int target, int* returnSize) {\n    return NULL;\n}" },
         testCases: [{ input: [[5, 7, 7, 8, 8, 10], 8], expected: [3, 4] }, { input: [[5, 7, 7, 8, 8, 10], 6], expected: [-1, -1] }], tags: ["binary-search"], points: 25
     },
 
-    // ─── HARD ────────────────────────────────────────────────────
+    // â”€â”€â”€ HARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     {
         id: "cc21", title: "LRU Cache", difficulty: "Hard", category: "Design", company: ["Google", "Amazon", "Microsoft", "Facebook", "Flipkart"], career: "technology",
         description: "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.\n\nImplement get(key) and put(key, value) in O(1) time.",
@@ -442,7 +312,7 @@ export const CODING_CHALLENGES = [
         id: "cc22", title: "Median of Two Sorted Arrays", difficulty: "Hard", category: "Searching", company: ["Google", "Amazon", "Goldman Sachs"], career: "technology",
         description: "Given two sorted arrays nums1 and nums2, return the median of the two sorted arrays. Must be O(log(m+n)).",
         examples: [{ input: "nums1=[1,3], nums2=[2]", output: "2.0" }],
-        hints: ["Binary search on the smaller array", "Partition both arrays such that left half ≤ right half"],
+        hints: ["Binary search on the smaller array", "Partition both arrays such that left half â‰¤ right half"],
         starterCode: { javascript: "function findMedianSortedArrays(nums1, nums2) {\n  // Your code here\n}", python: "def find_median_sorted_arrays(nums1, nums2):\n    # Your code here\n    pass", java: "class Solution {\n    public double findMedianSortedArrays(int[] nums1, int[] nums2) {\n        return 0.0;\n    }\n}", cpp: "class Solution {\npublic:\n    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {\n        return 0.0;\n    }\n};", c: "double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) {\n    return 0.0;\n}" },
         testCases: [], tags: ["binary-search", "divide-conquer"], points: 45
     },
@@ -460,7 +330,7 @@ export const CODING_CHALLENGES = [
         id: "cc24", title: "Word Ladder", difficulty: "Hard", category: "Graphs", company: ["Amazon", "Google", "Facebook"], career: "technology",
         description: "Given beginWord, endWord, and wordList, return the number of words in the shortest transformation sequence where only one letter can change at a time.",
         examples: [{ input: 'begin="hit", end="cog", list=["hot","dot","dog","lot","log","cog"]', output: "5" }],
-        hints: ["BFS — each word is a node, edges connect words differing by one letter"],
+        hints: ["BFS â€” each word is a node, edges connect words differing by one letter"],
         starterCode: { javascript: "function ladderLength(beginWord, endWord, wordList) {\n  // Your code here\n}", python: "def ladder_length(begin_word, end_word, word_list):\n    # Your code here\n    pass", java: "class Solution {\n    public int ladderLength(String beginWord, String endWord, List<String> wordList) {\n        return 0;\n    }\n}", cpp: "class Solution {\npublic:\n    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {\n        return 0;\n    }\n};", c: "int ladderLength(char* beginWord, char* endWord, char** wordList, int wordListSize) {\n    return 0;\n}" },
         testCases: [], tags: ["bfs", "graph"], points: 40
     },
@@ -475,12 +345,12 @@ export const CODING_CHALLENGES = [
     },
 ];
 
-// ─── DAILY QUIZ QUESTIONS (MCQ) ──────────────────────────────
+// â”€â”€â”€ DAILY QUIZ QUESTIONS (MCQ) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const DAILY_QUIZZES: Record<string, any[]> = {
     "technology": [
-        { id: "dq1", question: "What does API stand for?", options: ["Application Programming Interface", "Applied Programming Integration", "Automated Process Interface", "Application Process Integration"], correct: 0, explanation: "API stands for Application Programming Interface — it defines how software components communicate.", points: 5 },
+        { id: "dq1", question: "What does API stand for?", options: ["Application Programming Interface", "Applied Programming Integration", "Automated Process Interface", "Application Process Integration"], correct: 0, explanation: "API stands for Application Programming Interface â€” it defines how software components communicate.", points: 5 },
         { id: "dq2", question: "Which data structure uses FIFO?", options: ["Stack", "Queue", "Array", "Tree"], correct: 1, explanation: "Queue uses First-In-First-Out (FIFO) ordering.", points: 5 },
-        { id: "dq3", question: "What is the time complexity of binary search?", options: ["O(n)", "O(log n)", "O(n²)", "O(1)"], correct: 1, explanation: "Binary search halves the search space each step, giving O(log n).", points: 5 },
+        { id: "dq3", question: "What is the time complexity of binary search?", options: ["O(n)", "O(log n)", "O(nÂ²)", "O(1)"], correct: 1, explanation: "Binary search halves the search space each step, giving O(log n).", points: 5 },
         { id: "dq4", question: "Which protocol does HTTPS use for encryption?", options: ["SSL/TLS", "SSH", "AES", "RSA only"], correct: 0, explanation: "HTTPS uses SSL/TLS to encrypt communications between client and server.", points: 5 },
         { id: "dq5", question: "What is a closure in JavaScript?", options: ["A function with access to its outer scope", "A way to close browser tabs", "A design pattern only", "A type of loop"], correct: 0, explanation: "A closure is a function that has access to its parent scope, even after the parent function has closed.", points: 5 },
         { id: "dq6", question: "Which SQL command is used to retrieve data?", options: ["GET", "SELECT", "FETCH", "RETRIEVE"], correct: 1, explanation: "SELECT is the SQL command used to query and retrieve data from databases.", points: 5 },
@@ -493,38 +363,38 @@ export const DAILY_QUIZZES: Record<string, any[]> = {
         { id: "dq11", question: "What is the full form of GST in India?", options: ["General Sales Tax", "Goods and Services Tax", "Government Service Tax", "Gross Standard Tax"], correct: 1, explanation: "GST stands for Goods and Services Tax, implemented in India on July 1, 2017.", points: 5 },
     ],
     "design": [
-        { id: "dq12", question: "What does UX stand for?", options: ["User Experience", "Universal Exchange", "User Extension", "Unified Experience"], correct: 0, explanation: "UX = User Experience — how a user interacts with and experiences a product.", points: 5 },
+        { id: "dq12", question: "What does UX stand for?", options: ["User Experience", "Universal Exchange", "User Extension", "Unified Experience"], correct: 0, explanation: "UX = User Experience â€” how a user interacts with and experiences a product.", points: 5 },
         { id: "dq13", question: "Which tool is most used for UI design?", options: ["Photoshop", "Figma", "MS Paint", "PowerPoint"], correct: 1, explanation: "Figma has become the industry standard for collaborative interface design.", points: 5 },
     ],
 };
 
-// ─── COURSES CATALOG ────────────────────────────────────────
+// â”€â”€â”€ COURSES CATALOG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const COURSES = [
-    { id: "crs1", title: "DSA Mastery: Arrays to Graphs", category: "technology", difficulty: "Beginner to Advanced", duration: "12 weeks", modules: 24, instructor: "SkillSync AI", rating: 4.8, enrolled: 12500, free: true, description: "Complete data structures and algorithms course with 200+ practice problems. Start from arrays, move through trees, graphs, and dynamic programming.", tags: ["DSA", "Coding", "Interview Prep"], image: "🏗️" },
-    { id: "crs2", title: "Full Stack Web Development", category: "technology", difficulty: "Intermediate", duration: "16 weeks", modules: 32, instructor: "SkillSync AI", rating: 4.7, enrolled: 8900, free: true, description: "Build production-ready applications with React, Next.js, Node.js, and databases. Includes 5 real-world projects.", tags: ["React", "Node.js", "MongoDB"], image: "🌐" },
-    { id: "crs3", title: "Machine Learning A-Z", category: "technology", difficulty: "Intermediate", duration: "10 weeks", modules: 20, instructor: "SkillSync AI", rating: 4.9, enrolled: 15600, free: true, description: "From linear regression to deep learning. Hands-on with Python, scikit-learn, TensorFlow.", tags: ["ML", "Python", "AI"], image: "🤖" },
-    { id: "crs4", title: "System Design for Interviews", category: "technology", difficulty: "Advanced", duration: "8 weeks", modules: 16, instructor: "SkillSync AI", rating: 4.6, enrolled: 6700, free: false, description: "Design scalable systems like Twitter, WhatsApp, and Uber. Essential for senior developer interviews.", tags: ["System Design", "Architecture"], image: "🏛️" },
-    { id: "crs5", title: "UI/UX Design Fundamentals", category: "design", difficulty: "Beginner", duration: "8 weeks", modules: 16, instructor: "SkillSync AI", rating: 4.7, enrolled: 5400, free: true, description: "Learn user research, wireframing, prototyping, and visual design with Figma.", tags: ["Figma", "UX", "Design"], image: "🎨" },
-    { id: "crs6", title: "Business Communication Mastery", category: "business", difficulty: "Beginner", duration: "4 weeks", modules: 8, instructor: "SkillSync AI", rating: 4.5, enrolled: 9800, free: true, description: "Master email writing, presentations, negotiation, and professional communication for Indian workplaces.", tags: ["Communication", "Soft Skills"], image: "🗣️" },
-    { id: "crs7", title: "Placement Preparation Bootcamp", category: "technology", difficulty: "Intermediate", duration: "6 weeks", modules: 18, instructor: "SkillSync AI", rating: 4.8, enrolled: 22000, free: true, description: "Comprehensive placement prep: aptitude, coding, group discussion, HR interview, and resume building.", tags: ["Placements", "Interview", "AMCAT"], image: "🎯" },
-    { id: "crs8", title: "Python for Data Science", category: "technology", difficulty: "Beginner", duration: "6 weeks", modules: 12, instructor: "SkillSync AI", rating: 4.7, enrolled: 18200, free: true, description: "Learn Python from scratch. Pandas, NumPy, Matplotlib, and real datasets. NPTEL certified equivalent.", tags: ["Python", "Data Science"], image: "🐍" },
+    { id: "crs1", title: "DSA Mastery: Arrays to Graphs", category: "technology", difficulty: "Beginner to Advanced", duration: "12 weeks", modules: 24, instructor: "SkillSync AI", rating: 4.8, enrolled: 12500, free: true, description: "Complete data structures and algorithms course with 200+ practice problems. Start from arrays, move through trees, graphs, and dynamic programming.", tags: ["DSA", "Coding", "Interview Prep"], image: "ðŸ—ï¸" },
+    { id: "crs2", title: "Full Stack Web Development", category: "technology", difficulty: "Intermediate", duration: "16 weeks", modules: 32, instructor: "SkillSync AI", rating: 4.7, enrolled: 8900, free: true, description: "Build production-ready applications with React, Next.js, Node.js, and databases. Includes 5 real-world projects.", tags: ["React", "Node.js", "MongoDB"], image: "ðŸŒ" },
+    { id: "crs3", title: "Machine Learning A-Z", category: "technology", difficulty: "Intermediate", duration: "10 weeks", modules: 20, instructor: "SkillSync AI", rating: 4.9, enrolled: 15600, free: true, description: "From linear regression to deep learning. Hands-on with Python, scikit-learn, TensorFlow.", tags: ["ML", "Python", "AI"], image: "ðŸ¤–" },
+    { id: "crs4", title: "System Design for Interviews", category: "technology", difficulty: "Advanced", duration: "8 weeks", modules: 16, instructor: "SkillSync AI", rating: 4.6, enrolled: 6700, free: false, description: "Design scalable systems like Twitter, WhatsApp, and Uber. Essential for senior developer interviews.", tags: ["System Design", "Architecture"], image: "ðŸ›ï¸" },
+    { id: "crs5", title: "UI/UX Design Fundamentals", category: "design", difficulty: "Beginner", duration: "8 weeks", modules: 16, instructor: "SkillSync AI", rating: 4.7, enrolled: 5400, free: true, description: "Learn user research, wireframing, prototyping, and visual design with Figma.", tags: ["Figma", "UX", "Design"], image: "ðŸŽ¨" },
+    { id: "crs6", title: "Business Communication Mastery", category: "business", difficulty: "Beginner", duration: "4 weeks", modules: 8, instructor: "SkillSync AI", rating: 4.5, enrolled: 9800, free: true, description: "Master email writing, presentations, negotiation, and professional communication for Indian workplaces.", tags: ["Communication", "Soft Skills"], image: "ðŸ—£ï¸" },
+    { id: "crs7", title: "Placement Preparation Bootcamp", category: "technology", difficulty: "Intermediate", duration: "6 weeks", modules: 18, instructor: "SkillSync AI", rating: 4.8, enrolled: 22000, free: true, description: "Comprehensive placement prep: aptitude, coding, group discussion, HR interview, and resume building.", tags: ["Placements", "Interview", "AMCAT"], image: "ðŸŽ¯" },
+    { id: "crs8", title: "Python for Data Science", category: "technology", difficulty: "Beginner", duration: "6 weeks", modules: 12, instructor: "SkillSync AI", rating: 4.7, enrolled: 18200, free: true, description: "Learn Python from scratch. Pandas, NumPy, Matplotlib, and real datasets. NPTEL certified equivalent.", tags: ["Python", "Data Science"], image: "ðŸ" },
 ];
 
-// ─── JOB LISTINGS ───────────────────────────────────────────
+// â”€â”€â”€ JOB LISTINGS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export const JOB_LISTINGS = [
-    { id: "j1", title: "Software Development Engineer", company: "Amazon", location: "Bangalore", type: "Full-time", salary: "₹14-25 LPA", experience: "0-2 years", skills: ["Java", "DSA", "System Design"], posted: "2 hours ago", category: "technology", isHot: true, applicants: 234, deadline: "7 days", url: "#" },
-    { id: "j2", title: "Frontend Developer Intern", company: "Razorpay", location: "Bangalore (Remote)", type: "Internship", salary: "₹40K/month", experience: "0-1 years", skills: ["React", "TypeScript", "CSS"], posted: "5 hours ago", category: "technology", isHot: true, applicants: 156, deadline: "14 days", url: "#" },
-    { id: "j3", title: "Data Analyst", company: "Flipkart", location: "Bangalore", type: "Full-time", salary: "₹8-15 LPA", experience: "0-3 years", skills: ["SQL", "Python", "Excel", "Tableau"], posted: "1 day ago", category: "technology", isHot: false, applicants: 312, deadline: "10 days", url: "#" },
-    { id: "j4", title: "ML Engineer Intern", company: "Google", location: "Hyderabad", type: "Internship", salary: "₹1.2L/month", experience: "0 years", skills: ["Python", "TensorFlow", "ML"], posted: "3 hours ago", category: "technology", isHot: true, applicants: 520, deadline: "5 days", url: "#" },
-    { id: "j5", title: "Product Manager Associate", company: "CRED", location: "Bangalore", type: "Full-time", salary: "₹18-30 LPA", experience: "1-3 years", skills: ["Product Strategy", "Analytics", "SQL"], posted: "1 day ago", category: "business", isHot: false, applicants: 89, deadline: "21 days", url: "#" },
-    { id: "j6", title: "UX Design Intern", company: "Swiggy", location: "Remote", type: "Internship", salary: "₹25K/month", experience: "0 years", skills: ["Figma", "User Research", "Prototyping"], posted: "6 hours ago", category: "design", isHot: true, applicants: 167, deadline: "10 days", url: "#" },
-    { id: "j7", title: "Cybersecurity Analyst", company: "Deloitte", location: "Mumbai", type: "Full-time", salary: "₹8-16 LPA", experience: "0-2 years", skills: ["SIEM", "Python", "Network Security"], posted: "2 days ago", category: "technology", isHot: false, applicants: 78, deadline: "15 days", url: "#" },
-    { id: "j8", title: "Backend Developer", company: "PhonePe", location: "Pune", type: "Full-time", salary: "₹12-22 LPA", experience: "1-3 years", skills: ["Java", "Spring Boot", "Microservices"], posted: "4 hours ago", category: "technology", isHot: true, applicants: 198, deadline: "7 days", url: "#" },
-    { id: "j9", title: "Business Analyst Intern", company: "McKinsey", location: "Delhi (Hybrid)", type: "Internship", salary: "₹80K/month", experience: "0 years", skills: ["Excel", "PowerPoint", "Analytics"], posted: "1 day ago", category: "business", isHot: true, applicants: 445, deadline: "3 days", url: "#" },
-    { id: "j10", title: "DevOps Engineer", company: "Zomato", location: "Gurugram", type: "Full-time", salary: "₹10-20 LPA", experience: "1-3 years", skills: ["Docker", "Kubernetes", "AWS", "CI/CD"], posted: "8 hours ago", category: "technology", isHot: false, applicants: 112, deadline: "12 days", url: "#" },
+    { id: "j1", title: "Software Development Engineer", company: "Amazon", location: "Bangalore", type: "Full-time", salary: "â‚¹14-25 LPA", experience: "0-2 years", skills: ["Java", "DSA", "System Design"], posted: "2 hours ago", category: "technology", isHot: true, applicants: 234, deadline: "7 days", url: "#" },
+    { id: "j2", title: "Frontend Developer Intern", company: "Razorpay", location: "Bangalore (Remote)", type: "Internship", salary: "â‚¹40K/month", experience: "0-1 years", skills: ["React", "TypeScript", "CSS"], posted: "5 hours ago", category: "technology", isHot: true, applicants: 156, deadline: "14 days", url: "#" },
+    { id: "j3", title: "Data Analyst", company: "Flipkart", location: "Bangalore", type: "Full-time", salary: "â‚¹8-15 LPA", experience: "0-3 years", skills: ["SQL", "Python", "Excel", "Tableau"], posted: "1 day ago", category: "technology", isHot: false, applicants: 312, deadline: "10 days", url: "#" },
+    { id: "j4", title: "ML Engineer Intern", company: "Google", location: "Hyderabad", type: "Internship", salary: "â‚¹1.2L/month", experience: "0 years", skills: ["Python", "TensorFlow", "ML"], posted: "3 hours ago", category: "technology", isHot: true, applicants: 520, deadline: "5 days", url: "#" },
+    { id: "j5", title: "Product Manager Associate", company: "CRED", location: "Bangalore", type: "Full-time", salary: "â‚¹18-30 LPA", experience: "1-3 years", skills: ["Product Strategy", "Analytics", "SQL"], posted: "1 day ago", category: "business", isHot: false, applicants: 89, deadline: "21 days", url: "#" },
+    { id: "j6", title: "UX Design Intern", company: "Swiggy", location: "Remote", type: "Internship", salary: "â‚¹25K/month", experience: "0 years", skills: ["Figma", "User Research", "Prototyping"], posted: "6 hours ago", category: "design", isHot: true, applicants: 167, deadline: "10 days", url: "#" },
+    { id: "j7", title: "Cybersecurity Analyst", company: "Deloitte", location: "Mumbai", type: "Full-time", salary: "â‚¹8-16 LPA", experience: "0-2 years", skills: ["SIEM", "Python", "Network Security"], posted: "2 days ago", category: "technology", isHot: false, applicants: 78, deadline: "15 days", url: "#" },
+    { id: "j8", title: "Backend Developer", company: "PhonePe", location: "Pune", type: "Full-time", salary: "â‚¹12-22 LPA", experience: "1-3 years", skills: ["Java", "Spring Boot", "Microservices"], posted: "4 hours ago", category: "technology", isHot: true, applicants: 198, deadline: "7 days", url: "#" },
+    { id: "j9", title: "Business Analyst Intern", company: "McKinsey", location: "Delhi (Hybrid)", type: "Internship", salary: "â‚¹80K/month", experience: "0 years", skills: ["Excel", "PowerPoint", "Analytics"], posted: "1 day ago", category: "business", isHot: true, applicants: 445, deadline: "3 days", url: "#" },
+    { id: "j10", title: "DevOps Engineer", company: "Zomato", location: "Gurugram", type: "Full-time", salary: "â‚¹10-20 LPA", experience: "1-3 years", skills: ["Docker", "Kubernetes", "AWS", "CI/CD"], posted: "8 hours ago", category: "technology", isHot: false, applicants: 112, deadline: "12 days", url: "#" },
 ];
 
-// ─── PERSISTENT STORE (survives server restarts) ────────────
+// â”€â”€â”€ PERSISTENT STORE (survives server restarts) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 import * as fs from "fs";
 import * as path from "path";
 
@@ -559,7 +429,7 @@ export interface Opening {
     applicants: number;
 }
 
-// Persistence helper — saves data to JSON files so state survives server restarts
+// Persistence helper â€” saves data to JSON files so state survives server restarts
 const DATA_DIR = path.join(process.cwd(), ".skillsync-data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 const OPENINGS_FILE = path.join(DATA_DIR, "openings.json");
@@ -608,14 +478,14 @@ function saveOpeningsToDisk(openings: Opening[]) {
 
 // Default seed openings
 const SEED_OPENINGS: Opening[] = [
-    { id: "op1", title: "AI/ML Engineer", company: "Google India", location: "Bangalore", type: "Full-time", salary: "₹25-45 LPA", experience: "1-3 years", skills: ["Python", "TensorFlow", "PyTorch", "NLP"], description: "Join Google's AI team to build next-generation ML products. Work on large-scale systems serving billions of users. Strong background in deep learning and production ML required.", applyUrl: "https://careers.google.com", category: "technology", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-18T10:00:00Z", deadline: "2026-03-15", applicants: 342 },
-    { id: "op2", title: "Full Stack Developer Intern", company: "Razorpay", location: "Bangalore (Remote)", type: "Internship", salary: "₹50K/month + PPO", experience: "0 years (Students)", skills: ["React", "Node.js", "TypeScript", "PostgreSQL"], description: "6-month internship with Pre-Placement Offer opportunity. Build payment infrastructure used by 8M+ businesses. Fast-paced startup culture with real ownership from day 1.", applyUrl: "https://razorpay.com/careers", category: "technology", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-17T14:00:00Z", deadline: "2026-03-01", applicants: 567 },
-    { id: "op3", title: "Product Design Lead", company: "CRED", location: "Bangalore", type: "Full-time", salary: "₹22-38 LPA", experience: "3-5 years", skills: ["Figma", "Design Systems", "User Research", "Prototyping"], description: "Lead the design of CRED's consumer-facing products. Shape the experience for 25M+ premium users. Looking for someone who obsesses over craft and detail.", applyUrl: "https://cred.club/careers", category: "design", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-16T09:00:00Z", deadline: "2026-03-20", applicants: 89 },
-    { id: "op4", title: "Data Analyst - Growth", company: "Swiggy", location: "Bangalore / Remote", type: "Full-time", salary: "₹10-18 LPA", experience: "0-2 years", skills: ["SQL", "Python", "Tableau", "A/B Testing"], description: "Analyze growth metrics for India's leading food delivery platform. Work with product and marketing teams to drive user engagement and retention strategies.", applyUrl: "https://swiggy.com/careers", category: "technology", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-15T11:00:00Z", deadline: "2026-03-10", applicants: 234 },
-    { id: "op5", title: "DevOps Engineer", company: "PhonePe", location: "Pune / Bangalore", type: "Full-time", salary: "₹15-28 LPA", experience: "2-4 years", skills: ["Docker", "Kubernetes", "AWS", "Terraform", "CI/CD"], description: "Scale infrastructure for India's #1 UPI app processing 5B+ monthly transactions. High-impact role with exposure to massive distributed systems.", applyUrl: "https://phonepe.com/careers", category: "technology", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-18T08:00:00Z", deadline: "2026-03-05", applicants: 156 },
-    { id: "op6", title: "Business Analyst Intern", company: "McKinsey & Company", location: "Delhi / Mumbai (Hybrid)", type: "Internship", salary: "₹1L/month", experience: "0 years (MBA/Final Year)", skills: ["Excel", "PowerPoint", "Problem Solving", "Data Analysis"], description: "10-week summer internship at one of the world's top consulting firms. Work on real client engagements across industries. Strong analytical and communication skills required.", applyUrl: "https://mckinsey.com/careers", category: "business", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-17T16:00:00Z", deadline: "2026-02-28", applicants: 890 },
-    { id: "op7", title: "Cybersecurity Analyst", company: "Deloitte India", location: "Hyderabad / Mumbai", type: "Full-time", salary: "₹8-16 LPA", experience: "0-2 years", skills: ["SIEM", "SOC", "Python", "Network Security", "VAPT"], description: "Join Deloitte's Cyber Risk team. Conduct vulnerability assessments, manage SOC operations, and help enterprises secure their digital infrastructure.", applyUrl: "https://deloitte.com/careers", category: "technology", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-14T10:00:00Z", deadline: "2026-03-25", applicants: 112 },
-    { id: "op8", title: "Digital Marketing Manager", company: "Zerodha", location: "Bangalore (Remote-first)", type: "Full-time", salary: "₹12-22 LPA", experience: "2-4 years", skills: ["SEO", "Content Strategy", "Google Analytics", "Social Media"], description: "Lead digital marketing for India's largest stock broker. Drive user acquisition and engagement through content, SEO, and performance marketing.", applyUrl: "https://zerodha.com/careers", category: "marketing", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-13T12:00:00Z", deadline: "2026-03-15", applicants: 67 },
+    { id: "op1", title: "AI/ML Engineer", company: "Google India", location: "Bangalore", type: "Full-time", salary: "â‚¹25-45 LPA", experience: "1-3 years", skills: ["Python", "TensorFlow", "PyTorch", "NLP"], description: "Join Google's AI team to build next-generation ML products. Work on large-scale systems serving billions of users. Strong background in deep learning and production ML required.", applyUrl: "https://careers.google.com", category: "technology", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-18T10:00:00Z", deadline: "2026-03-15", applicants: 342 },
+    { id: "op2", title: "Full Stack Developer Intern", company: "Razorpay", location: "Bangalore (Remote)", type: "Internship", salary: "â‚¹50K/month + PPO", experience: "0 years (Students)", skills: ["React", "Node.js", "TypeScript", "PostgreSQL"], description: "6-month internship with Pre-Placement Offer opportunity. Build payment infrastructure used by 8M+ businesses. Fast-paced startup culture with real ownership from day 1.", applyUrl: "https://razorpay.com/careers", category: "technology", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-17T14:00:00Z", deadline: "2026-03-01", applicants: 567 },
+    { id: "op3", title: "Product Design Lead", company: "CRED", location: "Bangalore", type: "Full-time", salary: "â‚¹22-38 LPA", experience: "3-5 years", skills: ["Figma", "Design Systems", "User Research", "Prototyping"], description: "Lead the design of CRED's consumer-facing products. Shape the experience for 25M+ premium users. Looking for someone who obsesses over craft and detail.", applyUrl: "https://cred.club/careers", category: "design", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-16T09:00:00Z", deadline: "2026-03-20", applicants: 89 },
+    { id: "op4", title: "Data Analyst - Growth", company: "Swiggy", location: "Bangalore / Remote", type: "Full-time", salary: "â‚¹10-18 LPA", experience: "0-2 years", skills: ["SQL", "Python", "Tableau", "A/B Testing"], description: "Analyze growth metrics for India's leading food delivery platform. Work with product and marketing teams to drive user engagement and retention strategies.", applyUrl: "https://swiggy.com/careers", category: "technology", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-15T11:00:00Z", deadline: "2026-03-10", applicants: 234 },
+    { id: "op5", title: "DevOps Engineer", company: "PhonePe", location: "Pune / Bangalore", type: "Full-time", salary: "â‚¹15-28 LPA", experience: "2-4 years", skills: ["Docker", "Kubernetes", "AWS", "Terraform", "CI/CD"], description: "Scale infrastructure for India's #1 UPI app processing 5B+ monthly transactions. High-impact role with exposure to massive distributed systems.", applyUrl: "https://phonepe.com/careers", category: "technology", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-18T08:00:00Z", deadline: "2026-03-05", applicants: 156 },
+    { id: "op6", title: "Business Analyst Intern", company: "McKinsey & Company", location: "Delhi / Mumbai (Hybrid)", type: "Internship", salary: "â‚¹1L/month", experience: "0 years (MBA/Final Year)", skills: ["Excel", "PowerPoint", "Problem Solving", "Data Analysis"], description: "10-week summer internship at one of the world's top consulting firms. Work on real client engagements across industries. Strong analytical and communication skills required.", applyUrl: "https://mckinsey.com/careers", category: "business", isActive: true, isUrgent: true, postedBy: "admin", postedAt: "2026-02-17T16:00:00Z", deadline: "2026-02-28", applicants: 890 },
+    { id: "op7", title: "Cybersecurity Analyst", company: "Deloitte India", location: "Hyderabad / Mumbai", type: "Full-time", salary: "â‚¹8-16 LPA", experience: "0-2 years", skills: ["SIEM", "SOC", "Python", "Network Security", "VAPT"], description: "Join Deloitte's Cyber Risk team. Conduct vulnerability assessments, manage SOC operations, and help enterprises secure their digital infrastructure.", applyUrl: "https://deloitte.com/careers", category: "technology", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-14T10:00:00Z", deadline: "2026-03-25", applicants: 112 },
+    { id: "op8", title: "Digital Marketing Manager", company: "Zerodha", location: "Bangalore (Remote-first)", type: "Full-time", salary: "â‚¹12-22 LPA", experience: "2-4 years", skills: ["SEO", "Content Strategy", "Google Analytics", "Social Media"], description: "Lead digital marketing for India's largest stock broker. Drive user acquisition and engagement through content, SEO, and performance marketing.", applyUrl: "https://zerodha.com/careers", category: "marketing", isActive: true, isUrgent: false, postedBy: "admin", postedAt: "2026-02-13T12:00:00Z", deadline: "2026-03-15", applicants: 67 },
 ];
 
 class Store {
@@ -625,7 +495,7 @@ class Store {
     chatSessions: Map<string, ChatSession> = new Map();
     communityPosts: CommunityPost[] = [
         { id: "p1", userId: "seed1", userName: "Priya S.", title: "How I got into Google as a fresher from a Tier-3 college", content: "I want to share my journey of cracking Google's interview. I started with zero DSA knowledge in 3rd year. Here's my exact preparation strategy...\n\n1. Spent 3 months on Striver's A2Z DSA Sheet\n2. Built 2 full-stack projects\n3. Did 50+ mock interviews on Pramp\n4. Got referral through LinkedIn networking\n\nTotal prep time: 8 months. Don't let your college name hold you back!", category: "success-stories", tags: ["google", "placement", "tier-3"], likes: 347, comments: [{ userId: "seed2", userName: "Rahul K.", content: "This is so inspiring! Which optional subject did you focus on?", timestamp: "2026-02-15T10:30:00Z" }], timestamp: "2026-02-14T08:00:00Z" },
-        { id: "p2", userId: "seed2", userName: "Rahul K.", title: "Best free resources for ML in 2026", content: "After trying 20+ courses, here are my top picks for learning ML for free in India:\n\n🥇 Andrew Ng's ML Specialization (Coursera audit)\n🥈 NPTEL ML by IIT Madras\n🥉 Fast.ai Practical Deep Learning\n\nHonorable mentions: Kaggle Learn, Google's ML Crash Course, 3Blue1Brown for math intuition.\n\nAvoid paid bootcamps unless they have placement guarantees.", category: "resources", tags: ["ml", "free-resources", "learning"], likes: 215, comments: [], timestamp: "2026-02-13T14:00:00Z" },
+        { id: "p2", userId: "seed2", userName: "Rahul K.", title: "Best free resources for ML in 2026", content: "After trying 20+ courses, here are my top picks for learning ML for free in India:\n\nðŸ¥‡ Andrew Ng's ML Specialization (Coursera audit)\nðŸ¥ˆ NPTEL ML by IIT Madras\nðŸ¥‰ Fast.ai Practical Deep Learning\n\nHonorable mentions: Kaggle Learn, Google's ML Crash Course, 3Blue1Brown for math intuition.\n\nAvoid paid bootcamps unless they have placement guarantees.", category: "resources", tags: ["ml", "free-resources", "learning"], likes: 215, comments: [], timestamp: "2026-02-13T14:00:00Z" },
         { id: "p3", userId: "seed3", userName: "Ananya M.", title: "Parents want me to do MBA, I want to be a designer - advice?", content: "I'm in my final year of B.Com and I've been doing freelance graphic design for 2 years. My parents are insisting on CAT prep for MBA. I genuinely enjoy design and have a portfolio of 15+ projects.\n\nHow do I convince them? Has anyone faced a similar situation?", category: "career-dilemma", tags: ["parents", "design", "mba", "career-choice"], likes: 189, comments: [{ userId: "seed1", userName: "Priya S.", content: "Show them the salary data! UX designers at good companies earn 12-25 LPA. Also, check SkillSync's Parent Toolkit feature.", timestamp: "2026-02-12T16:00:00Z" }], timestamp: "2026-02-12T12:00:00Z" },
     ];
     quizHistory: Map<string, { date: string; score: number; total: number }[]> = new Map();
@@ -657,7 +527,7 @@ class Store {
         console.log(`[SkillSync Store] Loaded ${this.openings.length} openings`);
     }
 
-    // ─── User methods ───
+    // â”€â”€â”€ User methods â”€â”€â”€
     addUser(user: User) {
         if (!user.role) user.role = "student";
         this.users.set(user.id, user);
@@ -672,7 +542,7 @@ class Store {
         return user;
     }
 
-    // ─── Assessment methods ───
+    // â”€â”€â”€ Assessment methods â”€â”€â”€
     addAssessment(userId: string, assessment: Assessment) {
         const list = this.assessments.get(userId) || [];
         list.push(assessment);
@@ -683,7 +553,7 @@ class Store {
         return list[list.length - 1] || null;
     }
 
-    // ─── Chat methods ───
+    // â”€â”€â”€ Chat methods â”€â”€â”€
     getOrCreateChat(sessionId: string, userId: string): ChatSession {
         let session = this.chatSessions.get(sessionId);
         if (!session) {
@@ -693,7 +563,7 @@ class Store {
         return session;
     }
 
-    // ─── Community methods ───
+    // â”€â”€â”€ Community methods â”€â”€â”€
     addCommunityPost(post: CommunityPost) { this.communityPosts.unshift(post); }
     getCommunityPosts(category?: string) { return category ? this.communityPosts.filter(p => p.category === category) : this.communityPosts; }
     likePost(postId: string) { const p = this.communityPosts.find(p => p.id === postId); if (p) p.likes++; return p; }
@@ -703,7 +573,7 @@ class Store {
         return p;
     }
 
-    // ─── Points / Leaderboard ───
+    // â”€â”€â”€ Points / Leaderboard â”€â”€â”€
     addPoints(userId: string, points: number) {
         const user = this.users.get(userId);
         if (user) { user.points = (user.points || 0) + points; this.users.set(userId, user); saveUsersToDisk(this.users); }
@@ -716,7 +586,7 @@ class Store {
             .slice(0, 20);
     }
 
-    // ─── Openings CRUD ───
+    // â”€â”€â”€ Openings CRUD â”€â”€â”€
     getOpenings(activeOnly = true) {
         return activeOnly ? this.openings.filter(o => o.isActive) : this.openings;
     }
