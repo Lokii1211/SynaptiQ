@@ -1,12 +1,12 @@
 """
-SkillSync AI - Database Configuration
+SkillTen — Database Configuration
 """
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./skillsync.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./skillten.db")
 
 engine = create_engine(
     DATABASE_URL,

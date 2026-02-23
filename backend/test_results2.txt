@@ -1,0 +1,60 @@
+﻿============================================================
+  SkillTen Backend API ù Full Test Suite
+============================================================
+
+--- Public Endpoints ---
+  OK  Root: 200 keys=['platform', 'tagline', 'version', 'docs']
+  OK  Health: 200 keys=['status', 'platform']
+  OK  Careers: 200 careers=6 items
+  OK  Career Detail: 200 required_skills=5 items
+  OK  Jobs: 200 total=5
+  OK  Internships: 200 total=1
+  OK  Coding Problems: 200 total=4
+  OK  Problem Detail: 200 examples=1 items
+  OK  Challenges: 200 total=2
+  OK  Companies: 200 total=3
+  OK  Company Detail: 200 pros=3 items
+  OK  Company Reviews: 200 reviews=0 items
+  OK  Market Insights: 200 insights=2 items
+  OK  Trending Skills: 200 skills=8 items
+  OK  Campus Colleges: 200 colleges=4 items
+  OK  Campus Placements: 200 outcomes=0 items
+  OK  Campus Interviews: 200 experiences=0 items
+  OK  Community Posts: 200 posts=0 items
+
+--- Auth Flow ---
+  OK  Signup: 200 keys=['token', 'user']
+  OK  Login: 200 token=eyJhbGciOiJIUzI1NiIs...
+
+--- Authenticated Endpoints ---
+  OK  Me: 200 keys=['id', 'email', 'role', 'profile']
+  OK  Update Profile: 200 keys=['id', 'email', 'role', 'profile']
+  OK  Notifications: 200 total=0
+  OK  Chat Sessions: 200 sessions=0 items
+  OK  My Roadmaps: 200 roadmaps=0 items
+  OK  My Job Apps: 200 applications=0 items
+  OK  My Coding Stats: 200 keys=['problems_solved_total', 'easy_solved', 'medium_solved', 'hard_solved']
+  OK  My Connections: 200 connections=0 items
+  OK  Find Peers: 200 peers=0 items
+  OK  My Resumes: 200 resumes=0 items
+  OK  My Challenge Regs: 200 registrations=0 items
+
+--- AI Engine ---
+  OK  AI Chat: 200 keys=['session_id', 'reply']
+  OK  AI Skill Gap: 200 required_skills=5 items
+  OK  AI Resume Review: 200 improvements=2 items
+  OK  AI Code Review: 200 feedback=3 items
+  OK  AI Interview Prep: 200 expected_rounds=4 items
+  OK  AI Generate Roadmap: 200 keys=['roadmap_id', 'roadmap']
+
+--- Assessment 4D ---
+  OK  Start Assessment: session=ebbfbba2-c98... questions=4
+  OK  Submit Assessment: 200 matches=5 items
+  OK  Get 4D Profile: 200 matches=5 items
+
+--- Resume ---
+  OK  Create Resume: 200 keys=['resume_id', 'status']
+
+============================================================
+  All tests complete!
+============================================================

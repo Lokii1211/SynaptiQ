@@ -1,0 +1,89 @@
+﻿VIYA API ù VIYA v2.0.0
+Total endpoints: 50
+============================================================
+
+[untagged]
+  GET    /
+
+[Assessment]
+  GET    /api/assessment/profile
+  POST   /api/assessment/start
+  POST   /api/assessment/submit
+
+[Auth]
+  POST   /api/auth/login
+  GET    /api/auth/me
+  PATCH  /api/auth/profile
+  POST   /api/auth/signup
+
+[Campus]
+  GET    /api/campus/colleges
+  GET    /api/campus/interviews
+  GET    /api/campus/placements
+
+[Careers]
+  GET    /api/careers/
+  GET    /api/careers/{slug}
+
+[Challenges]
+  GET    /api/challenges/
+  GET    /api/challenges/my/registrations
+  GET    /api/challenges/{slug}
+  POST   /api/challenges/{slug}/register
+
+[AI Chat]
+  POST   /api/chat/
+  GET    /api/chat/sessions
+  GET    /api/chat/sessions/{session_id}
+
+[Coding Arena]
+  GET    /api/coding/problems
+  GET    /api/coding/problems/{slug}
+  POST   /api/coding/problems/{slug}/submit
+  GET    /api/coding/stats/me
+
+[Company Intel]
+  GET    /api/companies/
+  GET    /api/companies/{slug}
+  POST   /api/companies/{slug}/reviews
+  GET    /api/companies/{slug}/reviews
+
+[Internships]
+  GET    /api/internships/
+
+[Jobs Engine]
+  GET    /api/jobs/
+  GET    /api/jobs/applications/me
+  PATCH  /api/jobs/applications/{app_id}
+  GET    /api/jobs/matched
+  GET    /api/jobs/{job_id}
+  POST   /api/jobs/{job_id}/apply
+
+[Learning Hub]
+  POST   /api/learning/milestones/{milestone_id}/complete
+  GET    /api/learning/roadmaps
+  GET    /api/learning/roadmaps/{roadmap_id}
+
+[Market]
+  GET    /api/market/insights
+  GET    /api/market/trending-skills
+
+[Network]
+  POST   /api/network/community/posts
+  GET    /api/network/community/posts
+  POST   /api/network/connect
+  POST   /api/network/connect/{conn_id}/respond
+  GET    /api/network/connections
+  GET    /api/network/peers
+
+[Notifications]
+  GET    /api/notifications/
+  POST   /api/notifications/read-all
+  POST   /api/notifications/{notif_id}/read
+
+[Resume Builder]
+  GET    /api/resume/
+  POST   /api/resume/
+  GET    /api/resume/{resume_id}
+  PATCH  /api/resume/{resume_id}
+  GET    /health

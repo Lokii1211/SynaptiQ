@@ -1,77 +1,68 @@
 """
-SkillSync AI - Main Application
-AI-Powered Career Guidance Platform
+SkillTen — AI Career Intelligence Platform
+Main application entry point
 """
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 import uvicorn
+import os
 
 from database import init_db, SessionLocal
-from models import Career
-from career_data import CAREERS
-from routes import router
-
-
-def seed_careers():
-    """Seed career data if database is empty"""
-    db = SessionLocal()
-    try:
-        count = db.query(Career).count()
-        if count == 0:
-            print("📦 Seeding career data...")
-            for career_data in CAREERS:
-                career = Career(**career_data)
-                db.add(career)
-            db.commit()
-            print(f"✅ Seeded {len(CAREERS)} careers")
-        else:
-            print(f"📋 {count} careers already in database")
-    finally:
-        db.close()
+from routes import master_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup and shutdown"""
-    print("🚀 SkillSync AI Starting...")
-    print("━" * 40)
+    """Initialize database on startup"""
     init_db()
-    print("✅ Database initialized")
-    seed_careers()
-    print("━" * 40)
-    print("🎯 SkillSync AI is READY!")
-    print("   → API Docs: http://localhost:8000/docs")
-    print("━" * 40)
+
+    # Seed data if database is empty
+    db = SessionLocal()
+    try:
+        from models import Career
+        if db.query(Career).count() == 0:
+            try:
+                from seed_data import seed_all
+                seed_all(db)
+                print("✅ SkillTen seed data loaded")
+            except Exception as e:
+                print(f"⚠️ Seed data error (non-fatal): {e}")
+    finally:
+        db.close()
+
     yield
-    print("👋 SkillSync AI shutting down...")
 
 
 app = FastAPI(
-    title="SkillSync AI",
+    title="SkillTen",
     description="""
-## AI-Powered Career Guidance Platform
+## SkillTen — AI Career Intelligence Platform
 
 **Discover. Plan. Achieve.**
 
-### Features
-- 🧠 **AI Career Assessment** — Psychometric test with AI-powered recommendations
-- 🔍 **Career Explorer** — 200+ career profiles with salary data
-- 📊 **Skill Gap Analyzer** — Know exactly what to learn next
-- 📝 **AI Resume Builder** — ATS-optimized resumes in minutes
-- 💬 **AI Career Chat** — Ask anything about careers
-- 📈 **Market Insights** — Trending skills and salary benchmarks
+### Core Features
+- 🧬 **4D Career Assessment** — Psychometric profiling (Analytical × Interpersonal × Creative × Systematic)
+- 🎯 **Career Explorer** — 200+ career profiles with salary data
+- 💻 **Coding Arena** — LeetCode-style problems with AI code review
+- 🧠 **Aptitude Lab** — TCS/Infosys-pattern mock tests
+- 🏆 **Challenges** — Company-sponsored competitions with fast-track offers
+- 🤝 **Network** — Peer matching + community
+- 🏢 **Company Intel** — Glassdoor-killer with honest reviews
+- 📊 **Market Insights** — Trending skills and salary benchmarks
+- 📝 **Resume Builder** — ATS-optimized with AI suggestions
+- 💬 **AI Chat** — Career advisor chatbot (Gemini-powered)
+- 🎓 **Campus Command** — Placement data + interview experiences
+- 🤖 **AI Engine** — Skill gap, code review, job match, roadmap generation, interview prep
 
 Built for Indian students. Powered by AI.
     """,
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan
 )
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -80,35 +71,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routes
-app.include_router(router, prefix="/api")
+app.include_router(master_router, prefix="/api")
 
 
-@app.get("/", tags=["System"])
-async def root():
+@app.get("/")
+def root():
     return {
-        "name": "SkillSync AI",
-        "tagline": "Discover. Plan. Achieve.",
-        "version": "1.0.0",
+        "platform": "SkillTen",
+        "tagline": "AI Career Intelligence Platform",
+        "version": "2.0.0",
         "docs": "/docs",
-        "endpoints": {
-            "auth": "/api/auth/*",
-            "assessment": "/api/assessment/*",
-            "careers": "/api/careers",
-            "skills": "/api/skills/*",
-            "resume": "/api/resume/*",
-            "chat": "/api/chat",
-            "market": "/api/market/*"
-        }
     }
 
 
-@app.get("/health", tags=["System"])
-async def health():
-    return {"status": "healthy", "version": "1.0.0"}
+@app.get("/health")
+def health():
+    return {"status": "healthy", "platform": "SkillTen"}
 
 
 if __name__ == "__main__":
-    import os
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=os.getenv("ENV") != "production")

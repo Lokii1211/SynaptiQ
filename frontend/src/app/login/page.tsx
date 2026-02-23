@@ -1,136 +1,106 @@
-"use client";
-
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { useAuthStore } from '@/lib/store/auth.store';
+import { auth } from '@/lib/api';
 
 export default function LoginPage() {
-    const router = useRouter();
-    const [form, setForm] = useState({ email: "", password: "" });
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [checkingAuth, setCheckingAuth] = useState(true);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { login, loading, error, clearError } = useAuthStore();
 
-    // Check if already logged in (validate token first, don't blindly redirect)
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) { setCheckingAuth(false); return; }
-
-        fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } })
-            .then(r => r.json())
-            .then(data => {
-                if (data && data.id) {
-                    router.replace("/dashboard");
-                } else {
-                    // Token is invalid — clean up
-                    localStorage.removeItem("token");
-                    localStorage.removeItem("user");
-                    setCheckingAuth(false);
-                }
-            })
-            .catch(() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                setCheckingAuth(false);
-            });
-    }, [router]);
+        if (auth.isLoggedIn()) window.location.href = '/dashboard';
+        return () => clearError();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError("");
-        setLoading(true);
         try {
-            const res = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: form.email, password: form.password }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                setError(data.detail || "Login failed. Please check your credentials.");
-                setLoading(false);
-                return;
-            }
-
-            if (!data.token) {
-                setError("Login failed — no token received");
-                setLoading(false);
-                return;
-            }
-
-            // Success!
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            router.push("/dashboard");
-        } catch (err: any) {
-            console.error("Login error:", err);
-            setError(err.message || "Something went wrong. Please try again.");
-        } finally {
-            setLoading(false);
-        }
+            await login(email, password);
+            window.location.href = '/dashboard';
+        } catch { /* error handled by store */ }
     };
 
-    // Show loading while checking existing auth
-    if (checkingAuth) {
-        return (
-            <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-                <div style={{ width: 40, height: 40, border: "3px solid #1e1e2e", borderTopColor: "#6366f1", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
-            </div>
-        );
-    }
-
     return (
-        <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-6">
-            <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-purple-600/8 rounded-full blur-[120px]" />
+        <div className="min-h-screen bg-white flex">
+            {/* Left panel — form */}
+            <div className="flex-1 flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-lg mx-auto w-full">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                    {/* Logo */}
+                    <Link href="/" className="flex items-center gap-2 mb-10">
+                        <div className="w-9 h-9 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                            ST
+                        </div>
+                        <span className="text-xl font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
+                    </Link>
+
+                    <h1 className="text-2xl font-bold text-slate-900 mb-2">Welcome back</h1>
+                    <p className="text-slate-500 text-sm mb-8">Continue your career journey</p>
+
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+                            <input
+                                type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                                placeholder="your@email.com" required
+                                className="st-input"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
+                            <input
+                                type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••" required minLength={6}
+                                className="st-input"
+                            />
+                        </div>
+
+                        {error && (
+                            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                className="text-red-500 text-sm bg-red-50 px-3 py-2 rounded-lg"
+                            >{error}</motion.p>
+                        )}
+
+                        <button type="submit" disabled={loading}
+                            className="w-full st-btn-primary text-base py-3.5 flex items-center justify-center gap-2"
+                        >
+                            {loading ? (
+                                <>
+                                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Signing in...
+                                </>
+                            ) : 'Sign In'}
+                        </button>
+                    </form>
+
+                    <p className="text-sm text-slate-500 mt-6 text-center">
+                        Don&apos;t have an account?{' '}
+                        <Link href="/signup" className="text-indigo-600 font-semibold hover:text-indigo-700">
+                            Create one for free
+                        </Link>
+                    </p>
+                </motion.div>
             </div>
 
-            <div className="relative z-10 w-full max-w-md">
-                <div className="text-center mb-8">
-                    <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-                        <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-xl font-bold">S</div>
-                        <span className="text-2xl font-bold">Skill<span className="text-indigo-400">Sync</span> AI</span>
-                    </Link>
-                    <h1 className="text-2xl font-bold mb-2">Welcome back</h1>
-                    <p className="text-gray-400 text-sm">Log in to continue your career journey</p>
-                </div>
-
-                <form onSubmit={handleSubmit} className="card space-y-4">
-                    {error && (
-                        <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>
-                    )}
-
-                    <div>
-                        <label className="block text-sm text-gray-400 mb-1.5">Email</label>
-                        <input type="email" required className="input-field" placeholder="you@example.com"
-                            value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm text-gray-400 mb-1.5">Password</label>
-                        <input type="password" required className="input-field" placeholder="Your password"
-                            value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
-                    </div>
-
-                    <button type="submit" disabled={loading} className="btn-primary w-full !py-3.5 disabled:opacity-50">
-                        {loading ? "Logging in..." : "Log In"}
-                    </button>
-
-                    <p className="text-center text-sm text-gray-400">
-                        Don&apos;t have an account? <Link href="/signup" className="text-indigo-400 hover:underline">Sign up free</Link>
+            {/* Right panel — branding */}
+            <div className="hidden lg:flex flex-1 bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 items-center justify-center p-12">
+                <div className="text-white max-w-md">
+                    <h2 className="text-3xl font-bold mb-4">Your career DNA,<br />decoded by AI</h2>
+                    <p className="text-white/70 text-lg leading-relaxed mb-8">
+                        SkillTen helps Indian students discover their ideal career path through
+                        AI-powered psychometric assessment, skill gap analysis, and personalized roadmaps.
                     </p>
-
-                    {/* Quick login helper for testing */}
-                    <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "0.75rem", marginTop: "0.5rem" }}>
-                        <p style={{ fontSize: "0.7rem", color: "#64748b", textAlign: "center", marginBottom: "0.5rem" }}>Quick login (demo)</p>
-                        <button type="button" onClick={() => setForm({ email: "admin@skillsync.ai", password: "admin123" })}
-                            style={{ width: "100%", padding: "0.4rem", borderRadius: 8, background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)", color: "#ef4444", fontSize: "0.75rem", cursor: "pointer", marginBottom: "0.35rem" }}>
-                            🛡️ Admin: admin@skillsync.ai
-                        </button>
+                    <div className="space-y-3">
+                        {['4D Career Profiling', 'AI-Powered Skill Gap Analysis', 'Real-time Job Matching', 'Coding Arena + AI Review'].map((f, i) => (
+                            <div key={i} className="flex items-center gap-3 text-white/80">
+                                <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center text-xs">✓</div>
+                                <span className="text-sm font-medium">{f}</span>
+                            </div>
+                        ))}
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );

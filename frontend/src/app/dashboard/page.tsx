@@ -1,275 +1,268 @@
-"use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { api } from "@/lib/api";
+'use client';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { api, auth } from '@/lib/api';
+import { TopBar } from '@/components/layout/TopBar';
+import { BottomNav } from '@/components/layout/BottomNav';
+import { SideNav } from '@/components/layout/SideNav';
 
 export default function DashboardPage() {
     const [user, setUser] = useState<any>(null);
-    const [results, setResults] = useState<any>(null);
+    const [profile, setProfile] = useState<any>(null);
     const [trending, setTrending] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [streak] = useState(Math.floor(Math.random() * 7) + 1);
-    const [points] = useState(Math.floor(Math.random() * 500) + 100);
-    const [showProfile, setShowProfile] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) { window.location.href = "/login"; return; }
+        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         Promise.all([
             api.getMe().catch(() => null),
-            api.getResults().catch(() => null),
+            api.getAssessmentProfile().catch(() => null),
             api.getTrendingSkills().catch(() => ({ skills: [] })),
-        ]).then(([u, r, t]) => {
-            if (!u) { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "/login"; return; }
-            setUser(u); setResults(r); setTrending(t?.skills || []); setLoading(false);
+        ]).then(([u, p, t]) => {
+            if (!u) { auth.clearToken(); window.location.href = '/login'; return; }
+            setUser(u);
+            setProfile(p);
+            setTrending(t?.skills || []);
+            auth.setUser(u);
+            setLoading(false);
         });
     }, []);
 
     if (loading) return (
-        <div style={{ minHeight: "100vh", background: "var(--bg-primary)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ width: 48, height: 48, border: "3px solid var(--border-color)", borderTopColor: "var(--accent-primary)", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
+        <div className="flex min-h-screen bg-slate-50">
+            <SideNav />
+            <div className="flex-1 flex flex-col">
+                <TopBar />
+                <main className="flex-1 pb-24 md:pb-8">
+                    {/* Skeleton hero */}
+                    <div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 px-6 py-8">
+                        <div className="st-skeleton h-4 w-24 mb-3 opacity-30" />
+                        <div className="st-skeleton h-8 w-48 mb-5 opacity-30" />
+                        <div className="flex gap-4">
+                            <div className="bg-white/15 rounded-xl px-5 py-3 flex-1">
+                                <div className="st-skeleton h-3 w-16 mb-2 opacity-30" />
+                                <div className="st-skeleton h-6 w-12 opacity-30" />
+                            </div>
+                            <div className="bg-white/15 rounded-xl px-5 py-3 flex-1">
+                                <div className="st-skeleton h-3 w-16 mb-2 opacity-30" />
+                                <div className="st-skeleton h-6 w-12 opacity-30" />
+                            </div>
+                        </div>
+                    </div>
+                    {/* Skeleton cards */}
+                    <div className="px-4 md:px-6 py-6 max-w-4xl mx-auto space-y-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {[1, 2, 3, 4].map(i => <div key={i} className="st-skeleton h-28 rounded-2xl" />)}
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {[1, 2, 3, 4].map(i => <div key={i} className="st-skeleton h-28 rounded-2xl" />)}
+                        </div>
+                    </div>
+                </main>
+                <BottomNav />
+            </div>
         </div>
     );
 
+    const displayName = user?.profile?.display_name || user?.display_name || user?.email?.split('@')[0] || 'User';
+    const score = user?.profile?.skillten_score || 0;
+    const streak = user?.profile?.streak_days || 0;
+    const hasProfile = profile?.has_profile;
+    const archetype = user?.profile?.archetype_name || profile?.archetype_name;
+
     const primaryTools = [
-        { icon: "🧬", title: "4D Assessment", desc: "Deep career profiling", href: "/assessment", color: "#6366f1" },
-        { icon: "📝", title: "Daily Quiz", desc: "5 questions daily", href: "/daily", color: "#eab308", badge: "NEW" },
-        { icon: "💻", title: "Code Practice", desc: "HackerRank-style DSA", href: "/practice", color: "#22c55e", badge: "NEW" },
-        { icon: "🎓", title: "Courses", desc: "Industry-aligned learning", href: "/courses", color: "#8b5cf6", badge: "NEW" },
+        { icon: '🧬', title: '4D Assessment', desc: hasProfile ? 'View results' : 'Deep career profiling', href: '/assessment', color: 'from-indigo-500 to-violet-600', badge: !hasProfile ? 'START' : '' },
+        { icon: '💻', title: 'Coding Arena', desc: 'Practice DSA problems', href: '/practice', color: 'from-emerald-500 to-teal-600' },
+        { icon: '📚', title: 'Learning Hub', desc: 'AI-powered roadmaps', href: '/learn', color: 'from-cyan-500 to-blue-600' },
+        { icon: '🎯', title: 'Skill Analyzer', desc: 'Find your gaps', href: '/skills', color: 'from-amber-500 to-orange-500' },
     ];
 
-    const secondaryTools = [
-        { icon: "🎮", title: "Career Simulator", desc: "Day-in-the-life experience", href: "/simulator", color: "#06b6d4" },
-        { icon: "💰", title: "Salary Negotiation", desc: "Practice with AI recruiter", href: "/negotiate", color: "#f59e0b" },
-        { icon: "🎯", title: "College ROI", desc: "Is your degree worth it?", href: "/college-roi", color: "#ef4444" },
-        { icon: "👨‍👩‍👧", title: "Parent Toolkit", desc: "Bridge the family gap", href: "/parent", color: "#a855f7" },
+    const jobTools = [
+        { icon: '💼', title: 'Jobs Board', desc: 'Fresh openings daily', href: '/jobs', color: 'from-rose-500 to-pink-600', badge: 'HOT' },
+        { icon: '🎯', title: 'Internships', desc: 'Curated with PPO rates', href: '/internships', color: 'from-green-500 to-emerald-600' },
+        { icon: '📄', title: 'AI Resume', desc: 'ATS-ready templates', href: '/resume', color: 'from-violet-500 to-purple-600' },
+        { icon: '🏢', title: 'Company Intel', desc: 'Honest salary data', href: '/company-intel', color: 'from-sky-500 to-blue-600' },
     ];
 
-    const socialTools = [
-        { icon: "🌐", title: "Community", desc: "Share & learn together", href: "/community", color: "#3b82f6", badge: "NEW" },
-        { icon: "💼", title: "Jobs & Internships", desc: "Fresh openings daily", href: "/jobs", color: "#f43f5e", badge: "HOT" },
-        { icon: "🏆", title: "Leaderboard", desc: "Top learners rankings", href: "/leaderboard", color: "#eab308", badge: "NEW" },
-        { icon: "🔮", title: "AI Career Chat", desc: "Ask anything career", href: "/chat", color: "#14b8a6" },
-        { icon: "📊", title: "Analytics", desc: "Track your growth", href: "/analytics", color: "#f59e0b", badge: "NEW" },
-        { icon: "🗺️", title: "Skill Gap Finder", desc: "Your learning roadmap", href: "/skills", color: "#64748b" },
-        { icon: "🧭", title: "Explore Careers", desc: "Browse 12+ paths", href: "/careers", color: "#0ea5e9" },
+    const quickActions = [
+        { icon: '📅', label: 'Daily Quests', href: '/daily' },
+        { icon: '🏆', label: 'Leaderboard', href: '/leaderboard' },
+        { icon: '🔥', label: 'Streak', href: '/tracker' },
+        { icon: '📊', label: 'Analytics', href: '/analytics' },
+        { icon: '💬', label: 'AI Chat', href: '/chat' },
+        { icon: '🎭', label: 'Mock Interview', href: '/simulator' },
+        { icon: '🧮', label: 'Aptitude', href: '/aptitude' },
+        { icon: '⚔️', label: 'Campus Wars', href: '/campus' },
+    ];
+
+    const moreTools = [
+        { icon: '🏆', title: 'Challenges', href: '/challenges' },
+        { icon: '🤝', title: 'Network', href: '/network' },
+        { icon: '📊', title: 'Skill Market', href: '/skill-market' },
+        { icon: '⚔️', title: 'Campus Wars', href: '/campus' },
+        { icon: '💰', title: 'Negotiate', href: '/negotiate' },
+        { icon: '📚', title: 'Courses', href: '/courses' },
+        { icon: '🎓', title: 'College ROI', href: '/college-roi' },
+        { icon: '📅', title: 'First 90 Days', href: '/first-90-days' },
+        { icon: '👥', title: 'Similar Peers', href: '/people-like-you' },
+        { icon: '🗺️', title: 'Careers', href: '/careers' },
+        { icon: '📈', title: 'Score', href: '/score' },
+        { icon: '🔔', title: 'Notifications', href: '/notifications' },
+        { icon: '🧮', title: 'Aptitude', href: '/aptitude' },
+        { icon: '👨‍👩‍👧', title: 'For Parents', href: '/parent' },
+        { icon: '⚙️', title: 'Settings', href: '/settings' },
     ];
 
     return (
-        <div style={{ minHeight: "100vh", background: "var(--bg-primary)", color: "var(--text-primary)" }}>
-            {/* Header */}
-            <nav style={{ padding: "0.65rem clamp(0.75rem, 3vw, 2rem)", borderBottom: "1px solid var(--border-color)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "rgba(10,10,15,0.95)", backdropFilter: "blur(20px)", zIndex: 100, flexWrap: "wrap", gap: "0.5rem" }}>
-                <Link href="/dashboard" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
-                    <span style={{ fontSize: "1.5rem" }}>🧠</span>
-                    <span style={{ fontWeight: 800, fontSize: "1.2rem" }}>SkillSync <span style={{ color: "var(--accent-primary)" }}>AI</span></span>
-                </Link>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                    {user?.role === "admin" && (
-                        <Link href="/admin" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(239,68,68,0.1)", color: "#ef4444", fontSize: "0.8rem", fontWeight: 700 }}>
-                            🛡️ Admin
-                        </Link>
-                    )}
-                    <Link href="/daily" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(234,179,8,0.1)", color: "#eab308", fontSize: "0.8rem", fontWeight: 700 }}>
-                        🔥 {streak}d streak
-                    </Link>
-                    <Link href="/leaderboard" style={{ textDecoration: "none", padding: "0.3rem 0.7rem", borderRadius: 999, background: "rgba(99,102,241,0.1)", color: "var(--accent-primary)", fontSize: "0.8rem", fontWeight: 700 }}>
-                        ⭐ {points} pts
-                    </Link>
-                    {/* Profile Avatar */}
-                    <div style={{ position: "relative" }}>
-                        <button onClick={() => setShowProfile(!showProfile)}
-                            style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, var(--accent-primary), #8b5cf6)", border: "2px solid rgba(99,102,241,0.3)", color: "white", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "all 0.2s" }}>
-                            {user?.name?.charAt(0)?.toUpperCase() || "U"}
-                        </button>
-                        {showProfile && (
-                            <>
-                                <div style={{ position: "fixed", inset: 0, zIndex: 199 }} onClick={() => setShowProfile(false)} />
-                                <div style={{ position: "absolute", top: "calc(100% + 0.5rem)", right: 0, width: 280, borderRadius: 16, background: "var(--bg-card)", border: "1px solid var(--border-color)", boxShadow: "0 20px 60px rgba(0,0,0,0.5)", zIndex: 200, overflow: "hidden", animation: "fadeIn 0.2s ease" }}>
-                                    {/* Profile Header */}
-                                    <div style={{ padding: "1.25rem", background: "linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.1))", borderBottom: "1px solid var(--border-color)" }}>
-                                        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                                            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg, var(--accent-primary), #8b5cf6)", display: "flex", alignItems: "center", justifyContent: "center", color: "white", fontWeight: 800, fontSize: "1.1rem" }}>
-                                                {user?.name?.charAt(0)?.toUpperCase() || "U"}
+        <div className="flex min-h-screen bg-slate-50">
+            <SideNav />
+            <div className="flex-1 flex flex-col min-h-screen">
+                <TopBar />
+
+                <main className="flex-1 pb-24 md:pb-8 overflow-y-auto">
+                    {/* Hero greeting */}
+                    <div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 px-6 py-8 text-white relative overflow-hidden">
+                        {/* Decorative circles */}
+                        <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
+                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/4" />
+
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="relative z-10">
+                            <p className="text-white/70 text-sm mb-1">
+                                {new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening'}
+                            </p>
+                            <h1 className="text-2xl font-bold mb-1">{displayName} 👋</h1>
+                            {archetype && (
+                                <p className="text-white/50 text-xs mb-4">🧬 {archetype}</p>
+                            )}
+
+                            {/* Score + Streak */}
+                            <div className="flex gap-3">
+                                <Link href="/score" className="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 flex-1 hover:bg-white/20 transition-colors group">
+                                    <p className="text-xs text-white/60 mb-0.5">SkillTen Score</p>
+                                    <p className="text-2xl font-bold tabular-nums group-hover:scale-105 transition-transform inline-block">{score}</p>
+                                </Link>
+                                <Link href="/tracker" className="bg-white/15 backdrop-blur-sm rounded-xl px-5 py-3 flex-1 hover:bg-white/20 transition-colors group">
+                                    <p className="text-xs text-white/60 mb-0.5">Streak</p>
+                                    <p className="text-2xl font-bold group-hover:scale-105 transition-transform inline-block">{streak} 🔥</p>
+                                </Link>
+                            </div>
+
+                            {/* CTA if no assessment */}
+                            {!hasProfile && (
+                                <Link href="/assessment" className="mt-4 block bg-white text-indigo-700 px-6 py-3 rounded-xl font-semibold text-center hover:bg-white/90 transition-all hover:shadow-lg active:scale-[0.98]">
+                                    🧬 Take Your Career Assessment →
+                                </Link>
+                            )}
+                        </motion.div>
+                    </div>
+
+                    <div className="px-4 md:px-6 py-6 max-w-4xl mx-auto w-full space-y-8">
+
+                        {/* Quick actions (horizontal scroll) */}
+                        <section>
+                            <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                                {quickActions.map((a, i) => (
+                                    <motion.div key={a.href}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: i * 0.05 }}
+                                    >
+                                        <Link href={a.href} className="shrink-0 flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 hover:shadow-sm transition-all whitespace-nowrap">
+                                            <span>{a.icon}</span>{a.label}
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Primary tools */}
+                        <section>
+                            <h2 className="st-section-title mb-4">Career Tools</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                {primaryTools.map((tool, i) => (
+                                    <motion.div key={tool.href}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 + i * 0.08 }}
+                                    >
+                                        <Link href={tool.href} className="block st-card p-4 hover:shadow-lg group relative overflow-hidden h-full">
+                                            {tool.badge && (
+                                                <span className="absolute top-2 right-2 text-[10px] font-bold px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded-md st-pulse-glow">
+                                                    {tool.badge}
+                                                </span>
+                                            )}
+                                            <div className={`w-10 h-10 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform`}>
+                                                {tool.icon}
                                             </div>
-                                            <div>
-                                                <p style={{ fontWeight: 700, fontSize: "0.95rem" }}>{user?.name}</p>
-                                                <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{user?.email}</p>
+                                            <p className="font-semibold text-sm text-slate-900 mb-0.5">{tool.title}</p>
+                                            <p className="text-xs text-slate-500">{tool.desc}</p>
+                                        </Link>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Job tools */}
+                        <section>
+                            <h2 className="st-section-title mb-4">Opportunities</h2>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                {jobTools.map((tool, i) => (
+                                    <motion.div key={tool.href}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 + i * 0.08 }}
+                                    >
+                                        <Link href={tool.href} className="block st-card p-4 hover:shadow-lg group relative overflow-hidden h-full">
+                                            {tool.badge && (
+                                                <span className="absolute top-2 right-2 text-[10px] font-bold px-1.5 py-0.5 bg-rose-100 text-rose-700 rounded-md">
+                                                    {tool.badge}
+                                                </span>
+                                            )}
+                                            <div className={`w-10 h-10 bg-gradient-to-br ${tool.color} rounded-xl flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform`}>
+                                                {tool.icon}
                                             </div>
-                                        </div>
-                                        <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.75rem" }}>
-                                            <span style={{ padding: "0.15rem 0.5rem", borderRadius: 999, background: user?.role === "admin" ? "rgba(239,68,68,0.15)" : user?.role === "mentor" ? "rgba(245,158,11,0.15)" : "rgba(34,197,94,0.15)", color: user?.role === "admin" ? "#ef4444" : user?.role === "mentor" ? "#f59e0b" : "#22c55e", fontSize: "0.68rem", fontWeight: 700, textTransform: "uppercase" }}>
-                                                {user?.role === "admin" ? "🛡️ Admin" : user?.role === "mentor" ? "👨‍🏫 Mentor" : "🎓 Student"}
-                                            </span>
-                                            <span style={{ padding: "0.15rem 0.5rem", borderRadius: 999, background: "rgba(234,179,8,0.1)", color: "#eab308", fontSize: "0.68rem", fontWeight: 700 }}>
-                                                ⭐ {points} pts
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {/* Profile Actions */}
-                                    <div style={{ padding: "0.5rem" }}>
-                                        {user?.role === "admin" && (
-                                            <Link href="/admin" onClick={() => setShowProfile(false)}
-                                                style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "#ef4444", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
-                                                onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
-                                                onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                                                <span>🛡️</span> Admin Dashboard
-                                            </Link>
-                                        )}
-                                        <Link href="/analytics" onClick={() => setShowProfile(false)}
-                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
-                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.08)"}
-                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                                            <span>📊</span> My Analytics
+                                            <p className="font-semibold text-sm text-slate-900 mb-0.5">{tool.title}</p>
+                                            <p className="text-xs text-slate-500">{tool.desc}</p>
                                         </Link>
-                                        <Link href="/daily" onClick={() => setShowProfile(false)}
-                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
-                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.08)"}
-                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                                            <span>📝</span> Daily Challenge
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Trending skills marquee */}
+                        {trending.length > 0 && (
+                            <section>
+                                <h2 className="st-section-title mb-4">🔥 Trending Skills</h2>
+                                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+                                    {trending.map((skill: any, i: number) => (
+                                        <Link key={i} href={`/skills?career=${encodeURIComponent(skill.name || skill)}`}
+                                            className="shrink-0 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:border-indigo-300 hover:text-indigo-600 transition-all hover:shadow-sm">
+                                            {skill.name || skill}
                                         </Link>
-                                        <Link href="/leaderboard" onClick={() => setShowProfile(false)}
-                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, textDecoration: "none", color: "var(--text-primary)", fontSize: "0.85rem", fontWeight: 600, transition: "background 0.15s" }}
-                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(99,102,241,0.08)"}
-                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                                            <span>🏆</span> Leaderboard
-                                        </Link>
-                                        <div style={{ height: 1, background: "var(--border-color)", margin: "0.35rem 0" }} />
-                                        <button onClick={() => { localStorage.removeItem("token"); localStorage.removeItem("user"); window.location.href = "/login"; }}
-                                            style={{ display: "flex", alignItems: "center", gap: "0.65rem", padding: "0.6rem 0.75rem", borderRadius: 10, fontSize: "0.85rem", fontWeight: 600, color: "#ef4444", background: "transparent", border: "none", cursor: "pointer", width: "100%", textAlign: "left", transition: "background 0.15s" }}
-                                            onMouseEnter={e => e.currentTarget.style.background = "rgba(239,68,68,0.08)"}
-                                            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                                            <span>🚪</span> Logout
-                                        </button>
-                                    </div>
+                                    ))}
                                 </div>
-                            </>
+                            </section>
                         )}
-                    </div>
-                </div>
-            </nav>
 
-            <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(1rem, 3vw, 1.5rem) clamp(0.5rem, 2vw, 1rem)" }}>
-                {/* Welcome + Daily Action */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem", marginBottom: "1.25rem", alignItems: "stretch" }} className="dashboard-welcome">
-                    <div className="glass-card" style={{ padding: "1.5rem", borderRadius: 18, background: "linear-gradient(135deg, rgba(99,102,241,0.06), rgba(139,92,246,0.04))", border: "1px solid rgba(99,102,241,0.12)" }}>
-                        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "0.35rem" }}>
-                            {results?.has_results ? `${results.profile_type || "Career Explorer"}` : `Welcome back, ${user?.name?.split(" ")[0]} 👋`}
-                        </h1>
-                        <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.6 }}>
-                            {results?.has_results ? (results.personality_summary || "Your career assessment reveals unique strengths.").slice(0, 150) : "Start your journey with the 4D Assessment — the most impactful 15 minutes."}
-                        </p>
-                        {!results?.has_results && (
-                            <Link href="/assessment" style={{ display: "inline-block", marginTop: "0.75rem", padding: "0.6rem 1.5rem", borderRadius: 10, background: "linear-gradient(135deg, var(--accent-primary), #8b5cf6)", color: "white", textDecoration: "none", fontWeight: 600, fontSize: "0.9rem" }}>
-                                Take Assessment →
-                            </Link>
-                        )}
-                    </div>
-                    <div className="glass-card" style={{ padding: "1.25rem", borderRadius: 18, minWidth: 180, textAlign: "center", display: "flex", flexDirection: "column", justifyContent: "center", background: "linear-gradient(135deg, rgba(234,179,8,0.06), rgba(249,115,22,0.04))", border: "1px solid rgba(234,179,8,0.12)" }}>
-                        <span style={{ fontSize: "2rem" }}>📝</span>
-                        <p style={{ fontWeight: 700, fontSize: "0.9rem", marginTop: "0.5rem" }}>Daily Quiz</p>
-                        <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginBottom: "0.5rem" }}>Earn 25 pts today</p>
-                        <Link href="/daily" style={{ padding: "0.4rem 1rem", borderRadius: 8, background: "linear-gradient(135deg, #eab308, #f59e0b)", color: "#000", textDecoration: "none", fontWeight: 700, fontSize: "0.8rem" }}>
-                            Play Now →
-                        </Link>
-                    </div>
-                </div>
-
-                {/* Career Matches */}
-                {results?.has_results && results.top_careers && (
-                    <div style={{ marginBottom: "1.5rem" }}>
-                        <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.75rem" }}>🎯 Your Top Career Matches</h2>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "0.75rem" }}>
-                            {results.top_careers.slice(0, 3).map((career: any, i: number) => (
-                                <div key={i} className="glass-card" style={{ padding: "1rem", borderRadius: 12 }}>
-                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.5rem" }}>
-                                        <h3 style={{ fontSize: "0.9rem", fontWeight: 700 }}>{career.title}</h3>
-                                        <span style={{ padding: "0.2rem 0.5rem", borderRadius: 999, background: "rgba(34,197,94,0.1)", color: "#22c55e", fontSize: "0.75rem", fontWeight: 700 }}>{career.match_score}%</span>
-                                    </div>
-                                    <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>{career.why?.slice(0, 80)}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Primary Tools */}
-                <h2 style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)", fontWeight: 700, marginBottom: "0.75rem" }}>⚡ Daily Actions</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
-                    {primaryTools.map((t, i) => (
-                        <Link key={i} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
-                            <div className="glass-card" style={{ padding: "1.1rem", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", display: "flex", gap: "0.75rem", alignItems: "center", position: "relative" }}
-                                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.borderColor = t.color; }}
-                                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.borderColor = "var(--border-color)"; }}>
-                                <span style={{ fontSize: "1.75rem", minWidth: 40 }}>{t.icon}</span>
-                                <div>
-                                    <h3 style={{ fontSize: "0.9rem", fontWeight: 700 }}>{t.title}</h3>
-                                    <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{t.desc}</p>
-                                </div>
-                                {t.badge && <span style={{ position: "absolute", top: 8, right: 8, padding: "0.1rem 0.4rem", borderRadius: 999, background: t.badge === "HOT" ? "rgba(239,68,68,0.15)" : "rgba(34,197,94,0.15)", color: t.badge === "HOT" ? "#ef4444" : "#22c55e", fontSize: "0.6rem", fontWeight: 800 }}>{t.badge}</span>}
+                        {/* More tools grid */}
+                        <section>
+                            <h2 className="st-section-title mb-4">Explore Everything</h2>
+                            <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
+                                {moreTools.map((tool) => (
+                                    <Link key={tool.href} href={tool.href} className="st-card p-3 text-center hover:shadow-md group">
+                                        <span className="text-xl block mb-1 group-hover:scale-110 transition-transform">{tool.icon}</span>
+                                        <p className="text-[11px] font-medium text-slate-600 line-clamp-1">{tool.title}</p>
+                                    </Link>
+                                ))}
                             </div>
-                        </Link>
-                    ))}
-                </div>
+                        </section>
 
-                {/* Career Tools */}
-                <h2 style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)", fontWeight: 700, marginBottom: "0.75rem" }}>🧰 Career Intelligence</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(220px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
-                    {secondaryTools.map((t, i) => (
-                        <Link key={i} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
-                            <div className="glass-card" style={{ padding: "1.1rem", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", display: "flex", gap: "0.75rem", alignItems: "center" }}
-                                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.borderColor = t.color; }}
-                                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.borderColor = "var(--border-color)"; }}>
-                                <span style={{ fontSize: "1.75rem", minWidth: 40 }}>{t.icon}</span>
-                                <div>
-                                    <h3 style={{ fontSize: "0.9rem", fontWeight: 700 }}>{t.title}</h3>
-                                    <p style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>{t.desc}</p>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-
-                {/* Social & More */}
-                <h2 style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)", fontWeight: 700, marginBottom: "0.75rem" }}>🌐 Community & Growth</h2>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(160px, 100%), 1fr))", gap: "0.75rem", marginBottom: "1.25rem" }}>
-                    {socialTools.map((t, i) => (
-                        <Link key={i} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
-                            <div className="glass-card" style={{ padding: "1rem", borderRadius: 12, cursor: "pointer", transition: "all 0.2s", textAlign: "center", position: "relative" }}
-                                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.borderColor = t.color; }}
-                                onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.borderColor = "var(--border-color)"; }}>
-                                <span style={{ fontSize: "1.5rem" }}>{t.icon}</span>
-                                <h3 style={{ fontSize: "0.85rem", fontWeight: 700, marginTop: "0.35rem" }}>{t.title}</h3>
-                                <p style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>{t.desc}</p>
-                                {t.badge && <span style={{ position: "absolute", top: 6, right: 6, padding: "0.1rem 0.35rem", borderRadius: 999, background: t.badge === "HOT" ? "rgba(239,68,68,0.15)" : "rgba(34,197,94,0.15)", color: t.badge === "HOT" ? "#ef4444" : "#22c55e", fontSize: "0.55rem", fontWeight: 800 }}>{t.badge}</span>}
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-
-                {/* Trending Skills */}
-                {trending.length > 0 && (
-                    <div>
-                        <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "0.75rem" }}>🔥 Trending Skills in India</h2>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "0.6rem" }}>
-                            {trending.slice(0, 6).map((skill: any, i: number) => (
-                                <div key={i} className="glass-card" style={{ padding: "0.75rem 1rem", borderRadius: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <div>
-                                        <p style={{ fontWeight: 600, fontSize: "0.85rem" }}>{skill.name}</p>
-                                        <p style={{ fontSize: "0.7rem", color: "var(--text-secondary)" }}>{skill.avg_salary}</p>
-                                    </div>
-                                    <span style={{ padding: "0.2rem 0.5rem", borderRadius: 999, background: "rgba(34,197,94,0.1)", color: "#22c55e", fontSize: "0.7rem", fontWeight: 700 }}>{skill.growth}</span>
-                                </div>
-                            ))}
-                        </div>
                     </div>
-                )}
+                </main>
+
+                <BottomNav />
             </div>
-
-            <style jsx>{`
-                @media (min-width: 640px) {
-                    .dashboard-welcome { grid-template-columns: 1fr auto !important; }
-                }
-            `}</style>
         </div>
     );
 }

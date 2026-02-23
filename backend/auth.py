@@ -1,5 +1,5 @@
 """
-SkillSync AI - Authentication
+SkillTen — Authentication
 """
 
 from datetime import datetime, timedelta, timezone
@@ -14,7 +14,7 @@ import os
 from database import get_db
 from models import User
 
-SECRET_KEY = os.getenv("SECRET_KEY", "skillsync-dev-secret-change-me")
+SECRET_KEY = os.getenv("SECRET_KEY", "skillten-dev-secret-change-me")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_HOURS = 72
 
