@@ -17,6 +17,7 @@ const SIDE_NAV = [
             { href: '/practice', icon: '💻', label: 'Coding Arena' },
             { href: '/aptitude', icon: '🧠', label: 'Aptitude Engine' },
             { href: '/learn', icon: '📚', label: 'Learning Hub' },
+            { href: '/roadmap', icon: '🗺️', label: 'My Roadmap' },
             { href: '/skills', icon: '🎯', label: 'Skill Analyzer' },
             { href: '/courses', icon: '📖', label: 'Free Courses' },
             { href: '/daily', icon: '📅', label: 'Daily Quests' },

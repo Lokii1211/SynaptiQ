@@ -44,6 +44,11 @@ export const ROUTES = {
     FIRST_90_DAYS: '/first-90-days',
     PARENT: '/parent',
     PEOPLE_LIKE_YOU: '/people-like-you',
+    ROADMAP_PAGE: '/roadmap',
+    RESULTS_PAGE: '/results',
+    VERIFY: (hash: string) => `/verify/${hash}`,
+    CAREER_DETAIL: (slug: string) => `/career/${slug}`,
+    COMPANY_DETAIL: (slug: string) => `/company/${slug}`,
 } as const;
 
 export const AUTH_ROUTES = [ROUTES.LOGIN, ROUTES.SIGNUP, ROUTES.ONBOARDING];

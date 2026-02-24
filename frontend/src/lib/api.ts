@@ -202,6 +202,16 @@ export const api = {
     aiSalaryTruth: (data: { ctc_lpa: number; role: string; city: string }) =>
         request('/ai/salary-truth', { method: 'POST', body: JSON.stringify(data) }),
 
+    // ═══════════ AI ENGINE — Bible 05-D/05-G/05-F ═══════════
+    aiNegotiateSalary: (data: { company_type: string; role: string; initial_offer_lpa: number; budget_ceiling_lpa: number; scenario?: string; student_message: string; conversation_history?: any[] }) =>
+        request('/ai/negotiate-salary', { method: 'POST', body: JSON.stringify(data) }),
+
+    aiCareerDaySimulator: (data: { career: string; company_type?: string; city?: string; level?: string; student_choice?: string; decision_number?: number; conversation_history?: any[] }) =>
+        request('/ai/career-day-simulator', { method: 'POST', body: JSON.stringify(data) }),
+
+    aiWellbeingCheck: (data: { signal_type: string; student_data?: any; positive_history?: string[] }) =>
+        request('/ai/wellbeing-check', { method: 'POST', body: JSON.stringify(data) }),
+
     // ═══════════ BACKWARD COMPAT (old pages) ═══════════
     skillGapAnalysis: (data: { current_skills: string[]; target_career: string }) =>
         request('/ai/skill-gap', { method: 'POST', body: JSON.stringify(data) }),

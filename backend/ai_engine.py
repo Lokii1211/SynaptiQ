@@ -575,8 +575,200 @@ Be BRUTALLY honest. Indian parents need truth, not comfort."""
 
 
 # ═══════════════════════════════════════════════════════════════
+# 12. SALARY NEGOTIATION SIMULATOR (Bible 05-D)
+# ═══════════════════════════════════════════════════════════════
+
+def salary_negotiation_simulator(
+    company_type: str, role: str, initial_offer_lpa: float,
+    budget_ceiling_lpa: float, scenario: str = "campus_placement",
+    student_message: str = "", conversation_history: list = None
+) -> dict:
+    """AI plays Indian HR recruiter in salary negotiation roleplay (Bible 05-D)"""
+    history_str = ""
+    if conversation_history:
+        history_str = "\n".join([f"{m['role']}: {m['content']}" for m in conversation_history[-8:]])
+
+    prompt = f"""
+You are an HR recruiter at a {company_type} company in India. Stay in this persona.
+You are negotiating with a student for the role of {role}.
+
+SCENARIO: {scenario}
+INITIAL OFFER: ₹{initial_offer_lpa} LPA
+BUDGET CEILING: ₹{budget_ceiling_lpa} LPA (NEVER reveal this)
+
+CONVERSATION SO FAR:
+{history_str}
+
+STUDENT'S LATEST MESSAGE: {student_message}
+
+RECRUITER BEHAVIOR:
+→ Use real Indian HR tactics: "What's your current/expected CTC?"
+→ Push back on counter-offers — don't fold immediately
+→ If student makes data-backed case → show flexibility (up to ceiling, never above)
+→ If student accepts immediately → proceed, flag for debrief
+→ If student is aggressive → stay calm, slightly firmer
+
+If the student says "debrief", SWITCH to career counselor mode:
+1. 3 things they did well
+2. 3 missed opportunities with EXACT alternative wording
+3. The math: "Negotiating ₹1L more = ₹X L more over 10 years at 10% growth"
+4. One thing to practice before their next real negotiation
+
+Return JSON:
+{{
+    "recruiter_response": "...",
+    "is_debrief": false,
+    "negotiation_stage": "opening|counter|closing|accepted|debrief",
+    "current_offer_lpa": {initial_offer_lpa},
+    "tips": []
+}}
+"""
+    return _safe_generate(prompt, {
+        "recruiter_response": f"Thank you for your interest in the {role} position. We'd like to offer you ₹{initial_offer_lpa} LPA. This is competitive for {company_type} companies in this space.",
+        "is_debrief": False,
+        "negotiation_stage": "opening",
+        "current_offer_lpa": initial_offer_lpa,
+        "tips": []
+    })
+
+
+# ═══════════════════════════════════════════════════════════════
+# 13. CAREER DAY SIMULATOR (Bible 05-G)
+# ═══════════════════════════════════════════════════════════════
+
+def career_day_simulator(
+    career: str, company_type: str = "startup",
+    city: str = "Bangalore", level: str = "fresher",
+    student_choice: str = "", decision_number: int = 0,
+    conversation_history: list = None
+) -> dict:
+    """Interactive day-in-the-life career simulation (Bible 05-G)"""
+    history_str = ""
+    if conversation_history:
+        history_str = "\n".join([f"{m['role']}: {m['content']}" for m in conversation_history[-6:]])
+
+    prompt = f"""
+You are running a Career Day Simulation for: {career} at a {company_type} in {city} at {level} level.
+Make it feel real — not the LinkedIn version, the real 9pm-when-deadline-hits version.
+
+PREVIOUS CONVERSATION:
+{history_str}
+
+STUDENT'S CHOICE: {student_choice}
+CURRENT DECISION NUMBER: {decision_number}
+
+FLOW:
+- If decision_number == 0: SET THE SCENE with specific realistic detail and present first decision (3-4 options)
+- If decision_number 1-3: Show consequence of their choice + emotional reality + next decision
+- If decision_number >= 4 or student says "end simulation": Run DEBRIEF
+
+DAILY MOMENTS (ensure these appear across the simulation):
+→ Realize they lack a skill they thought they had
+→ Manager gives ambiguous direction
+→ Deadline compresses by 2 days unexpectedly
+→ One interpersonal friction
+
+Return JSON:
+{{
+    "narrative": "...",
+    "decision_prompt": "What do you do?",
+    "options": ["Option A: ...", "Option B: ...", "Option C: ..."],
+    "decision_number": {decision_number},
+    "is_complete": false,
+    "debrief": null
+}}
+
+For debrief, set is_complete=true and debrief to:
+{{
+    "mood_question": "How energized vs drained? Rate 1-5",
+    "fit_analysis": "What your reactions reveal about fit...",
+    "reality_note": "This used real scenarios from professionals",
+    "next_action": "One action to explore further"
+}}
+"""
+    if decision_number == 0:
+        return _safe_generate(prompt, {
+            "narrative": f"You are a {career} at a {company_type} in {city}. It's Monday, 9:07am. Your Slack shows 23 unread messages. Your standup is in 15 minutes but your manager just pinged: 'Can we talk before standup? Something came up over the weekend.' You haven't had coffee yet. Your laptop is loading. What do you prioritize?",
+            "decision_prompt": "What do you do?",
+            "options": [
+                "Go talk to your manager immediately — they said it's urgent",
+                "Quickly skim Slack first to see if the 'something' is already being discussed",
+                "Get coffee first, then go. You need to be sharp for unexpected conversations",
+                "Reply to manager: 'Sure, give me 5 mins' — use those 5 mins to check email"
+            ],
+            "decision_number": 0,
+            "is_complete": False,
+            "debrief": None
+        })
+    return _safe_generate(prompt, {
+        "narrative": "The day continues...",
+        "decision_prompt": "What do you do next?",
+        "options": ["Option A", "Option B", "Option C"],
+        "decision_number": decision_number,
+        "is_complete": False,
+        "debrief": None
+    })
+
+
+# ═══════════════════════════════════════════════════════════════
+# 14. EMOTION-AWARE INTERVENTION (Bible 05-F)
+# ═══════════════════════════════════════════════════════════════
+
+def emotion_aware_intervention(
+    signal_type: str, student_data: dict, positive_history: list = None
+) -> dict:
+    """Triggered by behavioral signals — wellbeing support (Bible 05-F)"""
+    wins = ", ".join(positive_history[:3]) if positive_history else "completing their profile"
+    streak = student_data.get("streak", 0)
+    milestones = student_data.get("milestones_hit", 0)
+
+    prompt = f"""
+A student needs support right now. You are SkillSync's wellbeing layer.
+
+SIGNAL TYPE: {signal_type}
+STUDENT DATA: streak={streak}, milestones_hit={milestones}
+POSITIVE HISTORY: {wins}
+
+Follow this EXACT sequence — never skip a stage:
+
+STAGE 1 — ACKNOWLEDGE (2-3 sentences)
+"That sounds genuinely hard." + specific acknowledgment.
+NEVER: "I understand how you feel."
+
+STAGE 2 — NORMALIZE (1-2 sentences)
+"Almost everyone on this exact path hits this wall at this stage."
+
+STAGE 3 — REFRAME WITH DATA (1-2 sentences)
+Reference their ACTUAL progress. NEVER generic encouragement.
+
+STAGE 4 — ONE TINY ACTION (1 sentence)
+NOT a plan. ONE frictionless, pressure-free suggestion.
+
+ESCALATION (if {signal_type} in [hopeless, worthless, give_up]):
+Gently mention: "Some people find it helps to talk to someone.
+iCall helpline 9152987821 | Vandrevala Foundation 1860-2662-345"
+
+Return JSON:
+{{
+    "message": "...",
+    "needs_escalation": false,
+    "helpline_shown": false,
+    "suggested_action": "one tiny step"
+}}
+"""
+    needs_escalation = signal_type in ["hopeless", "worthless", "give_up", "self_harm"]
+    return _safe_generate(prompt, {
+        "message": f"That sounds genuinely hard. {signal_type.replace('_', ' ').title()} is something almost everyone on this path experiences — it's not a signal you're failing, it's a signal you care about the outcome. You've already hit {milestones} milestones — that's real progress. When you're ready, even opening the app tomorrow counts as showing up.",
+        "needs_escalation": needs_escalation,
+        "helpline_shown": needs_escalation,
+        "suggested_action": "Open the app tomorrow — that's enough"
+    })
+
+
+# ═══════════════════════════════════════════════════════════════
 # MOCK/FALLBACK RESPONSES
 # ═══════════════════════════════════════════════════════════════
+
 
 def _mock_4d_assessment():
     return {

@@ -10,7 +10,8 @@ from auth import require_user
 from ai_engine import (
     analyze_skill_gap, analyze_resume, review_code,
     calculate_job_match, generate_roadmap, generate_interview_prep,
-    generate_reroute_options, generate_parent_report, check_salary_truth
+    generate_reroute_options, generate_parent_report, check_salary_truth,
+    salary_negotiation_simulator, career_day_simulator, emotion_aware_intervention
 )
 
 router = APIRouter()
@@ -143,7 +144,7 @@ async def ai_interview_prep(req: InterviewPrepReq, user: User = Depends(require_
 
 
 # ═══════════════════════════════════════════════════════════════
-# NEW: Bible XF-08 — Roadmap Rerouting Engine
+# Bible XF-08 — Roadmap Rerouting Engine
 # ═══════════════════════════════════════════════════════════════
 
 class RerouteReq(BaseModel):
@@ -173,7 +174,7 @@ async def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)
 
 
 # ═══════════════════════════════════════════════════════════════
-# NEW: Bible XF-10 — Parent Report Generator
+# Bible XF-10 — Parent Report Generator
 # ═══════════════════════════════════════════════════════════════
 
 @router.get("/parent-report")
@@ -199,7 +200,7 @@ async def ai_parent_report(user: User = Depends(require_user)):
 
 
 # ═══════════════════════════════════════════════════════════════
-# NEW: Bible XF-10 — Salary Truth Checker
+# Bible XF-10 — Salary Truth Checker
 # ═══════════════════════════════════════════════════════════════
 
 class SalaryTruthReq(BaseModel):
@@ -213,4 +214,70 @@ async def ai_salary_truth(req: SalaryTruthReq, user: User = Depends(require_user
     college_tier = user.profile.college_tier if user.profile else 2
     result = await check_salary_truth(req.ctc_lpa, req.role, req.city, college_tier)
     return result
+
+
+# ═══════════════════════════════════════════════════════════════
+# Bible 05-D — Salary Negotiation Simulator
+# ═══════════════════════════════════════════════════════════════
+
+class NegotiateReq(BaseModel):
+    company_type: str = "MNC"
+    role: str = "Software Engineer"
+    initial_offer_lpa: float = 8.0
+    budget_ceiling_lpa: float = 12.0
+    scenario: str = "campus_placement"
+    student_message: str = ""
+    conversation_history: list = []
+
+@router.post("/negotiate-salary")
+async def ai_negotiate_salary(req: NegotiateReq, user: User = Depends(require_user)):
+    """Bible 05-D — Interactive salary negotiation simulator with HR recruiter persona"""
+    result = await salary_negotiation_simulator(
+        req.company_type, req.role, req.initial_offer_lpa,
+        req.budget_ceiling_lpa, req.scenario,
+        req.student_message, req.conversation_history
+    )
+    return result
+
+
+# ═══════════════════════════════════════════════════════════════
+# Bible 05-G — Career Day Simulator
+# ═══════════════════════════════════════════════════════════════
+
+class CareerDayReq(BaseModel):
+    career: str = "Software Engineer"
+    company_type: str = "startup"
+    city: str = "Bangalore"
+    level: str = "fresher"
+    student_choice: str = ""
+    decision_number: int = 0
+    conversation_history: list = []
+
+@router.post("/career-day-simulator")
+async def ai_career_day(req: CareerDayReq, user: User = Depends(require_user)):
+    """Bible 05-G — Interactive day-in-the-life career simulation"""
+    result = await career_day_simulator(
+        req.career, req.company_type, req.city, req.level,
+        req.student_choice, req.decision_number, req.conversation_history
+    )
+    return result
+
+
+# ═══════════════════════════════════════════════════════════════
+# Bible 05-F — Emotion-Aware Intervention
+# ═══════════════════════════════════════════════════════════════
+
+class EmotionReq(BaseModel):
+    signal_type: str = "burnout"
+    student_data: dict = {}
+    positive_history: list = []
+
+@router.post("/wellbeing-check")
+async def ai_wellbeing_check(req: EmotionReq, user: User = Depends(require_user)):
+    """Bible 05-F — Triggered by behavioral signals — wellbeing support"""
+    result = await emotion_aware_intervention(
+        req.signal_type, req.student_data, req.positive_history
+    )
+    return result
+
 
