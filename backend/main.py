@@ -15,21 +15,24 @@ from routes import master_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize database on startup"""
-    init_db()
-
-    # Seed data if database is empty
-    db = SessionLocal()
     try:
-        from models import Career
-        if db.query(Career).count() == 0:
-            try:
-                from seed_data import seed_all
-                seed_all(db)
-                print("✅ SkillTen seed data loaded")
-            except Exception as e:
-                print(f"⚠️ Seed data error (non-fatal): {e}")
-    finally:
-        db.close()
+        init_db()
+
+        # Seed data if database is empty
+        db = SessionLocal()
+        try:
+            from models import Career
+            if db.query(Career).count() == 0:
+                try:
+                    from seed_data import seed_all
+                    seed_all(db)
+                    print("✅ SkillTen seed data loaded")
+                except Exception as e:
+                    print(f"⚠️ Seed data error (non-fatal): {e}")
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"⚠️ Database init error (non-fatal on serverless): {e}")
 
     yield
 

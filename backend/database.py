@@ -6,7 +6,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./skillten.db")
+# Vercel serverless can only write to /tmp
+if os.getenv("VERCEL"):
+    _default_db = "sqlite:///tmp/skillten.db"
+else:
+    _default_db = "sqlite:///./skillten.db"
+
+DATABASE_URL = os.getenv("DATABASE_URL", _default_db)
 
 engine = create_engine(
     DATABASE_URL,
