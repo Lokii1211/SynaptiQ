@@ -1,10 +1,10 @@
-# Render Blueprint - SkillSync AI
+# Render Blueprint - SkillTen / Viya AI
 # Deploy both backend and frontend from one repo
 
 services:
   # Backend API (FastAPI)
   - type: web
-    name: skillsync-api
+    name: skilleton-api
     runtime: python
     region: oregon
     rootDir: backend
@@ -19,20 +19,23 @@ services:
         value: sqlite:///./skillsync.db
       - key: PYTHON_VERSION
         value: "3.11.0"
+      - key: ENV
+        value: production
 
-  # Frontend (Next.js)
+  # Frontend (Next.js) — if deploying on Render instead of Vercel
   - type: web
-    name: skillsync-web
+    name: skilleton-web
     runtime: node
     region: oregon
     rootDir: frontend
     buildCommand: npm install && npm run build
     startCommand: npm run start
     envVars:
-      - key: NEXT_PUBLIC_API_URL
+      - key: NEXT_PUBLIC_BACKEND_URL
         fromService:
-          name: skillsync-api
+          name: skilleton-api
           type: web
           property: hostport
       - key: NODE_VERSION
         value: "20.11.0"
+
