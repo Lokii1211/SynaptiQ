@@ -1,41 +1,47 @@
-# Render Blueprint - SkillTen / Viya AI
+# Render Blueprint - SkillTen / VIYA AI
 # Deploy both backend and frontend from one repo
+# Docs: https://render.com/docs/blueprint-spec
 
 services:
-  # Backend API (FastAPI)
+  # ─── Backend API (FastAPI + Supabase PostgreSQL) ───
   - type: web
-    name: skilleton-api
+    name: viya-api
     runtime: python
-    region: oregon
+    region: singapore  # Closest to India for low latency
+    plan: free         # Free tier: 750 hrs/month, sleeps after 15 min idle
     rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: GOOGLE_API_KEY
-        sync: false
+        sync: false  # Set manually in Render dashboard
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
-        value: sqlite:///./skillsync.db
+        sync: false  # Set Supabase PostgreSQL URL in Render dashboard
       - key: PYTHON_VERSION
         value: "3.11.0"
       - key: ENV
         value: production
 
-  # Frontend (Next.js) — if deploying on Render instead of Vercel
+  # ─── Frontend (Next.js) ───
   - type: web
-    name: skilleton-web
+    name: viya-web
     runtime: node
-    region: oregon
+    region: singapore
+    plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
     startCommand: npm run start
     envVars:
-      - key: NEXT_PUBLIC_BACKEND_URL
+      - key: NEXT_PUBLIC_API_URL
         fromService:
-          name: skilleton-api
+          name: viya-api
           type: web
-          property: hostport
+          property: host
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false  # Set in Render dashboard
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false  # Set in Render dashboard
       - key: NODE_VERSION
         value: "20.11.0"
-

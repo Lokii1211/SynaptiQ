@@ -5,7 +5,10 @@ Supports: Supabase PostgreSQL (production) + SQLite (local dev)
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from dotenv import load_dotenv
 import os
+
+load_dotenv()  # Load .env before reading env vars
 
 # ─── Database URL Resolution ───
 # Priority: DATABASE_URL env var → Supabase connection string → SQLite fallback
