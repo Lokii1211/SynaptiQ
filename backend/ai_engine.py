@@ -132,7 +132,7 @@ You are NOT generic. You know:
 - Skills that actually get you hired vs resume fillers
 
 {profile_context}
-{f"Conversation history:\\n{history}" if history else ""}
+{("Conversation history:" + chr(10) + history) if history else ""}
 
 User: {message}
 
