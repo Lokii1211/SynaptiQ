@@ -14,6 +14,17 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Handle Google OAuth redirect — capture token from URL
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const googleToken = params.get('token');
+            if (googleToken && params.get('google')) {
+                auth.setToken(googleToken);
+                // Clean URL
+                window.history.replaceState({}, '', '/dashboard');
+            }
+        }
+
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         Promise.all([
             api.getMe().catch(() => null),
@@ -86,6 +97,7 @@ export default function DashboardPage() {
     ];
 
     const quickActions = [
+        { icon: '🏢', label: 'Mock Drive', href: '/mock-drive' },
         { icon: '📅', label: 'Daily Quests', href: '/daily' },
         { icon: '🏆', label: 'Leaderboard', href: '/leaderboard' },
         { icon: '🔥', label: 'Streak', href: '/tracker' },
@@ -97,7 +109,9 @@ export default function DashboardPage() {
     ];
 
     const moreTools = [
+        { icon: '🏢', title: 'Mock Drive', href: '/mock-drive' },
         { icon: '🏆', title: 'Challenges', href: '/challenges' },
+        { icon: '🎖️', title: 'Achievements', href: '/achievements' },
         { icon: '🤝', title: 'Network', href: '/network' },
         { icon: '📊', title: 'Skill Market', href: '/skill-market' },
         { icon: '⚔️', title: 'Campus Wars', href: '/campus' },

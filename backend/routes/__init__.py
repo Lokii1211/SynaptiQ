@@ -24,6 +24,13 @@ from .leaderboard import router as leaderboard_router
 from .profile import router as profile_router
 from .mock_drive import router as mock_drive_router
 from .score import router as score_router
+from .achievements import router as achievements_router
+from .tracker import router as tracker_router
+from .referral import router as referral_router
+from .community import router as community_router
+from .connections import router as connections_router
+from .email import router as email_router
+from .recruiter import router as recruiter_router
 
 master_router = APIRouter()
 
@@ -51,3 +58,11 @@ master_router.include_router(leaderboard_router, prefix="/leaderboard", tags=["L
 master_router.include_router(profile_router, prefix="/profile", tags=["Public Profile"])
 master_router.include_router(mock_drive_router, prefix="/mock-drive", tags=["Mock Placement Drive"])
 master_router.include_router(score_router, prefix="/score", tags=["Viya Score™"])
+master_router.include_router(achievements_router, prefix="/achievements", tags=["Achievements"])
+master_router.include_router(tracker_router, prefix="/tracker", tags=["Streak Tracker"])
+master_router.include_router(referral_router, prefix="/referral", tags=["Referral System"])
+master_router.include_router(community_router, prefix="/community", tags=["Community Forum"])
+master_router.include_router(connections_router, prefix="/connections", tags=["Connections"])
+master_router.include_router(email_router, prefix="/email", tags=["Email Service"])
+master_router.include_router(recruiter_router, prefix="/recruiter", tags=["Recruiter Portal"])
+

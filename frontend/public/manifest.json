@@ -1,27 +1,32 @@
 {
-    "name": "Viya — AI Career Intelligence",
-    "short_name": "Viya",
-    "description": "India's most honest AI Career Intelligence Platform. Assessment → Career Match → Roadmap → Placement.",
+    "name": "SkillTen — AI Career Intelligence",
+    "short_name": "SkillTen",
+    "description": "Discover your career DNA with AI-powered 4D assessment, skill verification, coding arena, and personalized roadmaps. Built for Indian students.",
     "start_url": "/dashboard",
     "display": "standalone",
-    "background_color": "#0F172A",
-    "theme_color": "#4F46E5",
-    "orientation": "portrait",
+    "background_color": "#f8fafc",
+    "theme_color": "#6366F1",
+    "orientation": "portrait-primary",
+    "scope": "/",
     "icons": [
         {
-            "src": "/icons/icon-192.png",
+            "src": "/icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         },
         {
-            "src": "/icons/icon-512.png",
+            "src": "/icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
     ],
     "categories": [
         "education",
-        "career"
+        "career",
+        "productivity"
     ],
-    "lang": "en-IN"
+    "lang": "en-IN",
+    "prefer_related_applications": false
 }

@@ -127,3 +127,110 @@ def update_profile(req: ProfileUpdateReq, user: User = Depends(require_user), db
     db.commit()
     db.refresh(profile)
     return _user_response(user, profile)
+
+
+# ─── Google OAuth ───
+import os, httpx
+
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/auth/google/callback")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3001")
+
+
+@router.get("/google")
+def google_login():
+    """Redirect to Google OAuth consent screen."""
+    if not GOOGLE_CLIENT_ID:
+        raise HTTPException(status_code=503, detail="Google OAuth not configured. Set GOOGLE_CLIENT_ID env var.")
+
+    google_auth_url = (
+        "https://accounts.google.com/o/oauth2/v2/auth?"
+        f"client_id={GOOGLE_CLIENT_ID}"
+        f"&redirect_uri={GOOGLE_REDIRECT_URI}"
+        "&response_type=code"
+        "&scope=openid%20email%20profile"
+        "&access_type=offline"
+        "&prompt=consent"
+    )
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url=google_auth_url)
+
+
+@router.get("/google/callback")
+def google_callback(code: str = "", error: str = "", db: Session = Depends(get_db)):
+    """Handle Google OAuth callback — exchange code for token, create/find user."""
+    from fastapi.responses import RedirectResponse
+
+    if error or not code:
+        return RedirectResponse(url=f"{FRONTEND_URL}/login?error=google_auth_failed")
+
+    try:
+        # Exchange code for tokens
+        token_resp = httpx.post("https://oauth2.googleapis.com/token", data={
+            "code": code,
+            "client_id": GOOGLE_CLIENT_ID,
+            "client_secret": GOOGLE_CLIENT_SECRET,
+            "redirect_uri": GOOGLE_REDIRECT_URI,
+            "grant_type": "authorization_code",
+        })
+        tokens = token_resp.json()
+        access_token = tokens.get("access_token")
+
+        if not access_token:
+            return RedirectResponse(url=f"{FRONTEND_URL}/login?error=google_token_failed")
+
+        # Get user info from Google
+        user_info_resp = httpx.get(
+            "https://www.googleapis.com/oauth2/v2/userinfo",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        google_user = user_info_resp.json()
+        email = google_user.get("email")
+        name = google_user.get("name", "User")
+        picture = google_user.get("picture", "")
+
+        if not email:
+            return RedirectResponse(url=f"{FRONTEND_URL}/login?error=google_no_email")
+
+        # Find or create user
+        user = db.query(User).filter(User.email == email).first()
+        if not user:
+            # New user — create account
+            import secrets
+            user = User(email=email, hashed_password=hash_password(secrets.token_urlsafe(32)))
+            db.add(user)
+            db.flush()
+
+            username = email.split("@")[0].lower().replace(".", "")[:20]
+            # Ensure unique username
+            existing = db.query(UserProfile).filter(UserProfile.username == username).first()
+            if existing:
+                username = f"{username}{user.id}"
+
+            profile = UserProfile(
+                user_id=user.id,
+                username=username,
+                display_name=name,
+                avatar_url=picture,
+            )
+            db.add(profile)
+            db.commit()
+            db.refresh(user)
+        else:
+            # Update last active
+            user.last_active_at = datetime.now(timezone.utc)
+            db.commit()
+
+        # Create JWT token
+        token = create_access_token({"sub": user.id})
+
+        # Redirect to frontend with token
+        return RedirectResponse(
+            url=f"{FRONTEND_URL}/dashboard?token={token}&google=1"
+        )
+
+    except Exception as e:
+        print(f"Google OAuth error: {e}")
+        return RedirectResponse(url=f"{FRONTEND_URL}/login?error=google_auth_error")
+

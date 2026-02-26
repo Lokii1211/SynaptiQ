@@ -324,7 +324,111 @@ CREATE TABLE IF NOT EXISTS skill_market_data (
 );
 
 -- ═══════════════════════════════════════════════════════════════
--- INDEXES FOR PERFORMANCE
+-- 15. USER ACHIEVEMENTS — Badge/achievement tracking
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS user_achievements (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    achievement_id TEXT NOT NULL,        -- references achievement definition
+    unlocked_at TIMESTAMPTZ DEFAULT NOW(),
+    xp_awarded INTEGER DEFAULT 0,
+    UNIQUE(user_id, achievement_id)
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- 16. STREAK FREEZES — Streak freeze usage history
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS streak_freezes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    used_at TIMESTAMPTZ DEFAULT NOW(),
+    streak_at_time INTEGER DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- 17. REFERRALS — Referral tracking (Bible §31)
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS referrals (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    referrer_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    referred_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    referral_code TEXT NOT NULL,
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'rewarded')),
+    xp_awarded INTEGER DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(referrer_id, referred_id)
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- 18. NOTIFICATIONS — User notification center
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS notifications (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    type TEXT NOT NULL DEFAULT 'system' CHECK (type IN ('system', 'achievement', 'streak', 'job', 'community', 'challenge')),
+    title TEXT NOT NULL,
+    message TEXT NOT NULL,
+    icon TEXT DEFAULT '🔔',
+    action_url TEXT,
+    is_read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- 19. USER CONNECTIONS — Social network (peer connections)
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS user_connections (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    connected_user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    status TEXT DEFAULT 'connected' CHECK (status IN ('pending', 'connected', 'blocked')),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, connected_user_id)
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- 20. MOCK INTERVIEW SESSIONS — Interview simulator tracking
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS mock_interview_sessions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    company TEXT NOT NULL,
+    interview_type TEXT NOT NULL CHECK (interview_type IN ('technical', 'behavioral', 'system_design', 'hr')),
+    
+    -- Session data
+    questions JSONB DEFAULT '[]',       -- [{question, user_answer, ai_feedback, score}]
+    overall_score INTEGER CHECK (overall_score >= 0 AND overall_score <= 100),
+    
+    -- Metadata
+    duration_minutes INTEGER,
+    started_at TIMESTAMPTZ DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    status TEXT DEFAULT 'in_progress' CHECK (status IN ('in_progress', 'completed', 'abandoned')),
+    
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- 21. CODING SUBMISSIONS — Track all coding problem attempts
+-- ═══════════════════════════════════════════════════════════════
+CREATE TABLE IF NOT EXISTS coding_submissions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    problem_slug TEXT NOT NULL,
+    language TEXT NOT NULL DEFAULT 'python',
+    code TEXT NOT NULL,
+    
+    passed BOOLEAN DEFAULT FALSE,
+    test_cases_passed INTEGER DEFAULT 0,
+    test_cases_total INTEGER DEFAULT 0,
+    execution_time_ms INTEGER,
+    
+    submitted_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ═══════════════════════════════════════════════════════════════
+-- INDEXES FOR NEW TABLES
 -- ═══════════════════════════════════════════════════════════════
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
@@ -360,6 +464,21 @@ CREATE INDEX IF NOT EXISTS idx_quiz_history_date ON quiz_history(quiz_date);
 
 CREATE INDEX IF NOT EXISTS idx_skillsync_scores_user ON skillsync_scores(user_id);
 CREATE INDEX IF NOT EXISTS idx_skill_market_week ON skill_market_data(week_start);
+
+-- New table indexes
+CREATE INDEX IF NOT EXISTS idx_user_achievements_user ON user_achievements(user_id);
+CREATE INDEX IF NOT EXISTS idx_streak_freezes_user ON streak_freezes(user_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_referrer ON referrals(referrer_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_referred ON referrals(referred_id);
+CREATE INDEX IF NOT EXISTS idx_referrals_code ON referrals(referral_code);
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(user_id, is_read);
+CREATE INDEX IF NOT EXISTS idx_notifications_created ON notifications(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_user_connections_user ON user_connections(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_connections_connected ON user_connections(connected_user_id);
+CREATE INDEX IF NOT EXISTS idx_mock_interview_user ON mock_interview_sessions(user_id);
+CREATE INDEX IF NOT EXISTS idx_coding_submissions_user ON coding_submissions(user_id);
+CREATE INDEX IF NOT EXISTS idx_coding_submissions_problem ON coding_submissions(problem_slug);
 
 -- ═══════════════════════════════════════════════════════════════
 -- AUTO-UPDATE updated_at TRIGGER
@@ -401,6 +520,14 @@ ALTER TABLE post_comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE quiz_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE skillsync_scores ENABLE ROW LEVEL SECURITY;
 ALTER TABLE skill_market_data ENABLE ROW LEVEL SECURITY;
+-- New tables
+ALTER TABLE user_achievements ENABLE ROW LEVEL SECURITY;
+ALTER TABLE streak_freezes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE referrals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_connections ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mock_interview_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE coding_submissions ENABLE ROW LEVEL SECURITY;
 
 -- Allow service role (our backend) full access
 CREATE POLICY "Service role full access on users" ON users FOR ALL USING (true) WITH CHECK (true);
@@ -417,6 +544,14 @@ CREATE POLICY "Service role full access on post_comments" ON post_comments FOR A
 CREATE POLICY "Service role full access on quiz_history" ON quiz_history FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Service role full access on skillsync_scores" ON skillsync_scores FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Service role full access on skill_market_data" ON skill_market_data FOR ALL USING (true) WITH CHECK (true);
+-- New table policies
+CREATE POLICY "Service role full access on user_achievements" ON user_achievements FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access on streak_freezes" ON streak_freezes FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access on referrals" ON referrals FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access on notifications" ON notifications FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access on user_connections" ON user_connections FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access on mock_interview_sessions" ON mock_interview_sessions FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access on coding_submissions" ON coding_submissions FOR ALL USING (true) WITH CHECK (true);
 
 -- ═══════════════════════════════════════════════════════════════
 -- SEED DATA
@@ -476,6 +611,7 @@ INSERT INTO skill_market_data (skill_name, week_start, city, posting_count, avg_
 ON CONFLICT DO NOTHING;
 
 -- ═══════════════════════════════════════════════════════════════
--- ✅ Schema ready! SkillSync AI database is production-ready.
--- Tables: 14 | Indexes: 25+ | RLS: Enabled on all tables
+-- ✅ Schema ready! SkillTen database is production-ready.
+-- Tables: 21 | Indexes: 40+ | RLS: Enabled on all tables
 -- ═══════════════════════════════════════════════════════════════
+

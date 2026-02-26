@@ -25,10 +25,16 @@ async function request<T = any>(endpoint: string, options: RequestInit = {}): Pr
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await fetch(`${BACKEND_URL}/api${endpoint}`, {
-        ...options,
-        headers,
-    });
+    let res: Response;
+    try {
+        res = await fetch(`${BACKEND_URL}/api${endpoint}`, {
+            ...options,
+            headers,
+        });
+    } catch (networkError) {
+        console.error('Network error — is the backend running?', networkError);
+        throw new ApiError('Cannot connect to server. Please check your internet connection or try again later.', 0);
+    }
 
     if (!res.ok) {
         const error = await res.json().catch(() => ({ detail: 'Something went wrong' }));
@@ -124,11 +130,23 @@ export const api = {
     getCompanyReviews: (slug: string) => request(`/companies/${slug}/reviews`),
 
     // ═══════════ NETWORK ═══════════
-    getConnections: () => request('/network/connections'),
+    getConnections: () => request('/connections/connections'),
 
-    findPeers: () => request('/network/peers'),
+    findPeers: () => request('/connections/peers'),
 
-    getCommunityPosts: () => request('/network/community/posts'),
+    connectPeer: (user_id: string) => request('/connections/connect', { method: 'POST', body: JSON.stringify({ user_id }) }),
+
+    disconnectPeer: (user_id: string) => request('/connections/disconnect', { method: 'DELETE', body: JSON.stringify({ user_id }) }),
+
+    getCommunityPosts: (category?: string) => request(`/community/posts${category ? `?category=${category}` : ''}`),
+
+    createCommunityPost: (data: { title: string; content: string; category?: string; tags?: string[] }) =>
+        request('/community/posts', { method: 'POST', body: JSON.stringify(data) }),
+
+    likePost: (post_id: string) => request(`/community/posts/${post_id}/like`, { method: 'POST' }),
+
+    addComment: (post_id: string, content: string) =>
+        request(`/community/posts/${post_id}/comment`, { method: 'POST', body: JSON.stringify({ content }) }),
 
     // ═══════════ RESUME ═══════════
     getResumes: () => request('/resume/'),
@@ -151,10 +169,10 @@ export const api = {
         request(`/notifications/?unread_only=${unread_only || false}`),
 
     markNotificationRead: (id: string) =>
-        request(`/notifications/${id}/read`, { method: 'PATCH' }),
+        request('/notifications/mark-read', { method: 'POST', body: JSON.stringify({ notification_id: id }) }),
 
     markAllRead: () =>
-        request('/notifications/read-all', { method: 'PATCH' }),
+        request('/notifications/mark-all-read', { method: 'POST' }),
 
     // ═══════════ CAMPUS ═══════════
     getColleges: () => request('/campus/colleges'),
@@ -212,9 +230,31 @@ export const api = {
     aiWellbeingCheck: (data: { signal_type: string; student_data?: any; positive_history?: string[] }) =>
         request('/ai/wellbeing-check', { method: 'POST', body: JSON.stringify(data) }),
 
+    // ═══════════ MOCK PLACEMENT DRIVE ═══════════
+    startMockDrive: (data: { target_company: string; target_role: string }) =>
+        request('/mock-drive/start', { method: 'POST', body: JSON.stringify(data) }),
+
+    submitMockRound: (data: { drive_id: string; round_number: number; answers: any[] }) =>
+        request('/mock-drive/submit-round', { method: 'POST', body: JSON.stringify(data) }),
+
+    getMockResults: (data: { drive_id: string; round_scores: any[] }) =>
+        request('/mock-drive/results', { method: 'POST', body: JSON.stringify(data) }),
+
     // ═══════════ BACKWARD COMPAT (old pages) ═══════════
     skillGapAnalysis: (data: { current_skills: string[]; target_career: string }) =>
         request('/ai/skill-gap', { method: 'POST', body: JSON.stringify(data) }),
+
+    // ═══════════ ACHIEVEMENTS ═══════════
+    getAchievements: () => request('/achievements/'),
+
+    // ═══════════ STREAK TRACKER ═══════════
+    getStreak: () => request('/tracker/'),
+    streakCheckIn: () => request('/tracker/check-in', { method: 'POST' }),
+    useStreakFreeze: () => request('/tracker/freeze', { method: 'POST', body: JSON.stringify({ use_freeze: true }) }),
+
+    // ═══════════ REFERRAL SYSTEM ═══════════
+    getReferrals: () => request('/referral/'),
+    applyReferral: (code: string) => request('/referral/apply', { method: 'POST', body: JSON.stringify({ ref_code: code }) }),
 };
 
 // Auth helpers

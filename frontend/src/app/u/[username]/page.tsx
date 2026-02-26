@@ -1,9 +1,83 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { ViyaScore, StreakCounter, SkillBadge, ActivityHeatmap, BadgeShelf } from '@/components/ui';
+
+// ─── Inline ProgressRing for Score ───
+function ScoreRing({ score, size = 96 }: { score: number; size?: number }) {
+    const radius = (size - 12) / 2;
+    const circ = 2 * Math.PI * radius;
+    const pct = Math.min(score, 100) / 100;
+    const color = score >= 80 ? '#22c55e' : score >= 50 ? '#eab308' : score >= 25 ? '#f97316' : '#ef4444';
+
+    return (
+        <div className="relative" style={{ width: size, height: size }}>
+            <svg width={size} height={size} className="st-progress-ring">
+                <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="#e2e8f0" strokeWidth="6" />
+                <motion.circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={color}
+                    strokeWidth="6" strokeLinecap="round"
+                    initial={{ strokeDashoffset: circ }}
+                    animate={{ strokeDashoffset: circ * (1 - pct) }}
+                    transition={{ duration: 1.2, ease: 'easeOut' }}
+                    strokeDasharray={circ}
+                />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <span className="text-2xl font-bold text-slate-900 tabular-nums">{score}</span>
+                <span className="text-[9px] text-slate-400 font-semibold uppercase">Score</span>
+            </div>
+        </div>
+    );
+}
+
+// ─── Inline Activity Heatmap (180-day GitHub style) ───
+function MiniHeatmap({ data = {}, days = 180 }: { data?: Record<string, number>; days?: number }) {
+    const cells = useMemo(() => {
+        const result: { date: string; count: number }[] = [];
+        const now = new Date();
+        for (let i = days - 1; i >= 0; i--) {
+            const d = new Date(now);
+            d.setDate(d.getDate() - i);
+            const key = d.toISOString().split('T')[0];
+            result.push({ date: key, count: data[key] || 0 });
+        }
+        return result;
+    }, [data, days]);
+
+    const getColor = (count: number) => {
+        if (count === 0) return 'bg-slate-100';
+        if (count === 1) return 'bg-indigo-200';
+        if (count <= 3) return 'bg-indigo-400';
+        return 'bg-indigo-600';
+    };
+
+    return (
+        <div className="flex flex-wrap gap-[3px]">
+            {cells.map((c, i) => (
+                <div key={i} className={`w-[10px] h-[10px] rounded-[2px] ${getColor(c.count)}`}
+                    title={`${c.date}: ${c.count} activities`}
+                />
+            ))}
+        </div>
+    );
+}
+
+// ─── Skill Badge ───
+function InlineSkillBadge({ skill, score, level }: { skill: string; score?: number; level?: string }) {
+    const levelColor = level === 'expert' ? 'bg-purple-100 text-purple-700 border-purple-200'
+        : level === 'advanced' ? 'bg-blue-100 text-blue-700 border-blue-200'
+            : level === 'intermediate' ? 'bg-green-100 text-green-700 border-green-200'
+                : 'bg-slate-100 text-slate-600 border-slate-200';
+
+    return (
+        <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium border ${levelColor}`}>
+            <span className="text-indigo-500 text-xs">✓</span>
+            {skill}
+            {score != null && <span className="text-xs opacity-60">{score}%</span>}
+        </span>
+    );
+}
 
 export default function PublicProfilePage() {
     const params = useParams();
@@ -11,6 +85,7 @@ export default function PublicProfilePage() {
     const [profile, setProfile] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [shareMsg, setShareMsg] = useState('');
 
     useEffect(() => {
         if (!username) return;
@@ -30,241 +105,308 @@ export default function PublicProfilePage() {
             });
     }, [username]);
 
+    const handleShare = async () => {
+        const url = window.location.href;
+        const text = `Check out ${profile?.display_name || username}'s verified career profile on SkillTen!`;
+        try {
+            if (navigator.share) {
+                await navigator.share({ title: `${profile?.display_name} on SkillTen`, text, url });
+            } else {
+                await navigator.clipboard.writeText(url);
+                setShareMsg('Link copied!');
+                setTimeout(() => setShareMsg(''), 2000);
+            }
+        } catch { /* user cancelled */ }
+    };
+
     if (loading) return (
         <div className="min-h-screen bg-slate-50">
-            {/* Skeleton */}
-            <div className="bg-gradient-to-br from-indigo-600 to-violet-700 h-48 animate-pulse" />
-            <div className="max-w-2xl mx-auto px-4 -mt-12 space-y-4">
+            <div className="bg-gradient-to-br from-indigo-600 to-violet-700 h-56" />
+            <div className="max-w-2xl mx-auto px-4 -mt-16 space-y-4">
                 <div className="flex items-end gap-4">
-                    <div className="w-24 h-24 bg-slate-200 rounded-3xl animate-pulse" />
+                    <div className="w-28 h-28 bg-white rounded-3xl shadow-xl animate-pulse" />
                     <div className="space-y-2 pb-2 flex-1">
-                        <div className="st-skeleton h-5 w-40" />
-                        <div className="st-skeleton h-3 w-24" />
+                        <div className="st-skeleton h-6 w-40" />
+                        <div className="st-skeleton h-4 w-24" />
                     </div>
                 </div>
-                <div className="grid grid-cols-4 gap-3">
-                    {[1, 2, 3, 4].map(i => <div key={i} className="st-skeleton h-20 rounded-xl" />)}
-                </div>
+                <div className="st-skeleton h-32 rounded-2xl" />
+                <div className="st-skeleton h-48 rounded-2xl" />
             </div>
         </div>
     );
 
     if (error || !profile) return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
-            <span className="text-5xl mb-4">🔍</span>
-            <p className="text-xl font-semibold text-slate-900 mb-2">Profile not found</p>
-            <p className="text-slate-500 mb-6">The user @{username} doesn&apos;t exist on SkillTen</p>
-            <Link href="/" className="st-btn-primary px-6">Go Home</Link>
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6">
+            <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
+                <span className="text-6xl block mb-4">🔍</span>
+                <h1 className="text-2xl font-bold text-slate-900 mb-2">Profile not found</h1>
+                <p className="text-slate-500 mb-8">The user @{username} doesn&apos;t exist on SkillTen yet.</p>
+                <div className="flex gap-3 justify-center">
+                    <Link href="/" className="st-btn-secondary px-6">Go Home</Link>
+                    <Link href="/signup" className="st-btn-primary px-6">Create Yours Free</Link>
+                </div>
+            </motion.div>
         </div>
     );
 
     const {
         display_name, archetype_name, skillten_score, college_name, target_role,
         streak_days, coding_stats, assessment_profile, badges, verified_skills,
-        activity_heatmap, score_trend, score_percentile, placement, bio,
+        activity_heatmap, score_percentile, placement, bio,
     } = profile;
 
     const tagline = archetype_name
-        ? `${archetype_name} | ${target_role || 'Career Explorer'}`
-        : target_role || 'SkillTen User';
+        ? `${archetype_name} · ${target_role || 'Career Explorer'}`
+        : target_role || 'SkillTen Member';
+
+    const codingTotal = (coding_stats?.easy || 0) + (coding_stats?.medium || 0) + (coding_stats?.hard || 0);
 
     return (
         <div className="min-h-screen bg-slate-50">
-            {/* Top nav */}
+            {/* ─── Top Navigation ─── */}
             <nav className="bg-white/95 backdrop-blur-lg border-b border-slate-200 px-6 py-3 sticky top-0 z-50">
                 <div className="max-w-2xl mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2">
                         <div className="w-7 h-7 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">ST</div>
                         <span className="text-base font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
                     </Link>
-                    <Link href="/signup" className="st-btn-primary text-sm py-2 px-4">Get SkillTen Free</Link>
+                    <div className="flex items-center gap-2">
+                        <button onClick={handleShare} className="text-sm text-slate-500 hover:text-indigo-600 transition-colors font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50">
+                            {shareMsg || '📤 Share'}
+                        </button>
+                        <Link href="/signup" className="st-btn-primary text-sm py-2 px-4">Join Free</Link>
+                    </div>
                 </div>
             </nav>
 
-            {/* Hero profile header */}
-            <div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 px-6 pt-12 pb-16 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/4" />
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/4" />
-                <div className="max-w-2xl mx-auto relative z-10 flex items-center gap-5">
-                    <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-                        className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center text-3xl font-bold shrink-0"
-                    >
-                        {display_name?.[0]?.toUpperCase() || '?'}
+            {/* ─── Hero Profile Header ─── */}
+            <div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 px-6 pt-14 pb-20 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/4" />
+                <div className="absolute top-1/2 right-1/4 w-20 h-20 bg-white/5 rounded-full animate-float" />
+                <div className="max-w-2xl mx-auto relative z-10">
+                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-5">
+                        <div className="w-24 h-24 bg-white/20 backdrop-blur-sm rounded-3xl flex items-center justify-center text-4xl font-bold shadow-lg shrink-0 border border-white/20">
+                            {display_name?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <div>
+                            <h1 className="text-3xl font-bold">{display_name}</h1>
+                            <p className="text-white/60 text-sm font-medium">@{username}</p>
+                            <p className="text-white/80 text-sm mt-1">{tagline}</p>
+                            {college_name && <p className="text-white/50 text-xs mt-0.5">🎓 {college_name}</p>}
+                        </div>
                     </motion.div>
-                    <div>
-                        <h1 className="text-2xl font-bold">{display_name}</h1>
-                        <p className="text-white/60 text-sm">@{username}</p>
-                        <p className="text-white/80 text-sm mt-1">{tagline}</p>
-                        {college_name && <p className="text-white/50 text-xs mt-0.5">🎓 {college_name}</p>}
-                    </div>
                 </div>
             </div>
 
-            {/* Score + Stats */}
-            <div className="max-w-2xl mx-auto px-4 -mt-8">
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl shadow-lg p-5 mb-6"
+            {/* ─── Score Card (overlapping hero) ─── */}
+            <div className="max-w-2xl mx-auto px-4 -mt-10">
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+                    className="bg-white rounded-2xl shadow-xl p-6 mb-6 border border-slate-100"
                 >
-                    <div className="flex items-start justify-between mb-4">
-                        <div>
-                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">SkillTen Score™</p>
-                            <ViyaScore
-                                score={skillten_score || 0}
-                                trend={score_trend}
-                                percentile={score_percentile}
-                                size="card"
-                            />
+                    <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center gap-5">
+                            <ScoreRing score={skillten_score || 0} />
+                            <div>
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">SkillTen Score™</p>
+                                {score_percentile && (
+                                    <p className="text-sm text-indigo-600 font-semibold mt-0.5">Top {100 - score_percentile}%</p>
+                                )}
+                                <p className="text-xs text-slate-400 mt-0.5">Verified by AI assessment</p>
+                            </div>
                         </div>
-                        <StreakCounter days={streak_days || 0} compact />
+                        <div className="text-right">
+                            <p className="text-3xl font-bold text-slate-900">{streak_days || 0}🔥</p>
+                            <p className="text-[10px] text-slate-400 uppercase font-semibold">Day Streak</p>
+                        </div>
                     </div>
+
                     <div className="grid grid-cols-4 gap-3">
                         {[
-                            { label: 'Problems', value: coding_stats?.total || 0 },
-                            { label: 'Streak', value: `${streak_days || 0}d` },
-                            { label: 'Badges', value: badges?.length || 0 },
-                            { label: 'Skills', value: verified_skills?.length || 0 },
+                            { label: 'Problems', value: codingTotal, icon: '💻' },
+                            { label: 'Streak', value: `${streak_days || 0}d`, icon: '🔥' },
+                            { label: 'Badges', value: badges?.length || 0, icon: '🏆' },
+                            { label: 'Skills', value: verified_skills?.length || 0, icon: '✓' },
                         ].map(stat => (
-                            <div key={stat.label} className="text-center">
+                            <div key={stat.label} className="text-center bg-slate-50 rounded-xl p-3">
                                 <p className="text-lg font-bold text-slate-900">{stat.value}</p>
-                                <p className="text-[10px] text-slate-400 uppercase">{stat.label}</p>
+                                <p className="text-[10px] text-slate-400 uppercase font-semibold">{stat.label}</p>
                             </div>
                         ))}
                     </div>
                 </motion.div>
             </div>
 
-            <div className="max-w-2xl mx-auto px-4 space-y-5 pb-12">
-
-                {/* Bio / Summary */}
+            <div className="max-w-2xl mx-auto px-4 space-y-5 pb-16">
+                {/* ─── Bio ─── */}
                 {(bio || assessment_profile?.summary) && (
-                    <section className="bg-white rounded-2xl p-5 shadow-sm">
+                    <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                        className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                    >
                         <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">About</h2>
                         <p className="text-sm text-slate-700 leading-relaxed">
                             {bio || assessment_profile?.summary || 'Career profile analysis complete.'}
                         </p>
-                    </section>
+                    </motion.section>
                 )}
 
-                {/* Activity Heatmap (Bible FE-05) */}
-                <section className="bg-white rounded-2xl p-5 shadow-sm">
-                    <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Activity</h2>
-                    <ActivityHeatmap data={activity_heatmap} days={180} />
-                    <p className="text-xs text-slate-400 mt-3 text-center">
-                        {streak_days || 0} day current streak · Consistent learner
-                    </p>
-                </section>
-
-                {/* Placement (if placed) */}
+                {/* ─── Placement Card ─── */}
                 {placement && (
-                    <motion.section
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
+                    <motion.section initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.25 }}
                         className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 shadow-sm border border-green-200"
                     >
-                        <h2 className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-3">🎉 Placed</h2>
+                        <h2 className="text-xs font-semibold text-green-700 uppercase tracking-wider mb-3">🎉 Placed!</h2>
                         <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center text-2xl">🏢</div>
+                            <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center text-2xl">🏢</div>
                             <div>
-                                <p className="font-bold text-slate-900">{placement.company}</p>
+                                <p className="font-bold text-slate-900 text-lg">{placement.company}</p>
                                 <p className="text-sm text-slate-600">{placement.role}</p>
-                                {placement.ctc_lpa && <p className="text-xs text-green-700 font-semibold">₹{placement.ctc_lpa} LPA</p>}
+                                {placement.ctc_lpa && <p className="text-xs text-green-700 font-semibold mt-0.5">₹{placement.ctc_lpa} LPA</p>}
                             </div>
                         </div>
                     </motion.section>
                 )}
 
-                {/* Verified Skills (Bible FE-05 — KEY differentiator) */}
+                {/* ─── Activity Heatmap ─── */}
+                <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                    className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                >
+                    <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Activity (180 days)</h2>
+                    <MiniHeatmap data={activity_heatmap} days={180} />
+                    <p className="text-xs text-slate-400 mt-3 text-center">
+                        {streak_days || 0} day streak · {codingTotal} problems solved
+                    </p>
+                </motion.section>
+
+                {/* ─── Verified Skills ─── */}
                 {verified_skills && verified_skills.length > 0 && (
-                    <section className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                            Verified Skills
-                        </h2>
-                        <p className="text-[10px] text-indigo-500 mb-4">✓ Quiz-tested, not self-claimed</p>
+                    <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
+                        className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                    >
+                        <div className="flex items-center justify-between mb-1">
+                            <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Verified Skills</h2>
+                            <span className="text-[10px] text-indigo-500 font-semibold">✓ Quiz-verified</span>
+                        </div>
+                        <p className="text-[10px] text-slate-400 mb-4">These skills are AI-tested, not self-claimed</p>
                         <div className="flex flex-wrap gap-2">
                             {verified_skills.map((skill: any, i: number) => (
-                                <SkillBadge
-                                    key={i}
-                                    skill={skill.name || skill}
-                                    score={skill.score}
-                                    verified={true}
-                                    level={skill.level}
+                                <InlineSkillBadge key={i} skill={skill.name || skill} score={skill.score} level={skill.level} />
+                            ))}
+                        </div>
+                    </motion.section>
+                )}
+
+                {/* ─── Coding Stats ─── */}
+                {coding_stats && codingTotal > 0 && (
+                    <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                        className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                    >
+                        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Coding Stats</h2>
+                        <div className="grid grid-cols-3 gap-4 text-center mb-4">
+                            <div className="bg-green-50 rounded-xl p-3">
+                                <p className="text-2xl font-bold text-green-600">{coding_stats.easy || 0}</p>
+                                <p className="text-xs text-green-600/80 font-medium">Easy</p>
+                            </div>
+                            <div className="bg-yellow-50 rounded-xl p-3">
+                                <p className="text-2xl font-bold text-yellow-600">{coding_stats.medium || 0}</p>
+                                <p className="text-xs text-yellow-600/80 font-medium">Medium</p>
+                            </div>
+                            <div className="bg-red-50 rounded-xl p-3">
+                                <p className="text-2xl font-bold text-red-600">{coding_stats.hard || 0}</p>
+                                <p className="text-xs text-red-600/80 font-medium">Hard</p>
+                            </div>
+                        </div>
+                        <div className="w-full h-3 bg-slate-100 rounded-full flex overflow-hidden">
+                            {[
+                                { val: coding_stats.easy || 0, color: 'bg-green-500' },
+                                { val: coding_stats.medium || 0, color: 'bg-yellow-500' },
+                                { val: coding_stats.hard || 0, color: 'bg-red-500' },
+                            ].map((seg, i) => (
+                                <motion.div key={i} className={`${seg.color} h-full`}
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${(seg.val / (codingTotal || 1)) * 100}%` }}
+                                    transition={{ duration: 0.8, delay: 0.5 + i * 0.15 }}
                                 />
                             ))}
                         </div>
-                    </section>
+                    </motion.section>
                 )}
 
-                {/* Coding Stats */}
-                {coding_stats && (
-                    <section className="bg-white rounded-2xl p-5 shadow-sm">
-                        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Coding</h2>
-                        <div className="grid grid-cols-3 gap-4 text-center mb-4">
-                            <div><p className="text-xl font-bold text-green-600">{coding_stats.easy || 0}</p><p className="text-xs text-slate-500">Easy</p></div>
-                            <div><p className="text-xl font-bold text-yellow-600">{coding_stats.medium || 0}</p><p className="text-xs text-slate-500">Medium</p></div>
-                            <div><p className="text-xl font-bold text-red-600">{coding_stats.hard || 0}</p><p className="text-xs text-slate-500">Hard</p></div>
-                        </div>
-                        <div className="w-full h-3 bg-slate-100 rounded-full flex overflow-hidden">
-                            {['bg-green-500', 'bg-yellow-500', 'bg-red-500'].map((color, i) => {
-                                const vals = [coding_stats.easy || 0, coding_stats.medium || 0, coding_stats.hard || 0];
-                                const total = vals.reduce((a: number, b: number) => a + b, 0) || 1;
-                                return <div key={i} className={`${color} h-full`} style={{ width: `${(vals[i] / total) * 100}%` }} />;
-                            })}
-                        </div>
-                    </section>
-                )}
-
-                {/* Badges */}
+                {/* ─── Badges ─── */}
                 {badges && badges.length > 0 && (
-                    <section className="bg-white rounded-2xl p-5 shadow-sm">
+                    <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
+                        className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                    >
                         <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Achievements</h2>
-                        <BadgeShelf badges={badges} />
-                    </section>
+                        <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
+                            {badges.map((badge: any, i: number) => (
+                                <motion.div key={i} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.5 + i * 0.08 }}
+                                    className="flex flex-col items-center gap-1 group"
+                                >
+                                    <span className="text-2xl group-hover:scale-125 transition-transform">{badge.icon || '🏅'}</span>
+                                    <span className="text-[10px] text-slate-500 font-medium text-center line-clamp-2">{badge.name}</span>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.section>
                 )}
 
-                {/* 4D Profile */}
+                {/* ─── 4D Career Profile ─── */}
                 {assessment_profile?.dimensions && (
-                    <section className="bg-white rounded-2xl p-5 shadow-sm">
+                    <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
+                        className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                    >
                         <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">4D Career Profile</h2>
                         <div className="grid grid-cols-2 gap-3">
                             {[
-                                { label: 'Analytical', value: assessment_profile.dimensions.analytical, color: 'bg-blue-500' },
-                                { label: 'Interpersonal', value: assessment_profile.dimensions.interpersonal, color: 'bg-pink-500' },
-                                { label: 'Creative', value: assessment_profile.dimensions.creative, color: 'bg-purple-500' },
-                                { label: 'Systematic', value: assessment_profile.dimensions.systematic, color: 'bg-emerald-500' },
+                                { label: 'Analytical', value: assessment_profile.dimensions.analytical, color: 'bg-blue-500', light: 'bg-blue-50', text: 'text-blue-700' },
+                                { label: 'Interpersonal', value: assessment_profile.dimensions.interpersonal, color: 'bg-pink-500', light: 'bg-pink-50', text: 'text-pink-700' },
+                                { label: 'Creative', value: assessment_profile.dimensions.creative, color: 'bg-purple-500', light: 'bg-purple-50', text: 'text-purple-700' },
+                                { label: 'Systematic', value: assessment_profile.dimensions.systematic, color: 'bg-emerald-500', light: 'bg-emerald-50', text: 'text-emerald-700' },
                             ].map(d => (
-                                <div key={d.label} className="bg-slate-50 rounded-xl p-3">
+                                <div key={d.label} className={`${d.light} rounded-xl p-4`}>
                                     <div className="flex items-center justify-between mb-2">
-                                        <span className="text-xs text-slate-600 font-medium">{d.label}</span>
-                                        <span className="text-xs font-bold text-slate-900">{d.value || 0}</span>
+                                        <span className={`text-xs ${d.text} font-semibold`}>{d.label}</span>
+                                        <span className="text-sm font-bold text-slate-900">{d.value || 0}%</span>
                                     </div>
-                                    <div className="w-full bg-slate-200 rounded-full h-1.5">
-                                        <motion.div
-                                            initial={{ width: 0 }}
-                                            animate={{ width: `${d.value || 0}%` }}
-                                            transition={{ duration: 1 }}
+                                    <div className="w-full bg-white/80 rounded-full h-2">
+                                        <motion.div initial={{ width: 0 }} animate={{ width: `${d.value || 0}%` }}
+                                            transition={{ duration: 1, delay: 0.6 }}
                                             className={`h-full ${d.color} rounded-full`}
                                         />
                                     </div>
                                 </div>
                             ))}
                         </div>
-                    </section>
+                    </motion.section>
                 )}
 
-                {/* Recruiter CTA */}
-                <div className="bg-indigo-600 rounded-2xl p-6 text-white text-center">
-                    <p className="font-semibold mb-1">Interested in {display_name?.split(' ')[0]}?</p>
-                    <p className="text-sm text-indigo-200 mb-4">This profile shows verified data — not self-claimed skills</p>
-                    <Link href="/signup" className="bg-white text-indigo-600 px-6 py-2.5 rounded-lg font-semibold text-sm inline-block hover:bg-indigo-50 transition-colors">
-                        Contact via SkillTen →
-                    </Link>
+                {/* ─── Recruiter CTA ─── */}
+                <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}
+                    className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-2xl p-8 text-white text-center"
+                >
+                    <p className="text-lg font-bold mb-1">Interested in {display_name?.split(' ')[0]}?</p>
+                    <p className="text-sm text-indigo-200 mb-5">This profile shows quiz-verified data — not self-claimed skills</p>
+                    <div className="flex gap-3 justify-center">
+                        <button onClick={handleShare} className="bg-white/20 backdrop-blur-sm text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-white/30 transition-colors">
+                            📤 Share Profile
+                        </button>
+                        <Link href="/signup" className="bg-white text-indigo-600 px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-50 transition-colors">
+                            Create Yours Free →
+                        </Link>
+                    </div>
+                </motion.div>
+
+                {/* ─── SkillTen watermark ─── */}
+                <div className="text-center pt-4 pb-8">
+                    <p className="text-xs text-slate-400">
+                        Verified career profile on{' '}
+                        <Link href="/" className="text-indigo-600 font-semibold hover:underline">SkillTen</Link>
+                        {' '}— The last career profile you&apos;ll ever need.
+                    </p>
                 </div>
             </div>
-
-            {/* Footer */}
-            <footer className="bg-white border-t border-slate-200 py-6 px-6 text-center text-xs text-slate-400">
-                <p>Powered by <Link href="/" className="text-indigo-600 font-semibold">SkillTen</Link> — The last career profile you&apos;ll ever need.</p>
-            </footer>
         </div>
     );
 }

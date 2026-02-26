@@ -10,6 +10,7 @@ import os
 
 from database import init_db, SessionLocal
 from routes import master_router
+from websocket_hub import router as ws_router
 
 
 @asynccontextmanager
@@ -75,6 +76,7 @@ app.add_middleware(
 )
 
 app.include_router(master_router, prefix="/api")
+app.include_router(ws_router, prefix="/api", tags=["WebSocket"])
 
 
 @app.get("/")
@@ -82,8 +84,10 @@ def root():
     return {
         "platform": "SkillTen",
         "tagline": "AI Career Intelligence Platform",
-        "version": "2.0.0",
+        "version": "2.1.0",
         "docs": "/docs",
+        "websocket": "/api/ws/{user_id}",
+        "features": ["Google OAuth", "WebSocket Notifications", "Email Service", "4 Languages"]
     }
 
 

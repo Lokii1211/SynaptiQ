@@ -178,9 +178,9 @@ export default function Home() {
           </div>
           <p className="text-xs text-slate-500">© 2026 SkillTen. Built with ❤️ for Indian students.</p>
           <div className="flex gap-6 text-xs">
-            <span className="hover:text-white cursor-pointer transition-colors">Privacy</span>
-            <span className="hover:text-white cursor-pointer transition-colors">Terms</span>
-            <span className="hover:text-white cursor-pointer transition-colors">Contact</span>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/help" className="hover:text-white transition-colors">Help</Link>
           </div>
         </div>
       </footer>

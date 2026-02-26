@@ -22,6 +22,7 @@ const SIDE_NAV = [
             { href: '/courses', icon: '📖', label: 'Free Courses' },
             { href: '/daily', icon: '📅', label: 'Daily Quests' },
             { href: '/challenges', icon: '🏆', label: 'Challenges' },
+            { href: '/achievements', icon: '🎖️', label: 'Achievements' },
         ]
     },
     {
@@ -32,6 +33,7 @@ const SIDE_NAV = [
             { href: '/company-intel', icon: '🏢', label: 'Companies' },
             { href: '/negotiate', icon: '💰', label: 'Negotiate' },
             { href: '/simulator', icon: '🎭', label: 'Mock Interview' },
+            { href: '/mock-drive', icon: '🏢', label: 'Mock Drive' },
             { href: '/side-income', icon: '💸', label: 'Side Income' },
         ]
     },
@@ -104,6 +106,12 @@ export function SideNav() {
             <div className="border-t border-slate-100 p-4">
                 <Link href="/notifications" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
                     <span>🔔</span><span>Notifications</span>
+                </Link>
+                <Link href="/refer" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
+                    <span>🎁</span><span>Refer & Earn</span>
+                </Link>
+                <Link href="/help" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
+                    <span>❓</span><span>Help Center</span>
                 </Link>
                 <Link href="/settings" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
                     <span>⚙️</span><span>Settings</span>

@@ -26,8 +26,9 @@
   --radius: 12px;
 }
 
+/* System preference dark mode */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --background: #0F172A;
     --foreground: #f8fafc;
     --bg-primary: #0F172A;
@@ -40,6 +41,51 @@
     --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.4);
   }
+}
+
+/* Manual dark mode toggle via class */
+:root.dark {
+  --background: #0F172A;
+  --foreground: #f8fafc;
+  --bg-primary: #0F172A;
+  --bg-secondary: #1E293B;
+  --bg-tertiary: #334155;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #64748b;
+  --border-color: #334155;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.4);
+  --accent-light: #1e1b4b;
+}
+
+:root.dark .st-card,
+:root.dark .bg-white {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+:root.dark .bg-slate-50 {
+  background-color: var(--bg-primary) !important;
+}
+
+:root.dark .text-slate-900 {
+  color: var(--text-primary) !important;
+}
+
+:root.dark .text-slate-700,
+:root.dark .text-slate-600 {
+  color: var(--text-secondary) !important;
+}
+
+:root.dark .text-slate-500,
+:root.dark .text-slate-400 {
+  color: var(--text-tertiary) !important;
+}
+
+:root.dark .border-slate-200,
+:root.dark .border-slate-100 {
+  border-color: var(--border-color) !important;
 }
 
 * {
