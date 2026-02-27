@@ -209,12 +209,88 @@ export default function CodingProblemPage() {
                         <div className="p-4">
                             {result && (
                                 <div className="mb-4">
-                                    <h4 className="text-sm font-semibold text-white mb-2">
-                                        {result.status === 'accepted' ? '✅ Accepted' : result.status === 'error' ? '❌ Error' : `⚠️ ${result.status}`}
-                                    </h4>
-                                    <pre className="text-xs text-slate-300 font-mono whitespace-pre-wrap bg-slate-900 rounded-lg p-3">
-                                        {result.message || result.output || JSON.stringify(result, null, 2)}
-                                    </pre>
+                                    {/* Status header */}
+                                    <div className={`flex items-center gap-3 mb-3 px-4 py-3 rounded-xl ${result.status === 'accepted' ? 'bg-emerald-500/10 border border-emerald-500/20' :
+                                            result.status === 'wrong_answer' ? 'bg-amber-500/10 border border-amber-500/20' :
+                                                result.status === 'error' ? 'bg-red-500/10 border border-red-500/20' :
+                                                    'bg-slate-700/50 border border-slate-600'
+                                        }`}>
+                                        <span className="text-2xl">
+                                            {result.status === 'accepted' ? '✅' : result.status === 'wrong_answer' ? '⚠️' : result.status === 'error' ? '❌' : '⏱️'}
+                                        </span>
+                                        <div>
+                                            <p className={`font-bold text-sm ${result.status === 'accepted' ? 'text-emerald-400' :
+                                                    result.status === 'wrong_answer' ? 'text-amber-400' :
+                                                        result.status === 'error' ? 'text-red-400' : 'text-slate-300'
+                                                }`}>
+                                                {result.status === 'accepted' ? 'Accepted!' :
+                                                    result.status === 'wrong_answer' ? 'Wrong Answer' :
+                                                        result.status === 'error' ? 'Error' :
+                                                            result.status?.replace(/_/g, ' ')?.replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Unknown'}
+                                            </p>
+                                            <p className="text-[11px] text-slate-500">
+                                                {result.status === 'accepted' ? 'All test cases passed! Nice work 🎉' :
+                                                    result.status === 'wrong_answer' ? 'Some test cases failed. Review your logic.' :
+                                                        result.message || 'Check your code and try again.'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Stats grid */}
+                                    {(result.test_cases_total || result.runtime_ms !== undefined) && (
+                                        <div className="grid grid-cols-3 gap-3 mb-3">
+                                            {/* Test cases */}
+                                            {result.test_cases_total > 0 && (
+                                                <div className="bg-slate-900 rounded-xl p-3 text-center">
+                                                    <p className="text-lg font-bold text-white tabular-nums">
+                                                        {result.test_cases_passed}<span className="text-slate-500 text-sm">/{result.test_cases_total}</span>
+                                                    </p>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5">Test Cases</p>
+                                                    {/* Progress bar */}
+                                                    <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+                                                        <div className={`h-full rounded-full transition-all duration-500 ${result.test_cases_passed === result.test_cases_total ? 'bg-emerald-400' : 'bg-amber-400'
+                                                            }`} style={{ width: `${(result.test_cases_passed / result.test_cases_total) * 100}%` }} />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {/* Runtime */}
+                                            {result.runtime_ms !== undefined && (
+                                                <div className="bg-slate-900 rounded-xl p-3 text-center">
+                                                    <p className="text-lg font-bold text-white tabular-nums">
+                                                        {result.runtime_ms}<span className="text-slate-500 text-sm">ms</span>
+                                                    </p>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5">Runtime</p>
+                                                    <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+                                                        <div className="h-full bg-indigo-400 rounded-full" style={{ width: `${Math.min((result.runtime_ms / 1000) * 100, 100)}%` }} />
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {/* Memory */}
+                                            {result.memory_mb !== undefined && (
+                                                <div className="bg-slate-900 rounded-xl p-3 text-center">
+                                                    <p className="text-lg font-bold text-white tabular-nums">
+                                                        {result.memory_mb}<span className="text-slate-500 text-sm">MB</span>
+                                                    </p>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5">Memory</p>
+                                                    <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+                                                        <div className="h-full bg-violet-400 rounded-full" style={{ width: `${Math.min((result.memory_mb / 50) * 100, 100)}%` }} />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Error message */}
+                                    {result.message && result.status === 'error' && (
+                                        <pre className="text-xs text-red-300 font-mono whitespace-pre-wrap bg-red-900/20 rounded-lg p-3 border border-red-900/30">
+                                            {result.message}
+                                        </pre>
+                                    )}
+
+                                    {/* Submission ID */}
+                                    {result.submission_id && (
+                                        <p className="text-[10px] text-slate-600 mt-2">ID: {result.submission_id}</p>
+                                    )}
                                 </div>
                             )}
                             {aiReview && !aiReview.error && (
