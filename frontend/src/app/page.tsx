@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { auth } from '@/lib/api';
+import { Logo } from '@/components/brand/Logo';
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0);
@@ -53,10 +54,7 @@ export default function Home() {
       {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-100 shadow-sm">
         <div className="max-w-6xl mx-auto flex items-center justify-between px-5 py-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md shadow-indigo-200">ST</div>
-            <span className="text-lg font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
-          </div>
+          <Logo size="md" href="/" />
           <div className="flex items-center gap-3">
             <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden sm:block">Sign In</Link>
             <Link href="/signup" className="st-btn-primary text-sm py-2.5 px-5">Start Free Assessment</Link>
@@ -76,7 +74,7 @@ export default function Home() {
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold bg-indigo-50 text-indigo-700 px-3.5 py-1.5 rounded-full mb-6 border border-indigo-100">
               🇮🇳 Built for Indian Students
             </span>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight st-font-heading">
               Find your career.<br />
               <span className="st-gradient-text">Build it. Get placed.</span>
             </h1>
@@ -296,9 +294,8 @@ export default function Home() {
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">ST</div>
-                <span className="text-sm font-bold text-white">Skill<span className="text-indigo-400">Ten</span></span>
+              <div className="mb-4">
+                <Logo size="sm" />
               </div>
               <p className="text-xs text-slate-500 leading-relaxed">AI Career Intelligence Platform built for Indian students. Discover · Plan · Achieve.</p>
             </div>

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/lib/store/auth.store';
 import { auth } from '@/lib/api';
+import { Logo } from '@/components/brand/Logo';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
 
@@ -37,14 +38,11 @@ export default function LoginPage() {
             <div className="flex-1 flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-lg mx-auto w-full">
                 <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 mb-8">
-                        <div className="w-9 h-9 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-sm">
-                            ST
-                        </div>
-                        <span className="text-xl font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
-                    </Link>
+                    <div className="mb-8">
+                        <Logo size="md" href="/" />
+                    </div>
 
-                    <h1 className="text-2xl font-bold text-slate-900 mb-1">Welcome back</h1>
+                    <h1 className="text-2xl font-bold text-slate-900 mb-1 st-font-heading">Welcome back</h1>
                     <p className="text-slate-500 text-sm mb-6">Continue your career journey</p>
 
                     {/* Google Sign-in Button */}

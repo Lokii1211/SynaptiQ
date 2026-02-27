@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth.store';
+import { Logo } from '@/components/brand/Logo';
 
 const NAV_ITEMS = [
     {
@@ -82,12 +83,7 @@ export function TopBar() {
             <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 lg:px-6 h-14" ref={dropdownRef}>
 
                 {/* Left: Logo */}
-                <Link href={user ? '/dashboard' : '/'} className="flex items-center gap-2 shrink-0">
-                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-md shadow-indigo-200">
-                        ST
-                    </div>
-                    <span className="text-lg font-bold text-slate-900 hidden sm:block">Skill<span className="text-indigo-600">Ten</span></span>
-                </Link>
+                <Logo size="sm" href={user ? '/dashboard' : '/'} />
 
                 {/* Center: Nav items (desktop only) */}
                 <nav className="hidden lg:flex items-center gap-1 mx-6">

@@ -13,17 +13,21 @@
   --text-primary: #0F172A;
   --text-secondary: #475569;
   --text-tertiary: #94a3b8;
-  --accent-primary: #6366F1;
-  --accent-hover: #4F46E5;
+  --accent-primary: #4F46E5;
+  --accent-secondary: #7C3AED;
+  --accent-hover: #4338CA;
   --accent-light: #EEF2FF;
   --border-color: #e2e8f0;
-  --success: #22c55e;
-  --warning: #eab308;
+  --success: #10b981;
+  --warning: #f59e0b;
   --danger: #ef4444;
   --info: #0ea5e9;
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
   --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.04);
-  --radius: 12px;
+  --radius: 14px;
+  --font-heading: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
 /* System preference dark mode */
@@ -179,11 +183,22 @@ body {
   }
 
   .st-gradient-text {
-    @apply bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent;
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #4F46E5, #7C3AED, #A855F7);
   }
 
   .st-heading {
     @apply text-2xl font-bold text-slate-900 tracking-tight;
+    font-family: var(--font-heading);
+  }
+
+  .st-heading-lg {
+    @apply text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight;
+    font-family: var(--font-heading);
+  }
+
+  .st-font-heading {
+    font-family: var(--font-heading);
   }
 }
 
