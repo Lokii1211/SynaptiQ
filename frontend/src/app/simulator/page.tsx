@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { SideNav } from '@/components/layout/SideNav';
 
 type Phase = 'setup' | 'interview' | 'feedback';
 type InterviewType = 'technical' | 'hr' | 'behavioral' | 'system-design';
@@ -174,8 +173,7 @@ export default function SimulatorPage() {
     const avgScore = scores.length ? Math.round(scores.reduce((a, s) => a + s.score, 0) / scores.length) : 0;
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
-            <SideNav />
+        <div className="min-h-screen bg-slate-50">
             <div className="flex-1 flex flex-col">
                 <TopBar />
                 <main className="flex-1 pb-24 md:pb-8">

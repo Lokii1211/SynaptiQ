@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { SideNav } from '@/components/layout/SideNav';
 import Link from 'next/link';
 
 interface Milestone {
@@ -110,7 +109,6 @@ export default function RoadmapPage() {
     return (
         <div className="min-h-screen bg-slate-950 text-white">
             <TopBar />
-            <SideNav />
             <main className="md:ml-56 pb-24 md:pb-8">
                 {/* Header */}
                 <div className="bg-gradient-to-br from-indigo-600 to-violet-700 px-6 py-8">

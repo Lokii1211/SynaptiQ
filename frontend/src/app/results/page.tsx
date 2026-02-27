@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { SideNav } from '@/components/layout/SideNav';
 
 interface AssessmentResult {
     archetype: { code: string; name: string; description: string; icon: string };

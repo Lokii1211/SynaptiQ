@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { SideNav } from '@/components/layout/SideNav';
 import Link from 'next/link';
 
 interface Post {
@@ -89,8 +88,7 @@ export default function CommunityPage() {
     };
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
-            <SideNav />
+        <div className="min-h-screen bg-slate-50">
             <div className="flex-1 flex flex-col">
                 <TopBar />
                 <main className="flex-1 pb-24 md:pb-8">
