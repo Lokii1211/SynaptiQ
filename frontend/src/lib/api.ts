@@ -101,8 +101,15 @@ export const api = {
 
     getCodingProblem: (slug: string) => request(`/coding/problems/${slug}`),
 
+    runCode: (slug: string, data: { language: string; code: string; custom_input?: string }) =>
+        request(`/coding/problems/${slug}/run`, { method: 'POST', body: JSON.stringify(data) }),
+
     submitCode: (slug: string, data: { language: string; code: string }) =>
         request(`/coding/problems/${slug}/submit`, { method: 'POST', body: JSON.stringify(data) }),
+
+    getSubmissions: (slug: string) => request(`/coding/problems/${slug}/submissions`),
+
+    getSubmissionCode: (submissionId: string) => request(`/coding/submissions/${submissionId}/code`),
 
     getCodingStats: () => request('/coding/stats/me'),
 

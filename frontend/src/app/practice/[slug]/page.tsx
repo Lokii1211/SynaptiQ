@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
 import { difficultyColor } from '@/lib/utils/india';
 
@@ -15,6 +15,9 @@ const LANGUAGES = [
     { id: 'cpp', label: 'C++', default: '// Write your solution here\n#include <bits/stdc++.h>\nusing namespace std;\n\nint main() {\n    \n    return 0;\n}\n' },
 ];
 
+type ResultTab = 'testcase' | 'output' | 'submissions';
+type PanelTab = 'problem' | 'code' | 'results'; // mobile
+
 export default function CodingProblemPage() {
     const params = useParams();
     const slug = params?.slug as string;
@@ -23,9 +26,17 @@ export default function CodingProblemPage() {
     const [language, setLanguage] = useState('python');
     const [code, setCode] = useState(LANGUAGES[0].default);
     const [submitting, setSubmitting] = useState(false);
+    const [running, setRunning] = useState(false);
     const [result, setResult] = useState<any>(null);
+    const [runResult, setRunResult] = useState<any>(null);
     const [aiReview, setAiReview] = useState<any>(null);
     const [showDescription, setShowDescription] = useState(true);
+    const [resultTab, setResultTab] = useState<ResultTab>('testcase');
+    const [customInput, setCustomInput] = useState('');
+    const [showCustomInput, setShowCustomInput] = useState(false);
+    const [submissions, setSubmissions] = useState<any[]>([]);
+    const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+    const [mobilePanel, setMobilePanel] = useState<PanelTab>('problem');
 
     useEffect(() => {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
@@ -42,10 +53,33 @@ export default function CodingProblemPage() {
         setCode(langDef?.default || '');
     };
 
+    // ─── RUN (test, no save) ───
+    const handleRun = async () => {
+        setRunning(true);
+        setRunResult(null);
+        setResult(null);
+        setResultTab('testcase');
+        try {
+            const data: any = { language, code };
+            if (showCustomInput && customInput.trim()) {
+                data.custom_input = customInput;
+            }
+            const res = await api.runCode(slug, data);
+            setRunResult(res);
+        } catch (e: any) {
+            setRunResult({ mode: 'error', error: e.message });
+        } finally {
+            setRunning(false);
+        }
+    };
+
+    // ─── SUBMIT (graded, saved) ───
     const handleSubmit = async () => {
         setSubmitting(true);
         setResult(null);
+        setRunResult(null);
         setAiReview(null);
+        setResultTab('testcase');
         try {
             const res = await api.submitCode(slug, { language, code });
             setResult(res);
@@ -56,6 +90,7 @@ export default function CodingProblemPage() {
         }
     };
 
+    // ─── AI Review ───
     const handleAiReview = async () => {
         try {
             const review = await api.aiCodeReview({ code, language, problem_title: problem?.title });
@@ -64,6 +99,22 @@ export default function CodingProblemPage() {
             setAiReview({ error: e.message });
         }
     };
+
+    // ─── Load submissions ───
+    const loadSubmissions = async () => {
+        setLoadingSubmissions(true);
+        try {
+            const data = await api.getSubmissions(slug);
+            setSubmissions(data.submissions || []);
+        } catch { setSubmissions([]); }
+        finally { setLoadingSubmissions(false); }
+    };
+
+    useEffect(() => {
+        if (resultTab === 'submissions' && submissions.length === 0) {
+            loadSubmissions();
+        }
+    }, [resultTab]);
 
     if (loading) return (
         <div className="min-h-screen bg-slate-900 flex items-center justify-center">
@@ -77,21 +128,34 @@ export default function CodingProblemPage() {
         </div>
     );
 
+    const hasResult = result || runResult;
+
     return (
         <div className="min-h-screen bg-slate-900 flex flex-col md:flex-row">
-            {/* Left: Problem description */}
-            <div className={`${showDescription ? 'block' : 'hidden'} md:block md:w-[45%] lg:w-[40%] bg-slate-900 border-r border-slate-700 overflow-y-auto h-screen`}>
+
+            {/* ═══════ MOBILE TAB BAR ═══════ */}
+            <div className="md:hidden flex bg-slate-800 border-b border-slate-700">
+                {(['problem', 'code', 'results'] as PanelTab[]).map(tab => (
+                    <button key={tab} onClick={() => setMobilePanel(tab)}
+                        className={`flex-1 py-3 text-xs font-semibold uppercase tracking-wider transition-colors ${mobilePanel === tab ? 'text-indigo-400 border-b-2 border-indigo-400 bg-slate-800' : 'text-slate-500'
+                            }`}>
+                        {tab === 'problem' ? '📄 Problem' : tab === 'code' ? '💻 Code' : '▶ Results'}
+                    </button>
+                ))}
+            </div>
+
+            {/* ═══════ LEFT: Problem Description ═══════ */}
+            <div className={`${mobilePanel === 'problem' ? 'block' : 'hidden'} md:block md:w-[45%] lg:w-[40%] bg-slate-900 border-r border-slate-700 overflow-y-auto h-[calc(100vh-48px)] md:h-screen`}>
                 <div className="p-6">
-                    {/* Header */}
                     <div className="flex items-center gap-3 mb-4">
-                        <button onClick={() => window.history.back()} className="text-slate-400 hover:text-white transition-colors">
+                        <button onClick={() => window.history.back()} className="text-slate-400 hover:text-white transition-colors text-sm">
                             ← Back
                         </button>
                     </div>
 
-                    <h1 className="text-xl font-bold text-white mb-3">{problem.title}</h1>
+                    <h1 className="text-xl font-bold text-white mb-3 st-font-heading">{problem.title}</h1>
 
-                    <div className="flex gap-2 mb-6">
+                    <div className="flex flex-wrap gap-2 mb-6">
                         <span className={`text-xs px-2.5 py-1 rounded-md font-medium border ${difficultyColor(problem.difficulty)}`}>
                             {problem.difficulty}
                         </span>
@@ -104,7 +168,7 @@ export default function CodingProblemPage() {
 
                     {/* Description */}
                     <div className="prose prose-invert prose-sm max-w-none mb-6">
-                        <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">{problem.description}</p>
+                        <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">{problem.problem_statement || problem.description}</p>
                     </div>
 
                     {/* Examples */}
@@ -142,44 +206,55 @@ export default function CodingProblemPage() {
                             ))}
                         </div>
                     )}
+
+                    {/* Hints */}
+                    {problem.hints && problem.hints.length > 0 && (
+                        <div className="mt-6">
+                            <h3 className="text-sm font-semibold text-slate-400 uppercase mb-2">Hints</h3>
+                            {problem.hints.map((hint: string, i: number) => (
+                                <details key={i} className="mb-2">
+                                    <summary className="text-sm text-indigo-400 cursor-pointer hover:text-indigo-300">💡 Hint {i + 1}</summary>
+                                    <p className="text-sm text-slate-400 mt-1 ml-4">{hint}</p>
+                                </details>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Right: Editor */}
-            <div className="flex-1 flex flex-col h-screen">
-                {/* Toolbar */}
-                <div className="bg-slate-800 border-b border-slate-700 px-4 py-2 flex items-center justify-between">
+            {/* ═══════ RIGHT: Editor + Results ═══════ */}
+            <div className={`${mobilePanel === 'problem' ? 'hidden md:flex' : 'flex'} flex-1 flex-col h-[calc(100vh-48px)] md:h-screen`}>
+
+                {/* ─── Toolbar ─── */}
+                <div className="bg-slate-800 border-b border-slate-700 px-4 py-2 flex items-center justify-between flex-shrink-0">
                     <div className="flex items-center gap-3">
                         <select value={language} onChange={(e) => handleLanguageChange(e.target.value)}
-                            className="bg-slate-700 text-white text-sm px-3 py-1.5 rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
+                            className="bg-slate-700 text-white text-sm px-3 py-1.5 rounded-lg border border-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             {LANGUAGES.map(l => <option key={l.id} value={l.id}>{l.label}</option>)}
                         </select>
-                        {/* Mobile toggle */}
-                        <button onClick={() => setShowDescription(!showDescription)}
-                            className="md:hidden text-sm text-slate-400 hover:text-white"
-                        >
-                            {showDescription ? '📝 Editor' : '📖 Problem'}
-                        </button>
                     </div>
                     <div className="flex items-center gap-2">
                         <button onClick={handleAiReview}
-                            className="text-xs bg-violet-600 hover:bg-violet-700 text-white px-3 py-1.5 rounded-lg transition-colors"
-                        >
+                            className="text-xs bg-violet-600 hover:bg-violet-700 text-white px-3 py-1.5 rounded-lg transition-colors hidden sm:block">
                             🤖 AI Review
                         </button>
-                        <button onClick={handleSubmit} disabled={submitting}
-                            className="text-sm bg-green-600 hover:bg-green-700 text-white px-5 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-2"
-                        >
-                            {submitting ? (
+                        <button onClick={handleRun} disabled={running || submitting}
+                            className="text-sm bg-slate-600 hover:bg-slate-500 text-white px-4 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5">
+                            {running ? (
                                 <><span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />Running...</>
-                            ) : '▶ Submit'}
+                            ) : '▶ Run'}
+                        </button>
+                        <button onClick={handleSubmit} disabled={submitting || running}
+                            className="text-sm bg-green-600 hover:bg-green-700 text-white px-5 py-1.5 rounded-lg font-medium transition-colors disabled:opacity-50 flex items-center gap-1.5">
+                            {submitting ? (
+                                <><span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />Submitting...</>
+                            ) : '✓ Submit'}
                         </button>
                     </div>
                 </div>
 
-                {/* Monaco Editor */}
-                <div className="flex-1">
+                {/* ─── Code Editor (shows always on desktop, only on 'code'/'results' tab on mobile) ─── */}
+                <div className={`${mobilePanel === 'results' ? 'hidden md:block' : ''} flex-1 min-h-0`}>
                     <MonacoEditor
                         height="100%"
                         language={language}
@@ -197,108 +272,249 @@ export default function CodingProblemPage() {
                             wordWrap: 'on',
                             suggestOnTriggerCharacters: true,
                             quickSuggestions: true,
+                            folding: true,
+                            autoClosingBrackets: 'always',
+                            autoClosingQuotes: 'always',
+                            formatOnPaste: true,
                         }}
                     />
                 </div>
 
-                {/* Results panel */}
-                {(result || aiReview) && (
-                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }}
-                        className="bg-slate-800 border-t border-slate-700 overflow-y-auto max-h-[40vh]"
-                    >
-                        <div className="p-4">
-                            {result && (
-                                <div className="mb-4">
-                                    {/* Status header */}
-                                    <div className={`flex items-center gap-3 mb-3 px-4 py-3 rounded-xl ${result.status === 'accepted' ? 'bg-emerald-500/10 border border-emerald-500/20' :
-                                            result.status === 'wrong_answer' ? 'bg-amber-500/10 border border-amber-500/20' :
-                                                result.status === 'error' ? 'bg-red-500/10 border border-red-500/20' :
-                                                    'bg-slate-700/50 border border-slate-600'
-                                        }`}>
-                                        <span className="text-2xl">
-                                            {result.status === 'accepted' ? '✅' : result.status === 'wrong_answer' ? '⚠️' : result.status === 'error' ? '❌' : '⏱️'}
-                                        </span>
-                                        <div>
-                                            <p className={`font-bold text-sm ${result.status === 'accepted' ? 'text-emerald-400' :
-                                                    result.status === 'wrong_answer' ? 'text-amber-400' :
-                                                        result.status === 'error' ? 'text-red-400' : 'text-slate-300'
-                                                }`}>
-                                                {result.status === 'accepted' ? 'Accepted!' :
-                                                    result.status === 'wrong_answer' ? 'Wrong Answer' :
-                                                        result.status === 'error' ? 'Error' :
-                                                            result.status?.replace(/_/g, ' ')?.replace(/\b\w/g, (l: string) => l.toUpperCase()) || 'Unknown'}
-                                            </p>
-                                            <p className="text-[11px] text-slate-500">
-                                                {result.status === 'accepted' ? 'All test cases passed! Nice work 🎉' :
-                                                    result.status === 'wrong_answer' ? 'Some test cases failed. Review your logic.' :
-                                                        result.message || 'Check your code and try again.'}
-                                            </p>
-                                        </div>
-                                    </div>
+                {/* ─── Custom Input Toggle ─── */}
+                <div className="bg-slate-800 border-t border-slate-700 px-4 py-1.5 flex items-center gap-3 flex-shrink-0">
+                    <button onClick={() => setShowCustomInput(!showCustomInput)}
+                        className={`text-xs px-3 py-1 rounded-md transition-colors ${showCustomInput ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-400 hover:text-white'}`}>
+                        {showCustomInput ? '✓ Custom Input' : '+ Custom Input'}
+                    </button>
+                    {showCustomInput && (
+                        <span className="text-[10px] text-slate-500">Enter your test input below → click Run</span>
+                    )}
+                </div>
 
-                                    {/* Stats grid */}
-                                    {(result.test_cases_total || result.runtime_ms !== undefined) && (
-                                        <div className="grid grid-cols-3 gap-3 mb-3">
-                                            {/* Test cases */}
-                                            {result.test_cases_total > 0 && (
-                                                <div className="bg-slate-900 rounded-xl p-3 text-center">
-                                                    <p className="text-lg font-bold text-white tabular-nums">
-                                                        {result.test_cases_passed}<span className="text-slate-500 text-sm">/{result.test_cases_total}</span>
-                                                    </p>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5">Test Cases</p>
-                                                    {/* Progress bar */}
-                                                    <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
-                                                        <div className={`h-full rounded-full transition-all duration-500 ${result.test_cases_passed === result.test_cases_total ? 'bg-emerald-400' : 'bg-amber-400'
-                                                            }`} style={{ width: `${(result.test_cases_passed / result.test_cases_total) * 100}%` }} />
+                {/* ─── Custom Input Area ─── */}
+                <AnimatePresence>
+                    {showCustomInput && (
+                        <motion.div initial={{ height: 0 }} animate={{ height: 100 }} exit={{ height: 0 }} className="overflow-hidden flex-shrink-0">
+                            <textarea
+                                value={customInput}
+                                onChange={(e) => setCustomInput(e.target.value)}
+                                placeholder="Enter your custom test input here..."
+                                className="w-full h-full bg-slate-900 text-slate-300 text-sm font-mono p-3 resize-none border-t border-slate-700 focus:outline-none placeholder:text-slate-600"
+                            />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* ═══════ RESULTS PANEL ═══════ */}
+                {(hasResult || aiReview || mobilePanel === 'results') && (
+                    <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }}
+                        className="bg-slate-800 border-t border-slate-700 overflow-y-auto max-h-[45vh] md:max-h-[40vh] flex-shrink-0">
+
+                        {/* Result Tabs */}
+                        <div className="flex border-b border-slate-700 px-2 sticky top-0 bg-slate-800 z-10">
+                            {[
+                                { key: 'testcase' as ResultTab, label: 'Test Cases', icon: '📋' },
+                                { key: 'output' as ResultTab, label: 'Output', icon: '📤' },
+                                { key: 'submissions' as ResultTab, label: 'Submissions', icon: '📜' },
+                            ].map(tab => (
+                                <button key={tab.key} onClick={() => setResultTab(tab.key)}
+                                    className={`px-4 py-2 text-xs font-medium transition-colors ${resultTab === tab.key ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-slate-500 hover:text-slate-300'
+                                        }`}>
+                                    {tab.icon} {tab.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="p-4">
+                            {/* ─── TEST CASES TAB ─── */}
+                            {resultTab === 'testcase' && (
+                                <>
+                                    {/* Submit result header */}
+                                    {result && (
+                                        <div className={`flex items-center gap-3 mb-4 px-4 py-3 rounded-xl ${result.status === 'accepted' ? 'bg-emerald-500/10 border border-emerald-500/20' :
+                                                result.status === 'wrong_answer' ? 'bg-amber-500/10 border border-amber-500/20' :
+                                                    result.status === 'error' ? 'bg-red-500/10 border border-red-500/20' :
+                                                        'bg-slate-700/50 border border-slate-600'
+                                            }`}>
+                                            <span className="text-2xl">
+                                                {result.status === 'accepted' ? '✅' : result.status === 'wrong_answer' ? '⚠️' : '❌'}
+                                            </span>
+                                            <div className="flex-1">
+                                                <p className={`font-bold text-sm ${result.status === 'accepted' ? 'text-emerald-400' :
+                                                        result.status === 'wrong_answer' ? 'text-amber-400' : 'text-red-400'
+                                                    }`}>
+                                                    {result.status === 'accepted' ? 'Accepted!' :
+                                                        result.status === 'wrong_answer' ? 'Wrong Answer' : 'Error'}
+                                                </p>
+                                                <p className="text-[11px] text-slate-500">
+                                                    {result.test_cases_passed}/{result.test_cases_total} test cases passed
+                                                    {result.runtime_percentile ? ` · Faster than ${result.runtime_percentile}% of ${language} submissions` : ''}
+                                                </p>
+                                            </div>
+                                            {/* Stats chips */}
+                                            <div className="hidden sm:flex items-center gap-3">
+                                                {result.runtime_ms != null && (
+                                                    <div className="text-center">
+                                                        <p className="text-sm font-bold text-white tabular-nums">{result.runtime_ms}<span className="text-slate-500 text-[10px]">ms</span></p>
+                                                        <p className="text-[9px] text-slate-500">Runtime</p>
                                                     </div>
-                                                </div>
-                                            )}
-                                            {/* Runtime */}
-                                            {result.runtime_ms !== undefined && (
-                                                <div className="bg-slate-900 rounded-xl p-3 text-center">
-                                                    <p className="text-lg font-bold text-white tabular-nums">
-                                                        {result.runtime_ms}<span className="text-slate-500 text-sm">ms</span>
-                                                    </p>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5">Runtime</p>
-                                                    <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
-                                                        <div className="h-full bg-indigo-400 rounded-full" style={{ width: `${Math.min((result.runtime_ms / 1000) * 100, 100)}%` }} />
+                                                )}
+                                                {result.memory_mb != null && (
+                                                    <div className="text-center">
+                                                        <p className="text-sm font-bold text-white tabular-nums">{result.memory_mb}<span className="text-slate-500 text-[10px]">MB</span></p>
+                                                        <p className="text-[9px] text-slate-500">Memory</p>
                                                     </div>
-                                                </div>
-                                            )}
-                                            {/* Memory */}
-                                            {result.memory_mb !== undefined && (
-                                                <div className="bg-slate-900 rounded-xl p-3 text-center">
-                                                    <p className="text-lg font-bold text-white tabular-nums">
-                                                        {result.memory_mb}<span className="text-slate-500 text-sm">MB</span>
-                                                    </p>
-                                                    <p className="text-[10px] text-slate-500 mt-0.5">Memory</p>
-                                                    <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
-                                                        <div className="h-full bg-violet-400 rounded-full" style={{ width: `${Math.min((result.memory_mb / 50) * 100, 100)}%` }} />
-                                                    </div>
-                                                </div>
-                                            )}
+                                                )}
+                                            </div>
                                         </div>
                                     )}
 
-                                    {/* Error message */}
-                                    {result.message && result.status === 'error' && (
-                                        <pre className="text-xs text-red-300 font-mono whitespace-pre-wrap bg-red-900/20 rounded-lg p-3 border border-red-900/30">
-                                            {result.message}
-                                        </pre>
+                                    {/* Per-test-case results */}
+                                    {(result?.case_results || runResult?.test_cases) && (
+                                        <div className="space-y-2">
+                                            {(result?.case_results || runResult?.test_cases || []).map((tc: any, i: number) => (
+                                                <details key={i} open={tc.status === 'failed'}>
+                                                    <summary className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer text-sm ${tc.status === 'passed' ? 'bg-emerald-500/5 border border-emerald-500/10 text-emerald-400' :
+                                                            'bg-red-500/5 border border-red-500/10 text-red-400'
+                                                        }`}>
+                                                        <span>{tc.status === 'passed' ? '✓' : '✗'} Test Case {tc.case_number} {tc.is_hidden ? '(Hidden)' : ''}</span>
+                                                        <span className="text-[10px] text-slate-500">{tc.runtime_ms}ms</span>
+                                                    </summary>
+                                                    <div className="mt-2 ml-2 grid grid-cols-3 gap-2 text-xs">
+                                                        <div className="bg-slate-900 rounded-lg p-2.5">
+                                                            <p className="text-[10px] text-slate-500 mb-1 uppercase font-semibold">Input</p>
+                                                            <pre className="text-slate-300 font-mono whitespace-pre-wrap">{tc.input || '—'}</pre>
+                                                        </div>
+                                                        <div className="bg-slate-900 rounded-lg p-2.5">
+                                                            <p className="text-[10px] text-slate-500 mb-1 uppercase font-semibold">Expected</p>
+                                                            <pre className="text-green-300 font-mono whitespace-pre-wrap">{tc.expected_output || '—'}</pre>
+                                                        </div>
+                                                        <div className="bg-slate-900 rounded-lg p-2.5">
+                                                            <p className="text-[10px] text-slate-500 mb-1 uppercase font-semibold">Your Output</p>
+                                                            <pre className={`font-mono whitespace-pre-wrap ${tc.status === 'passed' ? 'text-green-300' : 'text-red-300'}`}>{tc.your_output || '—'}</pre>
+                                                        </div>
+                                                    </div>
+                                                    {tc.diff && (
+                                                        <p className="text-[10px] text-amber-400 mt-1.5 ml-2">💡 {tc.diff}</p>
+                                                    )}
+                                                </details>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Custom input result */}
+                                    {runResult?.mode === 'custom_input' && (
+                                        <div className="bg-slate-900 rounded-xl p-4">
+                                            <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Custom Input Result</h4>
+                                            <div className="grid grid-cols-2 gap-3 text-xs">
+                                                <div>
+                                                    <p className="text-[10px] text-slate-500 mb-1">INPUT</p>
+                                                    <pre className="text-slate-300 font-mono bg-slate-800 rounded p-2">{runResult.input}</pre>
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] text-slate-500 mb-1">OUTPUT</p>
+                                                    <pre className="text-green-300 font-mono bg-slate-800 rounded p-2">{runResult.output}</pre>
+                                                </div>
+                                            </div>
+                                            <p className="text-[10px] text-slate-500 mt-2">{runResult.runtime_ms}ms · {runResult.memory_mb}MB</p>
+                                        </div>
+                                    )}
+
+                                    {/* Error */}
+                                    {runResult?.mode === 'error' && (
+                                        <div className="bg-red-900/20 border border-red-900/30 rounded-xl p-4">
+                                            <p className="text-red-400 text-sm font-semibold mb-1">❌ Error</p>
+                                            <pre className="text-red-300 text-xs font-mono">{runResult.error}</pre>
+                                        </div>
+                                    )}
+
+                                    {/* Submission stats row */}
+                                    {result && (result.runtime_percentile || result.memory_percentile) && (
+                                        <div className="grid grid-cols-2 gap-3 mt-4">
+                                            <div className="bg-slate-900 rounded-xl p-3">
+                                                <p className="text-[10px] text-slate-500 uppercase mb-1">Runtime</p>
+                                                <p className="text-lg font-bold text-white tabular-nums">{result.runtime_ms}<span className="text-slate-500 text-xs">ms</span></p>
+                                                <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+                                                    <div className="h-full bg-indigo-400 rounded-full transition-all duration-700" style={{ width: `${result.runtime_percentile}%` }} />
+                                                </div>
+                                                <p className="text-[10px] text-indigo-400 mt-1">Faster than {result.runtime_percentile}%</p>
+                                            </div>
+                                            <div className="bg-slate-900 rounded-xl p-3">
+                                                <p className="text-[10px] text-slate-500 uppercase mb-1">Memory</p>
+                                                <p className="text-lg font-bold text-white tabular-nums">{result.memory_mb}<span className="text-slate-500 text-xs">MB</span></p>
+                                                <div className="h-1.5 bg-slate-700 rounded-full mt-2 overflow-hidden">
+                                                    <div className="h-full bg-violet-400 rounded-full transition-all duration-700" style={{ width: `${result.memory_percentile}%` }} />
+                                                </div>
+                                                <p className="text-[10px] text-violet-400 mt-1">Less than {result.memory_percentile}%</p>
+                                            </div>
+                                        </div>
                                     )}
 
                                     {/* Submission ID */}
-                                    {result.submission_id && (
-                                        <p className="text-[10px] text-slate-600 mt-2">ID: {result.submission_id}</p>
+                                    {result?.submission_id && (
+                                        <p className="text-[10px] text-slate-600 mt-3">Attempt #{result.attempt_number} · ID: {result.submission_id}</p>
+                                    )}
+                                </>
+                            )}
+
+                            {/* ─── OUTPUT / AI REVIEW TAB ─── */}
+                            {resultTab === 'output' && (
+                                <div className="space-y-4">
+                                    {aiReview && !aiReview.error && (
+                                        <div>
+                                            <h4 className="text-sm font-semibold text-violet-400 mb-2">🤖 AI Code Review</h4>
+                                            <div className="text-sm text-slate-300 whitespace-pre-wrap bg-slate-900 rounded-lg p-3 leading-relaxed">
+                                                {aiReview.review || aiReview.feedback || JSON.stringify(aiReview, null, 2)}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {aiReview?.error && (
+                                        <div className="bg-red-900/20 border border-red-900/30 rounded-lg p-3">
+                                            <p className="text-red-400 text-xs">{aiReview.error}</p>
+                                        </div>
+                                    )}
+                                    {!aiReview && (
+                                        <div className="text-center py-8">
+                                            <p className="text-slate-500 text-sm">Click 🤖 AI Review to get feedback on your code</p>
+                                            <button onClick={handleAiReview}
+                                                className="mt-3 text-xs bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-lg transition-colors">
+                                                🤖 Get AI Review
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                             )}
-                            {aiReview && !aiReview.error && (
+
+                            {/* ─── SUBMISSIONS HISTORY TAB ─── */}
+                            {resultTab === 'submissions' && (
                                 <div>
-                                    <h4 className="text-sm font-semibold text-violet-400 mb-2">🤖 AI Code Review</h4>
-                                    <div className="text-sm text-slate-300 whitespace-pre-wrap bg-slate-900 rounded-lg p-3">
-                                        {aiReview.review || aiReview.feedback || JSON.stringify(aiReview, null, 2)}
-                                    </div>
+                                    {loadingSubmissions ? (
+                                        <div className="flex justify-center py-8">
+                                            <div className="w-6 h-6 border-2 border-slate-600 border-t-indigo-400 rounded-full animate-spin" />
+                                        </div>
+                                    ) : submissions.length === 0 ? (
+                                        <p className="text-slate-500 text-sm text-center py-8">No submissions yet. Submit your solution to see history.</p>
+                                    ) : (
+                                        <div className="space-y-1.5">
+                                            {submissions.map((s: any) => (
+                                                <div key={s.id} className={`flex items-center justify-between px-3 py-2.5 rounded-lg border text-xs ${s.status === 'accepted' ? 'bg-emerald-500/5 border-emerald-500/10' : 'bg-red-500/5 border-red-500/10'
+                                                    }`}>
+                                                    <div className="flex items-center gap-3">
+                                                        <span className={`font-semibold ${s.status === 'accepted' ? 'text-emerald-400' : 'text-red-400'}`}>
+                                                            {s.status === 'accepted' ? '✓ Accepted' : '✗ Wrong'}
+                                                        </span>
+                                                        <span className="text-slate-400">{s.language}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 text-slate-500">
+                                                        <span>{s.test_cases_passed}/{s.test_cases_total}</span>
+                                                        <span>{s.runtime_ms}ms</span>
+                                                        <span>{s.memory_mb}MB</span>
+                                                        <span className="text-slate-600">{s.submitted_at ? new Date(s.submitted_at).toLocaleDateString() : ''}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
