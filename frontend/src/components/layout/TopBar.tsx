@@ -23,11 +23,13 @@ const NAV_ITEMS = [
     {
         label: 'Career', href: '/assessment',
         items: [
-            { href: '/honest-mirror', icon: '🪞', label: 'Honest Mirror', badge: 'NEW' },
+            { href: '/honest-mirror', icon: '🪞', label: 'Honest Mirror' },
+            { href: '/placement-probability', icon: '🎯', label: 'Placement Probability', badge: 'NEW' },
             { href: '/assessment', icon: '🧬', label: 'My Assessment' },
             { href: '/careers', icon: '🗺️', label: 'Career Match' },
             { href: '/roadmap', icon: '📍', label: 'My Roadmap' },
-            { href: '/salary-truth', icon: '💰', label: 'Salary Truth', badge: 'NEW' },
+            { href: '/salary-truth', icon: '💰', label: 'Salary Truth' },
+            { href: '/people-like-you', icon: '👥', label: 'People Like You' },
             { href: '/skills', icon: '✅', label: 'Skill Verification' },
             { href: '/chat', icon: '💬', label: 'AI Career Counselor' },
         ]
