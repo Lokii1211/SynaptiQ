@@ -35,6 +35,7 @@ const NAV_ITEMS = [
         label: 'Compete', href: '/leaderboard',
         items: [
             { href: '/leaderboard', icon: '⚔️', label: 'Campus Wars' },
+            { href: '/battle', icon: '🎮', label: '1v1 Battle', badge: 'NEW' },
             { href: '/campus', icon: '🏅', label: 'College Rankings' },
             { href: '/tracker', icon: '🔥', label: 'Streak Tracker' },
             { href: '/achievements', icon: '🎖️', label: 'Achievements' },
@@ -50,11 +51,14 @@ const NAV_ITEMS = [
             { href: '/company-intel', icon: '🏢', label: 'Company Intel' },
             { href: '/certifications', icon: '🏅', label: 'Certifications', badge: 'NEW' },
             { href: '/simulator', icon: '🎭', label: 'Mock Interview' },
+            { href: '/pricing', icon: '💎', label: 'Pro Plans', badge: 'PRO' },
+            { href: '/tpo-dashboard', icon: '🏫', label: 'T&P Dashboard' },
         ]
     },
 ];
 
 const PROFILE_MENU = [
+    { href: '/profile', icon: '👤', label: 'My Profile' },
     { href: '/score', icon: '📊', label: 'My Viya Score™' },
     { href: '/analytics', icon: '📈', label: 'Analytics' },
     { href: '/learn', icon: '📚', label: 'Learning Hub' },

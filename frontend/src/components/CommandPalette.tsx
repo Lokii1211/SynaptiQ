@@ -62,6 +62,12 @@ const ALL_PAGES: SearchResult[] = [
     { title: 'Honest Mirror', subtitle: 'Career reality check', icon: '🪞', href: '/honest-mirror', category: 'Career' },
     { title: 'Salary Truth', subtitle: 'CTC → in-hand calculator', icon: '💰', href: '/salary-truth', category: 'Career' },
 
+    // New Features
+    { title: 'Pro Plans & Pricing', subtitle: 'Free vs Pro vs Pro Plus', icon: '💎', href: '/pricing', category: 'Navigation' },
+    { title: '1v1 Battle', subtitle: 'Challenge peers live', icon: '🎮', href: '/battle', category: 'Practice' },
+    { title: 'T&P Dashboard', subtitle: 'College placement HQ', icon: '🏫', href: '/tpo-dashboard', category: 'Navigation' },
+    { title: 'My Profile', subtitle: 'Your SkillTen profile', icon: '👤', href: '/profile', category: 'Navigation' },
+
     // Tools
     { title: 'Streak Tracker', subtitle: 'Maintain your streak', icon: '🔥', href: '/tracker', category: 'Tools' },
     { title: 'AI Chat', subtitle: 'Career assistant', icon: '🤖', href: '/chat', category: 'Tools' },
