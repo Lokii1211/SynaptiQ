@@ -115,18 +115,27 @@ export default function DashboardPage() {
 
     const diffColor = (d: string) => d === 'Easy' ? 'bg-emerald-50 text-emerald-700' : d === 'Medium' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700';
 
-    const greeting = new Date().getHours() < 12 ? 'Good morning' : new Date().getHours() < 17 ? 'Good afternoon' : 'Good evening';
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : hour < 21 ? 'Good evening' : 'Night owl mode';
+    const smartMessage = hour < 12
+        ? "Today's daily challenge is waiting."
+        : hour < 17
+            ? (streak > 5 ? `Your ${streak}-day streak is going strong 🔥` : "Keep building momentum today.")
+            : hour < 21
+                ? "Evening study time — complete one more task before bed."
+                : `Last chance to maintain your ${streak}-day streak!`;
 
     return (
         <div className="min-h-screen bg-slate-50">
             <TopBar />
 
             <main className="max-w-6xl mx-auto px-4 lg:px-6 py-5 pb-28 lg:pb-8">
-                {/* Greeting */}
+                {/* Smart Greeting (PRO Bible 5.1) */}
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
                     <p className="text-sm text-slate-500">{greeting}</p>
-                    <h1 className="text-xl font-bold text-slate-900">{displayName} 👋</h1>
+                    <h1 className="text-xl font-bold text-slate-900 st-font-heading">{displayName} 👋</h1>
                     {archetype && <p className="text-xs text-indigo-500 mt-0.5">🧬 {archetype}</p>}
+                    <p className="text-xs text-slate-400 mt-1">{smartMessage}</p>
                 </motion.div>
 
                 {/* Assessment CTA (if no assessment yet) */}

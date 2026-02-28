@@ -153,7 +153,8 @@ export default function PublicProfilePage() {
     const {
         display_name, archetype_name, skillten_score, college_name, target_role,
         streak_days, coding_stats, assessment_profile, badges, verified_skills,
-        activity_heatmap, score_percentile, placement, bio,
+        activity_heatmap, score_percentile, placement, bio, aptitude,
+        open_to_work, campus_rank, graduation_year, stream,
     } = profile;
 
     const tagline = archetype_name
@@ -161,6 +162,9 @@ export default function PublicProfilePage() {
         : target_role || 'SkillTen Member';
 
     const codingTotal = (coding_stats?.easy || 0) + (coding_stats?.medium || 0) + (coding_stats?.hard || 0);
+    const placementReadiness = Math.min(100, Math.round(
+        ((skillten_score || 0) * 0.3) + ((aptitude?.overall_percentile || 0) * 0.3) + (Math.min(codingTotal, 50) * 0.8) + ((verified_skills?.length || 0) * 5)
+    ));
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -191,10 +195,19 @@ export default function PublicProfilePage() {
                             {display_name?.[0]?.toUpperCase() || '?'}
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold">{display_name}</h1>
+                            <div className="flex items-center gap-2 mb-0.5">
+                                <h1 className="text-3xl font-bold">{display_name}</h1>
+                                {(open_to_work || profile.open_to_work) && (
+                                    <span className="text-[10px] bg-green-400 text-green-900 px-2 py-0.5 rounded-full font-bold animate-pulse">Open to Work</span>
+                                )}
+                            </div>
                             <p className="text-white/60 text-sm font-medium">@{username}</p>
                             <p className="text-white/80 text-sm mt-1">{tagline}</p>
-                            {college_name && <p className="text-white/50 text-xs mt-0.5">🎓 {college_name}</p>}
+                            {college_name && (
+                                <p className="text-white/50 text-xs mt-0.5">
+                                    🎓 {college_name}{stream ? ` · ${stream}` : ''}{graduation_year ? ` · ${graduation_year}` : ''}
+                                </p>
+                            )}
                         </div>
                     </motion.div>
                 </div>
@@ -222,16 +235,18 @@ export default function PublicProfilePage() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-3">
+                    {/* Quick Stats Bar (PRO Bible 3.1) */}
+                    <div className="grid grid-cols-5 gap-2">
                         {[
+                            { label: 'VIYA Score', value: skillten_score || 0, icon: '⭐' },
+                            { label: 'Streak', value: `${streak_days || 0}🔥`, icon: '' },
+                            { label: 'Skills', value: `${verified_skills?.length || 0}/10`, icon: '✓' },
                             { label: 'Problems', value: codingTotal, icon: '💻' },
-                            { label: 'Streak', value: `${streak_days || 0}d`, icon: '🔥' },
-                            { label: 'Badges', value: badges?.length || 0, icon: '🏆' },
-                            { label: 'Skills', value: verified_skills?.length || 0, icon: '✓' },
+                            { label: 'Readiness', value: `${placementReadiness}%`, icon: '🎯' },
                         ].map(stat => (
-                            <div key={stat.label} className="text-center bg-slate-50 rounded-xl p-3">
-                                <p className="text-lg font-bold text-slate-900">{stat.value}</p>
-                                <p className="text-[10px] text-slate-400 uppercase font-semibold">{stat.label}</p>
+                            <div key={stat.label} className="text-center bg-slate-50 rounded-xl p-2.5">
+                                <p className="text-base font-bold text-slate-900 tabular-nums">{stat.value}</p>
+                                <p className="text-[9px] text-slate-400 uppercase font-semibold">{stat.label}</p>
                             </div>
                         ))}
                     </div>
@@ -279,7 +294,7 @@ export default function PublicProfilePage() {
                     </p>
                 </motion.section>
 
-                {/* ─── Verified Skills ─── */}
+                {/* ─── Verified Skills (PRO Bible 3.1 — with score bars + expiry) ─── */}
                 {verified_skills && verified_skills.length > 0 && (
                     <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
                         className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
@@ -289,11 +304,62 @@ export default function PublicProfilePage() {
                             <span className="text-[10px] text-indigo-500 font-semibold">✓ Quiz-verified</span>
                         </div>
                         <p className="text-[10px] text-slate-400 mb-4">These skills are AI-tested, not self-claimed</p>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="space-y-3">
                             {verified_skills.map((skill: any, i: number) => (
-                                <InlineSkillBadge key={i} skill={skill.name || skill} score={skill.score} level={skill.level} />
+                                <div key={i} className="bg-slate-50 rounded-xl p-3">
+                                    <div className="flex items-center justify-between mb-1.5">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-indigo-500 text-xs">🏅</span>
+                                            <span className="text-sm font-semibold text-slate-800">{skill.name || skill.skill_name || skill}</span>
+                                        </div>
+                                        <span className="text-xs font-bold text-slate-700 tabular-nums">{skill.score || skill.verified_score || 0}/100</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden mb-1">
+                                        <motion.div initial={{ width: 0 }} animate={{ width: `${skill.score || skill.verified_score || 0}%` }}
+                                            transition={{ duration: 0.8, delay: 0.4 + i * 0.1 }}
+                                            className="h-full bg-indigo-500 rounded-full" />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] text-slate-400">
+                                            {skill.percentile ? `${skill.percentile}th percentile` : skill.proficiency_level || 'Verified'}
+                                        </span>
+                                        {(skill.expires_at || skill.verified_at) && (
+                                            <span className="text-[10px] text-slate-400">
+                                                {skill.expires_at ? `Expires: ${skill.expires_at}` : `Verified: ${skill.verified_at}`}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                             ))}
                         </div>
+                    </motion.section>
+                )}
+
+                {/* ─── Aptitude Scores (PRO Bible 3.1) ─── */}
+                {(aptitude?.overall_percentile || aptitude?.tests_taken > 0) && (
+                    <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.38 }}
+                        className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100"
+                    >
+                        <h2 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Aptitude Scores</h2>
+                        <div className="grid grid-cols-2 gap-3">
+                            {[
+                                { label: 'Quantitative', value: aptitude?.quant_percentile, color: 'bg-blue-500' },
+                                { label: 'Logical', value: aptitude?.logical_percentile, color: 'bg-emerald-500' },
+                                { label: 'Verbal', value: aptitude?.verbal_percentile, color: 'bg-amber-500' },
+                                { label: 'Overall', value: aptitude?.overall_percentile, color: 'bg-indigo-500' },
+                            ].map(apt => (
+                                <div key={apt.label} className="bg-slate-50 rounded-xl p-3">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <span className="text-xs text-slate-600 font-medium">{apt.label}</span>
+                                        <span className="text-xs font-bold text-slate-800">{apt.value || '—'}{apt.value ? 'th' : ''}</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                        <div className={`h-full ${apt.color} rounded-full transition-all duration-700`} style={{ width: `${apt.value || 0}%` }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-[10px] text-slate-400 mt-2 text-center">Based on {aptitude?.tests_taken || 0} tests</p>
                     </motion.section>
                 )}
 

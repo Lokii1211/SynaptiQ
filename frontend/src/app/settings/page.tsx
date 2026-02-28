@@ -30,6 +30,9 @@ export default function SettingsPage() {
         bio: '',
         linkedin_url: '',
         github_url: '',
+        graduation_year: '',
+        stream: '',
+        open_to_work: false,
     });
 
     const [notifications, setNotifications] = useState({
@@ -70,6 +73,9 @@ export default function SettingsPage() {
                 bio: u?.profile?.bio || '',
                 linkedin_url: u?.profile?.linkedin_url || '',
                 github_url: u?.profile?.github_url || '',
+                graduation_year: u?.profile?.graduation_year || '',
+                stream: u?.profile?.stream || '',
+                open_to_work: u?.profile?.open_to_work || false,
             });
             setLoading(false);
         }).catch(() => { auth.clearToken(); window.location.href = '/login'; });
@@ -192,6 +198,8 @@ export default function SettingsPage() {
                                                 { key: 'bio', label: 'Bio', placeholder: 'Final year CSE student passionate about AI...', icon: '📝' },
                                                 { key: 'target_role', label: 'Dream Role', placeholder: 'e.g. Software Engineer at Google', icon: '🎯' },
                                                 { key: 'college_name', label: 'College', placeholder: 'e.g. VIT Vellore', icon: '🎓' },
+                                                { key: 'graduation_year', label: 'Graduation Year', placeholder: 'e.g. 2026', icon: '📅' },
+                                                { key: 'stream', label: 'Stream / Branch', placeholder: 'e.g. CSE, ECE, IT', icon: '📚' },
                                                 { key: 'city', label: 'City', placeholder: 'e.g. Bangalore', icon: '📍' },
                                                 { key: 'mobile', label: 'Mobile (optional)', placeholder: '+91 98765 43210', icon: '📱' },
                                             ].map(field => (
@@ -241,6 +249,28 @@ export default function SettingsPage() {
                                                 </div>
                                             ))}
                                         </div>
+                                    </section>
+
+                                    {/* Open to Work + View as Recruiter (PRO Bible 3.1) */}
+                                    <section className="st-card p-6">
+                                        <h2 className="font-bold text-slate-900 mb-1">Job Search Status</h2>
+                                        <p className="text-xs text-slate-500 mb-4">Let recruiters know you&apos;re actively looking</p>
+                                        <div className="flex items-center justify-between py-3 border-b border-slate-100">
+                                            <div>
+                                                <p className="text-sm font-medium text-slate-900">🟢 Open to Work</p>
+                                                <p className="text-xs text-slate-500">Shows a green badge on your profile</p>
+                                            </div>
+                                            <Toggle
+                                                value={form.open_to_work}
+                                                onChange={() => setForm(prev => ({ ...prev, open_to_work: !prev.open_to_work }))}
+                                            />
+                                        </div>
+                                        {form.username && (
+                                            <a href={`/u/${form.username}`} target="_blank" rel="noopener noreferrer"
+                                                className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold text-sm transition-colors">
+                                                👁️ View as Recruiter
+                                            </a>
+                                        )}
                                     </section>
 
                                     <button onClick={handleSave} className="st-btn-primary w-full">
