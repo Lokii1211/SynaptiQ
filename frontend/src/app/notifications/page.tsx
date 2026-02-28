@@ -201,8 +201,8 @@ export default function NotificationsPage() {
                         {notifications.length > 0 && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
                                 className="mt-6 text-center">
-                                <Link href="/settings" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
-                                    ⚙️ Manage notification preferences in Settings
+                                <Link href="/notifications/settings" className="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+                                    ⚙️ Manage notification intelligence rules
                                 </Link>
                             </motion.div>
                         )}

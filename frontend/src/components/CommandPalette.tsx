@@ -53,10 +53,14 @@ const ALL_PAGES: SearchResult[] = [
     { title: 'Problem Bank', subtitle: '40+ DSA problems', icon: '📚', href: '/problems', category: 'Practice' },
     { title: 'Company Intel', subtitle: 'Interview prep', icon: '🏢', href: '/company-intel', category: 'Opportunities' },
 
+    // Certifications
+    { title: 'Certifications', subtitle: 'Earn verified credentials', icon: '🏅', href: '/certifications', category: 'Learning' },
+
     // Tools
     { title: 'Streak Tracker', subtitle: 'Maintain your streak', icon: '🔥', href: '/tracker', category: 'Tools' },
     { title: 'AI Chat', subtitle: 'Career assistant', icon: '🤖', href: '/chat', category: 'Tools' },
     { title: 'Notifications', subtitle: 'Updates & alerts', icon: '🔔', href: '/notifications', category: 'Tools' },
+    { title: 'Notification Settings', subtitle: 'Smart alert rules', icon: '⚙️', href: '/notifications/settings', category: 'Tools' },
     { title: 'Referrals', subtitle: 'Invite friends', icon: '🎁', href: '/referrals', category: 'Tools' },
 ];
 

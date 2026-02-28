@@ -45,6 +45,7 @@ const NAV_ITEMS = [
             { href: '/internships', icon: '🎯', label: 'Internships' },
             { href: '/resume', icon: '📄', label: 'Resume Builder' },
             { href: '/company-intel', icon: '🏢', label: 'Company Intel' },
+            { href: '/certifications', icon: '🏅', label: 'Certifications', badge: 'NEW' },
             { href: '/simulator', icon: '🎭', label: 'Mock Interview' },
         ]
     },
