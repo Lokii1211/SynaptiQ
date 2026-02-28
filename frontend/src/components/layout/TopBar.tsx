@@ -12,18 +12,21 @@ const NAV_ITEMS = [
         items: [
             { href: '/daily', icon: '⚡', label: 'Daily Challenge', badge: 'NEW' },
             { href: '/practice', icon: '💻', label: 'Coding Problems' },
-            { href: '/problems', icon: '📚', label: 'Problem Bank', badge: 'NEW' },
+            { href: '/problems', icon: '📚', label: 'Problem Bank' },
+            { href: '/study-plans', icon: '📋', label: 'Study Plans', badge: 'NEW' },
             { href: '/aptitude', icon: '🧠', label: 'Aptitude Practice' },
-            { href: '/mock-drive', icon: '🏢', label: 'Mock Placement Drive' },
+            { href: '/interview-experiences', icon: '📝', label: 'Interview Experiences', badge: 'NEW' },
             { href: '/challenges', icon: '🏆', label: 'Company Challenges' },
         ]
     },
     {
         label: 'Career', href: '/assessment',
         items: [
+            { href: '/honest-mirror', icon: '🪞', label: 'Honest Mirror', badge: 'NEW' },
             { href: '/assessment', icon: '🧬', label: 'My Assessment' },
             { href: '/careers', icon: '🗺️', label: 'Career Match' },
             { href: '/roadmap', icon: '📍', label: 'My Roadmap' },
+            { href: '/salary-truth', icon: '💰', label: 'Salary Truth', badge: 'NEW' },
             { href: '/skills', icon: '✅', label: 'Skill Verification' },
             { href: '/chat', icon: '💬', label: 'AI Career Counselor' },
         ]

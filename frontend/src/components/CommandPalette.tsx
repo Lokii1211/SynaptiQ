@@ -51,10 +51,16 @@ const ALL_PAGES: SearchResult[] = [
 
     // Problem Bank
     { title: 'Problem Bank', subtitle: '40+ DSA problems', icon: '📚', href: '/problems', category: 'Practice' },
+    { title: 'Study Plans', subtitle: 'Structured prep paths', icon: '📋', href: '/study-plans', category: 'Practice' },
     { title: 'Company Intel', subtitle: 'Interview prep', icon: '🏢', href: '/company-intel', category: 'Opportunities' },
+    { title: 'Interview Experiences', subtitle: 'Real student accounts', icon: '📝', href: '/interview-experiences', category: 'Practice' },
 
     // Certifications
     { title: 'Certifications', subtitle: 'Earn verified credentials', icon: '🏅', href: '/certifications', category: 'Learning' },
+
+    // Career Intelligence
+    { title: 'Honest Mirror', subtitle: 'Career reality check', icon: '🪞', href: '/honest-mirror', category: 'Career' },
+    { title: 'Salary Truth', subtitle: 'CTC → in-hand calculator', icon: '💰', href: '/salary-truth', category: 'Career' },
 
     // Tools
     { title: 'Streak Tracker', subtitle: 'Maintain your streak', icon: '🔥', href: '/tracker', category: 'Tools' },
