@@ -113,6 +113,17 @@ export const api = {
 
     getCodingStats: () => request('/coding/stats/me'),
 
+    // ═══════════ APTITUDE ═══════════
+    startAptitude: (data: { section?: string; difficulty?: string }) =>
+        request('/aptitude/start', { method: 'POST', body: JSON.stringify(data) }),
+
+    submitAptitude: (data: { session_id: string; answers: { question_id: string; selected_option: string; time_spent_ms: number }[] }) =>
+        request('/aptitude/submit', { method: 'POST', body: JSON.stringify(data) }),
+
+    aptitudeHistory: () => request('/aptitude/history'),
+
+    aptitudeProfile: () => request('/aptitude/profile'),
+
     // ═══════════ LEARNING ═══════════
     getMyRoadmaps: () => request('/learning/roadmaps'),
 
