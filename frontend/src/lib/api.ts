@@ -124,6 +124,9 @@ export const api = {
 
     aptitudeProfile: () => request('/aptitude/profile'),
 
+    practiceCheck: (data: { question_id: string; selected_option: string; time_spent_ms: number }) =>
+        request('/aptitude/practice/check', { method: 'POST', body: JSON.stringify(data) }),
+
     // ═══════════ LEARNING ═══════════
     getMyRoadmaps: () => request('/learning/roadmaps'),
 

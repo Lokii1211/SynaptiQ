@@ -31,8 +31,75 @@ class SubmitAptitudeReq(BaseModel):
     session_id: str
     answers: List[AptitudeAnswerItem]
 
-
 # ─── 1. Start a Timed Mini-Test (10 questions, 8 minutes) ───
+
+class PracticeCheckReq(BaseModel):
+    question_id: str
+    selected_option: str
+    time_spent_ms: int = 0
+
+@router.post("/practice/check")
+def practice_check_answer(
+    req: PracticeCheckReq,
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    """Practice Mode: Check a single answer instantly → full explanation."""
+    q = db.query(Question).filter_by(id=req.question_id).first()
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    is_correct = req.selected_option == (q.correct_answer or "")
+
+    # Build rich explanation response
+    explanation_text = q.explanation or ""
+
+    # Parse shortcut if embedded in explanation (format: SHORTCUT: ... FULL: ...)
+    shortcut = ""
+    full_solution = explanation_text
+    concept = q.category or "General"
+    common_mistake = ""
+
+    if "SHORTCUT:" in explanation_text:
+        parts = explanation_text.split("SHORTCUT:")
+        if len(parts) > 1:
+            rest = parts[1]
+            if "FULL:" in rest:
+                shortcut_parts = rest.split("FULL:")
+                shortcut = shortcut_parts[0].strip()
+                full_solution = shortcut_parts[1].strip()
+            else:
+                shortcut = rest.strip()
+
+    # Generate contextual common mistake based on category
+    mistake_map = {
+        "quant": "Forgetting to convert units or misreading the question conditions",
+        "logical": "Not considering all possible arrangements or missing negative cases",
+        "verbal": "Choosing an option that sounds correct but changes the original meaning",
+        "data_interpretation": "Calculating percentage of the wrong base value",
+        "mixed": "Rushing through without reading all options carefully",
+    }
+    common_mistake = mistake_map.get(q.category, mistake_map["mixed"])
+
+    # Company relevance
+    company_tags = q.company_tags if hasattr(q, 'company_tags') and q.company_tags else ["TCS", "Infosys"]
+
+    return {
+        "question_id": req.question_id,
+        "is_correct": is_correct,
+        "selected_option": req.selected_option,
+        "correct_answer": q.correct_answer or "",
+        "explanation": {
+            "shortcut_method": shortcut or f"Apply the standard formula for {concept} problems",
+            "full_solution": full_solution,
+            "concept_name": concept.replace("_", " ").title(),
+            "common_mistake": common_mistake,
+            "difficulty": q.difficulty or "medium",
+            "company_relevance": company_tags,
+        },
+        "time_spent_ms": req.time_spent_ms,
+    }
+
 
 @router.post("/start")
 def start_aptitude_test(
