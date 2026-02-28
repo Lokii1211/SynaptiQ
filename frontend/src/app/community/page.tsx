@@ -15,6 +15,12 @@ interface Post {
     replies: number;
     time: string;
     liked: boolean;
+    postType?: 'text' | 'placement' | 'solution' | 'achievement';
+    metadata?: {
+        company?: string; role?: string; ctc?: string; rounds?: string[];
+        problemTitle?: string; language?: string; codeSnippet?: string; complexity?: string;
+        achievementTitle?: string; achievementIcon?: string;
+    };
 }
 
 const MOCK_POSTS: Post[] = [
@@ -42,6 +48,20 @@ const MOCK_POSTS: Post[] = [
         id: '5', author: { name: 'Kavitha R.', avatar: '👩‍🔬', college: 'Anna University' },
         content: 'Which is better for a fresher: service company (TCS, Infosys) or startup? I have offers from both. The startup pays more but less job security. Parents want the big brand name.',
         tags: ['career-advice', 'dilemma'], likes: 28, replies: 22, time: '3d ago', liked: false
+    },
+    {
+        id: '6', author: { name: 'Suresh V.', avatar: '🎉', college: 'PSG Tech, Coimbatore', badge: 'Placed' },
+        content: 'Got placed at Amazon! 6 months of prep, 200+ problems, 4 mock interviews. Hard work pays off!',
+        tags: ['placement', 'amazon', 'success-story'], likes: 234, replies: 67, time: '6h ago', liked: false,
+        postType: 'placement',
+        metadata: { company: 'Amazon', role: 'SDE-1', ctc: '28.5 LPA', rounds: ['Online Assessment', 'Technical 1', 'Technical 2', 'Bar Raiser', 'HR'] }
+    },
+    {
+        id: '7', author: { name: 'Deepa M.', avatar: '💡', college: 'IIIT Hyderabad' },
+        content: 'Clean O(n) solution for "Trapping Rain Water" using two pointers. No extra space needed!',
+        tags: ['solution', 'dsa', 'two-pointers'], likes: 89, replies: 15, time: '8h ago', liked: false,
+        postType: 'solution',
+        metadata: { problemTitle: 'Trapping Rain Water', language: 'Python', codeSnippet: 'def trap(height):\n    l, r = 0, len(height)-1\n    lmax = rmax = ans = 0\n    while l < r:\n        if height[l] < height[r]:\n            lmax = max(lmax, height[l])\n            ans += lmax - height[l]\n            l += 1\n        else:\n            rmax = max(rmax, height[r])\n            ans += rmax - height[r]\n            r -= 1\n    return ans', complexity: 'O(n) time, O(1) space' }
     },
 ];
 
@@ -179,6 +199,42 @@ export default function CommunityPage() {
 
                                         {/* Content */}
                                         <p className="text-sm text-slate-700 whitespace-pre-line mb-3 leading-relaxed">{post.content}</p>
+
+                                        {/* Structured Post: Placement Card (Bible Phase 4) */}
+                                        {post.postType === 'placement' && post.metadata && (
+                                            <div className="mb-3 bg-gradient-to-r from-emerald-50 to-green-50 rounded-xl p-4 border border-emerald-200">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    <span className="text-2xl">🎉</span>
+                                                    <div>
+                                                        <p className="text-sm font-bold text-emerald-800">Placed at {post.metadata.company}!</p>
+                                                        <p className="text-xs text-emerald-600">{post.metadata.role} · {post.metadata.ctc}</p>
+                                                    </div>
+                                                </div>
+                                                {post.metadata.rounds && (
+                                                    <div className="flex flex-wrap gap-1 mt-2">
+                                                        {post.metadata.rounds.map((r, i) => (
+                                                            <span key={i} className="text-[9px] bg-white border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
+                                                                {i + 1}. {r}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {/* Structured Post: Solution Share (Bible Phase 4) */}
+                                        {post.postType === 'solution' && post.metadata && (
+                                            <div className="mb-3 bg-slate-900 rounded-xl overflow-hidden border border-slate-700">
+                                                <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-xs text-indigo-400 font-semibold">💡 {post.metadata.problemTitle}</span>
+                                                        <span className="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">{post.metadata.language}</span>
+                                                    </div>
+                                                    <span className="text-[9px] text-emerald-400 font-mono">{post.metadata.complexity}</span>
+                                                </div>
+                                                <pre className="px-4 py-3 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{post.metadata.codeSnippet}</pre>
+                                            </div>
+                                        )}
 
                                         {/* Tags */}
                                         <div className="flex flex-wrap gap-1.5 mb-3">

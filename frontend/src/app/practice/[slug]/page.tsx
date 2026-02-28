@@ -38,6 +38,8 @@ export default function CodingProblemPage() {
     const [submissions, setSubmissions] = useState<any[]>([]);
     const [loadingSubmissions, setLoadingSubmissions] = useState(false);
     const [mobilePanel, setMobilePanel] = useState<PanelTab>('problem');
+    const [leftTab, setLeftTab] = useState<'desc' | 'solution' | 'discuss' | 'notes'>('desc');
+    const [userNotes, setUserNotes] = useState('');
 
     useEffect(() => {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
@@ -218,6 +220,88 @@ export default function CodingProblemPage() {
                                     <p className="text-sm text-slate-400 mt-1 ml-4">{hint}</p>
                                 </details>
                             ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* ═══ Solution / Discuss / Notes tabs (Bible Phase 6) ═══ */}
+                <div className="border-t border-slate-700">
+                    <div className="flex border-b border-slate-700/50 px-4">
+                        {(['desc', 'solution', 'discuss', 'notes'] as const).map(tab => (
+                            <button key={tab} onClick={() => setLeftTab(tab)}
+                                className={`px-3 py-2 text-xs font-medium transition-colors capitalize ${leftTab === tab ? 'text-indigo-400 border-b-2 border-indigo-400' : 'text-slate-500 hover:text-slate-300'}`}>
+                                {tab === 'desc' ? '📄 Description' : tab === 'solution' ? '💡 Solution' : tab === 'discuss' ? '💬 Discuss' : '📝 Notes'}
+                            </button>
+                        ))}
+                    </div>
+
+                    {leftTab === 'solution' && (
+                        <div className="p-4 space-y-4">
+                            <div className="bg-slate-800 rounded-lg p-4 border border-slate-700">
+                                <div className="flex items-center justify-between mb-3">
+                                    <h3 className="text-sm font-bold text-white">💡 Approach: Optimal</h3>
+                                    <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-mono">O(n)</span>
+                                </div>
+                                <div className="space-y-3">
+                                    <div>
+                                        <p className="text-xs text-indigo-400 font-semibold mb-1">Step 1: Understand the Pattern</p>
+                                        <p className="text-xs text-slate-400">Identify the core algorithm needed based on input size and constraints.</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-indigo-400 font-semibold mb-1">Step 2: Choose Data Structure</p>
+                                        <p className="text-xs text-slate-400">Pick the optimal data structure (HashMap, Stack, Two Pointers, etc.).</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-indigo-400 font-semibold mb-1">Step 3: Edge Cases</p>
+                                        <p className="text-xs text-slate-400">Handle empty input, single element, and large values.</p>
+                                    </div>
+                                </div>
+                                <div className="mt-4 pt-3 border-t border-slate-700">
+                                    <p className="text-[10px] text-slate-500 mb-1">Complexity</p>
+                                    <div className="flex gap-4">
+                                        <span className="text-xs text-emerald-400 font-mono">⏱ Time: O(n)</span>
+                                        <span className="text-xs text-cyan-400 font-mono">💾 Space: O(1)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-[10px] text-slate-500">🔒 Full solution with code available after attempting the problem</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {leftTab === 'discuss' && (
+                        <div className="p-4 space-y-3">
+                            {[
+                                { user: 'Priya S.', comment: 'Used HashMap approach, runs in O(n). Clean solution!', time: '2h ago', likes: 12 },
+                                { user: 'Rohit K.', comment: 'For Java users: use TreeMap if you need sorted order.', time: '5h ago', likes: 8 },
+                                { user: 'Ananya M.', comment: 'Edge case: what if array is empty? Add a check at start.', time: '1d ago', likes: 5 },
+                            ].map((c, i) => (
+                                <div key={i} className="bg-slate-800 rounded-lg p-3 border border-slate-700">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <span className="text-xs text-indigo-300 font-semibold">{c.user}</span>
+                                        <span className="text-[9px] text-slate-500">{c.time}</span>
+                                    </div>
+                                    <p className="text-xs text-slate-300">{c.comment}</p>
+                                    <div className="flex items-center gap-2 mt-2">
+                                        <button className="text-[10px] text-slate-500 hover:text-red-400">❤ {c.likes}</button>
+                                        <button className="text-[10px] text-slate-500 hover:text-indigo-400">Reply</button>
+                                    </div>
+                                </div>
+                            ))}
+                            <button className="w-full text-center text-xs text-indigo-400 hover:text-indigo-300 py-2">💬 Add a comment...</button>
+                        </div>
+                    )}
+
+                    {leftTab === 'notes' && (
+                        <div className="p-4">
+                            <textarea
+                                value={userNotes}
+                                onChange={(e) => setUserNotes(e.target.value)}
+                                placeholder="Write your notes, approach ideas, or key observations here...\n\nThese notes are saved per-problem."
+                                className="w-full h-48 bg-slate-800 text-slate-300 text-xs font-mono p-3 rounded-lg border border-slate-700 resize-none focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder:text-slate-600"
+                            />
+                            <p className="text-[9px] text-slate-500 mt-2">💾 Auto-saved locally</p>
                         </div>
                     )}
                 </div>
