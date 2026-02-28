@@ -6,6 +6,27 @@ import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
 
+// Generate 365-day heatmap data
+function generateYearHeatmap() {
+    const data: { date: string; count: number }[] = [];
+    const today = new Date();
+    for (let i = 364; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(d.getDate() - i);
+        const dateStr = d.toISOString().split('T')[0];
+        const rand = Math.random();
+        let count = 0;
+        if (rand > 0.35) count = Math.floor(Math.random() * 4) + 1;
+        if (rand > 0.85) count = Math.floor(Math.random() * 3) + 4;
+        data.push({ date: dateStr, count });
+    }
+    return data;
+}
+
+const YEAR_HEATMAP = generateYearHeatmap();
+const HEAT_COLORS_PROFILE = ['bg-slate-100', 'bg-emerald-200', 'bg-emerald-300', 'bg-emerald-400', 'bg-emerald-500', 'bg-emerald-600', 'bg-emerald-700'];
+const HEAT_COLOR = (c: number) => c >= 6 ? HEAT_COLORS_PROFILE[6] : c >= 4 ? HEAT_COLORS_PROFILE[5] : c >= 3 ? HEAT_COLORS_PROFILE[4] : c >= 2 ? HEAT_COLORS_PROFILE[3] : c >= 1 ? HEAT_COLORS_PROFILE[2] : HEAT_COLORS_PROFILE[0];
+
 const MOCK_PROFILE = {
     name: 'Arjun Kumar',
     username: 'arjunk26',
@@ -66,12 +87,25 @@ const MOCK_PROFILE = {
     endorsements: 8,
     profileCompletion: 84,
     nextAction: 'Verify Java skill to reach 90% completion',
+    privacy: {
+        score: 'public',
+        aptitude: 'connections',
+        coding: 'public',
+        cgpa: 'recruiters',
+        connectionList: 'connections',
+        assessment: 'connections',
+    } as Record<string, string>,
 };
 
 export default function ProfilePage() {
-    const [profile] = useState(MOCK_PROFILE);
+    const [profile, setProfile] = useState(MOCK_PROFILE);
     const [activeSection, setActiveSection] = useState('about');
     const [viewAsRecruiter, setViewAsRecruiter] = useState(false);
+    const [privacy, setPrivacy] = useState(MOCK_PROFILE.privacy);
+
+    const updatePrivacy = (key: string, val: string) => {
+        setPrivacy(prev => ({ ...prev, [key]: val }));
+    };
 
     useEffect(() => { if (!auth.isLoggedIn()) { window.location.href = '/login'; } }, []);
 
@@ -300,6 +334,30 @@ export default function ProfilePage() {
                             {/* Coding Activity */}
                             {activeSection === 'coding' && (
                                 <div className="space-y-4">
+                                    {/* 365-Day Contribution Heatmap (Bible Phase 3 — GitHub-style) */}
+                                    <div className="st-card p-5">
+                                        <div className="flex items-center justify-between mb-3">
+                                            <h3 className="font-bold text-sm text-slate-900">📅 365-Day Contribution Heatmap</h3>
+                                            <span className="text-xs text-emerald-600 font-semibold">🔥 {profile.streak} day streak</span>
+                                        </div>
+                                        <div className="overflow-x-auto">
+                                            <div className="grid gap-[2px]" style={{ gridTemplateRows: 'repeat(7, 1fr)', gridAutoFlow: 'column', gridAutoColumns: 'minmax(0, 1fr)', minWidth: 720 }}>
+                                                {YEAR_HEATMAP.map((d, i) => (
+                                                    <div key={i} className={`w-[11px] h-[11px] rounded-[2px] ${HEAT_COLOR(d.count)} transition-colors cursor-pointer`}
+                                                        title={`${d.date}: ${d.count} contributions`} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center justify-between mt-2">
+                                            <span className="text-[9px] text-slate-400">{YEAR_HEATMAP.filter(d => d.count > 0).length} active days out of 365</span>
+                                            <div className="flex items-center gap-1">
+                                                <span className="text-[9px] text-slate-400">Less</span>
+                                                {[0, 1, 2, 3, 5, 7].map((c, i) => <div key={i} className={`w-[10px] h-[10px] rounded-[2px] ${HEAT_COLOR(c)}`} />)}
+                                                <span className="text-[9px] text-slate-400">More</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">📊 Coding Stats</h3>
                                         <div className="grid grid-cols-3 gap-3 mb-4">
@@ -382,8 +440,41 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
+                    {/* Privacy Controls (Bible Phase 3) */}
+                    <div className="mt-6 st-card p-5">
+                        <h3 className="font-bold text-sm text-slate-900 mb-1">🔒 Profile Privacy Controls</h3>
+                        <p className="text-[10px] text-slate-400 mb-4">Choose who can see each section of your profile</p>
+                        <div className="space-y-3">
+                            {[
+                                { key: 'score', label: 'SkillTen Score™', icon: '📊' },
+                                { key: 'aptitude', label: 'Aptitude Scores', icon: '🧠' },
+                                { key: 'coding', label: 'Coding Activity', icon: '💻' },
+                                { key: 'cgpa', label: 'CGPA / Grades', icon: '🎓' },
+                                { key: 'connectionList', label: 'Connection List', icon: '👥' },
+                                { key: 'assessment', label: 'Assessment Result', icon: '🧬' },
+                            ].map(field => (
+                                <div key={field.key} className="flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm">{field.icon}</span>
+                                        <span className="text-xs text-slate-700 font-medium">{field.label}</span>
+                                    </div>
+                                    <select
+                                        value={privacy[field.key]}
+                                        onChange={(e) => updatePrivacy(field.key, e.target.value)}
+                                        className="text-[10px] bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                                    >
+                                        <option value="public">🌐 Public</option>
+                                        <option value="connections">👥 Connections Only</option>
+                                        <option value="recruiters">💼 Recruiters Only</option>
+                                        <option value="private">🔒 Only Me</option>
+                                    </select>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* Public Profile URL */}
-                    <div className="mt-6 st-card p-4 flex items-center gap-3">
+                    <div className="mt-4 st-card p-4 flex items-center gap-3">
                         <span className="text-xs text-slate-400">🔗 Public Profile:</span>
                         <code className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-0.5 rounded">skillten.in/u/{profile.username}</code>
                         <button className="text-xs text-slate-500 hover:text-slate-700">📋 Copy</button>

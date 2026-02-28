@@ -51,6 +51,8 @@ const NAV_ITEMS = [
             { href: '/company-intel', icon: '🏢', label: 'Company Intel' },
             { href: '/certifications', icon: '🏅', label: 'Certifications', badge: 'NEW' },
             { href: '/simulator', icon: '🎭', label: 'Mock Interview' },
+            { href: '/campus-calendar', icon: '📅', label: 'Campus Drives', badge: 'NEW' },
+            { href: '/interview-experiences', icon: '📝', label: 'Interview Exp.' },
             { href: '/pricing', icon: '💎', label: 'Pro Plans', badge: 'PRO' },
             { href: '/tpo-dashboard', icon: '🏫', label: 'T&P Dashboard' },
         ]

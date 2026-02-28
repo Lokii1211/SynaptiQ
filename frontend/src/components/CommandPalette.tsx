@@ -74,6 +74,7 @@ const ALL_PAGES: SearchResult[] = [
     { title: 'Notifications', subtitle: 'Updates & alerts', icon: '🔔', href: '/notifications', category: 'Tools' },
     { title: 'Notification Settings', subtitle: 'Smart alert rules', icon: '⚙️', href: '/notifications/settings', category: 'Tools' },
     { title: 'Referrals', subtitle: 'Invite friends', icon: '🎁', href: '/referrals', category: 'Tools' },
+    { title: 'Campus Drives', subtitle: 'Upcoming campus drives + readiness', icon: '📅', href: '/campus-calendar', category: 'Opportunities' },
 ];
 
 export function CommandPalette() {
