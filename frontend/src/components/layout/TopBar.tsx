@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/auth.store';
 import { Logo } from '@/components/brand/Logo';
+import { CommandPalette } from '@/components/CommandPalette';
 
 const NAV_ITEMS = [
     {
@@ -134,21 +135,8 @@ export function TopBar() {
 
                 {/* Right: Search + Notifications + Score + Profile */}
                 <div className="flex items-center gap-2">
-                    {/* Search */}
-                    <div className={`hidden md:flex items-center transition-all duration-300 ${searchFocused ? 'w-64' : 'w-48'}`}>
-                        <div className="relative w-full">
-                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                            <input
-                                type="text"
-                                placeholder="Search..."
-                                onFocus={() => setSearchFocused(true)}
-                                onBlur={() => setSearchFocused(false)}
-                                className="w-full pl-9 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-300 transition-all"
-                            />
-                        </div>
-                    </div>
+                    {/* Command Palette Search (PRO Bible 5.1 — Ctrl+K) */}
+                    <CommandPalette />
 
                     {/* Notifications */}
                     <Link href="/notifications" className="relative p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors">
