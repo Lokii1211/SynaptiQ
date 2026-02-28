@@ -362,6 +362,51 @@ export default function DashboardPage() {
                             </div>
                         </motion.div>
 
+                        {/* Profile Views + Recruiter Interest (Bible Phase 5) */}
+                        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32 }}>
+                            <Link href="/profile" className="block st-card p-5 hover:shadow-xl group">
+                                <div className="flex items-center justify-between mb-3">
+                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Profile Views</p>
+                                    <span className="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">+18% ↑</span>
+                                </div>
+                                <div className="flex items-center gap-3 mb-3">
+                                    <p className="text-3xl font-bold text-slate-900">34</p>
+                                    <p className="text-xs text-slate-400">people viewed your profile this week</p>
+                                </div>
+                                {/* Viewer breakdown */}
+                                <div className="grid grid-cols-3 gap-2 mb-3">
+                                    {[
+                                        { label: 'Students', count: 21, icon: '🎓' },
+                                        { label: 'Recruiters', count: 8, icon: '💼' },
+                                        { label: 'TPOs', count: 5, icon: '🏫' },
+                                    ].map(v => (
+                                        <div key={v.label} className="text-center bg-slate-50 rounded-lg p-2">
+                                            <span className="text-sm">{v.icon}</span>
+                                            <p className="text-sm font-bold text-slate-900">{v.count}</p>
+                                            <p className="text-[9px] text-slate-400">{v.label}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                                {/* Recent recruiter views */}
+                                <div className="border-t border-slate-100 pt-3 space-y-2">
+                                    <p className="text-[10px] font-bold text-slate-500 uppercase">Recent Recruiter Views</p>
+                                    {[
+                                        { company: 'TCS', city: 'Chennai', time: '2h ago' },
+                                        { company: 'Infosys', city: 'Bangalore', time: '5h ago' },
+                                        { company: 'Wipro', city: 'Hyderabad', time: '1d ago' },
+                                    ].map((r, i) => (
+                                        <div key={i} className="flex items-center gap-2">
+                                            <div className="w-5 h-5 bg-indigo-100 rounded-full flex items-center justify-center text-[9px] font-bold text-indigo-600">{r.company[0]}</div>
+                                            <div className="flex-1">
+                                                <p className="text-[10px] font-semibold text-slate-700">Recruiter from {r.company}</p>
+                                                <p className="text-[9px] text-slate-400">{r.city} · {r.time}</p>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Link>
+                        </motion.div>
+
                         {/* Quick Tools */}
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
                             <div className="st-card p-5">

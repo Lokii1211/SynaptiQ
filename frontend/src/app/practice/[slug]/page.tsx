@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
 import { difficultyColor } from '@/lib/utils/india';
+import { classifyError } from '@/components/PaywallTrigger';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
 
@@ -332,24 +333,40 @@ export default function CodingProblemPage() {
                                     {/* Submit result header */}
                                     {result && (
                                         <div className={`flex items-center gap-3 mb-4 px-4 py-3 rounded-xl ${result.status === 'accepted' ? 'bg-emerald-500/10 border border-emerald-500/20' :
-                                                result.status === 'wrong_answer' ? 'bg-amber-500/10 border border-amber-500/20' :
-                                                    result.status === 'error' ? 'bg-red-500/10 border border-red-500/20' :
-                                                        'bg-slate-700/50 border border-slate-600'
+                                            result.status === 'wrong_answer' ? 'bg-amber-500/10 border border-amber-500/20' :
+                                                result.status === 'error' ? 'bg-red-500/10 border border-red-500/20' :
+                                                    'bg-slate-700/50 border border-slate-600'
                                             }`}>
                                             <span className="text-2xl">
                                                 {result.status === 'accepted' ? '✅' : result.status === 'wrong_answer' ? '⚠️' : '❌'}
                                             </span>
                                             <div className="flex-1">
                                                 <p className={`font-bold text-sm ${result.status === 'accepted' ? 'text-emerald-400' :
-                                                        result.status === 'wrong_answer' ? 'text-amber-400' : 'text-red-400'
+                                                    result.status === 'wrong_answer' ? 'text-amber-400' : 'text-red-400'
                                                     }`}>
                                                     {result.status === 'accepted' ? 'Accepted!' :
-                                                        result.status === 'wrong_answer' ? 'Wrong Answer' : 'Error'}
+                                                        result.status === 'wrong_answer' ? 'Wrong Answer' : (() => {
+                                                            const errInfo = classifyError(result.message || result.status || 'error');
+                                                            return errInfo.badge;
+                                                        })()}
                                                 </p>
                                                 <p className="text-[11px] text-slate-500">
                                                     {result.test_cases_passed}/{result.test_cases_total} test cases passed
                                                     {result.runtime_percentile ? ` · Faster than ${result.runtime_percentile}% of ${language} submissions` : ''}
                                                 </p>
+                                                {/* Error type badge + AI fix (Bible Phase 1) */}
+                                                {result.status !== 'accepted' && result.status !== 'wrong_answer' && (
+                                                    <div className="mt-2">
+                                                        {(() => {
+                                                            const errInfo = classifyError(result.message || result.status || 'error');
+                                                            return (
+                                                                <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[10px] font-bold ${errInfo.badgeColor}`}>
+                                                                    {errInfo.badge}
+                                                                </div>
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                )}
                                             </div>
                                             {/* Stats chips */}
                                             <div className="hidden sm:flex items-center gap-3">
@@ -375,7 +392,7 @@ export default function CodingProblemPage() {
                                             {(result?.case_results || runResult?.test_cases || []).map((tc: any, i: number) => (
                                                 <details key={i} open={tc.status === 'failed'}>
                                                     <summary className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer text-sm ${tc.status === 'passed' ? 'bg-emerald-500/5 border border-emerald-500/10 text-emerald-400' :
-                                                            'bg-red-500/5 border border-red-500/10 text-red-400'
+                                                        'bg-red-500/5 border border-red-500/10 text-red-400'
                                                         }`}>
                                                         <span>{tc.status === 'passed' ? '✓' : '✗'} Test Case {tc.case_number} {tc.is_hidden ? '(Hidden)' : ''}</span>
                                                         <span className="text-[10px] text-slate-500">{tc.runtime_ms}ms</span>

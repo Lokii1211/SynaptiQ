@@ -46,6 +46,7 @@ export default function AptitudePage() {
     // Review state
     const [testResult, setTestResult] = useState<any>(null);
     const [loading, setLoading] = useState(false);
+    const [revisionList, setRevisionList] = useState<string[]>([]);
 
     // Question start time tracking
     const questionStartTime = useRef(Date.now());
@@ -211,8 +212,8 @@ export default function AptitudePage() {
                             <div className="hidden sm:flex items-center gap-1">
                                 {questions.map((_, i) => (
                                     <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i === currentQ ? 'bg-indigo-500 scale-125' :
-                                            answers[questions[i]?.id] ? (answers[questions[i]?.id]?.result?.is_correct ? 'bg-emerald-400' : 'bg-red-400') :
-                                                'bg-slate-200'
+                                        answers[questions[i]?.id] ? (answers[questions[i]?.id]?.result?.is_correct ? 'bg-emerald-400' : 'bg-red-400') :
+                                            'bg-slate-200'
                                         }`} />
                                 ))}
                             </div>
@@ -241,8 +242,8 @@ export default function AptitudePage() {
                             {/* Difficulty + Category */}
                             <div className="flex items-center gap-2 mb-4">
                                 <span className={`text-[10px] px-2 py-0.5 rounded font-semibold uppercase ${q.difficulty === 'easy' ? 'bg-emerald-50 text-emerald-600' :
-                                        q.difficulty === 'hard' ? 'bg-red-50 text-red-600' :
-                                            'bg-amber-50 text-amber-600'
+                                    q.difficulty === 'hard' ? 'bg-red-50 text-red-600' :
+                                        'bg-amber-50 text-amber-600'
                                     }`}>{q.difficulty || 'medium'}</span>
                                 <span className="text-[10px] text-slate-400 uppercase">{q.category?.replace(/_/g, ' ')}</span>
                             </div>
@@ -280,9 +281,9 @@ export default function AptitudePage() {
                                             disabled={showExplanation}
                                             className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-xl border-2 text-left transition-all ${optionStyle}`}>
                                             <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${hasResult && isCorrect ? 'bg-emerald-500 text-white' :
-                                                    hasResult && isWrong ? 'bg-red-500 text-white' :
-                                                        isSelected && !hasResult ? 'bg-indigo-500 text-white' :
-                                                            'bg-slate-100 text-slate-500'
+                                                hasResult && isWrong ? 'bg-red-500 text-white' :
+                                                    isSelected && !hasResult ? 'bg-indigo-500 text-white' :
+                                                        'bg-slate-100 text-slate-500'
                                                 }`}>
                                                 {hasResult && isCorrect ? '✓' : hasResult && isWrong ? '✗' : key}
                                             </span>
@@ -469,6 +470,64 @@ export default function AptitudePage() {
                         )}
                     </motion.div>
 
+                    {/* ═══ Accuracy by Topic (Bible Phase 2) ═══ */}
+                    {(() => {
+                        const topicMap: Record<string, { correct: number; total: number }> = {};
+                        reviewItems.forEach(item => {
+                            const topic = item.question.category?.replace(/_/g, ' ') || 'General';
+                            if (!topicMap[topic]) topicMap[topic] = { correct: 0, total: 0 };
+                            topicMap[topic].total++;
+                            if (item.answer?.result?.is_correct) topicMap[topic].correct++;
+                        });
+                        const entries = Object.entries(topicMap);
+                        if (entries.length === 0) return null;
+                        return (
+                            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+                                className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
+                                <h2 className="text-sm font-bold text-slate-900 mb-4">📊 Accuracy by Topic</h2>
+                                <div className="space-y-3">
+                                    {entries.map(([topic, data]) => {
+                                        const pct = Math.round((data.correct / data.total) * 100);
+                                        return (
+                                            <div key={topic}>
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-xs text-slate-600 capitalize font-medium">{topic}</span>
+                                                    <span className={`text-[10px] font-bold ${pct >= 70 ? 'text-emerald-600' : pct >= 40 ? 'text-amber-600' : 'text-red-500'}`}>
+                                                        {data.correct}/{data.total} ({pct}%)
+                                                    </span>
+                                                </div>
+                                                <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                                    <div className={`h-full rounded-full transition-all duration-700 ${pct >= 70 ? 'bg-emerald-500' : pct >= 40 ? 'bg-amber-500' : 'bg-red-400'}`}
+                                                        style={{ width: `${pct}%` }} />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                                {/* Weakness Map */}
+                                <div className="mt-5 pt-4 border-t border-slate-100">
+                                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wide mb-3">🗺️ Weakness Map</h3>
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {[
+                                            { label: '💪 Strong', items: entries.filter(([, d]) => (d.correct / d.total) >= 0.7), color: 'bg-emerald-50 border-emerald-200 text-emerald-700' },
+                                            { label: '⚠️ Average', items: entries.filter(([, d]) => { const p = d.correct / d.total; return p >= 0.4 && p < 0.7; }), color: 'bg-amber-50 border-amber-200 text-amber-700' },
+                                            { label: '❌ Weak', items: entries.filter(([, d]) => (d.correct / d.total) < 0.4), color: 'bg-red-50 border-red-200 text-red-600' },
+                                        ].map(zone => (
+                                            <div key={zone.label} className={`rounded-xl p-3 border ${zone.color}`}>
+                                                <p className="text-[10px] font-bold mb-1.5">{zone.label}</p>
+                                                {zone.items.length === 0 ? (
+                                                    <p className="text-[9px] opacity-50">—</p>
+                                                ) : zone.items.map(([t]) => (
+                                                    <p key={t} className="text-[10px] capitalize">{t}</p>
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })()}
+
                     {/* Question Review */}
                     <h2 className="text-sm font-bold text-slate-600 uppercase tracking-wide mb-3">Question Review</h2>
                     <div className="space-y-3">
@@ -504,11 +563,39 @@ export default function AptitudePage() {
                                                 <p className="text-[10px] text-slate-400">🧠 {item.answer.result.explanation.concept_name}</p>
                                             </div>
                                         )}
+                                        {/* Add to Revision List (Bible Phase 2.2) */}
+                                        {!isCorrect && (
+                                            <button
+                                                onClick={() => {
+                                                    const qId = item.question.id || `q-${i}`;
+                                                    setRevisionList(prev => prev.includes(qId) ? prev.filter(x => x !== qId) : [...prev, qId]);
+                                                }}
+                                                className={`text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all ${revisionList.includes(item.question.id || `q-${i}`)
+                                                        ? 'bg-indigo-100 text-indigo-700 border border-indigo-300'
+                                                        : 'bg-slate-100 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600'
+                                                    }`}
+                                            >
+                                                {revisionList.includes(item.question.id || `q-${i}`) ? '✓ Added to Revision List' : '📋 Add to Revision List'}
+                                            </button>
+                                        )}
                                     </div>
                                 </details>
                             );
                         })}
                     </div>
+
+                    {/* Revision List Summary (Bible Phase 2.2) */}
+                    {revisionList.length > 0 && (
+                        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                            className="mt-6 bg-indigo-50 rounded-2xl p-5 border border-indigo-200">
+                            <div className="flex items-center justify-between mb-2">
+                                <h3 className="text-sm font-bold text-indigo-800">📋 Revision List ({revisionList.length} questions)</h3>
+                                <span className="text-[10px] text-indigo-500 font-medium">Spaced repetition in 1, 3, and 7 days</span>
+                            </div>
+                            <p className="text-xs text-indigo-600 mb-3">These questions will appear in your daily revision practice. You&apos;ll be reminded to re-solve them at optimal intervals for maximum retention.</p>
+                            <button className="st-btn-primary text-xs px-5 py-2">📚 Start Revision Practice →</button>
+                        </motion.div>
+                    )}
 
                     {/* Actions */}
                     <div className="mt-6 flex gap-3 justify-center">
