@@ -12,6 +12,7 @@ const NAV_ITEMS = [
         items: [
             { href: '/daily', icon: '⚡', label: 'Daily Challenge', badge: 'NEW' },
             { href: '/practice', icon: '💻', label: 'Coding Problems' },
+            { href: '/problems', icon: '📚', label: 'Problem Bank', badge: 'NEW' },
             { href: '/aptitude', icon: '🧠', label: 'Aptitude Practice' },
             { href: '/mock-drive', icon: '🏢', label: 'Mock Placement Drive' },
             { href: '/challenges', icon: '🏆', label: 'Company Challenges' },
@@ -34,6 +35,7 @@ const NAV_ITEMS = [
             { href: '/campus', icon: '🏅', label: 'College Rankings' },
             { href: '/tracker', icon: '🔥', label: 'Streak Tracker' },
             { href: '/achievements', icon: '🎖️', label: 'Achievements' },
+            { href: '/messages', icon: '💬', label: 'Messages', badge: 'NEW' },
         ]
     },
     {

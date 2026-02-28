@@ -44,9 +44,14 @@ const ALL_PAGES: SearchResult[] = [
 
     // Community
     { title: 'Community', subtitle: 'Posts & discussions', icon: '🗣️', href: '/community', category: 'Social' },
+    { title: 'Messages', subtitle: 'Direct messages', icon: '💬', href: '/messages', category: 'Social' },
     { title: 'Leaderboard', subtitle: 'Global rankings', icon: '🏅', href: '/leaderboard', category: 'Social' },
     { title: 'Campus Wars', subtitle: 'College competition', icon: '⚔️', href: '/campus', category: 'Social' },
     { title: 'Network', subtitle: 'Find peers', icon: '🤝', href: '/network', category: 'Social' },
+
+    // Problem Bank
+    { title: 'Problem Bank', subtitle: '40+ DSA problems', icon: '📚', href: '/problems', category: 'Practice' },
+    { title: 'Company Intel', subtitle: 'Interview prep', icon: '🏢', href: '/company-intel', category: 'Opportunities' },
 
     // Tools
     { title: 'Streak Tracker', subtitle: 'Maintain your streak', icon: '🔥', href: '/tracker', category: 'Tools' },
