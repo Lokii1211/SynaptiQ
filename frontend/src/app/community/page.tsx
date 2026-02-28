@@ -106,6 +106,16 @@ export default function CommunityPage() {
     const [newPost, setNewPost] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
     const [votedPolls, setVotedPolls] = useState<Record<string, number>>({});
+    const [feedTab, setFeedTab] = useState<'foryou' | 'college' | 'career' | 'placements' | 'study'>('foryou');
+    const [showReactions, setShowReactions] = useState<string | null>(null);
+
+    const REACTIONS = [
+        { emoji: '💡', label: 'Insightful' },
+        { emoji: '🔥', label: 'Inspiring' },
+        { emoji: '🤝', label: 'Relatable' },
+        { emoji: '👏', label: 'Impressive' },
+        { emoji: '💪', label: 'Motivating' },
+    ];
 
     useEffect(() => {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
@@ -157,6 +167,22 @@ export default function CommunityPage() {
                         <div className="flex flex-col md:flex-row gap-6">
                             {/* Main Feed */}
                             <div className="flex-1 space-y-4">
+                                {/* Feed Tabs (Bible L2) */}
+                                <div className="flex gap-1 bg-white rounded-xl p-1 border border-slate-200 overflow-x-auto mb-2">
+                                    {([
+                                        { id: 'foryou' as const, label: '🏠 For You' },
+                                        { id: 'college' as const, label: '🏫 My College' },
+                                        { id: 'career' as const, label: '💼 My Career' },
+                                        { id: 'placements' as const, label: '🏆 Placements' },
+                                        { id: 'study' as const, label: '📚 Study' },
+                                    ]).map(t => (
+                                        <button key={t.id} onClick={() => setFeedTab(t.id)}
+                                            className={`flex-shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${feedTab === t.id ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}>
+                                            {t.label}
+                                        </button>
+                                    ))}
+                                </div>
+
                                 {/* Compose */}
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                                     className="st-card p-4">

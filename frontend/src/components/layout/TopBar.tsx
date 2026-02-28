@@ -13,9 +13,10 @@ const NAV_ITEMS = [
             { href: '/daily', icon: '⚡', label: 'Daily Challenge', badge: 'NEW' },
             { href: '/practice', icon: '💻', label: 'Coding Problems' },
             { href: '/problems', icon: '📚', label: 'Problem Bank' },
-            { href: '/study-plans', icon: '📋', label: 'Study Plans', badge: 'NEW' },
+            { href: '/concepts', icon: '📖', label: 'Knowledge Hub', badge: 'NEW' },
+            { href: '/study-plans', icon: '📋', label: 'Study Plans' },
             { href: '/aptitude', icon: '🧠', label: 'Aptitude Practice' },
-            { href: '/interview-experiences', icon: '📝', label: 'Interview Experiences', badge: 'NEW' },
+            { href: '/study-groups', icon: '👥', label: 'Study Groups', badge: 'NEW' },
             { href: '/challenges', icon: '🏆', label: 'Company Challenges' },
         ]
     },
@@ -35,11 +36,12 @@ const NAV_ITEMS = [
         label: 'Compete', href: '/leaderboard',
         items: [
             { href: '/leaderboard', icon: '⚔️', label: 'Campus Wars' },
-            { href: '/battle', icon: '🎮', label: '1v1 Battle', badge: 'NEW' },
+            { href: '/contests', icon: '🏆', label: 'Contests & Rating', badge: 'NEW' },
+            { href: '/battle', icon: '🎮', label: '1v1 Battle' },
             { href: '/campus', icon: '🏅', label: 'College Rankings' },
             { href: '/tracker', icon: '🔥', label: 'Streak Tracker' },
             { href: '/achievements', icon: '🎖️', label: 'Achievements' },
-            { href: '/messages', icon: '💬', label: 'Messages', badge: 'NEW' },
+            { href: '/messages', icon: '💬', label: 'Messages' },
         ]
     },
     {
@@ -48,11 +50,13 @@ const NAV_ITEMS = [
             { href: '/jobs', icon: '💼', label: 'Jobs & Apply' },
             { href: '/internships', icon: '🎯', label: 'Internships' },
             { href: '/resume', icon: '📄', label: 'Resume Builder' },
+            { href: '/company-prep', icon: '🎯', label: 'Company Prep Kits', badge: 'NEW' },
             { href: '/company-intel', icon: '🏢', label: 'Company Intel' },
-            { href: '/certifications', icon: '🏅', label: 'Certifications', badge: 'NEW' },
+            { href: '/certifications', icon: '🏅', label: 'Certifications' },
             { href: '/simulator', icon: '🎭', label: 'Mock Interview' },
-            { href: '/campus-calendar', icon: '📅', label: 'Campus Drives', badge: 'NEW' },
+            { href: '/campus-calendar', icon: '📅', label: 'Campus Drives' },
             { href: '/interview-experiences', icon: '📝', label: 'Interview Exp.' },
+            { href: '/creator', icon: '✨', label: 'Creator Studio', badge: 'NEW' },
             { href: '/pricing', icon: '💎', label: 'Pro Plans', badge: 'PRO' },
             { href: '/tpo-dashboard', icon: '🏫', label: 'T&P Dashboard' },
         ]
