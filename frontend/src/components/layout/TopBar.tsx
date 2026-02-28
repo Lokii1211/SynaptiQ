@@ -75,6 +75,7 @@ export function TopBar() {
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const [profileOpen, setProfileOpen] = useState(false);
     const [searchFocused, setSearchFocused] = useState(false);
+    const [darkMode, setDarkMode] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -86,6 +87,15 @@ export function TopBar() {
         };
         document.addEventListener('mousedown', handler);
         return () => document.removeEventListener('mousedown', handler);
+    }, []);
+
+    // Dark mode init
+    useEffect(() => {
+        const saved = localStorage.getItem('st-dark-mode');
+        if (saved === 'true') {
+            setDarkMode(true);
+            document.documentElement.classList.add('dark');
+        }
     }, []);
 
     const isNavActive = (nav: typeof NAV_ITEMS[0]) =>
@@ -149,6 +159,20 @@ export function TopBar() {
                 <div className="flex items-center gap-2">
                     {/* Command Palette Search (PRO Bible 5.1 — Ctrl+K) */}
                     <CommandPalette />
+
+                    {/* Dark Mode Toggle (Bible Polish) */}
+                    <button
+                        onClick={() => {
+                            const next = !darkMode;
+                            setDarkMode(next);
+                            localStorage.setItem('st-dark-mode', String(next));
+                            document.documentElement.classList.toggle('dark', next);
+                        }}
+                        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
+                        title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                    >
+                        <span className="text-base">{darkMode ? '☀️' : '🌙'}</span>
+                    </button>
 
                     {/* Notifications */}
                     <Link href="/notifications" className="relative p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors">

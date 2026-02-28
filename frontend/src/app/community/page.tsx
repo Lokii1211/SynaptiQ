@@ -15,11 +15,13 @@ interface Post {
     replies: number;
     time: string;
     liked: boolean;
-    postType?: 'text' | 'placement' | 'solution' | 'achievement';
+    postType?: 'text' | 'placement' | 'solution' | 'achievement' | 'poll' | 'ama';
     metadata?: {
         company?: string; role?: string; ctc?: string; rounds?: string[];
         problemTitle?: string; language?: string; codeSnippet?: string; complexity?: string;
         achievementTitle?: string; achievementIcon?: string;
+        pollOptions?: { text: string; votes: number }[]; pollTotal?: number;
+        amaHost?: string; amaRole?: string; amaStatus?: 'live' | 'upcoming' | 'ended';
     };
 }
 
@@ -63,6 +65,28 @@ const MOCK_POSTS: Post[] = [
         postType: 'solution',
         metadata: { problemTitle: 'Trapping Rain Water', language: 'Python', codeSnippet: 'def trap(height):\n    l, r = 0, len(height)-1\n    lmax = rmax = ans = 0\n    while l < r:\n        if height[l] < height[r]:\n            lmax = max(lmax, height[l])\n            ans += lmax - height[l]\n            l += 1\n        else:\n            rmax = max(rmax, height[r])\n            ans += rmax - height[r]\n            r -= 1\n    return ans', complexity: 'O(n) time, O(1) space' }
     },
+    {
+        id: '8', author: { name: 'SkillTen Team', avatar: '📊', college: 'Official', badge: 'Staff' },
+        content: 'Which company\'s interview process do you find the hardest?',
+        tags: ['poll', 'placement'], likes: 67, replies: 34, time: '4h ago', liked: false,
+        postType: 'poll',
+        metadata: {
+            pollOptions: [
+                { text: 'Amazon (HLD + LP rounds)', votes: 142 },
+                { text: 'Google (5 rounds + committee)', votes: 198 },
+                { text: 'Flipkart (Machine Coding round)', votes: 87 },
+                { text: 'Microsoft (Group Fly round)', votes: 64 },
+            ],
+            pollTotal: 491,
+        }
+    },
+    {
+        id: '9', author: { name: 'Arun K.', avatar: '🎤', college: 'IIT Bombay', badge: 'SDE @ Google' },
+        content: 'AMA: I\'m a Google SDE-2 (ex-Amazon). Ask me anything about FAANG interviews, work culture, or career transitions!',
+        tags: ['ama', 'google', 'faang'], likes: 312, replies: 89, time: '1h ago', liked: false,
+        postType: 'ama',
+        metadata: { amaHost: 'Arun K.', amaRole: 'SDE-2 @ Google', amaStatus: 'live' }
+    },
 ];
 
 const TRENDING_TOPICS = [
@@ -81,6 +105,7 @@ export default function CommunityPage() {
     const [showCompose, setShowCompose] = useState(false);
     const [newPost, setNewPost] = useState('');
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [votedPolls, setVotedPolls] = useState<Record<string, number>>({});
 
     useEffect(() => {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
@@ -233,6 +258,58 @@ export default function CommunityPage() {
                                                     <span className="text-[9px] text-emerald-400 font-mono">{post.metadata.complexity}</span>
                                                 </div>
                                                 <pre className="px-4 py-3 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{post.metadata.codeSnippet}</pre>
+                                            </div>
+                                        )}
+
+                                        {/* Structured Post: Poll (Bible Phase 4) */}
+                                        {post.postType === 'poll' && post.metadata?.pollOptions && (
+                                            <div className="mb-3 space-y-2">
+                                                {post.metadata.pollOptions.map((opt, i) => {
+                                                    const voted = votedPolls[post.id] !== undefined;
+                                                    const isSelected = votedPolls[post.id] === i;
+                                                    const pct = voted && post.metadata?.pollTotal ? Math.round((opt.votes / post.metadata.pollTotal) * 100) : 0;
+                                                    return (
+                                                        <button key={i}
+                                                            onClick={() => {
+                                                                if (!voted) setVotedPolls(prev => ({ ...prev, [post.id]: i }));
+                                                            }}
+                                                            className={`w-full text-left relative overflow-hidden rounded-xl px-4 py-3 border transition-all ${voted
+                                                                ? (isSelected ? 'border-indigo-300 bg-indigo-50' : 'border-slate-200 bg-slate-50')
+                                                                : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer'
+                                                                }`}>
+                                                            {voted && (
+                                                                <div className={`absolute inset-y-0 left-0 ${isSelected ? 'bg-indigo-100' : 'bg-slate-100'} transition-all duration-700`} style={{ width: `${pct}%` }} />
+                                                            )}
+                                                            <div className="relative flex items-center justify-between z-10">
+                                                                <span className={`text-xs font-medium ${isSelected ? 'text-indigo-700' : 'text-slate-700'}`}>
+                                                                    {isSelected && '✓ '}{opt.text}
+                                                                </span>
+                                                                {voted && <span className={`text-xs font-bold ${isSelected ? 'text-indigo-600' : 'text-slate-400'}`}>{pct}%</span>}
+                                                            </div>
+                                                        </button>
+                                                    );
+                                                })}
+                                                <p className="text-[10px] text-slate-400 text-right">
+                                                    {votedPolls[post.id] !== undefined ? `${post.metadata.pollTotal} votes` : 'Tap to vote'}
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        {/* Structured Post: AMA (Bible Phase 4) */}
+                                        {post.postType === 'ama' && post.metadata && (
+                                            <div className="mb-3 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl p-4 border border-violet-200">
+                                                <div className="flex items-center gap-3 mb-2">
+                                                    {post.metadata.amaStatus === 'live' && (
+                                                        <span className="flex items-center gap-1.5 text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
+                                                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                                                            LIVE NOW
+                                                        </span>
+                                                    )}
+                                                    <span className="text-xs text-violet-600 font-semibold">🎤 {post.metadata.amaRole}</span>
+                                                </div>
+                                                <button className="w-full text-center bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold py-2.5 rounded-lg transition-colors">
+                                                    💬 Ask a Question
+                                                </button>
                                             </div>
                                         )}
 

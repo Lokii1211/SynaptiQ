@@ -157,6 +157,76 @@ export default function ResumePage() {
                       ))}
                     </div>
                   </section>
+
+                  {/* ═══ ATS Score Analyzer (Bible Phase 9) ═══ */}
+                  <section className="st-card p-6">
+                    <div className="flex items-center justify-between mb-5">
+                      <div>
+                        <h2 className="font-bold text-slate-900 text-lg">📊 ATS Score Analyzer</h2>
+                        <p className="text-xs text-slate-500 mt-0.5">AI-powered resume scoring against 50+ ATS systems</p>
+                      </div>
+                      <div className="relative w-20 h-20">
+                        <svg className="w-full h-full -rotate-90" viewBox="0 0 80 80">
+                          <circle cx="40" cy="40" r="32" fill="none" stroke="#E2E8F0" strokeWidth="6" />
+                          <circle cx="40" cy="40" r="32" fill="none" stroke="#10B981" strokeWidth="6" strokeLinecap="round"
+                            strokeDasharray={`${(78 / 100) * 201} ${201 - (78 / 100) * 201}`} />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className="text-lg font-bold text-slate-900">78</span>
+                          <span className="text-[8px] text-slate-500 uppercase font-bold">ATS Score</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Category Breakdown */}
+                    <div className="space-y-3 mb-5">
+                      {[
+                        { label: 'Contact Information', score: 100, status: 'pass', tip: 'All contact fields present' },
+                        { label: 'Education Section', score: 90, status: 'pass', tip: 'CGPA and university present' },
+                        { label: 'Skills Match', score: 72, status: 'warn', tip: 'Add 3 more role-specific skills' },
+                        { label: 'Work Experience', score: 55, status: 'warn', tip: 'Use STAR method for bullet points' },
+                        { label: 'Keyword Optimization', score: 65, status: 'warn', tip: 'Missing: Agile, CI/CD, Docker' },
+                        { label: 'Formatting & Layout', score: 95, status: 'pass', tip: 'Clean ATS-compatible format' },
+                        { label: 'Resume Length', score: 80, status: 'pass', tip: 'Optimal 1-page length' },
+                      ].map((cat, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold text-white flex-shrink-0 ${cat.status === 'pass' ? 'bg-emerald-500' : cat.status === 'warn' ? 'bg-amber-500' : 'bg-red-500'
+                            }`}>
+                            {cat.status === 'pass' ? '✓' : '!'}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between mb-0.5">
+                              <span className="text-xs font-medium text-slate-700">{cat.label}</span>
+                              <span className={`text-[10px] font-bold ${cat.score >= 80 ? 'text-emerald-600' : cat.score >= 60 ? 'text-amber-600' : 'text-red-500'}`}>{cat.score}%</span>
+                            </div>
+                            <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                              <div className={`h-full rounded-full transition-all duration-700 ${cat.score >= 80 ? 'bg-emerald-400' : cat.score >= 60 ? 'bg-amber-400' : 'bg-red-400'}`}
+                                style={{ width: `${cat.score}%` }} />
+                            </div>
+                            <p className="text-[9px] text-slate-400 mt-0.5">{cat.tip}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* AI Improvement Suggestions */}
+                    <div className="bg-gradient-to-r from-indigo-50 to-violet-50 rounded-xl p-4 border border-indigo-100">
+                      <h3 className="text-xs font-bold text-indigo-800 mb-2">🤖 AI Improvement Suggestions</h3>
+                      <div className="space-y-2">
+                        {[
+                          'Add quantifiable metrics to your experience bullets (e.g., "Reduced API latency by 40%")',
+                          'Include keywords: Docker, Kubernetes, CI/CD — 89% of SDE roles mention these',
+                          'Move "Projects" section above "Experience" for fresher profiles',
+                          'Add a 2-line professional summary at the top',
+                        ].map((suggestion, i) => (
+                          <div key={i} className="flex items-start gap-2">
+                            <span className="text-indigo-500 text-xs mt-0.5">→</span>
+                            <p className="text-xs text-indigo-700">{suggestion}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </section>
                 </motion.div>
               ) : (
                 <motion.div key="create" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">

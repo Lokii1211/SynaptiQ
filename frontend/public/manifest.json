@@ -28,5 +28,59 @@
         "productivity"
     ],
     "lang": "en-IN",
-    "prefer_related_applications": false
+    "prefer_related_applications": false,
+    "shortcuts": [
+        {
+            "name": "Practice Coding",
+            "short_name": "Practice",
+            "description": "Jump to DSA problem bank",
+            "url": "/problems",
+            "icons": [
+                {
+                    "src": "/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Aptitude Test",
+            "short_name": "Aptitude",
+            "description": "Start an aptitude quiz",
+            "url": "/aptitude",
+            "icons": [
+                {
+                    "src": "/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "AI Chat",
+            "short_name": "Chat",
+            "description": "Career AI assistant",
+            "url": "/chat",
+            "icons": [
+                {
+                    "src": "/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "form_factor": "narrow",
+            "label": "SkillTen Dashboard"
+        }
+    ],
+    "related_applications": [],
+    "protocol_handlers": [
+        {
+            "protocol": "web+skillten",
+            "url": "/handle-protocol?url=%s"
+        }
+    ]
 }

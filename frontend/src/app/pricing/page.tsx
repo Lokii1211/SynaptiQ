@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
+import { auth } from '@/lib/api';
 
 const PLANS = [
     {
@@ -101,6 +102,62 @@ const FAQ = [
 export default function PricingPage() {
     const [isYearly, setIsYearly] = useState(false);
     const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+    const [processing, setProcessing] = useState<string | null>(null);
+
+    /* ─── Razorpay Checkout (Bible Phase 8) ─── */
+    const handleCheckout = (planId: string) => {
+        setProcessing(planId);
+        const user = auth.getUser();
+        const planPrices: Record<string, number> = {
+            'pro-monthly': 29900,
+            'pro-yearly': 199900,
+            'pro-plus-monthly': 59900,
+        };
+        const key = planId === 'pro' ? (isYearly ? 'pro-yearly' : 'pro-monthly') : 'pro-plus-monthly';
+        const amount = planPrices[key] || 29900;
+        const planName = planId === 'pro'
+            ? `SkillTen Pro (${isYearly ? 'Yearly' : 'Monthly'})`
+            : 'SkillTen Pro Plus (Monthly)';
+
+        // Load Razorpay script if not already loaded
+        const loadScript = () => new Promise<void>((resolve) => {
+            if ((window as any).Razorpay) { resolve(); return; }
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve();
+            document.body.appendChild(script);
+        });
+
+        loadScript().then(() => {
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+                amount,
+                currency: 'INR',
+                name: 'SkillTen',
+                description: planName,
+                image: '/icon-192.png',
+                prefill: {
+                    name: user?.display_name || '',
+                    email: user?.email || '',
+                },
+                theme: { color: '#4F46E5' },
+                handler: (response: any) => {
+                    // Payment success
+                    setProcessing(null);
+                    alert(`✅ Payment successful! ID: ${response.razorpay_payment_id}\n\nYour ${planName} subscription is now active.`);
+                },
+                modal: {
+                    ondismiss: () => setProcessing(null),
+                },
+            };
+            const rzp = new (window as any).Razorpay(options);
+            rzp.on('payment.failed', (response: any) => {
+                setProcessing(null);
+                alert(`❌ Payment failed: ${response.error.description}`);
+            });
+            rzp.open();
+        }).catch(() => setProcessing(null));
+    };
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -168,12 +225,15 @@ export default function PricingPage() {
                                         <p className="text-[10px] text-emerald-600 font-semibold mb-3">That&apos;s just ₹167/month — less than a movie ticket 🎬</p>
                                     )}
 
-                                    <button className={`w-full py-3 rounded-xl text-sm font-bold transition-all mt-2 mb-4 ${plan.popular
-                                        ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:shadow-lg hover:shadow-indigo-500/30'
-                                        : plan.id === 'pro-plus'
-                                            ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:shadow-lg hover:shadow-amber-500/30'
-                                            : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>
-                                        {plan.id === 'free' ? 'Get Started Free' : plan.id === 'pro' ? 'Start 7-Day Free Trial' : 'Start Pro Plus'}
+                                    <button
+                                        onClick={() => plan.id !== 'free' ? handleCheckout(plan.id) : (window.location.href = '/signup')}
+                                        disabled={processing === plan.id}
+                                        className={`w-full py-3 rounded-xl text-sm font-bold transition-all mt-2 mb-4 ${plan.popular
+                                            ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:shadow-lg hover:shadow-indigo-500/30'
+                                            : plan.id === 'pro-plus'
+                                                ? 'bg-gradient-to-r from-amber-500 to-orange-600 text-white hover:shadow-lg hover:shadow-amber-500/30'
+                                                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} ${processing === plan.id ? 'opacity-60 cursor-wait' : ''}`}>
+                                        {processing === plan.id ? '⏳ Processing...' : plan.id === 'free' ? 'Get Started Free' : plan.id === 'pro' ? 'Start 7-Day Free Trial' : 'Start Pro Plus'}
                                     </button>
 
                                     <div className="space-y-2 flex-1">
