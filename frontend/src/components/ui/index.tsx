@@ -1,15 +1,15 @@
 'use client';
 import { motion } from 'framer-motion';
 
-// ─── ViyaScore Component (Bible FE-01 #1) ───
-interface ViyaScoreProps {
+// ─── SkillTenScore Component (Bible FE-01 #1) ───
+interface SkillTenScoreProps {
     score: number;
     trend?: number;
     percentile?: number;
     size?: 'hero' | 'card' | 'inline';
 }
 
-export function ViyaScore({ score, trend, percentile, size = 'card' }: ViyaScoreProps) {
+export function SkillTenScore({ score, trend, percentile, size = 'card' }: SkillTenScoreProps) {
     const sizes = {
         hero: { font: 'text-7xl', trend: 'text-lg', sub: 'text-sm' },
         card: { font: 'text-4xl', trend: 'text-sm', sub: 'text-xs' },

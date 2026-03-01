@@ -21,7 +21,7 @@ const MOCK_PROFILE = {
     branch: 'CSE',
     year: 2026,
     cgpa: 7.2,
-    viyaScore: 68,
+    skilltenScore: 68,
     streak: 23,
     problemsSolved: 87,
     skills: { python: 74, java: 0, sql: 61, dsa: 55, aptitude: 71 },
@@ -83,8 +83,8 @@ export default function HonestMirrorPage() {
                                     <p className="text-xs text-slate-500">{profile.branch} · {profile.college} · Class of {profile.year}</p>
                                 </div>
                                 <div className="ml-auto text-right">
-                                    <p className={`text-2xl font-bold ${getScoreColor(profile.viyaScore)}`}>{profile.viyaScore}</p>
-                                    <p className="text-[10px] text-slate-400 uppercase font-semibold">Viya Score</p>
+                                    <p className={`text-2xl font-bold ${getScoreColor(profile.skilltenScore)}`}>{profile.skilltenScore}</p>
+                                    <p className="text-[10px] text-slate-400 uppercase font-semibold">SkillTen Score</p>
                                 </div>
                             </div>
 
@@ -250,7 +250,7 @@ export default function HonestMirrorPage() {
                         <div className="bg-slate-900 text-white rounded-2xl p-5">
                             <p className="text-xs text-slate-400 font-semibold uppercase mb-2">🪞 The Mirror Speaks</p>
                             <p className="text-sm leading-relaxed text-slate-300">
-                                <strong className="text-white">Arjun</strong>, your Viya Score of <strong className="text-indigo-400">68</strong> puts you in the{' '}
+                                <strong className="text-white">Arjun</strong>, your SkillTen Score of <strong className="text-indigo-400">68</strong> puts you in the{' '}
                                 <strong className="text-amber-400">service company zone</strong>. TCS and Wipro are realistic targets.
                                 Infosys is achievable with 4 more weeks of focused prep. Product companies like Flipkart
                                 need <strong className="text-red-400">6+ months</strong> of dedicated DSA practice.{' '}

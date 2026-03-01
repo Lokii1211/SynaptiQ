@@ -11,7 +11,7 @@ interface CertificateData {
     issued_at?: string;
     score?: number;
     archetype?: string;
-    viya_score?: number;
+    skillten_score?: number;
 }
 
 export default function VerifyPage() {
@@ -31,7 +31,7 @@ export default function VerifyPage() {
                 issued_at: new Date().toISOString(),
                 score: 87,
                 archetype: 'The Quiet Systems Builder',
-                viya_score: 742,
+                skillten_score: 742,
             });
             setLoading(false);
         }, 1500);
@@ -64,7 +64,7 @@ export default function VerifyPage() {
                                 <span className="text-4xl">✅</span>
                             </motion.div>
                             <h1 className="text-2xl font-bold text-white">Certificate Verified</h1>
-                            <p className="text-green-100 text-sm mt-1">This is an authentic Viya certificate</p>
+                            <p className="text-green-100 text-sm mt-1">This is an authentic SkillTen certificate</p>
                         </div>
 
                         {/* Details */}
@@ -93,8 +93,8 @@ export default function VerifyPage() {
                                     <p className="text-white font-medium text-sm">{cert.archetype}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-white/40 uppercase tracking-wider">Viya Score™</p>
-                                    <p className="text-indigo-300 font-bold text-xl">{cert.viya_score}</p>
+                                    <p className="text-xs text-white/40 uppercase tracking-wider">SkillTen Score™</p>
+                                    <p className="text-indigo-300 font-bold text-xl">{cert.skillten_score}</p>
                                 </div>
                             </div>
                             <div className="pt-3 border-t border-white/10">
@@ -112,7 +112,7 @@ export default function VerifyPage() {
                         {/* Footer */}
                         <div className="bg-white/5 p-4 text-center border-t border-white/10">
                             <p className="text-white/40 text-xs">
-                                Verified by Viya Technologies — viya.ai
+                                Verified by SkillTen Technologies — skillten.in
                             </p>
                         </div>
                     </div>

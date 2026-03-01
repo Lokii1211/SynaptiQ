@@ -238,7 +238,7 @@ export default function PublicProfilePage() {
                     {/* Quick Stats Bar (PRO Bible 3.1) */}
                     <div className="grid grid-cols-5 gap-2">
                         {[
-                            { label: 'VIYA Score', value: skillten_score || 0, icon: '⭐' },
+                            { label: 'SkillTen Score', value: skillten_score || 0, icon: '⭐' },
                             { label: 'Streak', value: `${streak_days || 0}🔥`, icon: '' },
                             { label: 'Skills', value: `${verified_skills?.length || 0}/10`, icon: '✓' },
                             { label: 'Problems', value: codingTotal, icon: '💻' },

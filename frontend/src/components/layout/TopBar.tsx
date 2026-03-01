@@ -67,7 +67,7 @@ const NAV_ITEMS = [
 
 const PROFILE_MENU = [
     { href: '/profile', icon: '👤', label: 'My Profile' },
-    { href: '/score', icon: '📊', label: 'My Viya Score™' },
+    { href: '/score', icon: '📊', label: 'My SkillTen Score™' },
     { href: '/analytics', icon: '📈', label: 'Analytics' },
     { href: '/learn', icon: '📚', label: 'Learning Hub' },
     { href: '/refer', icon: '🎁', label: 'Refer & Earn' },
@@ -188,7 +188,7 @@ export function TopBar() {
                         <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full"></span>
                     </Link>
 
-                    {/* Viya Score Badge */}
+                    {/* SkillTen Score Badge */}
                     {user && (
                         <Link href="/score" className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 rounded-lg hover:border-indigo-200 transition-colors">
                             <span className="text-xs font-bold text-indigo-700">742</span>

@@ -163,12 +163,12 @@ export default function DashboardPage() {
                     <div className="lg:col-span-2 space-y-5">
                         {/* Top row: Score + Daily Challenge */}
                         <div className="grid sm:grid-cols-2 gap-4">
-                            {/* Viya Score Hero */}
+                            {/* SkillTen Score Hero */}
                             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
                                 <Link href="/score" className="block st-card p-5 hover:shadow-xl group h-full">
                                     <div className="flex items-center justify-between mb-3">
                                         <div>
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Viya Score™</p>
+                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">SkillTen Score™</p>
                                             <div className="flex items-center gap-2 mt-1">
                                                 <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+12 ↑</span>
                                                 <span className="text-[10px] text-slate-400">vs yesterday</span>

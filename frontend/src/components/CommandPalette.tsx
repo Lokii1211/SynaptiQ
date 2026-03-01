@@ -15,7 +15,7 @@ const ALL_PAGES: SearchResult[] = [
     // Core
     { title: 'Dashboard', subtitle: 'Your home base', icon: '🏠', href: '/dashboard', category: 'Navigation' },
     { title: 'Analytics', subtitle: 'Growth insights', icon: '📊', href: '/analytics', category: 'Navigation' },
-    { title: 'Score Breakdown', subtitle: 'Your Viya Score™', icon: '⭐', href: '/score', category: 'Navigation' },
+    { title: 'Score Breakdown', subtitle: 'Your SkillTen Score™', icon: '⭐', href: '/score', category: 'Navigation' },
     { title: 'Settings', subtitle: 'Profile & privacy', icon: '⚙️', href: '/settings', category: 'Navigation' },
 
     // Practice

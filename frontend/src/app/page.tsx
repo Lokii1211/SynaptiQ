@@ -21,7 +21,7 @@ export default function Home() {
   const features = [
     { icon: '🧬', title: 'Honest Mirror', desc: 'The truth about your career, not what you want to hear', color: 'from-indigo-500 to-violet-600' },
     { icon: '⚡', title: 'Daily Challenge', desc: 'Code every day. Build the habit that gets you hired.', color: 'from-amber-500 to-orange-600' },
-    { icon: '📊', title: 'Viya Score™', desc: 'One number that shows where you stand — verified, not self-claimed', color: 'from-emerald-500 to-teal-600' },
+    { icon: '📊', title: 'SkillTen Score™', desc: 'One number that shows where you stand — verified, not self-claimed', color: 'from-emerald-500 to-teal-600' },
     { icon: '⚔️', title: 'Campus Wars', desc: 'Your college needs you. Compete together. Rise together.', color: 'from-rose-500 to-pink-600' },
     { icon: '✅', title: 'Verified Skills', desc: 'Prove what you know. Beyond your resume. With percentile ranking.', color: 'from-cyan-500 to-blue-600' },
     { icon: '💬', title: 'AI Counselor', desc: 'Career advice that knows your actual profile, not generic tips', color: 'from-purple-500 to-violet-600' },
@@ -34,16 +34,16 @@ export default function Home() {
   ];
 
   const comparison = [
-    { feature: 'Career Assessment (4D)', viya: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Daily Coding Challenge', viya: true, linkedin: false, leetcode: true, gfg: true },
-    { feature: 'Aptitude Practice', viya: true, linkedin: false, leetcode: false, gfg: true },
-    { feature: 'AI Career Counselor', viya: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Campus Wars', viya: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Verified Skills', viya: true, linkedin: true, leetcode: false, gfg: false },
-    { feature: 'India Salary Data', viya: true, linkedin: true, leetcode: false, gfg: false },
-    { feature: 'Solution After 3 Fails', viya: true, linkedin: false, leetcode: false, gfg: true },
-    { feature: 'Parent Portal', viya: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Mock Placement Drive', viya: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Career Assessment (4D)', skillten: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Daily Coding Challenge', skillten: true, linkedin: false, leetcode: true, gfg: true },
+    { feature: 'Aptitude Practice', skillten: true, linkedin: false, leetcode: false, gfg: true },
+    { feature: 'AI Career Counselor', skillten: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Campus Wars', skillten: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Verified Skills', skillten: true, linkedin: true, leetcode: false, gfg: false },
+    { feature: 'India Salary Data', skillten: true, linkedin: true, leetcode: false, gfg: false },
+    { feature: 'Solution After 3 Fails', skillten: true, linkedin: false, leetcode: false, gfg: true },
+    { feature: 'Parent Portal', skillten: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Mock Placement Drive', skillten: true, linkedin: false, leetcode: false, gfg: false },
   ];
 
   const Check = () => <span className="text-emerald-500 font-bold">✓</span>;
@@ -212,7 +212,7 @@ export default function Home() {
                   {comparison.map((row, i) => (
                     <tr key={i} className={`border-b border-slate-100 ${i % 2 === 0 ? '' : 'bg-slate-50/50'}`}>
                       <td className="px-4 py-3 font-medium text-slate-700">{row.feature}</td>
-                      <td className="px-4 py-3 text-center">{row.viya ? <Check /> : <Cross />}</td>
+                      <td className="px-4 py-3 text-center">{row.skillten ? <Check /> : <Cross />}</td>
                       <td className="px-4 py-3 text-center">{row.linkedin ? <Check /> : <Cross />}</td>
                       <td className="px-4 py-3 text-center">{row.leetcode ? <Check /> : <Cross />}</td>
                       <td className="px-4 py-3 text-center">{row.gfg ? <Check /> : <Cross />}</td>

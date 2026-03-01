@@ -40,9 +40,9 @@ const SKILL_GAPS = [
 const LEARNING_CALENDAR = [
     { week: 'Week 1-2', topic: 'SQL Basics', hours: 8, resource: 'NPTEL SQL Course', status: 'current' as const },
     { week: 'Week 3-4', topic: 'SQL Advanced (Joins, Subqueries)', hours: 10, resource: 'NPTEL SQL + Practice', status: 'upcoming' as const },
-    { week: 'Week 5', topic: 'VIYA SQL Verification Quiz', hours: 2, resource: 'SkillTen Platform', status: 'upcoming' as const },
+    { week: 'Week 5', topic: 'SkillTen SQL Verification Quiz', hours: 2, resource: 'SkillTen Platform', status: 'upcoming' as const },
     { week: 'Week 6-8', topic: 'Python for Data Analysis', hours: 12, resource: 'Kaggle + Coursera', status: 'upcoming' as const },
-    { week: 'Week 9', topic: 'VIYA Python Intermediate Verification', hours: 2, resource: 'SkillTen Platform', status: 'upcoming' as const },
+    { week: 'Week 9', topic: 'SkillTen Python Intermediate Verification', hours: 2, resource: 'SkillTen Platform', status: 'upcoming' as const },
     { week: 'Week 10-11', topic: 'Statistics Fundamentals', hours: 10, resource: 'Khan Academy', status: 'upcoming' as const },
     { week: 'Week 12', topic: 'Excel Basics + Final Assessment', hours: 8, resource: 'YouTube + SkillTen', status: 'upcoming' as const },
 ];

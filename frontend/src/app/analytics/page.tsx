@@ -100,12 +100,12 @@ export default function AnalyticsPage() {
                             ))}
                         </div>
 
-                        {/* Viya Score Trend */}
+                        {/* SkillTen Score Trend */}
                         <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                             className="st-card p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
-                                    <h2 className="font-bold text-slate-900">Viya Score™ Trend</h2>
+                                    <h2 className="font-bold text-slate-900">SkillTen Score™ Trend</h2>
                                     <p className="text-xs text-slate-500">Your career readiness over 8 weeks</p>
                                 </div>
                                 <div className="text-right">

@@ -21,7 +21,7 @@ export default function ReferPage() {
     useEffect(() => {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         const user = auth.getUser();
-        const code = user?.profile?.username ? `VIYU-${user.profile.username.toUpperCase().slice(0, 6)}` : 'VIYA-USER';
+        const code = user?.profile?.username ? `SKTN-${user.profile.username.toUpperCase().slice(0, 6)}` : 'SKTN-USER';
         setReferralCode(code);
         // Mock referral data
         setReferrals([

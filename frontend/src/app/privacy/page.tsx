@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
                     <ul>
                         <li><strong>Usage Data:</strong> Features accessed, session duration, streak data, activity heatmap.</li>
                         <li><strong>Device Data:</strong> Device type, browser type, operating system, screen resolution.</li>
-                        <li><strong>Performance Data:</strong> Viya Score™ calculations, percentile rankings, coding performance metrics.</li>
+                        <li><strong>Performance Data:</strong> SkillTen Score™ calculations, percentile rankings, coding performance metrics.</li>
                     </ul>
 
                     <h3>2.3 Information We Never Collect</h3>
@@ -60,7 +60,7 @@ export default function PrivacyPolicyPage() {
                         <li><strong>Career Assessment:</strong> To generate your CareerDNA™ profile and career recommendations.</li>
                         <li><strong>AI Counseling:</strong> To provide personalized, India-specific career guidance.</li>
                         <li><strong>Skill Verification:</strong> To calculate and display your verified skill scores.</li>
-                        <li><strong>Viya Score™:</strong> To compute your composite career readiness score.</li>
+                        <li><strong>SkillTen Score™:</strong> To compute your composite career readiness score.</li>
                         <li><strong>Campus Wars:</strong> To display aggregate college-level leaderboards (never individual details).</li>
                         <li><strong>Parent Portal:</strong> Weekly summary shared only with your explicit consent.</li>
                         <li><strong>Job Matching:</strong> To match you with relevant internship and job opportunities.</li>
@@ -71,7 +71,7 @@ export default function PrivacyPolicyPage() {
                     <p>We do <strong>NOT</strong> sell your personal data. We share data only in these cases:</p>
                     <ul>
                         <li><strong>Public Profile:</strong> Information you choose to make public on your SkillTen profile.</li>
-                        <li><strong>Recruiter Portal:</strong> Only your public profile data, verified skills, and Viya Score™ — never assessment raw data or chat history.</li>
+                        <li><strong>Recruiter Portal:</strong> Only your public profile data, verified skills, and SkillTen Score™ — never assessment raw data or chat history.</li>
                         <li><strong>Campus Command Center:</strong> Only aggregate (college-level) statistics to T&P officers — never individual assessment details.</li>
                         <li><strong>Legal Requirements:</strong> If required by Indian law or court order.</li>
                     </ul>

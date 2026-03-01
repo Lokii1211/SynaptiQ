@@ -30,7 +30,7 @@ export default function AdminPage() {
         { label: 'Problems Solved', value: '18,392', change: '+2.1K this week', icon: '💻', color: 'from-emerald-500 to-teal-500' },
         { label: 'Active Streaks', value: '847', change: '29.7% of users', icon: '🔥', color: 'from-amber-500 to-orange-500' },
         { label: 'DAU', value: '412', change: '14.5% DAU/MAU', icon: '📈', color: 'from-rose-500 to-pink-500' },
-        { label: 'Avg Viya Score', value: '48.2', change: '+3.1 from last month', icon: '📊', color: 'from-indigo-500 to-blue-500' },
+        { label: 'Avg SkillTen Score', value: '48.2', change: '+3.1 from last month', icon: '📊', color: 'from-indigo-500 to-blue-500' },
     ];
 
     const recentUsers = [

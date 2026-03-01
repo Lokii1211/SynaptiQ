@@ -11,8 +11,8 @@ interface FAQ {
 
 const FAQS: FAQ[] = [
     // Getting Started
-    { category: 'Getting Started', q: 'What is SkillTen (VIYA)?', a: 'SkillTen is an AI-powered Career Intelligence Platform built for Indian engineering students. It helps you discover your career strengths through a psychometric assessment, verify your skills, practice coding, prepare for placements, and get honest AI career guidance.' },
-    { category: 'Getting Started', q: 'Is SkillTen free?', a: 'Yes! The core features are completely free — assessment, daily coding challenges, skills dashboard, Viya Score™, and basic AI counseling. Pro plan (₹299/month) unlocks unlimited AI sessions, detailed analytics, and priority support.' },
+    { category: 'Getting Started', q: 'What is SkillTen (SkillTen)?', a: 'SkillTen is an AI-powered Career Intelligence Platform built for Indian engineering students. It helps you discover your career strengths through a psychometric assessment, verify your skills, practice coding, prepare for placements, and get honest AI career guidance.' },
+    { category: 'Getting Started', q: 'Is SkillTen free?', a: 'Yes! The core features are completely free — assessment, daily coding challenges, skills dashboard, SkillTen Score™, and basic AI counseling. Pro plan (₹299/month) unlocks unlimited AI sessions, detailed analytics, and priority support.' },
     { category: 'Getting Started', q: 'Who is SkillTen for?', a: 'SkillTen is designed specifically for engineering students at Indian colleges (Tier 1, 2, and 3). Whether you\'re in CS, IT, ECE, Mechanical, or any branch, our career assessment and guidance are tailored for you.' },
     { category: 'Getting Started', q: 'How do I get started?', a: 'Create an account with your email, then take the 4D Career Assessment (25 minutes). This generates your CareerDNA™ profile, career matches, and honest feedback. After that, explore coding challenges, skill verification, and more.' },
 
@@ -22,10 +22,10 @@ const FAQS: FAQ[] = [
     { category: 'Assessment', q: 'What is the "Honest Mirror"?', a: 'Unlike other platforms that only show positives, our Honest Mirror shows you your career challenges too — areas where you might struggle. This honest feedback helps you prepare better.' },
     { category: 'Assessment', q: 'What if my assessment results feel wrong?', a: 'The assessment reflects your current tendencies, not your permanent identity. If something feels off, talk to our AI Counselor about it. People grow and change — your next assessment in 6 months may look very different.' },
 
-    // Viya Score™
-    { category: 'Viya Score™', q: 'What is the Viya Score™?', a: 'Viya Score™ is your composite career readiness metric: Skills (30%) + Coding (20%) + Aptitude (20%) + Assessment (15%) + Community (10%) + Roadmap Progress (5%). It updates in real-time as you complete activities.' },
-    { category: 'Viya Score™', q: 'How do I improve my Viya Score™?', a: 'Practice daily coding challenges, take aptitude tests, verify your skills through quizzes, complete your assessment, participate in the community, and follow your career roadmap. The score rewards consistent effort.' },
-    { category: 'Viya Score™', q: 'Can recruiters see my Viya Score™?', a: 'Yes — if you make your profile public, recruiters can see your Viya Score™ and verified skills. They cannot see your raw assessment data, AI chat history, or detailed analytics.' },
+    // SkillTen Score™
+    { category: 'SkillTen Score™', q: 'What is the SkillTen Score™?', a: 'SkillTen Score™ is your composite career readiness metric: Skills (30%) + Coding (20%) + Aptitude (20%) + Assessment (15%) + Community (10%) + Roadmap Progress (5%). It updates in real-time as you complete activities.' },
+    { category: 'SkillTen Score™', q: 'How do I improve my SkillTen Score™?', a: 'Practice daily coding challenges, take aptitude tests, verify your skills through quizzes, complete your assessment, participate in the community, and follow your career roadmap. The score rewards consistent effort.' },
+    { category: 'SkillTen Score™', q: 'Can recruiters see my SkillTen Score™?', a: 'Yes — if you make your profile public, recruiters can see your SkillTen Score™ and verified skills. They cannot see your raw assessment data, AI chat history, or detailed analytics.' },
 
     // Coding & Skills
     { category: 'Coding & Skills', q: 'What programming languages are supported?', a: 'Our compiler supports 8 languages: Python, Java, C, C++, JavaScript, TypeScript, Go, and Rust. Solutions are shown in ALL languages after 3 failed attempts.' },

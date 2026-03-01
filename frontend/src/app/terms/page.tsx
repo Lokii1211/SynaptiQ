@@ -32,7 +32,7 @@ export default function TermsPage() {
                         <li>Coding practice and compilation (multi-language)</li>
                         <li>Aptitude test preparation</li>
                         <li>Skill verification and certification</li>
-                        <li>Viya Score™ career readiness metric</li>
+                        <li>SkillTen Score™ career readiness metric</li>
                         <li>Campus Wars (gamified college competition)</li>
                         <li>Mock placement drive simulation</li>
                         <li>Career roadmap generation</li>
@@ -64,7 +64,7 @@ export default function TermsPage() {
                     <h2>5. Assessment & Scores</h2>
                     <ul>
                         <li>The 4D Psychometric Assessment provides career guidance based on your responses. It is <strong>not</strong> a clinical psychological evaluation.</li>
-                        <li>Viya Score™ is a relative metric of career readiness, not an absolute measure of ability.</li>
+                        <li>SkillTen Score™ is a relative metric of career readiness, not an absolute measure of ability.</li>
                         <li>Assessment results and skill scores are <strong>recommendations</strong>, not guarantees of employment.</li>
                         <li>Verified skill badges expire after 90 days and must be renewed through re-assessment.</li>
                     </ul>
@@ -102,7 +102,7 @@ export default function TermsPage() {
 
                     <h2>10. Free & Premium Plans</h2>
                     <ul>
-                        <li><strong>Free tier:</strong> Assessment, limited daily coding challenges, basic AI counseling, Viya Score™.</li>
+                        <li><strong>Free tier:</strong> Assessment, limited daily coding challenges, basic AI counseling, SkillTen Score™.</li>
                         <li><strong>Pro tier (₹299/month):</strong> Unlimited AI sessions, full compiler access, detailed analytics, priority support.</li>
                         <li>Payments processed securely through Razorpay.</li>
                         <li>Refund policy: 7-day money-back guarantee, no questions asked.</li>
@@ -110,7 +110,7 @@ export default function TermsPage() {
 
                     <h2>11. Intellectual Property</h2>
                     <ul>
-                        <li>SkillTen, VIYA, CareerDNA™, Viya Score™, and Honest Mirror are trademarks of SkillTen.</li>
+                        <li>SkillTen, VIYA, CareerDNA™, SkillTen Score™, and Honest Mirror are trademarks of SkillTen.</li>
                         <li>Assessment questions, algorithms, and AI system prompts are proprietary.</li>
                         <li>User-generated content (community posts, code) remains your property but is licensed to us for platform display.</li>
                     </ul>

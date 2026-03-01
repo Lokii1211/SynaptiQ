@@ -32,7 +32,7 @@ export function ShareableCard({
         // Try native share
         const shareData = {
             title: `${name}'s Career DNA — SkillTen`,
-            text: `🧬 My Career DNA says I'm a ${archetype || 'Future Leader'}! Top career match: ${topCareer}. Viya Score™: ${score}/100\n\nDiscover YOUR career DNA for free on SkillTen`,
+            text: `🧬 My Career DNA says I'm a ${archetype || 'Future Leader'}! Top career match: ${topCareer}. SkillTen Score™: ${score}/100\n\nDiscover YOUR career DNA for free on SkillTen`,
             url: 'https://skillten.in',
         };
 
@@ -54,7 +54,7 @@ export function ShareableCard({
 
     const handleDownload = async () => {
         // Copy card content as text for sharing
-        const text = `🧬 ${name}'s Career DNA — SkillTen\n\n🏷️ Archetype: ${archetype || 'Future Leader'}\n🎯 Top Career: ${topCareer}\n📊 Viya Score™: ${score}/100\n\n📐 4D Dimensions:\n  Analytical: ${dimensions.analytical}\n  Interpersonal: ${dimensions.interpersonal}\n  Creative: ${dimensions.creative}\n  Systematic: ${dimensions.systematic}\n\n🔗 Discover YOUR Career DNA: https://skillten.in`;
+        const text = `🧬 ${name}'s Career DNA — SkillTen\n\n🏷️ Archetype: ${archetype || 'Future Leader'}\n🎯 Top Career: ${topCareer}\n📊 SkillTen Score™: ${score}/100\n\n📐 4D Dimensions:\n  Analytical: ${dimensions.analytical}\n  Interpersonal: ${dimensions.interpersonal}\n  Creative: ${dimensions.creative}\n  Systematic: ${dimensions.systematic}\n\n🔗 Discover YOUR Career DNA: https://skillten.in`;
         try {
             await navigator.clipboard.writeText(text);
             setShared(true);
@@ -116,7 +116,7 @@ export function ShareableCard({
                     {/* Score */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-[10px] text-white/40 uppercase font-semibold">Viya Score™</p>
+                            <p className="text-[10px] text-white/40 uppercase font-semibold">SkillTen Score™</p>
                             <p className="text-2xl font-bold">{score}<span className="text-sm text-white/50">/100</span></p>
                         </div>
                         <div className="text-right text-[10px] text-white/30">
