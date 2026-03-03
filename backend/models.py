@@ -548,6 +548,43 @@ class CommunityPost(Base):
     updated_at = Column(DateTime, default=_now, onupdate=_now)
 
     author = relationship("User", back_populates="community_posts")
+    comments = relationship("PostComment", back_populates="post", cascade="all, delete-orphan")
+    likes = relationship("PostLike", back_populates="post", cascade="all, delete-orphan")
+
+
+class PostComment(Base):
+    __tablename__ = "post_comments"
+    id = Column(String, primary_key=True, default=_uuid)
+    post_id = Column(String, ForeignKey("community_posts.id", ondelete="CASCADE"), nullable=False, index=True)
+    author_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    content = Column(Text, nullable=False)
+    likes_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=_now)
+
+    post = relationship("CommunityPost", back_populates="comments")
+    author = relationship("User")
+
+
+class PostLike(Base):
+    __tablename__ = "post_likes"
+    id = Column(String, primary_key=True, default=_uuid)
+    post_id = Column(String, ForeignKey("community_posts.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime, default=_now)
+    __table_args__ = (UniqueConstraint("post_id", "user_id", name="uq_post_like"),)
+
+    post = relationship("CommunityPost", back_populates="likes")
+    user = relationship("User")
+
+
+class PasswordResetToken(Base):
+    __tablename__ = "password_reset_tokens"
+    id = Column(String, primary_key=True, default=_uuid)
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    token = Column(String(100), unique=True, nullable=False, index=True)
+    expires_at = Column(DateTime, nullable=False)
+    is_used = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=_now)
 
 
 # ═══════════════════════════ ROADMAP ═══════════════════════════

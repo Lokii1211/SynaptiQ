@@ -1,173 +1,269 @@
 """
-Community API — Bible §22
-Forum posts, comments, likes, categories
+SkillTen Community API — Real DB-backed posts, comments, likes
+Uses SQLAlchemy with SQLite/PostgreSQL (no supabase client)
 """
-from fastapi import APIRouter, Request
-from datetime import datetime
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
+from typing import Optional, List
+from sqlalchemy.orm import Session
+from datetime import datetime, timezone
+
+from database import get_db
+from models import User, UserProfile, CommunityPost, PostComment, PostLike, ViyaNotification
+from auth import require_user, get_current_user
 
 router = APIRouter()
 
-def require_user(request: Request):
-    user = getattr(request.state, "user", None)
-    if not user:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    return user
+
+class CreatePostReq(BaseModel):
+    title: str
+    content: str
+    category: Optional[str] = "general"
+    tags: Optional[List[str]] = []
+
+class CreateCommentReq(BaseModel):
+    content: str
+
+
+def _post_response(post: CommunityPost, current_user_id: str = None):
+    """Format a post for API response."""
+    author_name = "Anonymous"
+    author_avatar = None
+    author_username = None
+    if post.author and post.author.profile:
+        if not post.is_anonymous:
+            author_name = post.author.profile.display_name or post.author.email.split("@")[0]
+            author_avatar = post.author.profile.avatar_url
+            author_username = post.author.profile.username
+
+    # Check if current user liked this post
+    user_liked = False
+    if current_user_id and post.likes:
+        user_liked = any(like.user_id == current_user_id for like in post.likes)
+
+    return {
+        "id": post.id,
+        "author_id": post.author_id if not post.is_anonymous else None,
+        "author_name": author_name,
+        "author_avatar": author_avatar,
+        "author_username": author_username,
+        "title": post.title,
+        "content": post.content,
+        "post_type": post.post_type or "general",
+        "tags": post.tags or [],
+        "likes_count": post.likes_count,
+        "comments_count": post.comments_count,
+        "views_count": post.views_count,
+        "user_liked": user_liked,
+        "is_pinned": post.is_pinned,
+        "created_at": post.created_at.isoformat() if post.created_at else None,
+    }
+
+
+def _comment_response(comment: PostComment):
+    """Format a comment for API response."""
+    author_name = "Anonymous"
+    if comment.author and comment.author.profile:
+        author_name = comment.author.profile.display_name or comment.author.email.split("@")[0]
+
+    return {
+        "id": comment.id,
+        "author_name": author_name,
+        "author_avatar": comment.author.profile.avatar_url if comment.author and comment.author.profile else None,
+        "content": comment.content,
+        "likes_count": comment.likes_count,
+        "created_at": comment.created_at.isoformat() if comment.created_at else None,
+    }
 
 
 @router.get("/posts")
-async def get_posts(request: Request):
+def get_posts(
+    category: Optional[str] = None,
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=50),
+    user: Optional[User] = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
     """Get community posts with optional category filter."""
-    category = request.query_params.get("category", None)
-    page = int(request.query_params.get("page", "1"))
-    limit = int(request.query_params.get("limit", "20"))
+    query = db.query(CommunityPost).filter(
+        CommunityPost.moderation_status == "approved"
+    ).order_by(CommunityPost.is_pinned.desc(), CommunityPost.created_at.desc())
+
+    if category and category not in ("all", ""):
+        query = query.filter(CommunityPost.post_type == category)
+
+    total = query.count()
     offset = (page - 1) * limit
-    
-    try:
-        from database import supabase
-        query = supabase.table("community_posts").select("*").order("created_at", desc=True)
-        
-        if category and category != "all":
-            query = query.eq("category", category)
-        
-        result = query.range(offset, offset + limit - 1).execute()
-        posts = result.data if result.data else []
-        
-        return {
-            "posts": posts,
-            "page": page,
-            "total": len(posts)
-        }
-    except Exception:
-        # Fallback seed data
-        return {
-            "posts": [
-                {"id": "1", "user_name": "Priya S.", "title": "How I got into Google from a Tier-3 college", "content": "Total prep time: 8 months. Don't let your college name hold you back!", "category": "success-stories", "tags": ["google", "placement"], "likes": 347, "created_at": "2026-02-20"},
-                {"id": "2", "user_name": "Rahul K.", "title": "Best free resources for ML in 2026", "content": "After trying 20+ courses, here are my top picks.", "category": "resources", "tags": ["ml", "free"], "likes": 215, "created_at": "2026-02-19"},
-                {"id": "3", "user_name": "Vikram R.", "title": "Tier-2 college to ₹18L at Swiggy", "content": "ECE graduate. Switched to SWE. Here's my 14-month roadmap.", "category": "success-stories", "tags": ["swiggy", "tier-2"], "likes": 421, "created_at": "2026-02-18"},
-            ],
-            "page": 1,
-            "total": 3
-        }
+    posts = query.offset(offset).limit(limit).all()
+
+    user_id = user.id if user else None
+    return {
+        "posts": [_post_response(p, user_id) for p in posts],
+        "page": page,
+        "total": total,
+        "has_more": (offset + limit) < total,
+    }
 
 
 @router.get("/posts/{post_id}")
-async def get_post(post_id: str, request: Request):
+def get_post(post_id: str, user: Optional[User] = Depends(get_current_user), db: Session = Depends(get_db)):
     """Get a single post with its comments."""
-    try:
-        from database import supabase
-        post_result = supabase.table("community_posts").select("*").eq("id", post_id).single().execute()
-        comments_result = supabase.table("post_comments").select("*").eq("post_id", post_id).order("created_at", desc=False).execute()
-        
-        return {
-            "post": post_result.data,
-            "comments": comments_result.data if comments_result.data else []
-        }
-    except Exception:
-        return {"post": None, "comments": []}
+    post = db.query(CommunityPost).filter(CommunityPost.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    # Increment view count
+    post.views_count = (post.views_count or 0) + 1
+    db.commit()
+
+    # Get comments
+    comments = db.query(PostComment).filter(
+        PostComment.post_id == post_id
+    ).order_by(PostComment.created_at.asc()).all()
+
+    user_id = user.id if user else None
+    return {
+        "post": _post_response(post, user_id),
+        "comments": [_comment_response(c) for c in comments],
+    }
 
 
 @router.post("/posts")
-async def create_post(request: Request):
+def create_post(req: CreatePostReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """Create a new community post."""
-    user = require_user(request)
-    body = await request.json()
-    
-    title = body.get("title", "").strip()
-    content = body.get("content", "").strip()
-    category = body.get("category", "general")
-    tags = body.get("tags", [])
-    
-    if not title or not content:
-        return {"error": "Title and content are required"}
-    
-    if len(title) > 200:
-        return {"error": "Title too long (max 200 chars)"}
-    
-    user_name = user.get("name", user.get("email", "Anonymous").split("@")[0])
-    
-    try:
-        from database import supabase
-        result = supabase.table("community_posts").insert({
-            "user_id": str(user["id"]),
-            "user_name": user_name,
-            "title": title,
-            "content": content,
-            "category": category,
-            "tags": tags,
-            "likes": 0,
-        }).execute()
-        
-        return {
-            "success": True,
-            "post": result.data[0] if result.data else None
-        }
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+    if not req.title.strip() or not req.content.strip():
+        raise HTTPException(status_code=400, detail="Title and content are required")
 
+    if len(req.title) > 300:
+        raise HTTPException(status_code=400, detail="Title too long (max 300 chars)")
 
-@router.post("/posts/{post_id}/comment")
-async def add_comment(post_id: str, request: Request):
-    """Add a comment to a post."""
-    user = require_user(request)
-    body = await request.json()
-    content = body.get("content", "").strip()
-    
-    if not content:
-        return {"error": "Comment content is required"}
-    
-    user_name = user.get("name", user.get("email", "Anonymous").split("@")[0])
-    
-    try:
-        from database import supabase
-        result = supabase.table("post_comments").insert({
-            "post_id": post_id,
-            "user_id": str(user["id"]),
-            "user_name": user_name,
-            "content": content,
-        }).execute()
-        
-        return {
-            "success": True,
-            "comment": result.data[0] if result.data else None
-        }
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+    post = CommunityPost(
+        author_id=user.id,
+        title=req.title.strip(),
+        content=req.content.strip(),
+        post_type=req.category,
+        tags=req.tags,
+    )
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+
+    return {
+        "success": True,
+        "post": _post_response(post, user.id),
+    }
 
 
 @router.post("/posts/{post_id}/like")
-async def like_post(post_id: str, request: Request):
-    """Like/upvote a community post."""
-    require_user(request)
-    
-    try:
-        from database import supabase
-        # Get current likes count
-        post = supabase.table("community_posts").select("likes").eq("id", post_id).single().execute()
-        current_likes = post.data.get("likes", 0) if post.data else 0
-        
-        # Increment
-        supabase.table("community_posts").update({
-            "likes": current_likes + 1
-        }).eq("id", post_id).execute()
-        
-        return {"success": True, "likes": current_likes + 1}
-    except Exception:
-        return {"success": True, "likes": 0}
+def like_post(post_id: str, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """Like/unlike a community post (toggle)."""
+    post = db.query(CommunityPost).filter(CommunityPost.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    # Check if already liked
+    existing = db.query(PostLike).filter(
+        PostLike.post_id == post_id, PostLike.user_id == user.id
+    ).first()
+
+    if existing:
+        # Unlike
+        db.delete(existing)
+        post.likes_count = max((post.likes_count or 0) - 1, 0)
+        db.commit()
+        return {"success": True, "liked": False, "likes_count": post.likes_count}
+    else:
+        # Like
+        like = PostLike(post_id=post_id, user_id=user.id)
+        db.add(like)
+        post.likes_count = (post.likes_count or 0) + 1
+        db.commit()
+
+        # Notify post author (if not own post)
+        if post.author_id != user.id:
+            name = user.profile.display_name if user.profile else user.email.split("@")[0]
+            notif = ViyaNotification(
+                user_id=post.author_id,
+                type="post_like",
+                title=f"{name} liked your post",
+                body=post.title[:100],
+                action_url=f"/community/{post.id}",
+                icon="❤️",
+            )
+            db.add(notif)
+            db.commit()
+
+        return {"success": True, "liked": True, "likes_count": post.likes_count}
+
+
+@router.post("/posts/{post_id}/comment")
+def add_comment(post_id: str, req: CreateCommentReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """Add a comment to a post."""
+    post = db.query(CommunityPost).filter(CommunityPost.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+
+    if not req.content.strip():
+        raise HTTPException(status_code=400, detail="Comment content is required")
+
+    comment = PostComment(
+        post_id=post_id,
+        author_id=user.id,
+        content=req.content.strip(),
+    )
+    db.add(comment)
+    post.comments_count = (post.comments_count or 0) + 1
+    db.commit()
+    db.refresh(comment)
+
+    # Notify post author
+    if post.author_id != user.id:
+        name = user.profile.display_name if user.profile else user.email.split("@")[0]
+        notif = ViyaNotification(
+            user_id=post.author_id,
+            type="post_comment",
+            title=f"{name} commented on your post",
+            body=req.content[:100],
+            action_url=f"/community/{post.id}",
+            icon="💬",
+        )
+        db.add(notif)
+        db.commit()
+
+    return {
+        "success": True,
+        "comment": _comment_response(comment),
+    }
+
+
+@router.delete("/posts/{post_id}")
+def delete_post(post_id: str, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """Delete own post."""
+    post = db.query(CommunityPost).filter(CommunityPost.id == post_id).first()
+    if not post:
+        raise HTTPException(status_code=404, detail="Post not found")
+    if post.author_id != user.id and user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not your post")
+
+    db.delete(post)
+    db.commit()
+    return {"success": True}
 
 
 @router.get("/categories")
-async def get_categories(request: Request):
+def get_categories():
     """Get available community categories."""
     return {
         "categories": [
             {"slug": "all", "label": "All Posts", "icon": "📋"},
-            {"slug": "success-stories", "label": "Success Stories", "icon": "🏆"},
+            {"slug": "placements", "label": "Placements", "icon": "🎯"},
+            {"slug": "career-advice", "label": "Career Advice", "icon": "💡"},
             {"slug": "resources", "label": "Resources", "icon": "📚"},
-            {"slug": "career-dilemma", "label": "Career Dilemma", "icon": "🤔"},
-            {"slug": "interview-prep", "label": "Interview Prep", "icon": "🎯"},
-            {"slug": "general", "label": "General", "icon": "💬"},
+            {"slug": "success-stories", "label": "Success Stories", "icon": "🏆"},
+            {"slug": "questions", "label": "Questions", "icon": "❓"},
+            {"slug": "interview-prep", "label": "Interview Prep", "icon": "🎤"},
             {"slug": "college-life", "label": "College Life", "icon": "🎓"},
             {"slug": "side-projects", "label": "Side Projects", "icon": "🔨"},
+            {"slug": "general", "label": "General", "icon": "💬"},
         ]
     }

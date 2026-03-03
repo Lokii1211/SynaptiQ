@@ -14,14 +14,21 @@
             "headers": {
                 "Access-Control-Allow-Origin": "*",
                 "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
+                "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With, Accept",
+                "Access-Control-Allow-Credentials": "true",
                 "Access-Control-Max-Age": "86400"
             },
             "status": 204
         },
         {
             "src": "/(.*)",
-            "dest": "main.py"
+            "dest": "main.py",
+            "headers": {
+                "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Credentials": "true"
+            }
         }
-    ]
+    ],
+    "trailingSlash": false,
+    "cleanUrls": true
 }

@@ -17,7 +17,7 @@ SMTP_USER = os.getenv("SMTP_USER", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 FROM_EMAIL = os.getenv("FROM_EMAIL", "hello@skillten.in")
 FROM_NAME = os.getenv("FROM_NAME", "SkillTen")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3001")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 
 def _send_email(to_email: str, subject: str, html_body: str, text_body: str = "") -> bool:

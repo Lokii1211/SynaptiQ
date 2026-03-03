@@ -3,7 +3,13 @@
  * All frontend requests go through here to the Python backend
  */
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+// In production (Vercel), use relative URL so requests go through the rewrite proxy (no CORS).
+// In development, use the local backend directly.
+const isServer = typeof window === 'undefined';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (
+    isServer ? 'http://localhost:8000' :
+        (window.location.hostname === 'localhost' ? 'http://localhost:8000' : '')
+);
 
 class ApiError extends Error {
     status: number;
@@ -56,6 +62,55 @@ export const api = {
 
     updateProfile: (data: Record<string, any>) =>
         request('/auth/profile', { method: 'PATCH', body: JSON.stringify(data) }),
+
+    forgotPassword: (email: string) =>
+        request('/auth/forgot-password', { method: 'POST', body: JSON.stringify({ email }) }),
+
+    resetPassword: (token: string, new_password: string) =>
+        request('/auth/reset-password', { method: 'POST', body: JSON.stringify({ token, new_password }) }),
+
+    changePassword: (current_password: string, new_password: string) =>
+        request('/auth/change-password', { method: 'POST', body: JSON.stringify({ current_password, new_password }) }),
+
+    // ═══════════ NOTIFICATIONS ═══════════
+    getNotifications: (unread_only: boolean = false, page: number = 1) =>
+        request(`/notifications/?unread_only=${unread_only}&page=${page}`),
+
+    markRead: (notification_id: string) =>
+        request('/notifications/mark-read', { method: 'POST', body: JSON.stringify({ notification_id }) }),
+
+    markAllRead: () =>
+        request('/notifications/mark-all-read', { method: 'POST' }),
+
+    clearNotifications: () =>
+        request('/notifications/clear', { method: 'DELETE' }),
+
+    // ═══════════ COMMUNITY ═══════════
+    getCommunityPosts: (category?: string, page: number = 1, limit: number = 20) =>
+        request(`/community/posts?page=${page}&limit=${limit}${category ? `&category=${category}` : ''}`),
+
+    createCommunityPost: (data: { title?: string; content: string; category?: string; tags?: string[] }) =>
+        request('/community/posts', { method: 'POST', body: JSON.stringify(data) }),
+
+    likePost: (post_id: string) =>
+        request(`/community/posts/${post_id}/like`, { method: 'POST' }),
+
+    commentOnPost: (post_id: string, content: string) =>
+        request(`/community/posts/${post_id}/comments`, { method: 'POST', body: JSON.stringify({ content }) }),
+
+    getCommunityCategories: () => request('/community/categories'),
+
+    // ═══════════ CONNECTIONS ═══════════
+    getPeers: (search?: string, page: number = 1) =>
+        request(`/connections/peers?page=${page}${search ? `&search=${search}` : ''}`),
+
+    getConnections: (status: string = 'accepted') =>
+        request(`/connections/connections?status=${status}`),
+
+    sendConnectionRequest: (receiver_id: string, message?: string) =>
+        request('/connections/connect', { method: 'POST', body: JSON.stringify({ receiver_id, message }) }),
+
+    getConnectionStats: () => request('/connections/stats'),
 
     // ═══════════ ASSESSMENT ═══════════
     startAssessment: (device_type: string = 'web') =>
@@ -150,26 +205,20 @@ export const api = {
 
     getCompanyReviews: (slug: string) => request(`/companies/${slug}/reviews`),
 
-    // ═══════════ NETWORK ═══════════
-    getConnections: () => request('/connections/connections'),
-
+    // ═══════════ NETWORK (Legacy) ═══════════
     findPeers: () => request('/connections/peers'),
 
     connectPeer: (user_id: string) => request('/connections/connect', { method: 'POST', body: JSON.stringify({ user_id }) }),
 
     disconnectPeer: (user_id: string) => request('/connections/disconnect', { method: 'DELETE', body: JSON.stringify({ user_id }) }),
 
-    getCommunityPosts: (category?: string) => request(`/community/posts${category ? `?category=${category}` : ''}`),
-
-    createCommunityPost: (data: { title: string; content: string; category?: string; tags?: string[] }) =>
-        request('/community/posts', { method: 'POST', body: JSON.stringify(data) }),
-
-    likePost: (post_id: string) => request(`/community/posts/${post_id}/like`, { method: 'POST' }),
-
     addComment: (post_id: string, content: string) =>
         request(`/community/posts/${post_id}/comment`, { method: 'POST', body: JSON.stringify({ content }) }),
 
-    // ═══════════ RESUME ═══════════
+    markNotificationRead: (id: string) =>
+        request('/notifications/mark-read', { method: 'POST', body: JSON.stringify({ notification_id: id }) }),
+
+
     getResumes: () => request('/resume/'),
 
     createResume: (data: { title: string; template?: string; content: any; target_role: string }) =>
@@ -185,15 +234,7 @@ export const api = {
 
     getChatSession: (id: string) => request(`/chat/sessions/${id}`),
 
-    // ═══════════ NOTIFICATIONS ═══════════
-    getNotifications: (unread_only?: boolean) =>
-        request(`/notifications/?unread_only=${unread_only || false}`),
 
-    markNotificationRead: (id: string) =>
-        request('/notifications/mark-read', { method: 'POST', body: JSON.stringify({ notification_id: id }) }),
-
-    markAllRead: () =>
-        request('/notifications/mark-all-read', { method: 'POST' }),
 
     // ═══════════ CAMPUS ═══════════
     getColleges: () => request('/campus/colleges'),

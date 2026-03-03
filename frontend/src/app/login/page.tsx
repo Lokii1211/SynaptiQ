@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/store/auth.store';
 import { auth } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? '' : 'http://localhost:8000');
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -95,7 +95,7 @@ export default function LoginPage() {
                                     className="w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500" />
                                 <span className="text-xs text-slate-500">Remember me</span>
                             </label>
-                            <Link href="/help" className="text-xs text-indigo-600 font-medium hover:text-indigo-700">
+                            <Link href="/forgot-password" className="text-xs text-indigo-600 font-medium hover:text-indigo-700">
                                 Forgot password?
                             </Link>
                         </div>

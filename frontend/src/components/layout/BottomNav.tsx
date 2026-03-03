@@ -13,42 +13,41 @@ const NAV_ITEMS = [
         match: ['/dashboard'],
     },
     {
+        href: '/community', label: 'Feed',
+        icon: (active: boolean) => (
+            <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+            </svg>
+        ),
+        match: ['/community'],
+    },
+    {
+        href: '/network', label: 'Network',
+        icon: (active: boolean) => (
+            <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+        ),
+        match: ['/network', '/messages'],
+    },
+    {
         href: '/practice', label: 'Practice',
         icon: (active: boolean) => (
             <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
             </svg>
         ),
-        match: ['/practice', '/daily', '/aptitude', '/mock-drive', '/challenges'],
+        match: ['/practice', '/daily', '/aptitude', '/mock-drive', '/challenges', '/problems'],
         badge: '⚡',
     },
     {
-        href: '/leaderboard', label: 'Compete',
-        icon: (active: boolean) => (
-            <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
-            </svg>
-        ),
-        match: ['/leaderboard', '/campus', '/tracker', '/achievements'],
-    },
-    {
-        href: '/assessment', label: 'Career',
-        icon: (active: boolean) => (
-            <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-            </svg>
-        ),
-        match: ['/assessment', '/careers', '/career', '/roadmap', '/skills', '/chat', '/results', '/score'],
-    },
-    {
-        href: '/settings', label: 'Profile',
+        href: '/profile', label: 'Profile',
         icon: (active: boolean) => (
             <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={active ? 0 : 1.8} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
         ),
-        match: ['/settings', '/analytics', '/parent', '/refer', '/help', '/u/'],
+        match: ['/profile', '/settings', '/analytics', '/score', '/refer', '/help', '/u/'],
     },
 ];
 
@@ -62,14 +61,14 @@ export function BottomNav() {
         <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
             {/* Glassmorphism background */}
             <div className="bg-white/90 backdrop-blur-xl border-t border-slate-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
-                <div className="flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom,0px)]">
+                <div className="flex items-center justify-around px-1 pb-[env(safe-area-inset-bottom,0px)]">
                     {NAV_ITEMS.map((item) => {
                         const active = isActive(item);
                         return (
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-3.5 min-w-[60px] transition-all duration-200 ${active
+                                className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-3 min-w-[56px] transition-all duration-200 ${active
                                     ? 'text-indigo-600'
                                     : 'text-slate-400'
                                     }`}

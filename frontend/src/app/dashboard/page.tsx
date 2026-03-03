@@ -13,6 +13,8 @@ function generateHeatmapData() {
     return data;
 }
 
+const EMPTY_HEATMAP = new Array(91).fill(0);
+
 const HEAT_COLORS = ['bg-slate-100', 'bg-emerald-200', 'bg-emerald-300', 'bg-emerald-400', 'bg-emerald-600'];
 
 /* ─── Score Ring ─── */
@@ -42,9 +44,10 @@ export default function DashboardPage() {
     const [profile, setProfile] = useState<any>(null);
     const [trending, setTrending] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const heatmap = useMemo(() => generateHeatmapData(), []);
+    const [heatmap, setHeatmap] = useState<number[]>(EMPTY_HEATMAP);
 
     useEffect(() => {
+        setHeatmap(generateHeatmapData());
         if (typeof window !== 'undefined') {
             const params = new URLSearchParams(window.location.search);
             const googleToken = params.get('token');

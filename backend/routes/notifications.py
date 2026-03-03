@@ -1,134 +1,140 @@
 """
-Notifications API — Bible §30
-Push notifications for streaks, achievements, jobs, challenges
+SkillTen Notifications API — Real DB-backed notifications
+Uses SQLAlchemy with SQLite/PostgreSQL
 """
-from fastapi import APIRouter, Request
-from datetime import datetime
+from fastapi import APIRouter, Depends, HTTPException, Query
+from pydantic import BaseModel
+from typing import Optional
+from sqlalchemy.orm import Session
+from datetime import datetime, timezone
+
+from database import get_db
+from models import User, ViyaNotification
+from auth import require_user
 
 router = APIRouter()
 
-def require_user(request: Request):
-    """Extract user from request state (set by auth middleware)."""
-    user = getattr(request.state, "user", None)
-    if not user:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=401, detail="Not authenticated")
-    return user
+
+class MarkReadReq(BaseModel):
+    notification_id: str
+
+class SendNotifReq(BaseModel):
+    user_id: Optional[str] = None
+    type: str = "system"
+    title: str
+    body: str
+    icon: Optional[str] = "🔔"
+    action_url: Optional[str] = None
 
 
 @router.get("/")
-async def get_notifications(request: Request):
-    """Get all notifications for the current user."""
-    user = require_user(request)
-    user_id = str(user.get("id", ""))
-    
-    try:
-        from database import supabase
-        result = supabase.table("notifications").select("*").eq(
-            "user_id", user_id
-        ).order("created_at", desc=True).limit(50).execute()
-        
-        notifications = result.data if result.data else []
-        unread_count = len([n for n in notifications if not n.get("is_read")])
-        
-        return {
-            "notifications": notifications,
-            "unread_count": unread_count,
-            "total": len(notifications)
-        }
-    except Exception:
-        # Return empty if DB not set up yet
-        return {
-            "notifications": [],
-            "unread_count": 0,
-            "total": 0
-        }
+def get_notifications(
+    unread_only: bool = False,
+    page: int = Query(1, ge=1),
+    limit: int = Query(30, ge=1, le=100),
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db)
+):
+    """Get notifications for the current user."""
+    query = db.query(ViyaNotification).filter(
+        ViyaNotification.user_id == user.id
+    )
+
+    if unread_only:
+        query = query.filter(ViyaNotification.is_read == False)
+
+    total = query.count()
+    unread_count = db.query(ViyaNotification).filter(
+        ViyaNotification.user_id == user.id,
+        ViyaNotification.is_read == False,
+    ).count()
+
+    offset = (page - 1) * limit
+    notifications = query.order_by(
+        ViyaNotification.created_at.desc()
+    ).offset(offset).limit(limit).all()
+
+    return {
+        "notifications": [
+            {
+                "id": n.id,
+                "type": n.type,
+                "title": n.title,
+                "body": n.body,
+                "icon": n.icon,
+                "action_url": n.action_url,
+                "is_read": n.is_read,
+                "created_at": n.created_at.isoformat() if n.created_at else None,
+            }
+            for n in notifications
+        ],
+        "unread_count": unread_count,
+        "total": total,
+    }
 
 
 @router.post("/mark-read")
-async def mark_notification_read(request: Request):
+def mark_notification_read(req: MarkReadReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """Mark a specific notification as read."""
-    user = require_user(request)
-    body = await request.json()
-    notification_id = body.get("notification_id")
-    
-    if not notification_id:
-        return {"error": "notification_id required"}
-    
-    try:
-        from database import supabase
-        supabase.table("notifications").update({
-            "is_read": True
-        }).eq("id", notification_id).eq("user_id", str(user["id"])).execute()
-        
-        return {"success": True}
-    except Exception:
-        return {"success": True}  # Graceful fallback
+    notif = db.query(ViyaNotification).filter(
+        ViyaNotification.id == req.notification_id,
+        ViyaNotification.user_id == user.id,
+    ).first()
+
+    if notif:
+        notif.is_read = True
+        notif.read_at = datetime.now(timezone.utc)
+        db.commit()
+
+    return {"success": True}
 
 
 @router.post("/mark-all-read")
-async def mark_all_read(request: Request):
-    """Mark all notifications as read for the current user."""
-    user = require_user(request)
-    
-    try:
-        from database import supabase
-        supabase.table("notifications").update({
-            "is_read": True
-        }).eq("user_id", str(user["id"])).eq("is_read", False).execute()
-        
-        return {"success": True, "message": "All notifications marked as read"}
-    except Exception:
-        return {"success": True}
+def mark_all_read(user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """Mark all notifications as read."""
+    db.query(ViyaNotification).filter(
+        ViyaNotification.user_id == user.id,
+        ViyaNotification.is_read == False,
+    ).update({"is_read": True, "read_at": datetime.now(timezone.utc)})
+    db.commit()
+
+    return {"success": True, "message": "All notifications marked as read"}
 
 
 @router.post("/send")
-async def send_notification(request: Request):
-    """Send a notification to a user (admin or system use)."""
-    user = require_user(request)
-    body = await request.json()
-    
-    target_user_id = body.get("user_id", str(user["id"]))
-    notification_type = body.get("type", "system")
-    title = body.get("title", "SkillTen Notification")
-    message = body.get("message", "")
-    icon = body.get("icon", "🔔")
-    action_url = body.get("action_url")
-    
-    if not message:
-        return {"error": "message is required"}
-    
-    try:
-        from database import supabase
-        result = supabase.table("notifications").insert({
-            "user_id": target_user_id,
-            "type": notification_type,
-            "title": title,
-            "message": message,
-            "icon": icon,
-            "action_url": action_url,
-            "is_read": False,
-        }).execute()
-        
-        return {
-            "success": True,
-            "notification": result.data[0] if result.data else None
+def send_notification(req: SendNotifReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """Send a notification (admin or system use)."""
+    target_user_id = req.user_id or user.id
+
+    notif = ViyaNotification(
+        user_id=target_user_id,
+        type=req.type,
+        title=req.title,
+        body=req.body,
+        icon=req.icon,
+        action_url=req.action_url,
+    )
+    db.add(notif)
+    db.commit()
+    db.refresh(notif)
+
+    return {
+        "success": True,
+        "notification": {
+            "id": notif.id,
+            "type": notif.type,
+            "title": notif.title,
+            "body": notif.body,
         }
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+    }
 
 
 @router.delete("/clear")
-async def clear_notifications(request: Request):
+def clear_notifications(user: User = Depends(require_user), db: Session = Depends(get_db)):
     """Clear all notifications for the current user."""
-    user = require_user(request)
-    
-    try:
-        from database import supabase
-        supabase.table("notifications").delete().eq(
-            "user_id", str(user["id"])
-        ).execute()
-        
-        return {"success": True, "message": "All notifications cleared"}
-    except Exception:
-        return {"success": True}
+    deleted = db.query(ViyaNotification).filter(
+        ViyaNotification.user_id == user.id
+    ).delete()
+    db.commit()
+
+    return {"success": True, "deleted": deleted}

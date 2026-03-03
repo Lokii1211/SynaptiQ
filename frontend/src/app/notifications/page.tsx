@@ -6,6 +6,20 @@ import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
 
+function formatTimeAgo(dateStr: string): string {
+    const now = new Date();
+    const date = new Date(dateStr);
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    const diffHrs = Math.floor(diffMins / 60);
+    if (diffHrs < 24) return `${diffHrs}h ago`;
+    const diffDays = Math.floor(diffHrs / 24);
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return `${Math.floor(diffDays / 7)}w ago`;
+}
+
 interface Notification {
     id: string;
     type: 'achievement' | 'streak' | 'job' | 'community' | 'system' | 'challenge';
@@ -48,8 +62,19 @@ export default function NotificationsPage() {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         // Try real API first, then fallback to mock
         api.getNotifications().then(data => {
-            const real = data.notifications || [];
-            setNotifications(real.length > 0 ? real : MOCK_NOTIFICATIONS);
+            const raw = data.notifications || [];
+            // Map API fields to component fields
+            const mapped: Notification[] = raw.map((n: any) => ({
+                id: n.id,
+                type: n.type || 'system',
+                title: n.title,
+                message: n.body || n.message || '',
+                time: n.created_at ? formatTimeAgo(n.created_at) : 'Just now',
+                read: n.is_read ?? n.read ?? false,
+                action_url: n.action_url,
+                icon: n.icon || '🔔',
+            }));
+            setNotifications(mapped.length > 0 ? mapped : MOCK_NOTIFICATIONS);
             setLoading(false);
         }).catch(() => {
             setNotifications(MOCK_NOTIFICATIONS);

@@ -89,7 +89,7 @@ export default function PublicProfilePage() {
 
     useEffect(() => {
         if (!username) return;
-        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' ? '' : 'http://localhost:8000');
         fetch(`${BACKEND_URL}/api/auth/profile/${username}`)
             .then(res => {
                 if (!res.ok) throw new Error('Profile not found');
