@@ -247,10 +247,10 @@ def change_password(req: ChangePasswordReq, user: User = Depends(require_user), 
 # ─── Google OAuth ───
 import os, httpx
 
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "242493429474-giklhq9ldehpk7bg47hjnpombped2tt6.apps.googleusercontent.com")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
-GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "http://localhost:8000/api/auth/google/callback")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "https://skillten.vercel.app/api/auth/google/callback")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://synaptiqq.vercel.app")
 
 
 @router.get("/google")
