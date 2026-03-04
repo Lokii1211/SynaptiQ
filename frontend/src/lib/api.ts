@@ -3,13 +3,21 @@
  * All frontend requests go through here to the Python backend
  */
 
-// In production (Vercel), use relative URL so requests go through the rewrite proxy (no CORS).
-// In development, use the local backend directly.
-const isServer = typeof window === 'undefined';
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (
-    isServer ? 'http://localhost:8000' :
-        (window.location.hostname === 'localhost' ? 'http://localhost:8000' : '')
-);
+// On production (Vercel), use '' (empty = relative URL) so /api/* goes through
+// the Vercel rewrite proxy defined in vercel.json → same-origin, zero CORS issues.
+// On localhost, hit the local backend directly.
+function getBackendUrl(): string {
+    if (typeof window === 'undefined') {
+        // Server-side rendering: use env var or localhost
+        return (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
+    }
+    // Client-side: if we're on localhost, use local backend. Otherwise, use relative URL (Vercel rewrite).
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return 'http://localhost:8000';
+    }
+    return ''; // relative URL → Vercel rewrite proxy → no CORS
+}
+const BACKEND_URL = getBackendUrl();
 
 class ApiError extends Error {
     status: number;

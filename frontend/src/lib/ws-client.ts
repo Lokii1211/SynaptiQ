@@ -42,7 +42,8 @@ class SkillTenWebSocket {
         this.isConnecting = true;
 
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const backendHost = process.env.NEXT_PUBLIC_BACKEND_URL?.replace(/^https?:\/\//, '') || 'localhost:8000';
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const backendHost = isLocal ? 'localhost:8000' : window.location.host;
         const wsUrl = `${protocol}//${backendHost}/api/ws/${userId}`;
 
         try {
