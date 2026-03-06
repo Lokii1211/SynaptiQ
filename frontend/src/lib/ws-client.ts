@@ -202,7 +202,7 @@ class SkillTenNotificationClient {
         if (!token) return;
 
         try {
-            const res = await fetch(`${BACKEND_URL}/api/notifications/?unread=true&limit=10`, {
+            const res = await fetch(`${BACKEND_URL}/api/notifications/?unread_only=true&limit=10`, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
 
