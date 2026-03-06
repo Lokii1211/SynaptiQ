@@ -87,20 +87,27 @@ def _user_response(user: User, profile: UserProfile):
 
 @router.post("/signup")
 def signup(req: SignupReq, db: Session = Depends(get_db)):
-    if db.query(User).filter(User.email == req.email).first():
-        raise HTTPException(status_code=400, detail="Email already registered")
-    if db.query(UserProfile).filter(UserProfile.username == req.username).first():
-        raise HTTPException(status_code=400, detail="Username taken")
+    try:
+        if db.query(User).filter(User.email == req.email).first():
+            raise HTTPException(status_code=400, detail="Email already registered")
+        if db.query(UserProfile).filter(UserProfile.username == req.username).first():
+            raise HTTPException(status_code=400, detail="Username taken")
 
-    user = User(email=req.email, hashed_password=hash_password(req.password))
-    db.add(user)
-    db.flush()
+        user = User(email=req.email, hashed_password=hash_password(req.password))
+        db.add(user)
+        db.flush()
 
-    profile = UserProfile(user_id=user.id, username=req.username, display_name=req.display_name)
-    db.add(profile)
-    db.commit()
-    db.refresh(user)
-    db.refresh(profile)
+        profile = UserProfile(user_id=user.id, username=req.username, display_name=req.display_name)
+        db.add(profile)
+        db.commit()
+        db.refresh(user)
+        db.refresh(profile)
+    except HTTPException:
+        raise
+    except Exception as e:
+        db.rollback()
+        print(f"[Signup] Error creating user: {e}")
+        raise HTTPException(status_code=500, detail=f"Account creation failed: {str(e)}")
 
     # Send welcome email (async-safe, non-blocking)
     try:
