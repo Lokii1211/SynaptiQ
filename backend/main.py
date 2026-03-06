@@ -101,9 +101,12 @@ def health_db():
     """Diagnostic endpoint — shows database status"""
     from database import DATABASE_URL, SessionLocal
     from sqlalchemy import text
+    # Mask password in URL for display
+    import re
+    safe_url = re.sub(r':([^@]+)@', ':****@', DATABASE_URL[:80])
     info = {
         "db_type": "postgresql" if "postgresql" in DATABASE_URL else "sqlite",
-        "db_url_prefix": DATABASE_URL[:30] + "...",
+        "db_url_safe": safe_url,
         "connection": "unknown",
         "tables": {},
         "error": None,
@@ -120,11 +123,11 @@ def health_db():
                 count = result.scalar()
                 info["tables"][table] = count
             except Exception as e:
-                info["tables"][table] = f"ERROR: {str(e)[:80]}"
+                info["tables"][table] = f"ERROR: {str(e)[:100]}"
         db.close()
     except Exception as e:
         info["connection"] = "failed"
-        info["error"] = str(e)[:200]
+        info["error"] = str(e)[:500]
     return info
 
 

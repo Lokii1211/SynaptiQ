@@ -38,6 +38,14 @@ print(f"[DB] Using {'PostgreSQL' if _is_postgres else 'SQLite'} | Serverless: {_
 connect_args = {}
 if not _is_postgres:
     connect_args["check_same_thread"] = False
+else:
+    # Supabase requires SSL connections
+    connect_args["sslmode"] = "require"
+
+# Also add sslmode to URL if not present (belt + suspenders)
+if _is_postgres and "sslmode" not in DATABASE_URL:
+    separator = "&" if "?" in DATABASE_URL else "?"
+    DATABASE_URL = DATABASE_URL + separator + "sslmode=require"
 
 if _is_postgres and _is_serverless:
     # Serverless: use NullPool — each request gets a fresh connection, no leak risk
@@ -46,7 +54,6 @@ if _is_postgres and _is_serverless:
         connect_args=connect_args,
         echo=False,
         poolclass=NullPool,
-        pool_pre_ping=True,
     )
 elif _is_postgres:
     # Long-running server: use connection pool
