@@ -12,7 +12,7 @@ from score_calculator import calculate_viya_score
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 def get_score(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),

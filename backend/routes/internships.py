@@ -7,7 +7,7 @@ from models import JobListing
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("")
 def list_internships(
     q: Optional[str] = None, location: Optional[str] = None,
     is_remote: Optional[bool] = None,

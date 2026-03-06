@@ -1,0 +1,24 @@
+Login: 200 token=True
+[200] Y Assessment Questions      | /api/assessment/questions
+[200] Y Assessment Profile        | /api/assessment/profile
+[404] X Careers List              | /api/careers
+[200] Y Coding Problems           | /api/coding/problems
+[200] Y Daily Challenge           | /api/coding/daily
+[200] Y Aptitude Topics           | /api/aptitude/topics
+[404] X Skills List               | /api/skills
+[200] Y Skills Trending           | /api/skills/trending
+[404] X Jobs List                 | /api/jobs
+[404] X Notifications             | /api/notifications/
+[200] Y Community Posts           | /api/community/posts
+[404] X Leaderboard               | /api/leaderboard
+[200] Y Campus Wars               | /api/leaderboard/campus-wars
+[404] X Challenges                | /api/challenges
+[404] X Resume                    | /api/resume
+[404] X Achievements              | /api/achievements
+[404] X SkillTen Score            | /api/score
+[404] X Streak Tracker            | /api/tracker
+[200] Y Universal Search          | /api/search?q=python
+[200] Y Chat Sessions             | /api/chat/sessions
+
+PASS: 10  FAIL: 10  TOTAL: 20
+Rate: 50%

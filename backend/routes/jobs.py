@@ -12,7 +12,7 @@ from auth import require_user
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 def list_jobs(
     q: Optional[str] = None,
     role_type: Optional[str] = None,

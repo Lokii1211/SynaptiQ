@@ -65,7 +65,6 @@ Built for Indian students. Powered by AI.
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,
-    redirect_slashes=False,
 )
 
 app.add_middleware(

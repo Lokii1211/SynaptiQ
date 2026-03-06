@@ -47,7 +47,7 @@ TRENDING_SKILLS_DATA = [
 ]
 
 
-@router.get("/")
+@router.get("")
 def list_skills_root(
     category: Optional[str] = None,
     search: Optional[str] = None,

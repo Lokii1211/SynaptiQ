@@ -15,14 +15,14 @@ class ResumeReq(BaseModel):
     content: dict
     target_role: Optional[str] = None
 
-@router.post("/")
+@router.post(""")
 def create_resume(req: ResumeReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     resume = Resume(user_id=user.id, title=req.title, template=req.template, content=req.content, target_role=req.target_role)
     db.add(resume)
     db.commit()
     return {"resume_id": resume.id, "status": "created"}
 
-@router.get("/")
+@router.get("")
 def list_resumes(user: User = Depends(require_user), db: Session = Depends(get_db)):
     resumes = db.query(Resume).filter_by(user_id=user.id).order_by(Resume.updated_at.desc()).all()
     return {"resumes": [{"id": r.id, "title": r.title, "template": r.template, "ats_score": r.ats_score, "target_role": r.target_role, "is_primary": r.is_primary, "updated_at": str(r.updated_at)} for r in resumes]}

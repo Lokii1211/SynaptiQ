@@ -44,7 +44,7 @@ ACHIEVEMENTS = [
 ]
 
 
-@router.get("/")
+@router.get("")
 def get_achievements(user=Depends(require_user), db: Session = Depends(get_db)):
     """Get all achievements with user's unlock status"""
     from models import UserProfile, CodingSubmission, AssessmentSession

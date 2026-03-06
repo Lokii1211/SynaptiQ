@@ -12,7 +12,7 @@ class ReferralCodeReq(BaseModel):
     ref_code: str
 
 
-@router.get("/")
+@router.get("")
 def get_referrals(user=Depends(require_user), db: Session = Depends(get_db)):
     """Get current user's referral stats"""
     from models import UserProfile

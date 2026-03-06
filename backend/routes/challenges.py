@@ -12,7 +12,7 @@ from auth import require_user
 router = APIRouter()
 
 
-@router.get("/")
+@router.get("")
 def list_challenges(
     status: Optional[str] = None, challenge_type: Optional[str] = None,
     skip: int = 0, limit: int = 20, db: Session = Depends(get_db)

@@ -13,7 +13,7 @@ class StreakFreezeReq(BaseModel):
     use_freeze: bool = True
 
 
-@router.get("/")
+@router.get("")
 def get_streak(user=Depends(require_user), db: Session = Depends(get_db)):
     """Get full streak data for current user"""
     from models import UserProfile

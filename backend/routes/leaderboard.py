@@ -20,7 +20,7 @@ router = APIRouter()
 
 # ─── 0. Leaderboard Overview ───
 
-@router.get("/")
+@router.get("")
 def leaderboard_overview(
     db: Session = Depends(get_db),
 ):

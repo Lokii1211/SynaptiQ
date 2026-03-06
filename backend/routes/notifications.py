@@ -27,7 +27,7 @@ class SendNotifReq(BaseModel):
     action_url: Optional[str] = None
 
 
-@router.get("/")
+@router.get("")
 def get_notifications(
     unread_only: bool = False,
     page: int = Query(1, ge=1),
