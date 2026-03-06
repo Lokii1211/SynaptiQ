@@ -96,6 +96,38 @@ def health():
     return {"status": "healthy", "platform": "SkillTen"}
 
 
+@app.get("/health/db")
+def health_db():
+    """Diagnostic endpoint — shows database status"""
+    from database import DATABASE_URL, SessionLocal
+    from sqlalchemy import text
+    info = {
+        "db_type": "postgresql" if "postgresql" in DATABASE_URL else "sqlite",
+        "db_url_prefix": DATABASE_URL[:30] + "...",
+        "connection": "unknown",
+        "tables": {},
+        "error": None,
+    }
+    try:
+        db = SessionLocal()
+        # Test connection
+        db.execute(text("SELECT 1"))
+        info["connection"] = "ok"
+        # Check key tables
+        for table in ["users", "user_profiles", "careers", "questions", "coding_problems"]:
+            try:
+                result = db.execute(text(f"SELECT COUNT(*) FROM {table}"))
+                count = result.scalar()
+                info["tables"][table] = count
+            except Exception as e:
+                info["tables"][table] = f"ERROR: {str(e)[:80]}"
+        db.close()
+    except Exception as e:
+        info["connection"] = "failed"
+        info["error"] = str(e)[:200]
+    return info
+
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=os.getenv("ENV") != "production")
