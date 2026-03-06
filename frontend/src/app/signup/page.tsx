@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/store/auth.store';
 import { auth } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
-const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? '' : 'http://localhost:8000';
+const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://skillten.vercel.app' : 'http://localhost:8000';
 
 export default function SignupPage() {
     const [form, setForm] = useState({ email: '', password: '', display_name: '', username: '' });

@@ -43,7 +43,7 @@ class SkillTenWebSocket {
 
         const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const backendHost = isLocal ? 'localhost:8000' : window.location.host;
+        const backendHost = isLocal ? 'localhost:8000' : 'skillten.vercel.app';
         const wsUrl = `${protocol}//${backendHost}/api/ws/${userId}`;
 
         try {

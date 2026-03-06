@@ -89,7 +89,7 @@ export default function PublicProfilePage() {
 
     useEffect(() => {
         if (!username) return;
-        const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? '' : 'http://localhost:8000';
+        const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://skillten.vercel.app' : 'http://localhost:8000';
         fetch(`${BACKEND_URL}/api/auth/profile/${username}`)
             .then(res => {
                 if (!res.ok) throw new Error('Profile not found');

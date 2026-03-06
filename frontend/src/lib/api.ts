@@ -3,19 +3,20 @@
  * All frontend requests go through here to the Python backend
  */
 
-// On production (Vercel), use '' (empty = relative URL) so /api/* goes through
-// the Vercel rewrite proxy defined in vercel.json → same-origin, zero CORS issues.
+// On production, call the backend directly at skillten.vercel.app.
+// The Vercel rewrite proxy was stripping POST request bodies, causing signup/login to fail.
+// CORS is enabled on the backend (allow_origins=["*"]) so direct cross-origin calls work.
 // On localhost, hit the local backend directly.
 function getBackendUrl(): string {
     if (typeof window === 'undefined') {
-        // Server-side rendering: use env var or localhost
+        // Server-side rendering
         return (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
     }
-    // Client-side: if we're on localhost, use local backend. Otherwise, use relative URL (Vercel rewrite).
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         return 'http://localhost:8000';
     }
-    return ''; // relative URL → Vercel rewrite proxy → no CORS
+    // Production: call the backend directly
+    return 'https://skillten.vercel.app';
 }
 const BACKEND_URL = getBackendUrl();
 
