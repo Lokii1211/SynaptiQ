@@ -64,7 +64,8 @@ Built for Indian students. Powered by AI.
     version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    lifespan=lifespan
+    lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 app.add_middleware(
@@ -83,6 +84,53 @@ app.add_middleware(
 
 app.include_router(master_router, prefix="/api")
 app.include_router(ws_router, prefix="/api", tags=["WebSocket"])
+
+
+# ─── Universal Search ───
+from fastapi import Query as Q, Depends
+from sqlalchemy.orm import Session
+from database import get_db
+
+@app.get("/api/search")
+def universal_search(
+    q: str = Q(..., min_length=1, max_length=100),
+    db: Session = Depends(get_db),
+):
+    """Search across users, careers, coding problems, and skills."""
+    from models import User, UserProfile, Career, CodingProblem, SkillsTaxonomy
+    import re
+    search = f"%{q}%"
+    results = {"query": q, "users": [], "careers": [], "problems": [], "skills": []}
+
+    # Search users
+    users = db.query(UserProfile).filter(
+        (UserProfile.display_name.ilike(search)) |
+        (UserProfile.username.ilike(search))
+    ).limit(5).all()
+    results["users"] = [{"username": u.username, "display_name": u.display_name, "avatar_url": u.avatar_url} for u in users]
+
+    # Search careers
+    careers = db.query(Career).filter(
+        (Career.title.ilike(search)) |
+        (Career.description.ilike(search))
+    ).limit(5).all()
+    results["careers"] = [{"slug": c.slug, "title": c.title, "category": c.category} for c in careers]
+
+    # Search coding problems
+    problems = db.query(CodingProblem).filter(
+        (CodingProblem.title.ilike(search)) |
+        (CodingProblem.category.ilike(search))
+    ).limit(5).all()
+    results["problems"] = [{"slug": p.slug, "title": p.title, "difficulty": p.difficulty} for p in problems]
+
+    # Search skills
+    skills = db.query(SkillsTaxonomy).filter(
+        (SkillsTaxonomy.name.ilike(search))
+    ).limit(5).all()
+    results["skills"] = [{"slug": s.slug, "name": s.name, "category": s.category} for s in skills]
+
+    results["total"] = sum(len(v) for v in results.values() if isinstance(v, list))
+    return results
 
 
 @app.get("/")

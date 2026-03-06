@@ -31,6 +31,42 @@ class SubmitAptitudeReq(BaseModel):
     session_id: str
     answers: List[AptitudeAnswerItem]
 
+# ─── 0. Aptitude Topics ───
+
+APTITUDE_TOPICS = [
+    {"id": "quant", "name": "Quantitative Aptitude", "icon": "📊", "description": "Number systems, percentages, profit/loss, time & work, probability", "question_count": 500, "avg_time_mins": 8, "companies": ["TCS", "Infosys", "Wipro", "Cognizant"]},
+    {"id": "logical", "name": "Logical Reasoning", "icon": "🧠", "description": "Puzzles, seating arrangement, syllogisms, coding-decoding, blood relations", "question_count": 400, "avg_time_mins": 10, "companies": ["TCS", "Accenture", "Capgemini"]},
+    {"id": "verbal", "name": "Verbal Ability", "icon": "📝", "description": "Reading comprehension, grammar, sentence completion, para jumbles", "question_count": 350, "avg_time_mins": 7, "companies": ["Infosys", "Wipro", "HCL"]},
+    {"id": "data_interpretation", "name": "Data Interpretation", "icon": "📈", "description": "Tables, bar graphs, pie charts, line graphs, caselets", "question_count": 250, "avg_time_mins": 12, "companies": ["TCS", "Deloitte", "EY"]},
+    {"id": "mixed", "name": "Mixed (Adaptive)", "icon": "🎯", "description": "Combined questions from all sections, difficulty adapts to performance", "question_count": 1500, "avg_time_mins": 8, "companies": ["All Companies"]},
+]
+
+
+@router.get("/topics")
+def get_aptitude_topics(
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    """Get available aptitude topics with metadata."""
+    # Get actual question counts from DB per category
+    for topic in APTITUDE_TOPICS:
+        if topic["id"] != "mixed":
+            count = db.query(Question).filter(
+                Question.is_aptitude_question == True,
+                Question.is_active == True,
+                Question.category == topic["id"],
+            ).count()
+            topic["db_question_count"] = count
+        else:
+            count = db.query(Question).filter(
+                Question.is_aptitude_question == True,
+                Question.is_active == True,
+            ).count()
+            topic["db_question_count"] = count
+
+    return {"topics": APTITUDE_TOPICS}
+
+
 # ─── 1. Start a Timed Mini-Test (10 questions, 8 minutes) ───
 
 class PracticeCheckReq(BaseModel):

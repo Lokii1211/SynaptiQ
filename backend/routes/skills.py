@@ -33,6 +33,57 @@ class SubmitVerificationReq(BaseModel):
 
 # ─── 1. List All Skills ───
 
+TRENDING_SKILLS_DATA = [
+    {"name": "Python", "icon": "🐍", "category": "Programming", "demand_score": 98, "avg_salary_lpa": 12.5, "growth": "+23%", "roles": ["Backend Dev", "Data Scientist", "ML Engineer"]},
+    {"name": "React.js", "icon": "⚛️", "category": "Frontend", "demand_score": 95, "avg_salary_lpa": 14.0, "growth": "+18%", "roles": ["Frontend Dev", "Full-Stack Dev"]},
+    {"name": "Machine Learning", "icon": "🤖", "category": "AI/ML", "demand_score": 96, "avg_salary_lpa": 18.5, "growth": "+35%", "roles": ["ML Engineer", "Data Scientist", "AI Researcher"]},
+    {"name": "Cloud (AWS/GCP)", "icon": "☁️", "category": "DevOps", "demand_score": 94, "avg_salary_lpa": 16.0, "growth": "+28%", "roles": ["Cloud Engineer", "DevOps Engineer"]},
+    {"name": "Node.js", "icon": "🟩", "category": "Backend", "demand_score": 90, "avg_salary_lpa": 13.0, "growth": "+15%", "roles": ["Backend Dev", "Full-Stack Dev"]},
+    {"name": "SQL / Databases", "icon": "🗃️", "category": "Data", "demand_score": 92, "avg_salary_lpa": 10.5, "growth": "+10%", "roles": ["Data Analyst", "Backend Dev", "DBA"]},
+    {"name": "Java", "icon": "☕", "category": "Programming", "demand_score": 88, "avg_salary_lpa": 12.0, "growth": "+8%", "roles": ["Backend Dev", "Android Dev", "Enterprise"]},
+    {"name": "TypeScript", "icon": "🔷", "category": "Frontend", "demand_score": 91, "avg_salary_lpa": 14.5, "growth": "+30%", "roles": ["Full-Stack Dev", "Frontend Dev"]},
+    {"name": "Docker / K8s", "icon": "🐳", "category": "DevOps", "demand_score": 89, "avg_salary_lpa": 15.5, "growth": "+25%", "roles": ["DevOps Engineer", "SRE"]},
+    {"name": "GenAI / LLMs", "icon": "✨", "category": "AI/ML", "demand_score": 99, "avg_salary_lpa": 25.0, "growth": "+120%", "roles": ["AI Engineer", "Prompt Engineer", "ML Researcher"]},
+]
+
+
+@router.get("/")
+def list_skills_root(
+    category: Optional[str] = None,
+    search: Optional[str] = None,
+    skip: int = 0, limit: int = 50,
+    db: Session = Depends(get_db),
+):
+    """Browse the skills taxonomy catalog (alias for /catalog)."""
+    q = db.query(SkillsTaxonomy)
+    if category:
+        q = q.filter(SkillsTaxonomy.category == category)
+    if search:
+        q = q.filter(SkillsTaxonomy.name.ilike(f"%{search}%"))
+    total = q.count()
+    skills = q.offset(skip).limit(limit).all()
+
+    if total == 0:
+        # Return trending skills as fallback when DB isn't seeded
+        return {"total": len(TRENDING_SKILLS_DATA), "skills": TRENDING_SKILLS_DATA, "source": "builtin"}
+
+    return {
+        "total": total,
+        "skills": [{
+            "id": s.id, "slug": s.slug, "name": s.name,
+            "category": s.category, "sub_category": s.sub_category,
+            "demand_level": s.demand_level, "icon": s.icon,
+            "learning_time_hours": s.learning_time_hours,
+        } for s in skills],
+    }
+
+
+@router.get("/trending")
+def get_trending_skills():
+    """Get trending skills with demand data and salary benchmarks."""
+    return {"trending": TRENDING_SKILLS_DATA}
+
+
 @router.get("/catalog")
 def list_skills(
     category: Optional[str] = None,

@@ -12,6 +12,57 @@ from auth import require_user
 router = APIRouter()
 
 
+@router.get("/daily")
+def daily_challenge(
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    """Get today's daily coding challenge."""
+    import hashlib
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    # Deterministic pick based on date
+    day_hash = int(hashlib.md5(today.encode()).hexdigest(), 16)
+
+    problems = db.query(CodingProblem).filter(CodingProblem.is_active == True).all()
+    if problems:
+        problem = problems[day_hash % len(problems)]
+        already_solved = db.query(UserProblemSubmission).filter_by(
+            user_id=user.id, problem_id=problem.id, status="accepted"
+        ).first() is not None
+        return {
+            "date": today,
+            "problem": {
+                "id": problem.id, "title": problem.title, "slug": problem.slug,
+                "difficulty": problem.difficulty, "category": problem.category,
+                "problem_statement": problem.problem_statement,
+                "constraints": problem.constraints, "examples": problem.examples,
+                "starter_code": problem.starter_code,
+                "company_tags": problem.company_tags,
+            },
+            "already_solved": already_solved,
+            "xp_reward": {"easy": 10, "medium": 25, "hard": 50}.get(problem.difficulty, 25),
+        }
+
+    # Fallback when DB has no problems
+    return {
+        "date": today,
+        "problem": {
+            "id": "daily-001", "title": "Two Sum", "slug": "two-sum",
+            "difficulty": "easy", "category": "arrays",
+            "problem_statement": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nReturn the answer in any order.",
+            "constraints": ["2 <= nums.length <= 10^4", "-10^9 <= nums[i] <= 10^9", "-10^9 <= target <= 10^9", "Only one valid answer exists."],
+            "examples": [
+                {"input": "nums = [2,7,11,15], target = 9", "output": "[0,1]", "explanation": "Because nums[0] + nums[1] == 9, we return [0, 1]."},
+                {"input": "nums = [3,2,4], target = 6", "output": "[1,2]", "explanation": "nums[1] + nums[2] == 6"},
+            ],
+            "starter_code": {"python": "def two_sum(nums, target):\n    # Your code here\n    pass", "javascript": "function twoSum(nums, target) {\n    // Your code here\n}"},
+            "company_tags": ["Google", "Amazon", "Microsoft", "Meta"],
+        },
+        "already_solved": False,
+        "xp_reward": 10,
+    }
+
+
 @router.get("/problems")
 def list_problems(
     category: Optional[str] = None,

@@ -18,6 +18,32 @@ from auth import require_user
 router = APIRouter()
 
 
+# ─── 0. Leaderboard Overview ───
+
+@router.get("/")
+def leaderboard_overview(
+    db: Session = Depends(get_db),
+):
+    """Get leaderboard overview — top users by SkillTen Score."""
+    profiles = db.query(UserProfile).filter(
+        UserProfile.viya_score > 0,
+    ).order_by(desc(UserProfile.viya_score)).limit(20).all()
+
+    return {
+        "total": len(profiles),
+        "leaderboard": [{
+            "rank": i + 1,
+            "username": p.username,
+            "display_name": p.display_name,
+            "avatar_url": p.avatar_url,
+            "college_name": p.college_name,
+            "viya_score": p.viya_score or 0,
+            "streak_days": p.streak_days or 0,
+            "archetype_name": p.archetype_name,
+        } for i, p in enumerate(profiles)],
+    }
+
+
 # ─── 1. Individual Leaderboard ───
 
 @router.get("/individual")

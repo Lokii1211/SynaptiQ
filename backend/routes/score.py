@@ -12,6 +12,21 @@ from score_calculator import calculate_viya_score
 router = APIRouter()
 
 
+@router.get("/")
+def get_score(
+    user: User = Depends(require_user),
+    db: Session = Depends(get_db),
+):
+    """Get current SkillTen Score™ overview."""
+    profile = user.profile
+    return {
+        "viya_score": profile.viya_score if profile else 0,
+        "streak_days": profile.streak_days if profile else 0,
+        "archetype_name": profile.archetype_name if profile else None,
+        "archetype_code": profile.archetype_code if profile else None,
+    }
+
+
 @router.post("/calculate")
 def recalculate_score(
     user: User = Depends(require_user),

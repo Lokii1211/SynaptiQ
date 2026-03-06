@@ -156,13 +156,29 @@ def me(user: User = Depends(require_user)):
 
 @router.patch("/profile")
 def update_profile(req: ProfileUpdateReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    import re
     profile = user.profile
     if not profile:
         raise HTTPException(status_code=404, detail="Profile not found")
 
+    # XSS sanitization — strip dangerous HTML tags from text fields
+    def sanitize(text):
+        if not isinstance(text, str):
+            return text
+        # Remove script tags and event handlers
+        text = re.sub(r'<script[^>]*>.*?</script>', '', text, flags=re.DOTALL | re.IGNORECASE)
+        text = re.sub(r'<[^>]+(on\w+\s*=)[^>]*>', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'<(script|iframe|object|embed|form|input|button|textarea|select)[^>]*>', '', text, flags=re.IGNORECASE)
+        text = re.sub(r'</(script|iframe|object|embed|form|input|button|textarea|select)>', '', text, flags=re.IGNORECASE)
+        return text.strip()
+
+    text_fields = {"bio", "display_name", "tagline", "city", "state", "college_name", "target_role"}
+
     data = req.dict(exclude_unset=True)
     for k, v in data.items():
         if hasattr(profile, k):
+            if k in text_fields and isinstance(v, str):
+                v = sanitize(v)
             setattr(profile, k, v)
 
     db.commit()
