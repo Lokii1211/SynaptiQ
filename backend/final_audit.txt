@@ -1,0 +1,30 @@
+Login: 500 token=False
+[500] X Assessment Questions      | /api/assessment/questions
+[500] X Assessment Profile        | /api/assessment/profile
+[500] X Careers List              | /api/careers
+[500] X Coding Problems           | /api/coding/problems
+[500] X Daily Challenge           | /api/coding/daily
+[500] X Aptitude Topics           | /api/aptitude/topics
+[500] X Skills List               | /api/skills
+[500] X Skills Trending           | /api/skills/trending
+[500] X Jobs List                 | /api/jobs
+[500] X Internships               | /api/internships
+[500] X Notifications             | /api/notifications/
+[500] X Community Posts           | /api/community/posts
+[500] X Leaderboard               | /api/leaderboard
+[500] X Campus Wars               | /api/leaderboard/campus-wars
+[500] X Challenges                | /api/challenges
+[500] X Resume                    | /api/resume
+[500] X Achievements              | /api/achievements
+[500] X SkillTen Score            | /api/score
+[500] X Streak Tracker            | /api/tracker
+[500] X Universal Search          | /api/search?q=python
+[500] X Chat Sessions             | /api/chat/sessions
+[500] X Health Check              | /health
+[500] X DB Health                 | /health/db
+[500] X AI Chat POST             | /api/chat
+[500] X Invalid Token Rejected    | /api/auth/me
+[500] X Unauthorized Blocked      | /api/auth/me
+
+PASS: 0  FAIL: 26  TOTAL: 26
+Rate: 0%

@@ -15,7 +15,7 @@ class ResumeReq(BaseModel):
     content: dict
     target_role: Optional[str] = None
 
-@router.post(""")
+@router.post("")
 def create_resume(req: ResumeReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     resume = Resume(user_id=user.id, title=req.title, template=req.template, content=req.content, target_role=req.target_role)
     db.add(resume)
