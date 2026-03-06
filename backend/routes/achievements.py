@@ -47,21 +47,27 @@ ACHIEVEMENTS = [
 @router.get("")
 def get_achievements(user=Depends(require_user), db: Session = Depends(get_db)):
     """Get all achievements with user's unlock status"""
-    from models import UserProfile, CodingSubmission, AssessmentSession
+    from models import UserProfile, UserProblemSubmission, AssessmentSession
     
     profile = db.query(UserProfile).filter(UserProfile.user_id == user.id).first()
     
     # Calculate user stats for achievement checking
     streak = profile.streak_days if profile else 0
     viya_score = profile.viya_score if profile else 0
-    problems_solved = db.query(CodingSubmission).filter(
-        CodingSubmission.user_id == user.id,
-        CodingSubmission.passed == True
-    ).count() if hasattr(CodingSubmission, 'passed') else 0
-    has_assessment = db.query(AssessmentSession).filter(
-        AssessmentSession.user_id == user.id,
-        AssessmentSession.status == 'completed'
-    ).count() > 0
+    try:
+        problems_solved = db.query(UserProblemSubmission).filter(
+            UserProblemSubmission.user_id == user.id,
+            UserProblemSubmission.status == "accepted"
+        ).count()
+    except Exception:
+        problems_solved = 0
+    try:
+        has_assessment = db.query(AssessmentSession).filter(
+            AssessmentSession.user_id == user.id,
+            AssessmentSession.is_complete == True
+        ).count() > 0
+    except Exception:
+        has_assessment = False
 
     results = []
     for ach in ACHIEVEMENTS:

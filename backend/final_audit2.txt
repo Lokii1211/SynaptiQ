@@ -1,0 +1,29 @@
+[200] Health Check: {'status': 'healthy', 'platform': 'SkillTen'}
+[200] Login: token=True
+[200] Y Assessment Questions      | /api/assessment/questions
+[200] Y Assessment Profile        | /api/assessment/profile
+[200] Y Careers List              | /api/careers
+[200] Y Coding Problems           | /api/coding/problems
+[200] Y Daily Challenge           | /api/coding/daily
+[200] Y Aptitude Topics           | /api/aptitude/topics
+[200] Y Skills List               | /api/skills
+[200] Y Skills Trending           | /api/skills/trending
+[200] Y Jobs List                 | /api/jobs
+[200] Y Internships               | /api/internships
+[200] Y Notifications             | /api/notifications
+[200] Y Community Posts           | /api/community/posts
+[200] Y Leaderboard               | /api/leaderboard
+[200] Y Campus Wars               | /api/leaderboard/campus-wars
+[200] Y Challenges                | /api/challenges
+[200] Y Resume                    | /api/resume
+[500] X Achievements              | /api/achievements
+[200] Y SkillTen Score            | /api/score
+[200] Y Score Current             | /api/score/current
+[200] Y Streak Tracker            | /api/tracker
+[200] Y Universal Search          | /api/search?q=python
+[200] Y Chat Sessions             | /api/chat/sessions
+[200] Y Companies                 | /api/companies
+[200] Y Campus Colleges           | /api/campus/colleges
+
+PASS: 23  FAIL: 1  TOTAL: 24
+Rate: 96%
