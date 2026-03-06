@@ -1,6 +1,8 @@
 /**
- * SkillTen — WebSocket Notification Client
- * Real-time connection to backend WebSocket hub
+ * SkillTen — Notification Client
+ * Hybrid approach: tries WebSocket first, falls back to HTTP polling
+ * Vercel serverless doesn't support persistent WebSocket connections,
+ * so polling is the production-grade solution.
  */
 
 type NotificationType = 'notification' | 'achievement' | 'streak_risk' | 'campus_wars' |
@@ -22,75 +24,53 @@ interface WSMessage {
 
 type MessageHandler = (message: WSMessage) => void;
 
-class SkillTenWebSocket {
+const BACKEND_URL = typeof window !== 'undefined' &&
+    window.location.hostname !== 'localhost' &&
+    window.location.hostname !== '127.0.0.1'
+    ? 'https://skillten.vercel.app'
+    : 'http://localhost:8000';
+
+const IS_LOCAL = typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+class SkillTenNotificationClient {
     private ws: WebSocket | null = null;
     private userId: string = '';
     private listeners: Map<string, Set<MessageHandler>> = new Map();
-    private reconnectAttempts: number = 0;
-    private maxReconnectAttempts: number = 10;
-    private reconnectDelay: number = 1000;
-    private pingInterval: ReturnType<typeof setInterval> | null = null;
-    private isConnecting: boolean = false;
+    private pollInterval: ReturnType<typeof setInterval> | null = null;
+    private pollDelay: number = 30000; // 30 seconds
+    private lastPollTimestamp: string = '';
+    private isConnected: boolean = false;
+    private mode: 'ws' | 'poll' | 'none' = 'none';
 
     /**
-     * Connect to the WebSocket server
+     * Connect — tries WebSocket on localhost, uses polling on production
      */
     connect(userId: string): void {
-        if (this.isConnecting || (this.ws && this.ws.readyState === WebSocket.OPEN)) return;
-
+        if (this.isConnected) return;
         this.userId = userId;
-        this.isConnecting = true;
 
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-        const backendHost = isLocal ? 'localhost:8000' : 'skillten.vercel.app';
-        const wsUrl = `${protocol}//${backendHost}/api/ws/${userId}`;
-
-        try {
-            this.ws = new WebSocket(wsUrl);
-
-            this.ws.onopen = () => {
-                console.log('[WS] Connected to SkillTen notifications');
-                this.isConnecting = false;
-                this.reconnectAttempts = 0;
-                this.startPing();
-            };
-
-            this.ws.onmessage = (event: MessageEvent) => {
-                try {
-                    const message: WSMessage = JSON.parse(event.data);
-                    this.handleMessage(message);
-                } catch (e) {
-                    console.warn('[WS] Failed to parse message:', e);
-                }
-            };
-
-            this.ws.onclose = () => {
-                this.isConnecting = false;
-                this.stopPing();
-                this.reconnect();
-            };
-
-            this.ws.onerror = () => {
-                this.isConnecting = false;
-                console.warn('[WS] Connection error');
-            };
-        } catch (e) {
-            this.isConnecting = false;
-            console.warn('[WS] Failed to connect:', e);
+        if (IS_LOCAL) {
+            this.connectWebSocket();
+        } else {
+            // Production (Vercel) — use HTTP polling directly
+            this.startPolling();
         }
     }
 
     /**
-     * Disconnect from WebSocket
+     * Disconnect and clean up
      */
     disconnect(): void {
-        this.stopPing();
-        this.reconnectAttempts = this.maxReconnectAttempts; // Prevent reconnection
+        this.isConnected = false;
+        this.mode = 'none';
+
         if (this.ws) {
             this.ws.close();
             this.ws = null;
         }
+
+        this.stopPolling();
     }
 
     /**
@@ -102,7 +82,6 @@ class SkillTenWebSocket {
         }
         this.listeners.get(type)!.add(handler);
 
-        // Return unsubscribe function
         return () => {
             this.listeners.get(type)?.delete(handler);
         };
@@ -116,7 +95,7 @@ class SkillTenWebSocket {
     }
 
     /**
-     * Send a message to the server
+     * Send a message (WS only, no-op on polling)
      */
     send(data: Record<string, unknown>): void {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
@@ -125,27 +104,133 @@ class SkillTenWebSocket {
     }
 
     /**
-     * Send typing indicator
+     * Mark notification as read
      */
+    markRead(notificationId: string): void {
+        if (this.mode === 'ws') {
+            this.send({ type: 'read_receipt', notification_id: notificationId });
+        } else {
+            // HTTP fallback
+            const token = typeof window !== 'undefined' ? localStorage.getItem('skillten_token') : null;
+            if (token) {
+                fetch(`${BACKEND_URL}/api/notifications/${notificationId}/read`, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                }).catch(() => { /* silent */ });
+            }
+        }
+    }
+
     sendTyping(targetUserId: string): void {
         this.send({ type: 'typing', target_user_id: targetUserId });
     }
 
-    /**
-     * Mark notification as read via WS
-     */
-    markRead(notificationId: string): void {
-        this.send({ type: 'read_receipt', notification_id: notificationId });
-    }
-
-    /**
-     * Get online user count
-     */
     getOnlineCount(): void {
         this.send({ type: 'get_online' });
     }
 
-    // ─── Private ───
+    // ─── WebSocket (localhost only) ───
+
+    private connectWebSocket(): void {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//localhost:8000/api/ws/${this.userId}`;
+
+        try {
+            this.ws = new WebSocket(wsUrl);
+
+            this.ws.onopen = () => {
+                console.log('[Notif] WebSocket connected (local dev)');
+                this.isConnected = true;
+                this.mode = 'ws';
+            };
+
+            this.ws.onmessage = (event: MessageEvent) => {
+                try {
+                    const message: WSMessage = JSON.parse(event.data);
+                    this.handleMessage(message);
+                } catch (e) {
+                    console.warn('[Notif] Failed to parse WS message:', e);
+                }
+            };
+
+            this.ws.onclose = () => {
+                this.isConnected = false;
+                // Don't reconnect WS — fall back to polling
+                console.log('[Notif] WebSocket closed, falling back to polling');
+                this.startPolling();
+            };
+
+            this.ws.onerror = () => {
+                console.log('[Notif] WebSocket unavailable, using HTTP polling');
+                this.ws = null;
+                this.startPolling();
+            };
+        } catch {
+            this.startPolling();
+        }
+    }
+
+    // ─── HTTP Polling (production) ───
+
+    private startPolling(): void {
+        if (this.pollInterval) return; // already polling
+
+        this.isConnected = true;
+        this.mode = 'poll';
+        this.lastPollTimestamp = new Date().toISOString();
+
+        console.log('[Notif] Using HTTP polling (30s interval)');
+
+        // Initial poll immediately
+        this.pollNotifications();
+
+        // Then every 30 seconds
+        this.pollInterval = setInterval(() => {
+            this.pollNotifications();
+        }, this.pollDelay);
+    }
+
+    private stopPolling(): void {
+        if (this.pollInterval) {
+            clearInterval(this.pollInterval);
+            this.pollInterval = null;
+        }
+    }
+
+    private async pollNotifications(): Promise<void> {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('skillten_token') : null;
+        if (!token) return;
+
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/notifications/?unread=true&limit=10`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+            });
+
+            if (!res.ok) return;
+
+            const data = await res.json();
+            const notifications = Array.isArray(data) ? data : (data.notifications || []);
+
+            // Process new notifications
+            for (const notif of notifications) {
+                const message: WSMessage = {
+                    type: 'notification',
+                    title: notif.title || 'SkillTen',
+                    message: notif.message || notif.content || '',
+                    icon: notif.icon || '🔔',
+                    action_url: notif.action_url || notif.link || '',
+                    notification_type: notif.notification_type || notif.type || 'general',
+                    notification_id: notif.id,
+                    timestamp: notif.created_at || notif.timestamp,
+                };
+                this.handleMessage(message);
+            }
+        } catch {
+            // Silent fail — will retry on next interval
+        }
+    }
+
+    // ─── Message Handling ───
 
     private handleMessage(message: WSMessage): void {
         // Trigger type-specific listeners
@@ -188,35 +273,7 @@ class SkillTenWebSocket {
             Notification.requestPermission();
         }
     }
-
-    private reconnect(): void {
-        if (this.reconnectAttempts >= this.maxReconnectAttempts) return;
-
-        this.reconnectAttempts++;
-        const delay = Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
-        console.log(`[WS] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-
-        setTimeout(() => {
-            if (this.userId) {
-                this.connect(this.userId);
-            }
-        }, delay);
-    }
-
-    private startPing(): void {
-        this.stopPing();
-        this.pingInterval = setInterval(() => {
-            this.send({ type: 'ping' });
-        }, 30000);
-    }
-
-    private stopPing(): void {
-        if (this.pingInterval) {
-            clearInterval(this.pingInterval);
-            this.pingInterval = null;
-        }
-    }
 }
 
 // Singleton instance
-export const wsClient = new SkillTenWebSocket();
+export const wsClient = new SkillTenNotificationClient();
