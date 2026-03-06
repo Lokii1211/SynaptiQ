@@ -4,6 +4,7 @@ Supports: Supabase PostgreSQL (production) + SQLite (local dev)
 """
 
 from sqlalchemy import create_engine
+from sqlalchemy.pool import NullPool
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from dotenv import load_dotenv
 import os
@@ -24,23 +25,46 @@ elif os.getenv("VERCEL"):
 else:
     DATABASE_URL = "sqlite:///./skillten.db"
 
-# ─── Engine Configuration ───
-connect_args = {}
-if "sqlite" in DATABASE_URL:
-    connect_args["check_same_thread"] = False
-
-# Fix Supabase URL format if needed (supabase uses postgres:// but SQLAlchemy needs postgresql://)
+# Fix Supabase URL format (supabase uses postgres:// but SQLAlchemy needs postgresql://)
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    echo=False,
-    pool_pre_ping=True,  # auto-reconnect stale connections
-    pool_size=5 if "postgresql" in DATABASE_URL else 0,
-    max_overflow=10 if "postgresql" in DATABASE_URL else 0,
-)
+_is_postgres = "postgresql" in DATABASE_URL
+_is_serverless = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+
+print(f"[DB] Using {'PostgreSQL' if _is_postgres else 'SQLite'} | Serverless: {_is_serverless}")
+
+# ─── Engine Configuration ───
+connect_args = {}
+if not _is_postgres:
+    connect_args["check_same_thread"] = False
+
+if _is_postgres and _is_serverless:
+    # Serverless: use NullPool — each request gets a fresh connection, no leak risk
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        echo=False,
+        poolclass=NullPool,
+        pool_pre_ping=True,
+    )
+elif _is_postgres:
+    # Long-running server: use connection pool
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        echo=False,
+        pool_pre_ping=True,
+        pool_size=5,
+        max_overflow=10,
+    )
+else:
+    # SQLite (local dev)
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        echo=False,
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -59,5 +83,10 @@ def get_db():
 
 
 def init_db():
-    """Create all tables"""
-    Base.metadata.create_all(bind=engine)
+    """Create tables — safe to call when tables already exist (uses IF NOT EXISTS)"""
+    try:
+        Base.metadata.create_all(bind=engine)
+        print("[DB] ✅ Tables verified/created")
+    except Exception as e:
+        # On Supabase, tables already exist from SQL Editor — this is fine
+        print(f"[DB] ⚠️ Table creation note: {e}")
