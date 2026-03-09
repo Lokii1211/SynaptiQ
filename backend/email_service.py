@@ -1,54 +1,85 @@
 """
 SkillTen — Email Integration Service
 Handles transactional emails: welcome, streak reminders, weekly digest, password reset
-Uses SMTP with HTML templates. Configure via env vars.
+Uses Resend API (primary) or SMTP (fallback). Configure via env vars.
 """
 import os
 import smtplib
+import json
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Optional
 from datetime import datetime
 
 # ─── Configuration ───
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
 SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 FROM_EMAIL = os.getenv("FROM_EMAIL", "hello@skillten.in")
 FROM_NAME = os.getenv("FROM_NAME", "SkillTen")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://synaptiqq.vercel.app")
 
 
-def _send_email(to_email: str, subject: str, html_body: str, text_body: str = "") -> bool:
-    """Send an email via SMTP. Returns True on success."""
-    if not SMTP_USER or not SMTP_PASSWORD:
-        print(f"[Email] SMTP not configured. Would send to {to_email}: {subject}")
+def _send_via_resend(to_email: str, subject: str, html_body: str) -> bool:
+    """Send email via Resend API."""
+    try:
+        import urllib.request
+        data = json.dumps({
+            "from": f"{FROM_NAME} <onboarding@resend.dev>",
+            "to": [to_email],
+            "subject": subject,
+            "html": html_body,
+        }).encode()
+        req = urllib.request.Request(
+            "https://api.resend.com/emails",
+            data=data,
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        resp = urllib.request.urlopen(req, timeout=10)
+        result = json.loads(resp.read().decode())
+        print(f"[Email/Resend] Sent to {to_email}: {subject} (id={result.get('id')})")
+        return True
+    except Exception as e:
+        print(f"[Email/Resend] Failed to send to {to_email}: {e}")
         return False
 
+
+def _send_via_smtp(to_email: str, subject: str, html_body: str, text_body: str = "") -> bool:
+    """Send email via SMTP (fallback)."""
     try:
         msg = MIMEMultipart("alternative")
         msg["Subject"] = subject
         msg["From"] = f"{FROM_NAME} <{FROM_EMAIL}>"
         msg["To"] = to_email
         msg["Reply-To"] = FROM_EMAIL
-
-        # Plain text fallback
         if text_body:
             msg.attach(MIMEText(text_body, "plain"))
-
-        # HTML version
         msg.attach(MIMEText(html_body, "html"))
-
         with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_USER, SMTP_PASSWORD)
             server.sendmail(FROM_EMAIL, to_email, msg.as_string())
-
-        print(f"[Email] Sent to {to_email}: {subject}")
+        print(f"[Email/SMTP] Sent to {to_email}: {subject}")
         return True
     except Exception as e:
-        print(f"[Email] Failed to send to {to_email}: {e}")
+        print(f"[Email/SMTP] Failed to send to {to_email}: {e}")
+        return False
+
+
+def _send_email(to_email: str, subject: str, html_body: str, text_body: str = "") -> bool:
+    """Send an email. Uses Resend (primary) or SMTP (fallback)."""
+    if RESEND_API_KEY:
+        return _send_via_resend(to_email, subject, html_body)
+    elif SMTP_USER and SMTP_PASSWORD:
+        return _send_via_smtp(to_email, subject, html_body, text_body)
+    else:
+        print(f"[Email] No email provider configured. Would send to {to_email}: {subject}")
         return False
 
 

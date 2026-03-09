@@ -8,6 +8,16 @@ from contextlib import asynccontextmanager
 import uvicorn
 import os
 
+# ─── Sentry Error Monitoring ───
+SENTRY_DSN = os.getenv("SENTRY_DSN", "")
+if SENTRY_DSN:
+    try:
+        import sentry_sdk
+        sentry_sdk.init(dsn=SENTRY_DSN, traces_sample_rate=0.1, environment=os.getenv("ENV", "production"))
+        print("✅ Sentry error monitoring enabled")
+    except Exception as e:
+        print(f"⚠️ Sentry init failed (non-fatal): {e}")
+
 from database import init_db, SessionLocal
 from routes import master_router
 from websocket_hub import router as ws_router
