@@ -1,0 +1,265 @@
+"""
+SkillTen — Real Coding Problems Seed (GFG/LeetCode/HackerRank patterns)
+30 problems: 10 Easy, 12 Medium, 8 Hard
+"""
+
+CODING_PROBLEMS = [
+    # ═══ EASY (10) ═══
+    {"title": "Two Sum", "slug": "two-sum", "difficulty": "easy", "difficulty_numeric": 1, "category": "arrays",
+     "company_tags": ["Google", "Amazon", "Microsoft", "TCS", "Infosys"], "india_frequency": "very_high",
+     "problem_statement": "Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nReturn the answer in any order.",
+     "examples": [{"input": "nums = [2,7,11,15], target = 9", "output": "[0,1]", "explanation": "Because nums[0] + nums[1] == 9"},{"input": "nums = [3,2,4], target = 6", "output": "[1,2]"}],
+     "constraints": ["2 <= nums.length <= 10^4", "-10^9 <= nums[i] <= 10^9", "Only one valid answer exists."],
+     "hints": ["Try using a hash map to store values you've seen.", "For each number, check if target - number exists in map."],
+     "starter_code": {"python": "class Solution:\n    def twoSum(self, nums: list[int], target: int) -> list[int]:\n        # Your code here\n        pass", "javascript": "function twoSum(nums, target) {\n    // Your code here\n}", "java": "class Solution {\n    public int[] twoSum(int[] nums, int target) {\n        // Your code here\n        return new int[]{};\n    }\n}", "cpp": "class Solution {\npublic:\n    vector<int> twoSum(vector<int>& nums, int target) {\n        // Your code here\n        return {};\n    }\n};"},
+     "test_cases": [{"input": "[2,7,11,15]\n9", "expected_output": "[0,1]"},{"input": "[3,2,4]\n6", "expected_output": "[1,2]"},{"input": "[3,3]\n6", "expected_output": "[0,1]"}],
+     "time_complexity": "O(n)", "space_complexity": "O(n)", "estimated_minutes_fresher": 15,
+     "interview_context": "Most frequently asked in Indian IT placements. TCS NQT, Infosys InfyTQ all include this."},
+
+    {"title": "Reverse Linked List", "slug": "reverse-linked-list", "difficulty": "easy", "difficulty_numeric": 1, "category": "linked_lists",
+     "company_tags": ["Amazon", "Microsoft", "TCS", "Wipro"], "india_frequency": "very_high",
+     "problem_statement": "Given the head of a singly linked list, reverse the list, and return the reversed list.",
+     "examples": [{"input": "head = [1,2,3,4,5]", "output": "[5,4,3,2,1]"},{"input": "head = [1,2]", "output": "[2,1]"}],
+     "constraints": ["0 <= Number of nodes <= 5000", "-5000 <= Node.val <= 5000"],
+     "hints": ["Use three pointers: prev, curr, next.", "Iteratively reverse each pointer."],
+     "starter_code": {"python": "class Solution:\n    def reverseList(self, head):\n        # Your code here\n        pass"},
+     "test_cases": [{"input": "[1,2,3,4,5]", "expected_output": "[5,4,3,2,1]"},{"input": "[1,2]", "expected_output": "[2,1]"},{"input": "[]", "expected_output": "[]"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 20},
+
+    {"title": "Valid Parentheses", "slug": "valid-parentheses", "difficulty": "easy", "difficulty_numeric": 1, "category": "stacks",
+     "company_tags": ["Google", "Amazon", "Flipkart", "Zoho"], "india_frequency": "very_high",
+     "problem_statement": "Given a string `s` containing just the characters `(`, `)`, `{`, `}`, `[` and `]`, determine if the input string is valid.\n\nAn input string is valid if:\n1. Open brackets must be closed by the same type of brackets.\n2. Open brackets must be closed in the correct order.\n3. Every close bracket has a corresponding open bracket of the same type.",
+     "examples": [{"input": "s = '()'", "output": "true"},{"input": "s = '()[]{}'", "output": "true"},{"input": "s = '(]'", "output": "false"}],
+     "constraints": ["1 <= s.length <= 10^4", "s consists of parentheses only '()[]{}'"],
+     "hints": ["Use a stack.", "Push opening brackets, pop for closing."],
+     "starter_code": {"python": "class Solution:\n    def isValid(self, s: str) -> bool:\n        pass"},
+     "test_cases": [{"input": "()", "expected_output": "true"},{"input": "()[]{}", "expected_output": "true"},{"input": "(]", "expected_output": "false"},{"input": "([)]", "expected_output": "false"}],
+     "time_complexity": "O(n)", "space_complexity": "O(n)", "estimated_minutes_fresher": 15},
+
+    {"title": "Best Time to Buy and Sell Stock", "slug": "best-time-buy-sell-stock", "difficulty": "easy", "difficulty_numeric": 1, "category": "arrays",
+     "company_tags": ["Amazon", "Goldman Sachs", "Morgan Stanley", "Paytm"], "india_frequency": "high",
+     "problem_statement": "You are given an array `prices` where `prices[i]` is the price of a given stock on the ith day.\n\nYou want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.\n\nReturn the maximum profit you can achieve. If you cannot achieve any profit, return 0.",
+     "examples": [{"input": "prices = [7,1,5,3,6,4]", "output": "5", "explanation": "Buy on day 2 (price=1) and sell on day 5 (price=6), profit = 6-1 = 5."},{"input": "prices = [7,6,4,3,1]", "output": "0"}],
+     "starter_code": {"python": "class Solution:\n    def maxProfit(self, prices: list[int]) -> int:\n        pass"},
+     "test_cases": [{"input": "[7,1,5,3,6,4]", "expected_output": "5"},{"input": "[7,6,4,3,1]", "expected_output": "0"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 20},
+
+    {"title": "Palindrome Number", "slug": "palindrome-number", "difficulty": "easy", "difficulty_numeric": 1, "category": "math",
+     "company_tags": ["TCS", "Infosys", "Wipro", "HCL"], "india_frequency": "very_high",
+     "problem_statement": "Given an integer `x`, return `true` if `x` is a palindrome, and `false` otherwise.\n\nAn integer is a palindrome when it reads the same forward and backward.",
+     "examples": [{"input": "x = 121", "output": "true"},{"input": "x = -121", "output": "false"},{"input": "x = 10", "output": "false"}],
+     "starter_code": {"python": "class Solution:\n    def isPalindrome(self, x: int) -> bool:\n        pass"},
+     "test_cases": [{"input": "121", "expected_output": "true"},{"input": "-121", "expected_output": "false"},{"input": "10", "expected_output": "false"}],
+     "time_complexity": "O(log n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 10},
+
+    {"title": "Maximum Subarray", "slug": "maximum-subarray", "difficulty": "easy", "difficulty_numeric": 2, "category": "arrays",
+     "company_tags": ["Amazon", "Microsoft", "Google", "Flipkart", "TCS"], "india_frequency": "very_high",
+     "problem_statement": "Given an integer array `nums`, find the subarray with the largest sum, and return its sum.\n\nA subarray is a contiguous non-empty sequence of elements within an array.",
+     "examples": [{"input": "nums = [-2,1,-3,4,-1,2,1,-5,4]", "output": "6", "explanation": "The subarray [4,-1,2,1] has the largest sum 6."}],
+     "hints": ["Kadane's Algorithm: track current sum and max sum.", "Reset current sum to 0 if it goes negative."],
+     "starter_code": {"python": "class Solution:\n    def maxSubArray(self, nums: list[int]) -> int:\n        pass"},
+     "test_cases": [{"input": "[-2,1,-3,4,-1,2,1,-5,4]", "expected_output": "6"},{"input": "[1]", "expected_output": "1"},{"input": "[5,4,-1,7,8]", "expected_output": "23"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 20},
+
+    {"title": "Merge Two Sorted Lists", "slug": "merge-two-sorted-lists", "difficulty": "easy", "difficulty_numeric": 1, "category": "linked_lists",
+     "company_tags": ["Microsoft", "Amazon", "Accenture"], "india_frequency": "high",
+     "problem_statement": "You are given the heads of two sorted linked lists `list1` and `list2`. Merge the two lists into one sorted list by splicing together the nodes of the first two lists. Return the head of the merged linked list.",
+     "examples": [{"input": "list1 = [1,2,4], list2 = [1,3,4]", "output": "[1,1,2,3,4,4]"}],
+     "starter_code": {"python": "class Solution:\n    def mergeTwoLists(self, list1, list2):\n        pass"},
+     "test_cases": [{"input": "[1,2,4]\n[1,3,4]", "expected_output": "[1,1,2,3,4,4]"}],
+     "time_complexity": "O(n+m)", "space_complexity": "O(1)", "estimated_minutes_fresher": 20},
+
+    {"title": "FizzBuzz", "slug": "fizzbuzz", "difficulty": "easy", "difficulty_numeric": 1, "category": "math",
+     "company_tags": ["TCS", "Infosys", "Wipro", "Cognizant", "HCL"], "india_frequency": "very_high",
+     "problem_statement": "Given an integer n, return a string array answer (1-indexed) where:\n- answer[i] == 'FizzBuzz' if i is divisible by 3 and 5.\n- answer[i] == 'Fizz' if i is divisible by 3.\n- answer[i] == 'Buzz' if i is divisible by 5.\n- answer[i] == i (as a string) if none of the above conditions are true.",
+     "examples": [{"input": "n = 15", "output": '["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]'}],
+     "starter_code": {"python": "class Solution:\n    def fizzBuzz(self, n: int) -> list[str]:\n        pass"},
+     "test_cases": [{"input": "3", "expected_output": '["1","2","Fizz"]'},{"input": "5", "expected_output": '["1","2","Fizz","4","Buzz"]'}],
+     "time_complexity": "O(n)", "space_complexity": "O(n)", "estimated_minutes_fresher": 10},
+
+    {"title": "Roman to Integer", "slug": "roman-to-integer", "difficulty": "easy", "difficulty_numeric": 1, "category": "strings",
+     "company_tags": ["Amazon", "Microsoft", "Zoho"], "india_frequency": "high",
+     "problem_statement": "Given a roman numeral, convert it to an integer. Roman numerals: I=1, V=5, X=10, L=50, C=100, D=500, M=1000. When a smaller value appears before a larger value, it is subtracted.",
+     "examples": [{"input": "s = 'III'", "output": "3"},{"input": "s = 'LVIII'", "output": "58"},{"input": "s = 'MCMXCIV'", "output": "1994"}],
+     "starter_code": {"python": "class Solution:\n    def romanToInt(self, s: str) -> int:\n        pass"},
+     "test_cases": [{"input": "III", "expected_output": "3"},{"input": "LVIII", "expected_output": "58"},{"input": "MCMXCIV", "expected_output": "1994"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 15},
+
+    {"title": "Contains Duplicate", "slug": "contains-duplicate", "difficulty": "easy", "difficulty_numeric": 1, "category": "arrays",
+     "company_tags": ["Amazon", "Google", "Infosys"], "india_frequency": "high",
+     "problem_statement": "Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.",
+     "examples": [{"input": "nums = [1,2,3,1]", "output": "true"},{"input": "nums = [1,2,3,4]", "output": "false"}],
+     "starter_code": {"python": "class Solution:\n    def containsDuplicate(self, nums: list[int]) -> bool:\n        pass"},
+     "test_cases": [{"input": "[1,2,3,1]", "expected_output": "true"},{"input": "[1,2,3,4]", "expected_output": "false"}],
+     "time_complexity": "O(n)", "space_complexity": "O(n)", "estimated_minutes_fresher": 10},
+
+    # ═══ MEDIUM (12) ═══
+    {"title": "3Sum", "slug": "3sum", "difficulty": "medium", "difficulty_numeric": 3, "category": "arrays",
+     "company_tags": ["Google", "Amazon", "Flipkart", "Paytm"], "india_frequency": "high",
+     "problem_statement": "Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.\n\nNotice that the solution set must not contain duplicate triplets.",
+     "examples": [{"input": "nums = [-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]"}],
+     "hints": ["Sort the array first.", "Use two pointers after fixing one element."],
+     "starter_code": {"python": "class Solution:\n    def threeSum(self, nums: list[int]) -> list[list[int]]:\n        pass"},
+     "test_cases": [{"input": "[-1,0,1,2,-1,-4]", "expected_output": "[[-1,-1,2],[-1,0,1]]"}],
+     "time_complexity": "O(n^2)", "space_complexity": "O(n)", "estimated_minutes_fresher": 35},
+
+    {"title": "Longest Substring Without Repeating Characters", "slug": "longest-substring-no-repeat", "difficulty": "medium", "difficulty_numeric": 3, "category": "strings",
+     "company_tags": ["Amazon", "Google", "Flipkart", "Microsoft"], "india_frequency": "high",
+     "problem_statement": "Given a string s, find the length of the longest substring without repeating characters.",
+     "examples": [{"input": "s = 'abcabcbb'", "output": "3", "explanation": "The answer is 'abc', with length 3."},{"input": "s = 'bbbbb'", "output": "1"}],
+     "hints": ["Use sliding window technique.", "Maintain a set of characters in current window."],
+     "starter_code": {"python": "class Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        pass"},
+     "test_cases": [{"input": "abcabcbb", "expected_output": "3"},{"input": "bbbbb", "expected_output": "1"},{"input": "pwwkew", "expected_output": "3"}],
+     "time_complexity": "O(n)", "space_complexity": "O(min(m,n))", "estimated_minutes_fresher": 30},
+
+    {"title": "Add Two Numbers", "slug": "add-two-numbers", "difficulty": "medium", "difficulty_numeric": 3, "category": "linked_lists",
+     "company_tags": ["Amazon", "Microsoft", "Flipkart"], "india_frequency": "high",
+     "problem_statement": "You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each node contains a single digit. Add the two numbers and return the sum as a linked list.",
+     "examples": [{"input": "l1 = [2,4,3], l2 = [5,6,4]", "output": "[7,0,8]", "explanation": "342 + 465 = 807"}],
+     "starter_code": {"python": "class Solution:\n    def addTwoNumbers(self, l1, l2):\n        pass"},
+     "test_cases": [{"input": "[2,4,3]\n[5,6,4]", "expected_output": "[7,0,8]"}],
+     "time_complexity": "O(max(m,n))", "space_complexity": "O(max(m,n))", "estimated_minutes_fresher": 30},
+
+    {"title": "Container With Most Water", "slug": "container-with-most-water", "difficulty": "medium", "difficulty_numeric": 3, "category": "two_pointers",
+     "company_tags": ["Amazon", "Google", "Goldman Sachs"], "india_frequency": "high",
+     "problem_statement": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container, such that the container contains the most water.",
+     "examples": [{"input": "height = [1,8,6,2,5,4,8,3,7]", "output": "49"}],
+     "starter_code": {"python": "class Solution:\n    def maxArea(self, height: list[int]) -> int:\n        pass"},
+     "test_cases": [{"input": "[1,8,6,2,5,4,8,3,7]", "expected_output": "49"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 25},
+
+    {"title": "Binary Tree Level Order Traversal", "slug": "level-order-traversal", "difficulty": "medium", "difficulty_numeric": 3, "category": "trees",
+     "company_tags": ["Amazon", "Microsoft", "TCS", "Infosys"], "india_frequency": "very_high",
+     "problem_statement": "Given the root of a binary tree, return the level order traversal of its nodes' values (i.e., from left to right, level by level).",
+     "examples": [{"input": "root = [3,9,20,null,null,15,7]", "output": "[[3],[9,20],[15,7]]"}],
+     "starter_code": {"python": "class Solution:\n    def levelOrder(self, root) -> list[list[int]]:\n        pass"},
+     "test_cases": [{"input": "[3,9,20,null,null,15,7]", "expected_output": "[[3],[9,20],[15,7]]"}],
+     "time_complexity": "O(n)", "space_complexity": "O(n)", "estimated_minutes_fresher": 25},
+
+    {"title": "Rotate Image", "slug": "rotate-image", "difficulty": "medium", "difficulty_numeric": 3, "category": "matrix",
+     "company_tags": ["Amazon", "Microsoft", "Zoho", "Flipkart"], "india_frequency": "high",
+     "problem_statement": "You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise). You have to rotate the image in-place.",
+     "examples": [{"input": "matrix = [[1,2,3],[4,5,6],[7,8,9]]", "output": "[[7,4,1],[8,5,2],[9,6,3]]"}],
+     "starter_code": {"python": "class Solution:\n    def rotate(self, matrix: list[list[int]]) -> None:\n        pass"},
+     "test_cases": [{"input": "[[1,2,3],[4,5,6],[7,8,9]]", "expected_output": "[[7,4,1],[8,5,2],[9,6,3]]"}],
+     "time_complexity": "O(n^2)", "space_complexity": "O(1)", "estimated_minutes_fresher": 30},
+
+    {"title": "Group Anagrams", "slug": "group-anagrams", "difficulty": "medium", "difficulty_numeric": 3, "category": "strings",
+     "company_tags": ["Amazon", "Goldman Sachs", "Uber"], "india_frequency": "high",
+     "problem_statement": "Given an array of strings strs, group the anagrams together. You can return the answer in any order.",
+     "examples": [{"input": 'strs = ["eat","tea","tan","ate","nat","bat"]', "output": '[["bat"],["nat","tan"],["ate","eat","tea"]]'}],
+     "starter_code": {"python": "class Solution:\n    def groupAnagrams(self, strs: list[str]) -> list[list[str]]:\n        pass"},
+     "test_cases": [{"input": '["eat","tea","tan","ate","nat","bat"]', "expected_output": '[["bat"],["nat","tan"],["ate","eat","tea"]]'}],
+     "time_complexity": "O(n*k*log(k))", "space_complexity": "O(n*k)", "estimated_minutes_fresher": 25},
+
+    {"title": "Number of Islands", "slug": "number-of-islands", "difficulty": "medium", "difficulty_numeric": 3, "category": "graphs",
+     "company_tags": ["Amazon", "Google", "Microsoft", "Flipkart"], "india_frequency": "high",
+     "problem_statement": "Given an m x n 2D binary grid where '1' represents land and '0' represents water, return the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically.",
+     "examples": [{"input": 'grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]', "output": "3"}],
+     "starter_code": {"python": "class Solution:\n    def numIslands(self, grid: list[list[str]]) -> int:\n        pass"},
+     "test_cases": [{"input": '[["1","1","0"],["0","1","0"],["0","0","1"]]', "expected_output": "2"}],
+     "time_complexity": "O(m*n)", "space_complexity": "O(m*n)", "estimated_minutes_fresher": 35},
+
+    {"title": "Coin Change", "slug": "coin-change", "difficulty": "medium", "difficulty_numeric": 4, "category": "dynamic_programming",
+     "company_tags": ["Google", "Amazon", "Paytm", "PhonePe"], "india_frequency": "high",
+     "problem_statement": "You are given an integer array coins representing different denominations and an integer amount. Return the fewest number of coins needed to make up that amount. If not possible, return -1.",
+     "examples": [{"input": "coins = [1,5,11], amount = 11", "output": "1"},{"input": "coins = [2], amount = 3", "output": "-1"}],
+     "starter_code": {"python": "class Solution:\n    def coinChange(self, coins: list[int], amount: int) -> int:\n        pass"},
+     "test_cases": [{"input": "[1,5,11]\n11", "expected_output": "1"},{"input": "[2]\n3", "expected_output": "-1"}],
+     "time_complexity": "O(n*amount)", "space_complexity": "O(amount)", "estimated_minutes_fresher": 35},
+
+    {"title": "Sort Colors (Dutch National Flag)", "slug": "sort-colors", "difficulty": "medium", "difficulty_numeric": 3, "category": "arrays",
+     "company_tags": ["Amazon", "Microsoft", "Wipro", "TCS"], "india_frequency": "very_high",
+     "problem_statement": "Given an array nums with n objects colored red, white, or blue (0, 1, 2), sort them in-place so that same colors are adjacent. You must solve this without using the library sort function.",
+     "examples": [{"input": "nums = [2,0,2,1,1,0]", "output": "[0,0,1,1,2,2]"}],
+     "starter_code": {"python": "class Solution:\n    def sortColors(self, nums: list[int]) -> None:\n        pass"},
+     "test_cases": [{"input": "[2,0,2,1,1,0]", "expected_output": "[0,0,1,1,2,2]"},{"input": "[2,0,1]", "expected_output": "[0,1,2]"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 20},
+
+    {"title": "Kth Largest Element", "slug": "kth-largest-element", "difficulty": "medium", "difficulty_numeric": 3, "category": "heaps",
+     "company_tags": ["Amazon", "Facebook", "Google", "Flipkart"], "india_frequency": "high",
+     "problem_statement": "Given an integer array nums and an integer k, return the kth largest element in the array. Note that it is the kth largest element in sorted order, not the kth distinct element.",
+     "examples": [{"input": "nums = [3,2,1,5,6,4], k = 2", "output": "5"},{"input": "nums = [3,2,3,1,2,4,5,5,6], k = 4", "output": "4"}],
+     "starter_code": {"python": "class Solution:\n    def findKthLargest(self, nums: list[int], k: int) -> int:\n        pass"},
+     "test_cases": [{"input": "[3,2,1,5,6,4]\n2", "expected_output": "5"}],
+     "time_complexity": "O(n log k)", "space_complexity": "O(k)", "estimated_minutes_fresher": 25},
+
+    {"title": "Detect Cycle in Linked List", "slug": "detect-cycle-linked-list", "difficulty": "medium", "difficulty_numeric": 3, "category": "linked_lists",
+     "company_tags": ["Amazon", "Microsoft", "TCS", "Infosys"], "india_frequency": "very_high",
+     "problem_statement": "Given head, the head of a linked list, determine if the linked list has a cycle in it. Return true if there is a cycle, false otherwise.",
+     "examples": [{"input": "head = [3,2,0,-4], pos = 1", "output": "true", "explanation": "Tail connects to node at index 1"}],
+     "hints": ["Floyd's Cycle Detection (Tortoise and Hare).", "Use two pointers — slow moves 1 step, fast moves 2 steps."],
+     "starter_code": {"python": "class Solution:\n    def hasCycle(self, head) -> bool:\n        pass"},
+     "test_cases": [{"input": "[3,2,0,-4]\n1", "expected_output": "true"},{"input": "[1,2]\n-1", "expected_output": "false"}],
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 20},
+
+    # ═══ HARD (8) ═══
+    {"title": "LRU Cache", "slug": "lru-cache", "difficulty": "hard", "difficulty_numeric": 5, "category": "design",
+     "company_tags": ["Google", "Microsoft", "Amazon", "Flipkart"], "india_frequency": "high",
+     "problem_statement": "Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.\n\nImplement the LRUCache class:\n- LRUCache(int capacity) Initialize the LRU cache with positive size capacity.\n- int get(int key) Return the value of the key if the key exists, otherwise return -1.\n- void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity, evict the least recently used key.",
+     "examples": [{"input": 'LRUCache(2), put(1,1), put(2,2), get(1), put(3,3), get(2)', "output": "1, -1"}],
+     "starter_code": {"python": "class LRUCache:\n    def __init__(self, capacity: int):\n        pass\n    def get(self, key: int) -> int:\n        pass\n    def put(self, key: int, value: int) -> None:\n        pass"},
+     "time_complexity": "O(1)", "space_complexity": "O(capacity)", "estimated_minutes_fresher": 45},
+
+    {"title": "Merge K Sorted Lists", "slug": "merge-k-sorted-lists", "difficulty": "hard", "difficulty_numeric": 5, "category": "heaps",
+     "company_tags": ["Amazon", "Google", "Microsoft"], "india_frequency": "high",
+     "problem_statement": "You are given an array of k linked-lists lists, each linked-list is sorted in ascending order. Merge all the linked-lists into one sorted linked-list and return it.",
+     "examples": [{"input": "lists = [[1,4,5],[1,3,4],[2,6]]", "output": "[1,1,2,3,4,4,5,6]"}],
+     "starter_code": {"python": "class Solution:\n    def mergeKLists(self, lists):\n        pass"},
+     "time_complexity": "O(n*log(k))", "space_complexity": "O(k)", "estimated_minutes_fresher": 40},
+
+    {"title": "Trapping Rain Water", "slug": "trapping-rain-water", "difficulty": "hard", "difficulty_numeric": 5, "category": "arrays",
+     "company_tags": ["Google", "Amazon", "Goldman Sachs", "Flipkart"], "india_frequency": "high",
+     "problem_statement": "Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.",
+     "examples": [{"input": "height = [0,1,0,2,1,0,1,3,2,1,2,1]", "output": "6"}],
+     "starter_code": {"python": "class Solution:\n    def trap(self, height: list[int]) -> int:\n        pass"},
+     "time_complexity": "O(n)", "space_complexity": "O(1)", "estimated_minutes_fresher": 40},
+
+    {"title": "Word Ladder", "slug": "word-ladder", "difficulty": "hard", "difficulty_numeric": 5, "category": "graphs",
+     "company_tags": ["Amazon", "Google", "Microsoft"], "india_frequency": "medium",
+     "problem_statement": 'Given two words beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, such that only one letter can be changed at a time and each transformed word must exist in the word list.',
+     "examples": [{"input": 'beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]', "output": "5"}],
+     "starter_code": {"python": "class Solution:\n    def ladderLength(self, beginWord: str, endWord: str, wordList: list[str]) -> int:\n        pass"},
+     "time_complexity": "O(n*m^2)", "space_complexity": "O(n*m)", "estimated_minutes_fresher": 45},
+
+    {"title": "Median of Two Sorted Arrays", "slug": "median-two-sorted-arrays", "difficulty": "hard", "difficulty_numeric": 5, "category": "binary_search",
+     "company_tags": ["Google", "Amazon", "Goldman Sachs"], "india_frequency": "medium",
+     "problem_statement": "Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays. The overall run time complexity should be O(log (m+n)).",
+     "examples": [{"input": "nums1 = [1,3], nums2 = [2]", "output": "2.0"},{"input": "nums1 = [1,2], nums2 = [3,4]", "output": "2.5"}],
+     "starter_code": {"python": "class Solution:\n    def findMedianSortedArrays(self, nums1: list[int], nums2: list[int]) -> float:\n        pass"},
+     "time_complexity": "O(log(min(m,n)))", "space_complexity": "O(1)", "estimated_minutes_fresher": 50},
+
+    {"title": "Longest Palindromic Substring", "slug": "longest-palindromic-substring", "difficulty": "hard", "difficulty_numeric": 4, "category": "dynamic_programming",
+     "company_tags": ["Amazon", "Microsoft", "Zoho"], "india_frequency": "high",
+     "problem_statement": "Given a string s, return the longest palindromic substring in s.",
+     "examples": [{"input": "s = 'babad'", "output": "'bab'", "explanation": "'aba' is also a valid answer."},{"input": "s = 'cbbd'", "output": "'bb'"}],
+     "starter_code": {"python": "class Solution:\n    def longestPalindrome(self, s: str) -> str:\n        pass"},
+     "time_complexity": "O(n^2)", "space_complexity": "O(1)", "estimated_minutes_fresher": 35},
+
+    {"title": "Serialize and Deserialize Binary Tree", "slug": "serialize-deserialize-tree", "difficulty": "hard", "difficulty_numeric": 5, "category": "trees",
+     "company_tags": ["Google", "Amazon", "Microsoft"], "india_frequency": "medium",
+     "problem_statement": "Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work.",
+     "examples": [{"input": "root = [1,2,3,null,null,4,5]", "output": "[1,2,3,null,null,4,5]"}],
+     "starter_code": {"python": "class Codec:\n    def serialize(self, root) -> str:\n        pass\n    def deserialize(self, data: str):\n        pass"},
+     "time_complexity": "O(n)", "space_complexity": "O(n)", "estimated_minutes_fresher": 45},
+
+    {"title": "Regular Expression Matching", "slug": "regex-matching", "difficulty": "hard", "difficulty_numeric": 5, "category": "dynamic_programming",
+     "company_tags": ["Google", "Facebook", "Amazon"], "india_frequency": "medium",
+     "problem_statement": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where '.' matches any single character and '*' matches zero or more of the preceding element.",
+     "examples": [{"input": "s = 'aa', p = 'a'", "output": "false"},{"input": "s = 'aa', p = 'a*'", "output": "true"}],
+     "starter_code": {"python": "class Solution:\n    def isMatch(self, s: str, p: str) -> bool:\n        pass"},
+     "time_complexity": "O(m*n)", "space_complexity": "O(m*n)", "estimated_minutes_fresher": 50},
+]
+
+
+def seed_coding_problems(db):
+    """Seed 30 real coding problems into the database."""
+    from models import CodingProblem
+    if db.query(CodingProblem).count() > 0:
+        return 0
+    count = 0
+    for p in CODING_PROBLEMS:
+        db.add(CodingProblem(**p))
+        count += 1
+    db.commit()
+    return count

@@ -149,6 +149,12 @@ def health():
     return {"status": "healthy", "platform": "SkillTen"}
 
 
+@app.get("/api/health")
+def api_health():
+    """Health check accessible through frontend rewrite."""
+    return {"status": "healthy", "platform": "SkillTen"}
+
+
 @app.get("/health/db")
 def health_db():
     """Diagnostic endpoint — shows database status"""
@@ -184,6 +190,38 @@ def health_db():
     return info
 
 
+@app.get("/api/health/db")
+def api_health_db():
+    """DB health accessible through frontend rewrite."""
+    return health_db()
+
+
+@app.post("/api/admin/seed")
+def trigger_seed():
+    """Manually trigger database seeding — safe to call multiple times (idempotent)."""
+    results = {}
+    db = SessionLocal()
+    try:
+        from seed_problems import seed_coding_problems
+        results["coding_problems"] = seed_coding_problems(db)
+    except Exception as e:
+        results["coding_problems_error"] = str(e)[:200]
+    try:
+        from seed_aptitude import seed_aptitude_questions
+        results["aptitude_questions"] = seed_aptitude_questions(db)
+    except Exception as e:
+        results["aptitude_questions_error"] = str(e)[:200]
+    try:
+        from seed_data import seed_all
+        seed_all(db)
+        results["full_seed"] = "completed"
+    except Exception as e:
+        results["full_seed_error"] = str(e)[:200]
+    db.close()
+    return {"status": "ok", "results": results}
+
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=os.getenv("ENV") != "production")
+

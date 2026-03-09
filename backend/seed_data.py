@@ -17,6 +17,21 @@ def seed_all(db):
     _seed_market_insights(db)
     _seed_badges(db)
     _seed_questions(db)
+    # Enhanced seed: 30 real problems + 50 aptitude questions
+    try:
+        from seed_problems import seed_coding_problems
+        count = seed_coding_problems(db)
+        if count:
+            print(f"  ✅ Seeded {count} coding problems (GFG/LeetCode/HackerRank)")
+    except Exception as e:
+        print(f"  ⚠️ Coding problems seed: {e}")
+    try:
+        from seed_aptitude import seed_aptitude_questions
+        count = seed_aptitude_questions(db)
+        if count:
+            print(f"  ✅ Seeded {count} aptitude questions (TCS/Infosys/Wipro)")
+    except Exception as e:
+        print(f"  ⚠️ Aptitude seed: {e}")
     db.commit()
 
 
