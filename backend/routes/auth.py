@@ -138,10 +138,39 @@ def signup(req: SignupReq, db: Session = Depends(get_db)):
 
 @router.post("/login")
 def login(req: LoginReq, db: Session = Depends(get_db)):
+    from fastapi import Request
+    # ─── Rate Limiting (5 attempts per 15 min per email) ───
+    from collections import defaultdict
+    import time as _time
+    if not hasattr(login, "_attempts"):
+        login._attempts = defaultdict(list)  # email -> [timestamps]
+
+    key = req.email.lower()
+    now = _time.time()
+    # Clean old attempts (> 15 min)
+    login._attempts[key] = [t for t in login._attempts[key] if now - t < 900]
+
+    if len(login._attempts[key]) >= 5:
+        oldest = login._attempts[key][0]
+        remaining = int(900 - (now - oldest))
+        raise HTTPException(
+            status_code=429,
+            detail=f"Account temporarily locked. Try again in {remaining // 60} minutes."
+        )
+
     user = db.query(User).filter(User.email == req.email).first()
     if not user or not verify_password(req.password, user.hashed_password):
+        login._attempts[key].append(now)
+        attempts_left = 5 - len(login._attempts[key])
+        if attempts_left <= 2:
+            raise HTTPException(
+                status_code=401,
+                detail=f"Invalid credentials. {attempts_left} attempts remaining."
+            )
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
+    # Successful login — clear attempts
+    login._attempts.pop(key, None)
     user.last_active_at = datetime.now(timezone.utc)
     db.commit()
 
