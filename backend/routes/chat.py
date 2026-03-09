@@ -16,6 +16,7 @@ class ChatReq(BaseModel):
     session_id: Optional[str] = None
 
 @router.post("")
+@router.post("/")
 async def chat(req: ChatReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     if req.session_id:
         session = db.query(ChatSession).filter_by(id=req.session_id, user_id=user.id).first()

@@ -160,8 +160,7 @@ def start_aptitude_test(
         user_id=user.id,
         test_type="mini",
         sections=[req.section],
-        total_questions=len(questions),
-        time_limit_seconds=480,
+        duration_minutes=8,
     )
     db.add(session)
     db.commit()
@@ -197,7 +196,7 @@ def submit_aptitude_test(
     ).first()
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")
-    if session.is_complete:
+    if session.completed_at:
         raise HTTPException(status_code=400, detail="Already submitted")
 
     # Grade
@@ -231,7 +230,6 @@ def submit_aptitude_test(
     # Percentile (simple approximation — real uses population data)
     percentile = min(99, round(score * 0.95 + 5, 1))
 
-    session.is_complete = True
     session.completed_at = datetime.now(timezone.utc)
     session.total_score = score
     session.time_taken_seconds = time_taken
