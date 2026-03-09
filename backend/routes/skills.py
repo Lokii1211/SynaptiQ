@@ -72,7 +72,7 @@ def list_skills_root(
         "skills": [{
             "id": s.id, "slug": s.slug, "name": s.name,
             "category": s.category, "sub_category": s.sub_category,
-            "demand_level": s.demand_level, "icon": s.icon,
+            "demand_level": s.demand_level, "icon": s.icon_url,
             "learning_time_hours": s.learning_time_hours,
         } for s in skills],
     }
@@ -104,7 +104,7 @@ def list_skills(
         "skills": [{
             "id": s.id, "slug": s.slug, "name": s.name,
             "category": s.category, "sub_category": s.sub_category,
-            "demand_level": s.demand_level, "icon": s.icon,
+            "demand_level": s.demand_level, "icon": s.icon_url,
             "learning_time_hours": s.learning_time_hours,
         } for s in skills],
     }
