@@ -50,6 +50,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="SkillTen",
+    redirect_slashes=False,
     description="""
 ## SkillTen — AI Career Intelligence Platform
 

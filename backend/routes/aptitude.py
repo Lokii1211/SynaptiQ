@@ -144,17 +144,28 @@ def start_aptitude_test(
     db: Session = Depends(get_db),
 ):
     """Start a timed aptitude mini-test — 10 questions, 480-second timer."""
+    # Map frontend section names to DB category names
+    section_aliases = {
+        "quant": ["quant", "quantitative"],
+        "logical": ["logical"],
+        "verbal": ["verbal"],
+        "data_interpretation": ["data_interpretation"],
+        "technical": ["technical"],
+    }
+
     q = db.query(Question).filter(
         Question.is_aptitude_question == True,
         Question.is_active == True,
     )
     if req.section != "mixed":
-        q = q.filter(Question.category == req.section)
+        cats = section_aliases.get(req.section, [req.section])
+        q = q.filter(Question.category.in_(cats))
     if req.difficulty != "adaptive":
         q = q.filter(Question.difficulty == req.difficulty)
 
-    # Randomize
-    questions = q.order_by(Question.id).limit(10).all()
+    # Randomize using func.random()
+    from sqlalchemy import func
+    questions = q.order_by(func.random()).limit(10).all()
 
     session = AptitudeTestSession(
         user_id=user.id,
