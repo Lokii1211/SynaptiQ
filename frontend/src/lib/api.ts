@@ -237,7 +237,7 @@ export const api = {
 
     // ═══════════ CHAT ═══════════
     chat: (data: { message: string; session_id?: string }) =>
-        request('/chat/', { method: 'POST', body: JSON.stringify(data) }),
+        request('/chat', { method: 'POST', body: JSON.stringify(data) }),
 
     getChatSessions: () => request('/chat/sessions'),
 
