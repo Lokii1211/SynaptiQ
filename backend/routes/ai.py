@@ -22,11 +22,11 @@ class SkillGapReq(BaseModel):
     target_career: str
 
 @router.post("/skill-gap")
-async def ai_skill_gap(req: SkillGapReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
+def ai_skill_gap(req: SkillGapReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     ctx = {}
     if user.profile:
         ctx = {"college_tier": user.profile.college_tier, "stream": user.profile.stream, "graduation_year": user.profile.graduation_year}
-    result = await analyze_skill_gap(req.current_skills, req.target_career, ctx)
+    result = analyze_skill_gap(req.current_skills, req.target_career, ctx)
     return result
 
 
@@ -35,8 +35,8 @@ class ResumeAnalyzeReq(BaseModel):
     target_role: str
 
 @router.post("/resume-review")
-async def ai_resume_review(req: ResumeAnalyzeReq, user: User = Depends(require_user)):
-    result = await analyze_resume(req.resume_data, req.target_role)
+def ai_resume_review(req: ResumeAnalyzeReq, user: User = Depends(require_user)):
+    result = analyze_resume(req.resume_data, req.target_role)
     return result
 
 
@@ -46,8 +46,8 @@ class CodeReviewReq(BaseModel):
     problem_title: Optional[str] = ""
 
 @router.post("/code-review")
-async def ai_code_review(req: CodeReviewReq, user: User = Depends(require_user)):
-    result = await review_code(req.code, req.language, req.problem_title)
+def ai_code_review(req: CodeReviewReq, user: User = Depends(require_user)):
+    result = review_code(req.code, req.language, req.problem_title)
     return result
 
 
@@ -55,7 +55,7 @@ class JobMatchReq(BaseModel):
     job_id: str
 
 @router.post("/job-match")
-async def ai_job_match(req: JobMatchReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
+def ai_job_match(req: JobMatchReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     from models import JobListing
     job = db.query(JobListing).filter_by(id=req.job_id).first()
     if not job:
@@ -73,7 +73,7 @@ async def ai_job_match(req: JobMatchReq, user: User = Depends(require_user), db:
         "required_skills": job.required_skills, "preferred_skills": job.preferred_skills,
         "company_type": job.company_type, "salary_min_lpa": job.salary_min_lpa,
     }
-    result = await calculate_job_match(user_data, job_data)
+    result = calculate_job_match(user_data, job_data)
     return result
 
 
@@ -83,14 +83,14 @@ class RoadmapGenReq(BaseModel):
     hours_per_week: int = 10
 
 @router.post("/generate-roadmap")
-async def ai_generate_roadmap(req: RoadmapGenReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
+def ai_generate_roadmap(req: RoadmapGenReq, user: User = Depends(require_user), db: Session = Depends(get_db)):
     from models import LearningRoadmap, RoadmapPhase, RoadmapMilestone
     
     ctx = {"hours_per_week": req.hours_per_week}
     if user.profile:
         ctx.update({"college_tier": user.profile.college_tier, "stream": user.profile.stream, "graduation_year": user.profile.graduation_year})
     
-    result = await generate_roadmap(req.target_career, req.current_skills, ctx)
+    result = generate_roadmap(req.target_career, req.current_skills, ctx)
     
     # Save to database
     roadmap = LearningRoadmap(
@@ -138,8 +138,8 @@ class InterviewPrepReq(BaseModel):
     round_type: str = "technical"
 
 @router.post("/interview-prep")
-async def ai_interview_prep(req: InterviewPrepReq, user: User = Depends(require_user)):
-    result = await generate_interview_prep(req.company, req.role, req.round_type)
+def ai_interview_prep(req: InterviewPrepReq, user: User = Depends(require_user)):
+    result = generate_interview_prep(req.company, req.role, req.round_type)
     return result
 
 
@@ -156,7 +156,7 @@ class RerouteReq(BaseModel):
     placement_deadline: Optional[str] = None
 
 @router.post("/reroute-roadmap")
-async def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)):
+def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)):
     """Bible XF-08 — When student falls behind, generate 3 reroute options"""
     student_profile = {}
     if user.profile:
@@ -166,7 +166,7 @@ async def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)
             "graduation_year": user.profile.graduation_year,
             "display_name": user.display_name,
         }
-    result = await generate_reroute_options(
+    result = generate_reroute_options(
         req.original_roadmap, req.completed_milestones, req.missed_milestones,
         student_profile, req.available_hours_per_week, req.target_career, req.placement_deadline
     )
@@ -178,7 +178,7 @@ async def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)
 # ═══════════════════════════════════════════════════════════════
 
 @router.get("/parent-report")
-async def ai_parent_report(user: User = Depends(require_user)):
+def ai_parent_report(user: User = Depends(require_user)):
     """Bible XF-10 — Weekly parent-friendly progress report"""
     student_profile = {
         "display_name": user.display_name,
@@ -195,7 +195,7 @@ async def ai_parent_report(user: User = Depends(require_user)):
         "streak_days": 12,
         "hours_spent": 6,
     }
-    result = await generate_parent_report(student_profile, weekly_activity)
+    result = generate_parent_report(student_profile, weekly_activity)
     return result
 
 
@@ -209,10 +209,10 @@ class SalaryTruthReq(BaseModel):
     city: str
 
 @router.post("/salary-truth")
-async def ai_salary_truth(req: SalaryTruthReq, user: User = Depends(require_user)):
+def ai_salary_truth(req: SalaryTruthReq, user: User = Depends(require_user)):
     """Bible XF-10 — CTC vs in-hand salary breakdown for parents"""
     college_tier = user.profile.college_tier if user.profile else 2
-    result = await check_salary_truth(req.ctc_lpa, req.role, req.city, college_tier)
+    result = check_salary_truth(req.ctc_lpa, req.role, req.city, college_tier)
     return result
 
 
@@ -230,9 +230,9 @@ class NegotiateReq(BaseModel):
     conversation_history: list = []
 
 @router.post("/negotiate-salary")
-async def ai_negotiate_salary(req: NegotiateReq, user: User = Depends(require_user)):
+def ai_negotiate_salary(req: NegotiateReq, user: User = Depends(require_user)):
     """Bible 05-D — Interactive salary negotiation simulator with HR recruiter persona"""
-    result = await salary_negotiation_simulator(
+    result = salary_negotiation_simulator(
         req.company_type, req.role, req.initial_offer_lpa,
         req.budget_ceiling_lpa, req.scenario,
         req.student_message, req.conversation_history
@@ -254,9 +254,9 @@ class CareerDayReq(BaseModel):
     conversation_history: list = []
 
 @router.post("/career-day-simulator")
-async def ai_career_day(req: CareerDayReq, user: User = Depends(require_user)):
+def ai_career_day(req: CareerDayReq, user: User = Depends(require_user)):
     """Bible 05-G — Interactive day-in-the-life career simulation"""
-    result = await career_day_simulator(
+    result = career_day_simulator(
         req.career, req.company_type, req.city, req.level,
         req.student_choice, req.decision_number, req.conversation_history
     )
@@ -273,9 +273,9 @@ class EmotionReq(BaseModel):
     positive_history: list = []
 
 @router.post("/wellbeing-check")
-async def ai_wellbeing_check(req: EmotionReq, user: User = Depends(require_user)):
+def ai_wellbeing_check(req: EmotionReq, user: User = Depends(require_user)):
     """Bible 05-F — Triggered by behavioral signals — wellbeing support"""
-    result = await emotion_aware_intervention(
+    result = emotion_aware_intervention(
         req.signal_type, req.student_data, req.positive_history
     )
     return result

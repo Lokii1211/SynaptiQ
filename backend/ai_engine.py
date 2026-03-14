@@ -483,7 +483,7 @@ Be honest. Don't sugar-coat. India-specific reality."""
 # 10. PARENT REPORT GENERATION (Bible XF-10)
 # ═══════════════════════════════════════════════════════════════
 
-async def generate_parent_report(student_profile: dict, weekly_activity: dict) -> dict:
+def generate_parent_report(student_profile: dict, weekly_activity: dict) -> dict:
     """Generate parent-friendly weekly report (Bible XF-10)"""
     prompt = f"""You are SkillTen's Parent Report Generator. Write for Indian parents.
 
