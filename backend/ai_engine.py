@@ -44,7 +44,7 @@ def _safe_generate(prompt: str, fallback: dict) -> dict:
 # 1. ASSESSMENT 4D ANALYSIS
 # ═══════════════════════════════════════════════════════════════
 
-async def analyze_4d_assessment(answers: list, time_data: list = None) -> dict:
+def analyze_4d_assessment(answers: list, time_data: list = None) -> dict:
     """Analyze 4D assessment answers → archetype + career matches"""
     prompt = f"""You are SkillTen's 4D Career Profiling Engine for Indian students.
 
@@ -97,7 +97,7 @@ Use Indian salary data (LPA). Be honest, not generic."""
 # 2. CAREER CHAT
 # ═══════════════════════════════════════════════════════════════
 
-async def career_chat(message: str, context: list = None, user_profile: dict = None) -> str:
+def career_chat(message: str, context: list = None, user_profile: dict = None) -> str:
     """AI career counselor chat — SkillTen's conversational advisor"""
     if not model:
         return _mock_chat_response(message)
@@ -158,7 +158,7 @@ Respond as SkillTen AI:"""
 # 3. SKILL GAP ANALYSIS
 # ═══════════════════════════════════════════════════════════════
 
-async def analyze_skill_gap(current_skills: list, target_career: str, user_context: dict = None) -> dict:
+def analyze_skill_gap(current_skills: list, target_career: str, user_context: dict = None) -> dict:
     """Analyze gap between user's skills and target career"""
     ctx = ""
     if user_context:
@@ -206,7 +206,7 @@ Be realistic with timelines for an Indian student."""
 # 4. RESUME ATS SCORING + SUGGESTIONS
 # ═══════════════════════════════════════════════════════════════
 
-async def analyze_resume(resume_data: dict, target_role: str) -> dict:
+def analyze_resume(resume_data: dict, target_role: str) -> dict:
     """ATS score + improvement suggestions for resume"""
     prompt = f"""You are SkillTen's Resume ATS Analyzer for Indian job market.
 
@@ -250,7 +250,7 @@ Be tough but constructive. Indian freshers need honest feedback."""
 # 5. CODE REVIEW AI
 # ═══════════════════════════════════════════════════════════════
 
-async def review_code(code: str, language: str, problem_title: str = "") -> dict:
+def review_code(code: str, language: str, problem_title: str = "") -> dict:
     """AI code review for coding submissions"""
     prompt = f"""You are SkillTen's Code Review AI, an expert competitive programmer.
 
@@ -288,7 +288,7 @@ Review this code and return ONLY raw JSON:
 # 6. JOB MATCH SCORING
 # ═══════════════════════════════════════════════════════════════
 
-async def calculate_job_match(user_profile: dict, job_data: dict) -> dict:
+def calculate_job_match(user_profile: dict, job_data: dict) -> dict:
     """Calculate AI match score between user and job"""
     prompt = f"""You are SkillTen's Job Match Engine.
 
@@ -322,7 +322,7 @@ Calculate match and return ONLY raw JSON:
 # 7. ROADMAP GENERATION
 # ═══════════════════════════════════════════════════════════════
 
-async def generate_roadmap(target_career: str, current_skills: list, user_context: dict = None) -> dict:
+def generate_roadmap(target_career: str, current_skills: list, user_context: dict = None) -> dict:
     """Generate personalized learning roadmap"""
     ctx = ""
     if user_context:
@@ -376,7 +376,7 @@ Rules:
 # 8. INTERVIEW PREP
 # ═══════════════════════════════════════════════════════════════
 
-async def generate_interview_prep(company: str, role: str, round_type: str = "technical") -> dict:
+def generate_interview_prep(company: str, role: str, round_type: str = "technical") -> dict:
     """Generate interview preparation guide"""
     prompt = f"""You are SkillTen's Interview Prep AI, specialized in Indian tech hiring.
 
@@ -415,7 +415,7 @@ Use real data about {company}'s interview process in India. Be specific."""
 # 9. ROADMAP REROUTING ENGINE (Bible XF-08)
 # ═══════════════════════════════════════════════════════════════
 
-async def generate_reroute_options(
+def generate_reroute_options(
     original_roadmap: dict, completed_milestones: list, missed_milestones: list,
     student_profile: dict, available_hours_per_week: int, target_career: str,
     placement_deadline: str = None
@@ -535,7 +535,7 @@ RULES:
 # 11. SALARY TRUTH CHECKER (Bible XF-10)
 # ═══════════════════════════════════════════════════════════════
 
-async def check_salary_truth(ctc_lpa: float, role: str, city: str, college_tier: int = 2) -> dict:
+def check_salary_truth(ctc_lpa: float, role: str, city: str, college_tier: int = 2) -> dict:
     """Help parents understand CTC vs in-hand salary (Bible XF-10)"""
     prompt = f"""You are SkillTen's Salary Truth Engine for Indian parents.
 
