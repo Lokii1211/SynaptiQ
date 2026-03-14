@@ -161,10 +161,10 @@ def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)):
     student_profile = {}
     if user.profile:
         student_profile = {
-            "college_tier": user.profile.college_tier,
-            "stream": user.profile.stream,
-            "graduation_year": user.profile.graduation_year,
-            "display_name": user.display_name,
+            "college_tier": getattr(user.profile, 'college_tier', None),
+            "stream": getattr(user.profile, 'stream', None),
+            "graduation_year": getattr(user.profile, 'graduation_year', None),
+            "display_name": getattr(user.profile, 'display_name', user.email),
         }
     result = generate_reroute_options(
         req.original_roadmap, req.completed_milestones, req.missed_milestones,
@@ -181,13 +181,13 @@ def ai_reroute_roadmap(req: RerouteReq, user: User = Depends(require_user)):
 def ai_parent_report(user: User = Depends(require_user)):
     """Bible XF-10 — Weekly parent-friendly progress report"""
     student_profile = {
-        "display_name": user.display_name,
+        "display_name": getattr(user.profile, 'display_name', user.email) if user.profile else user.email,
         "email": user.email,
     }
     if user.profile:
         student_profile.update({
-            "target_role": user.profile.target_role,
-            "college_name": user.profile.college_name,
+            "target_role": getattr(user.profile, 'target_role', None),
+            "college_name": getattr(user.profile, 'college_name', None),
         })
     weekly_activity = {
         "problems_solved": 8,
