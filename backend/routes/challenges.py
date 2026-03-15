@@ -1,4 +1,4 @@
-"""SkillTen Challenges — list, detail, register, submit"""
+"""Mentixy Challenges — list, detail, register, submit"""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional

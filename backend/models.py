@@ -1,5 +1,5 @@
 """
-SkillTen — Complete Database Models
+Mentixy — Complete Database Models
 Production-grade schema: Users, Skills, Assessment 4D, Coding, Aptitude,
 Jobs, Challenges, Social, Roadmaps, Gamification, Companies, Notifications,
 Placement Outcomes, Colleges, Interview Experiences, Resumes, Chat, Careers
@@ -91,8 +91,8 @@ class UserProfile(Base):
     github_username = Column(String(100))
     personal_website = Column(Text)
     twitter_handle = Column(String(100))
-    # Viya Score
-    viya_score = Column(Integer, default=0)
+    # Mentixy Score
+    mentixy_score = Column(Integer, default=0)
     score_breakdown = Column(JSON)
     score_7d_trend = Column(Integer, default=0)
     score_30d_trend = Column(Integer, default=0)
@@ -682,7 +682,7 @@ class UserBadge(Base):
 
 
 class UserViyaScoreLog(Base):
-    __tablename__ = "user_viya_score_log"
+    __tablename__ = "user_mentixy_score_log"
     id = Column(String, primary_key=True, default=_uuid)
     user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     score = Column(Integer, nullable=False)

@@ -1,9 +1,9 @@
 /**
- * SkillTen — API Client
+ * Mentixy — API Client
  * All frontend requests go through here to the Python backend
  */
 
-// On production, call the backend directly at skillten.vercel.app.
+// On production, call the backend directly at mentixy-api.vercel.app.
 // The Vercel rewrite proxy was stripping POST request bodies, causing signup/login to fail.
 // CORS is enabled on the backend (allow_origins=["*"]) so direct cross-origin calls work.
 // On localhost, hit the local backend directly.
@@ -16,7 +16,7 @@ function getBackendUrl(): string {
         return 'http://localhost:8000';
     }
     // Production: call the backend directly
-    return 'https://skillten.vercel.app';
+    return 'https://mentixy-api.vercel.app';
 }
 const BACKEND_URL = getBackendUrl();
 
@@ -29,7 +29,7 @@ class ApiError extends Error {
 }
 
 async function request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('skillten_token') : null;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('mentixy_token') : null;
 
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
@@ -331,30 +331,30 @@ export const api = {
 // Auth helpers
 export const auth = {
     setToken: (token: string) => {
-        if (typeof window !== 'undefined') localStorage.setItem('skillten_token', token);
+        if (typeof window !== 'undefined') localStorage.setItem('mentixy_token', token);
     },
     getToken: () => {
-        if (typeof window !== 'undefined') return localStorage.getItem('skillten_token');
+        if (typeof window !== 'undefined') return localStorage.getItem('mentixy_token');
         return null;
     },
     clearToken: () => {
         if (typeof window !== 'undefined') {
-            localStorage.removeItem('skillten_token');
-            localStorage.removeItem('skillten_user');
+            localStorage.removeItem('mentixy_token');
+            localStorage.removeItem('mentixy_user');
         }
     },
     setUser: (user: any) => {
-        if (typeof window !== 'undefined') localStorage.setItem('skillten_user', JSON.stringify(user));
+        if (typeof window !== 'undefined') localStorage.setItem('mentixy_user', JSON.stringify(user));
     },
     getUser: () => {
         if (typeof window !== 'undefined') {
-            const u = localStorage.getItem('skillten_user');
+            const u = localStorage.getItem('mentixy_user');
             return u ? JSON.parse(u) : null;
         }
         return null;
     },
     isLoggedIn: () => {
-        if (typeof window !== 'undefined') return !!localStorage.getItem('skillten_token');
+        if (typeof window !== 'undefined') return !!localStorage.getItem('mentixy_token');
         return false;
     },
 };

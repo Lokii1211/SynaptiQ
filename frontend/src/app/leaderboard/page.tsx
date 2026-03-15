@@ -65,7 +65,7 @@ export default function LeaderboardPage() {
                     rank: 4,
                     display_name: me.profile?.display_name || me.display_name || 'You',
                     username: me.profile?.username || 'you',
-                    score: me.profile?.skillten_score || 750,
+                    score: me.profile?.mentixy_score || 750,
                     college: me.profile?.college_name || 'Your College',
                     problems_solved: 90,
                     streak: 7,

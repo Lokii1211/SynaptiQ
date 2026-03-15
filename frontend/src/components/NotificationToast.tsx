@@ -79,7 +79,7 @@ export function NotificationToast() {
         const unsub5 = wsClient.on('system', (msg) => {
             addToast({
                 id: `sys-${Date.now()}`,
-                title: msg.title || 'SkillTen',
+                title: msg.title || 'Mentixy',
                 message: msg.message || '',
                 icon: msg.icon || '📢',
                 type: 'system',

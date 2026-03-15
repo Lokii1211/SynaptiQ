@@ -1,8 +1,8 @@
-"""SkillTen Viya Score™ Calculator — empirically-weighted composite scoring
+"""Mentixy Mentixy Score™ Calculator — empirically-weighted composite scoring
 Bible Section 1 (Prompt 1.2 §6) + Section 4 (Prompt 4.1 §6)
 
 Formula:
-  Viya Score™ = 0.30 × Verified Skills
+  Mentixy Score™ = 0.30 × Verified Skills
               + 0.20 × Coding Consistency
               + 0.20 × Aptitude Percentile
               + 0.15 × Assessment Completion
@@ -21,9 +21,9 @@ from models import (
 )
 
 
-def calculate_viya_score(user_id: str, db: Session) -> dict:
+def calculate_mentixy_score(user_id: str, db: Session) -> dict:
     """
-    Calculate and store the composite Viya Score™ for a user.
+    Calculate and store the composite Mentixy Score™ for a user.
     Returns breakdown and total score (0-100).
     """
 
@@ -99,9 +99,9 @@ def calculate_viya_score(user_id: str, db: Session) -> dict:
 
     # ─── Save to profile ───
     profile = db.query(UserProfile).filter_by(user_id=user_id).first()
-    old_score = profile.viya_score or 0 if profile else 0
+    old_score = profile.mentixy_score or 0 if profile else 0
     if profile:
-        profile.viya_score = total_score
+        profile.mentixy_score = total_score
 
     # Log score change
     delta = total_score - old_score
@@ -115,7 +115,7 @@ def calculate_viya_score(user_id: str, db: Session) -> dict:
     db.commit()
 
     return {
-        "viya_score": total_score,
+        "mentixy_score": total_score,
         "delta": delta,
         "breakdown": breakdown,
         "calculated_at": datetime.now(timezone.utc).isoformat(),

@@ -6,23 +6,23 @@ import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
 interface StudentRow {
-    id: string; name: string; branch: string; cgpa: number; skilltenScore: number;
+    id: string; name: string; branch: string; cgpa: number; mentixyScore: number;
     problemsSolved: number; aptitudePercentile: number; streak: number;
     readiness: 'highly-ready' | 'ready' | 'needs-work' | 'at-risk';
     skillsVerified: number; lastActive: string;
 }
 
 const MOCK_STUDENTS: StudentRow[] = [
-    { id: '1', name: 'Sneha R.', branch: 'CSE', cgpa: 8.4, skilltenScore: 82, problemsSolved: 234, aptitudePercentile: 87, streak: 47, readiness: 'highly-ready', skillsVerified: 5, lastActive: '2 hrs ago' },
-    { id: '2', name: 'Arjun K.', branch: 'CSE', cgpa: 7.2, skilltenScore: 68, problemsSolved: 87, aptitudePercentile: 71, streak: 23, readiness: 'ready', skillsVerified: 3, lastActive: '5 hrs ago' },
-    { id: '3', name: 'Priya M.', branch: 'ECE', cgpa: 7.8, skilltenScore: 73, problemsSolved: 156, aptitudePercentile: 79, streak: 15, readiness: 'ready', skillsVerified: 4, lastActive: '1 day ago' },
-    { id: '4', name: 'Vikram S.', branch: 'CSE', cgpa: 6.8, skilltenScore: 45, problemsSolved: 23, aptitudePercentile: 52, streak: 0, readiness: 'needs-work', skillsVerified: 1, lastActive: '5 days ago' },
-    { id: '5', name: 'Deepa L.', branch: 'IT', cgpa: 7.5, skilltenScore: 61, problemsSolved: 67, aptitudePercentile: 65, streak: 8, readiness: 'ready', skillsVerified: 2, lastActive: '12 hrs ago' },
-    { id: '6', name: 'Rahul D.', branch: 'CSE', cgpa: 8.1, skilltenScore: 78, problemsSolved: 189, aptitudePercentile: 84, streak: 31, readiness: 'highly-ready', skillsVerified: 4, lastActive: '1 hr ago' },
-    { id: '7', name: 'Kavya N.', branch: 'ECE', cgpa: 6.2, skilltenScore: 32, problemsSolved: 8, aptitudePercentile: 38, streak: 0, readiness: 'at-risk', skillsVerified: 0, lastActive: '12 days ago' },
-    { id: '8', name: 'Arun T.', branch: 'Mech', cgpa: 7.0, skilltenScore: 55, problemsSolved: 45, aptitudePercentile: 62, streak: 5, readiness: 'needs-work', skillsVerified: 2, lastActive: '2 days ago' },
-    { id: '9', name: 'Meena S.', branch: 'CSE', cgpa: 9.1, skilltenScore: 91, problemsSolved: 312, aptitudePercentile: 95, streak: 89, readiness: 'highly-ready', skillsVerified: 7, lastActive: '30 min ago' },
-    { id: '10', name: 'Karthik P.', branch: 'IT', cgpa: 6.5, skilltenScore: 41, problemsSolved: 19, aptitudePercentile: 45, streak: 0, readiness: 'at-risk', skillsVerified: 0, lastActive: '14 days ago' },
+    { id: '1', name: 'Sneha R.', branch: 'CSE', cgpa: 8.4, mentixyScore: 82, problemsSolved: 234, aptitudePercentile: 87, streak: 47, readiness: 'highly-ready', skillsVerified: 5, lastActive: '2 hrs ago' },
+    { id: '2', name: 'Arjun K.', branch: 'CSE', cgpa: 7.2, mentixyScore: 68, problemsSolved: 87, aptitudePercentile: 71, streak: 23, readiness: 'ready', skillsVerified: 3, lastActive: '5 hrs ago' },
+    { id: '3', name: 'Priya M.', branch: 'ECE', cgpa: 7.8, mentixyScore: 73, problemsSolved: 156, aptitudePercentile: 79, streak: 15, readiness: 'ready', skillsVerified: 4, lastActive: '1 day ago' },
+    { id: '4', name: 'Vikram S.', branch: 'CSE', cgpa: 6.8, mentixyScore: 45, problemsSolved: 23, aptitudePercentile: 52, streak: 0, readiness: 'needs-work', skillsVerified: 1, lastActive: '5 days ago' },
+    { id: '5', name: 'Deepa L.', branch: 'IT', cgpa: 7.5, mentixyScore: 61, problemsSolved: 67, aptitudePercentile: 65, streak: 8, readiness: 'ready', skillsVerified: 2, lastActive: '12 hrs ago' },
+    { id: '6', name: 'Rahul D.', branch: 'CSE', cgpa: 8.1, mentixyScore: 78, problemsSolved: 189, aptitudePercentile: 84, streak: 31, readiness: 'highly-ready', skillsVerified: 4, lastActive: '1 hr ago' },
+    { id: '7', name: 'Kavya N.', branch: 'ECE', cgpa: 6.2, mentixyScore: 32, problemsSolved: 8, aptitudePercentile: 38, streak: 0, readiness: 'at-risk', skillsVerified: 0, lastActive: '12 days ago' },
+    { id: '8', name: 'Arun T.', branch: 'Mech', cgpa: 7.0, mentixyScore: 55, problemsSolved: 45, aptitudePercentile: 62, streak: 5, readiness: 'needs-work', skillsVerified: 2, lastActive: '2 days ago' },
+    { id: '9', name: 'Meena S.', branch: 'CSE', cgpa: 9.1, mentixyScore: 91, problemsSolved: 312, aptitudePercentile: 95, streak: 89, readiness: 'highly-ready', skillsVerified: 7, lastActive: '30 min ago' },
+    { id: '10', name: 'Karthik P.', branch: 'IT', cgpa: 6.5, mentixyScore: 41, problemsSolved: 19, aptitudePercentile: 45, streak: 0, readiness: 'at-risk', skillsVerified: 0, lastActive: '14 days ago' },
 ];
 
 const UPCOMING_DRIVES = [
@@ -53,7 +53,7 @@ export default function TPODashboardPage() {
     const filteredStudents = students
         .filter(s => readinessFilter === 'all' || s.readiness === readinessFilter)
         .filter(s => branchFilter === 'all' || s.branch === branchFilter)
-        .sort((a, b) => sortBy === 'score' ? b.skilltenScore - a.skilltenScore :
+        .sort((a, b) => sortBy === 'score' ? b.mentixyScore - a.mentixyScore :
             sortBy === 'cgpa' ? b.cgpa - a.cgpa : b.streak - a.streak);
 
     const clusters = {
@@ -63,7 +63,7 @@ export default function TPODashboardPage() {
         atRisk: students.filter(s => s.readiness === 'at-risk').length,
     };
 
-    const avgScore = Math.round(students.reduce((a, s) => a + s.skilltenScore, 0) / students.length);
+    const avgScore = Math.round(students.reduce((a, s) => a + s.mentixyScore, 0) / students.length);
     const avgCgpa = (students.reduce((a, s) => a + s.cgpa, 0) / students.length).toFixed(1);
     const activeStudents = students.filter(s => !s.lastActive.includes('day')).length;
 
@@ -118,7 +118,7 @@ export default function TPODashboardPage() {
                             {/* Key Metrics */}
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 {[
-                                    { label: 'Avg SkillTen Score', value: avgScore.toString(), color: 'text-indigo-600', sub: `vs national avg: 54` },
+                                    { label: 'Avg Mentixy Score', value: avgScore.toString(), color: 'text-indigo-600', sub: `vs national avg: 54` },
                                     { label: 'Avg CGPA', value: avgCgpa, color: 'text-violet-600', sub: 'B.E. CSE batch' },
                                     { label: 'Active This Week', value: `${activeStudents}/${students.length}`, color: 'text-emerald-600', sub: `${Math.round(activeStudents / students.length * 100)}% engagement` },
                                     { label: 'Campus Wars Rank', value: '#7', color: 'text-amber-600', sub: 'South India ranking' },
@@ -241,7 +241,7 @@ export default function TPODashboardPage() {
                                                     </td>
                                                     <td className="text-center py-3 px-2 text-slate-600">{s.branch}</td>
                                                     <td className="text-center py-3 px-2 font-semibold">{s.cgpa}</td>
-                                                    <td className={`text-center py-3 px-2 font-bold ${s.skilltenScore >= 75 ? 'text-emerald-600' : s.skilltenScore >= 50 ? 'text-amber-600' : 'text-red-500'}`}>{s.skilltenScore}</td>
+                                                    <td className={`text-center py-3 px-2 font-bold ${s.mentixyScore >= 75 ? 'text-emerald-600' : s.mentixyScore >= 50 ? 'text-amber-600' : 'text-red-500'}`}>{s.mentixyScore}</td>
                                                     <td className="text-center py-3 px-2 text-slate-600">{s.problemsSolved}</td>
                                                     <td className={`text-center py-3 px-2 font-semibold ${s.aptitudePercentile >= 75 ? 'text-emerald-600' : s.aptitudePercentile >= 60 ? 'text-amber-600' : 'text-red-500'}`}>{s.aptitudePercentile}th</td>
                                                     <td className="text-center py-3 px-2">
@@ -337,7 +337,7 @@ export default function TPODashboardPage() {
                                 <div className="st-card p-5">
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">📈 vs Last Year (Class of 2025)</h3>
                                     {[
-                                        { metric: 'Average SkillTen Score', current: avgScore, prev: 48, unit: '' },
+                                        { metric: 'Average Mentixy Score', current: avgScore, prev: 48, unit: '' },
                                         { metric: 'Avg Problems Solved', current: Math.round(students.reduce((a, s) => a + s.problemsSolved, 0) / students.length), prev: 34, unit: '' },
                                         { metric: 'Active Rate (7-day)', current: Math.round(activeStudents / students.length * 100), prev: 42, unit: '%' },
                                         { metric: 'Skills Verified (avg)', current: +(students.reduce((a, s) => a + s.skillsVerified, 0) / students.length).toFixed(1), prev: 1.2, unit: '' },

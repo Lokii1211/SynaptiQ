@@ -10,7 +10,7 @@ interface StepConfig {
 }
 
 const STEPS: StepConfig[] = [
-    { title: 'Welcome to SkillTen! 🎉', subtitle: 'Let\'s personalize your career journey in 60 seconds', emoji: '👋' },
+    { title: 'Welcome to Mentixy! 🎉', subtitle: 'Let\'s personalize your career journey in 60 seconds', emoji: '👋' },
     { title: 'About You', subtitle: 'Tell us about your academic background', emoji: '🎓' },
     { title: 'Your Interests', subtitle: 'What excites you? This helps our AI match careers.', emoji: '💡' },
     { title: 'Dream Career', subtitle: 'Where do you see yourself?', emoji: '🚀' },
@@ -140,7 +140,7 @@ export default function OnboardingPage() {
                                 <div className="space-y-4">
                                     <div className="bg-indigo-50 rounded-2xl p-5 text-center">
                                         <p className="text-sm text-indigo-700 leading-relaxed">
-                                            SkillTen uses AI to discover your <strong>Career DNA</strong> — your unique strengths,
+                                            Mentixy uses AI to discover your <strong>Career DNA</strong> — your unique strengths,
                                             perfect career matches, and a personalized roadmap to get there.
                                         </p>
                                     </div>

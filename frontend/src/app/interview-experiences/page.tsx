@@ -17,7 +17,7 @@ interface InterviewExp {
     prepTime: string;
     outcome: 'selected' | 'rejected' | 'waitlisted';
     ctc?: string;
-    skilltenScore?: number;
+    mentixyScore?: number;
     rounds: { type: string; duration: string; questions: string[]; difficulty: string; performance: string }[];
     tips: string;
     author: { name: string; college: string; avatar: string };
@@ -29,7 +29,7 @@ const MOCK_EXPERIENCES: InterviewExp[] = [
     {
         id: '1', company: 'TCS', role: 'System Engineer', city: 'Chennai', date: 'Jan 2026',
         collegeTier: 'Tier-3', cgpa: '7.2 – 8.0', prepTime: '4 weeks',
-        outcome: 'selected', ctc: '3.6 LPA', skilltenScore: 68,
+        outcome: 'selected', ctc: '3.6 LPA', mentixyScore: 68,
         rounds: [
             { type: 'Online Test (NQT)', duration: '180 min', questions: ['Aptitude (Quant, LR, VA) — 60 questions', 'Coding — 1 Easy problem (Two Sum variant)', 'Email Writing section'], difficulty: 'Easy-Medium', performance: 'confident' },
             { type: 'Technical Interview', duration: '25 min', questions: ['Tell me about yourself', 'What is OOP? Explain 4 pillars with examples', 'Difference between ArrayList and LinkedList', 'Write a program to reverse a string'], difficulty: 'Easy', performance: 'confident' },
@@ -41,7 +41,7 @@ const MOCK_EXPERIENCES: InterviewExp[] = [
     {
         id: '2', company: 'Infosys', role: 'Systems Engineer', city: 'Mysore', date: 'Dec 2025',
         collegeTier: 'Tier-2', cgpa: '8.0 – 9.0', prepTime: '3 weeks',
-        outcome: 'selected', ctc: '3.6 LPA', skilltenScore: 72,
+        outcome: 'selected', ctc: '3.6 LPA', mentixyScore: 72,
         rounds: [
             { type: 'Online Test (InfyTQ)', duration: '120 min', questions: ['MCQ on Java/Python basics — 20 questions', 'Hands-on coding — 2 problems (String manipulation, Array sorting)', 'Pseudo-code reading — 5 questions'], difficulty: 'Medium', performance: 'struggled' },
             { type: 'Technical + HR', duration: '30 min', questions: ['Explain your final year project', 'What is normalization in DBMS?', 'Difference between TCP and UDP', 'Why Infosys over TCS?'], difficulty: 'Medium', performance: 'confident' },
@@ -64,7 +64,7 @@ const MOCK_EXPERIENCES: InterviewExp[] = [
     {
         id: '4', company: 'Amazon', role: 'SDE-1', city: 'Hyderabad', date: 'Oct 2025',
         collegeTier: 'Tier-1 (NIT)', cgpa: '8.0 – 9.0', prepTime: '3 months',
-        outcome: 'rejected', skilltenScore: 81,
+        outcome: 'rejected', mentixyScore: 81,
         rounds: [
             { type: 'Online Assessment', duration: '120 min', questions: ['2 Medium-Hard coding problems (Graph BFS, Dynamic Programming)', 'Work simulation assessment — 7 scenarios'], difficulty: 'Hard', performance: 'confident' },
             { type: 'Technical Round 1', duration: '60 min', questions: ['Design a LRU Cache', 'Merge K Sorted Lists (optimal solution required)', 'Time and space complexity analysis'], difficulty: 'Hard', performance: 'struggled' },
@@ -184,7 +184,7 @@ export default function InterviewExperiencesPage() {
                                                         <span>📊 CGPA: {exp.cgpa}</span>
                                                         <span>⏱️ Prep: {exp.prepTime}</span>
                                                         {exp.ctc && <span className="font-bold text-emerald-600">💰 {exp.ctc}</span>}
-                                                        {exp.skilltenScore && <span className="font-bold text-indigo-600">⭐ SkillTen: {exp.skilltenScore}</span>}
+                                                        {exp.mentixyScore && <span className="font-bold text-indigo-600">⭐ Mentixy: {exp.mentixyScore}</span>}
                                                     </div>
                                                     <p className="text-xs text-slate-500 mt-1">By {exp.author.name} · {exp.author.college}</p>
                                                 </div>

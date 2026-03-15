@@ -1,4 +1,4 @@
-"""SkillTen Aptitude Engine — timed mini-tests, percentile scoring, solution explanations
+"""Mentixy Aptitude Engine — timed mini-tests, percentile scoring, solution explanations
 Bible Section 5 (Prompt 5.1 §7) + Section 6 (Prompt 6.1 §C)
 """
 from fastapi import APIRouter, Depends, HTTPException, Query

@@ -1,4 +1,4 @@
-"""SkillTen Parent Intelligence Portal — weekly reports, salary truth, trajectory
+"""Mentixy Parent Intelligence Portal — weekly reports, salary truth, trajectory
 Bible Section 1 (Prompt 1.2 §7) + Section 3 (Prompt 3.1 §Screen 8)
 """
 from fastapi import APIRouter, Depends, HTTPException
@@ -51,7 +51,7 @@ async def weekly_summary(
         "college": profile.college_name if profile else "",
         "stream": profile.stream if profile else "",
         "year": profile.current_year_of_study if profile else 0,
-        "viya_score": profile.viya_score if profile else 0,
+        "mentixy_score": profile.mentixy_score if profile else 0,
         "streak_days": profile.streak_days if profile else 0,
         "archetype": profile.archetype_name if profile else "",
     }
@@ -71,7 +71,7 @@ async def weekly_summary(
         "student_name": student_profile["name"],
         "report": report,
         "quick_stats": {
-            "viya_score": student_profile["viya_score"],
+            "mentixy_score": student_profile["mentixy_score"],
             "streak_days": student_profile["streak_days"],
             "skills_verified": verified_skills,
             "problems_solved": weekly_activity["problems_solved"],

@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/store/auth.store';
 import { auth } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
-const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://skillten.vercel.app' : 'http://localhost:8000';
+const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://mentixy-api.vercel.app' : 'http://localhost:8000';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -134,7 +134,7 @@ export default function LoginPage() {
                 <div className="text-white max-w-md relative z-10">
                     <h2 className="text-3xl font-bold mb-4">Your career DNA,<br />decoded by AI</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                        SkillTen helps Indian students discover their ideal career path through
+                        Mentixy helps Indian students discover their ideal career path through
                         AI-powered psychometric assessment, skill gap analysis, and personalized roadmaps.
                     </p>
                     <div className="space-y-3">
@@ -155,7 +155,7 @@ export default function LoginPage() {
 
                     {/* Social proof */}
                     <div className="mt-8 bg-white/10 rounded-xl p-4 backdrop-blur-sm">
-                        <p className="text-white/90 text-sm italic">&ldquo;SkillTen showed me career paths I never knew existed. Got placed at ₹8.5 LPA from a Tier-3 college!&rdquo;</p>
+                        <p className="text-white/90 text-sm italic">&ldquo;Mentixy showed me career paths I never knew existed. Got placed at ₹8.5 LPA from a Tier-3 college!&rdquo;</p>
                         <p className="text-white/50 text-xs mt-2">— Priya S., VIT Vellore, 2025 Batch</p>
                     </div>
                 </div>

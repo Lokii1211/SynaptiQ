@@ -19,7 +19,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const saved = localStorage.getItem('skillten_locale') as Locale;
+            const saved = localStorage.getItem('mentixy_locale') as Locale;
             if (saved && ['en', 'hi', 'ta', 'te'].includes(saved)) {
                 setLocaleState(saved);
             }
@@ -29,7 +29,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     const setLocale = (newLocale: Locale) => {
         setLocaleState(newLocale);
         if (typeof window !== 'undefined') {
-            localStorage.setItem('skillten_locale', newLocale);
+            localStorage.setItem('mentixy_locale', newLocale);
         }
     };
 

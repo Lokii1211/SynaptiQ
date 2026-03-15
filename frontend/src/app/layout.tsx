@@ -4,11 +4,11 @@ import { LanguageProvider } from "@/lib/language-context";
 import { NotificationToast } from "@/components/NotificationToast";
 
 export const metadata: Metadata = {
-  title: "SkillTen — AI Career Intelligence Platform",
+  title: "Mentixy — AI Career Intelligence Platform",
   description: "Discover your career DNA with AI-powered 4D assessment, skill gap analysis, coding arena, and personalized roadmaps. Built for Indian students.",
-  keywords: ["SkillTen", "career guidance", "AI", "psychometric test", "skill gap", "resume builder", "India", "placement", "career assessment"],
+  keywords: ["Mentixy", "career guidance", "AI", "psychometric test", "skill gap", "resume builder", "India", "placement", "career assessment"],
   openGraph: {
-    title: "SkillTen — AI Career Intelligence Platform",
+    title: "Mentixy — AI Career Intelligence Platform",
     description: "Your career DNA decoded. AI-powered 4D profiling, coding arena, job matching — built for Indian students.",
     type: "website",
   },
@@ -29,7 +29,7 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="SkillTen" />
+        <meta name="apple-mobile-web-app-title" content="Mentixy" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />

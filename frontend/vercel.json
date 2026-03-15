@@ -3,7 +3,7 @@
     "rewrites": [
         {
             "source": "/api/:path*",
-            "destination": "https://skillten.vercel.app/api/:path*"
+            "destination": "https://mentixy-api.vercel.app/api/:path*"
         }
     ]
 }

@@ -1,4 +1,4 @@
-"""SkillTen — Achievements & Badges API"""
+"""Mentixy — Achievements & Badges API"""
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
@@ -38,9 +38,9 @@ ACHIEVEMENTS = [
     {"id": "mock_clear", "title": "Mock Cleared", "desc": "Clear all rounds with 70%+", "icon": "🎯", "category": "mock_drive", "rarity": "rare", "xp": 300},
     # Career
     {"id": "roadmap_start", "title": "Roadmap Runner", "desc": "Start following a career roadmap", "icon": "🗺️", "category": "career", "rarity": "common", "xp": 30},
-    {"id": "score_50", "title": "Rising Star", "desc": "Achieve Viya Score™ of 50+", "icon": "⭐", "category": "career", "rarity": "common", "xp": 75},
-    {"id": "score_75", "title": "Top Performer", "desc": "Achieve Viya Score™ of 75+", "icon": "🌟", "category": "career", "rarity": "rare", "xp": 250},
-    {"id": "score_90", "title": "Elite", "desc": "Achieve Viya Score™ of 90+", "icon": "👑", "category": "career", "rarity": "legendary", "xp": 1000},
+    {"id": "score_50", "title": "Rising Star", "desc": "Achieve Mentixy Score™ of 50+", "icon": "⭐", "category": "career", "rarity": "common", "xp": 75},
+    {"id": "score_75", "title": "Top Performer", "desc": "Achieve Mentixy Score™ of 75+", "icon": "🌟", "category": "career", "rarity": "rare", "xp": 250},
+    {"id": "score_90", "title": "Elite", "desc": "Achieve Mentixy Score™ of 90+", "icon": "👑", "category": "career", "rarity": "legendary", "xp": 1000},
 ]
 
 
@@ -53,7 +53,7 @@ def get_achievements(user=Depends(require_user), db: Session = Depends(get_db)):
     
     # Calculate user stats for achievement checking
     streak = profile.streak_days if profile else 0
-    viya_score = profile.viya_score if profile else 0
+    mentixy_score = profile.mentixy_score if profile else 0
     try:
         problems_solved = db.query(UserProblemSubmission).filter(
             UserProblemSubmission.user_id == user.id,
@@ -91,11 +91,11 @@ def get_achievements(user=Depends(require_user), db: Session = Depends(get_db)):
         elif ach["id"] == "assessed":
             unlocked = has_assessment; progress = 1 if has_assessment else 0
         elif ach["id"] == "score_50":
-            unlocked = viya_score >= 50; progress = min(viya_score, 50); max_progress = 50
+            unlocked = mentixy_score >= 50; progress = min(mentixy_score, 50); max_progress = 50
         elif ach["id"] == "score_75":
-            unlocked = viya_score >= 75; progress = min(viya_score, 75); max_progress = 75
+            unlocked = mentixy_score >= 75; progress = min(mentixy_score, 75); max_progress = 75
         elif ach["id"] == "score_90":
-            unlocked = viya_score >= 90; progress = min(viya_score, 90); max_progress = 90
+            unlocked = mentixy_score >= 90; progress = min(mentixy_score, 90); max_progress = 90
 
         results.append({
             **ach,

@@ -1,4 +1,4 @@
-"""SkillTen AI Chat — Gemini-powered career advisor"""
+"""Mentixy AI Chat — Gemini-powered career advisor"""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional
@@ -41,7 +41,7 @@ async def chat(req: ChatReq, user: User = Depends(require_user), db: Session = D
             "cgpa": user.profile.cgpa,
             "target_role": user.profile.target_role,
             "archetype_name": user.profile.archetype_name,
-            "skillten_score": user.profile.viya_score,
+            "mentixy_score": user.profile.mentixy_score,
         }
 
     # Generate AI response via Gemini (or mock fallback)

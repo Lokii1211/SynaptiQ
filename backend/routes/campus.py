@@ -1,4 +1,4 @@
-"""SkillTen Campus Command Center"""
+"""Mentixy Campus Command Center"""
 from fastapi import APIRouter, Depends, Query
 from typing import Optional
 from sqlalchemy.orm import Session

@@ -1,5 +1,5 @@
 """
-SkillTen — Recruiter Portal API
+Mentixy — Recruiter Portal API
 Search candidates, manage shortlists, post jobs, view analytics
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -37,7 +37,7 @@ def search_candidates(
             (UserProfile.username.ilike(f"%{q}%"))
         )
     if min_score:
-        query = query.filter(UserProfile.viya_score >= min_score)
+        query = query.filter(UserProfile.mentixy_score >= min_score)
     if college_tier:
         query = query.filter(UserProfile.college_tier == college_tier)
     if stream:
@@ -46,7 +46,7 @@ def search_candidates(
         query = query.filter(UserProfile.open_to_work == open_to_work)
 
     total = query.count()
-    candidates = query.order_by(desc(UserProfile.viya_score)).offset(skip).limit(limit).all()
+    candidates = query.order_by(desc(UserProfile.mentixy_score)).offset(skip).limit(limit).all()
 
     return {
         "total": total,
@@ -59,7 +59,7 @@ def search_candidates(
             "college_tier": c.college_tier,
             "stream": c.stream,
             "graduation_year": c.graduation_year,
-            "skillten_score": c.viya_score,
+            "mentixy_score": c.mentixy_score,
             "streak_days": c.streak_days,
             "archetype_name": c.archetype_name,
             "target_role": c.target_role,
@@ -88,7 +88,7 @@ def candidate_detail(user_id: str, db: Session = Depends(get_db)):
         "stream": profile.stream,
         "graduation_year": profile.graduation_year,
         "cgpa": profile.cgpa,
-        "skillten_score": profile.viya_score,
+        "mentixy_score": profile.mentixy_score,
         "streak_days": profile.streak_days,
         "archetype_name": profile.archetype_name,
         "target_role": profile.target_role,

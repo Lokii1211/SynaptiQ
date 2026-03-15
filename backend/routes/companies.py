@@ -1,4 +1,4 @@
-"""SkillTen Companies Intel — search, detail, reviews"""
+"""Mentixy Companies Intel — search, detail, reviews"""
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional

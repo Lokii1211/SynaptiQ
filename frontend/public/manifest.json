@@ -1,6 +1,6 @@
 {
-    "name": "SkillTen — AI Career Intelligence",
-    "short_name": "SkillTen",
+    "name": "Mentixy — AI Career Intelligence",
+    "short_name": "Mentixy",
     "description": "Discover your career DNA with AI-powered 4D assessment, skill verification, coding arena, and personalized roadmaps. Built for Indian students.",
     "start_url": "/dashboard",
     "display": "standalone",
@@ -73,13 +73,13 @@
             "sizes": "512x512",
             "type": "image/png",
             "form_factor": "narrow",
-            "label": "SkillTen Dashboard"
+            "label": "Mentixy Dashboard"
         }
     ],
     "related_applications": [],
     "protocol_handlers": [
         {
-            "protocol": "web+skillten",
+            "protocol": "web+mentixy",
             "url": "/handle-protocol?url=%s"
         }
     ]

@@ -1,4 +1,4 @@
-// ─── SkillSync AI — Supabase Database Layer ───
+// ─── Mentixy — Supabase Database Layer ───
 // Production-grade database operations using Supabase (PostgreSQL)
 // Falls back to file-based store if Supabase is not configured
 

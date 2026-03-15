@@ -80,7 +80,7 @@ export default function DailyPage() {
                                 <div>
                                     <span className="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full mb-2 inline-block">📅 DAILY QUESTS</span>
                                     <h1 className="text-2xl font-bold st-font-heading">Today&apos;s Missions</h1>
-                                    <p className="text-white/70 text-sm mt-1">Complete daily tasks to boost your SkillTen Score</p>
+                                    <p className="text-white/70 text-sm mt-1">Complete daily tasks to boost your Mentixy Score</p>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-3xl font-bold">{streak}🔥</p>

@@ -12,12 +12,12 @@ export default function CoursesPage() {
     }, []);
 
     const courses = [
-        { id: 1, title: 'DSA for Placements', provider: 'SkillTen', duration: '8 weeks', level: 'Beginner', icon: '💻', free: true, students: '12K+', rating: 4.8, tags: ['Arrays', 'Trees', 'DP'] },
-        { id: 2, title: 'System Design Basics', provider: 'SkillTen', duration: '6 weeks', level: 'Intermediate', icon: '🏗️', free: true, students: '5K+', rating: 4.7, tags: ['Scalability', 'Databases'] },
+        { id: 1, title: 'DSA for Placements', provider: 'Mentixy', duration: '8 weeks', level: 'Beginner', icon: '💻', free: true, students: '12K+', rating: 4.8, tags: ['Arrays', 'Trees', 'DP'] },
+        { id: 2, title: 'System Design Basics', provider: 'Mentixy', duration: '6 weeks', level: 'Intermediate', icon: '🏗️', free: true, students: '5K+', rating: 4.7, tags: ['Scalability', 'Databases'] },
         { id: 3, title: 'Machine Learning A-Z', provider: 'YouTube Curated', duration: '10 weeks', level: 'Beginner', icon: '🤖', free: true, students: '8K+', rating: 4.6, tags: ['Python', 'NumPy', 'Sklearn'] },
         { id: 4, title: 'Web Dev Bootcamp', provider: 'Free Resources', duration: '12 weeks', level: 'Beginner', icon: '🌐', free: true, students: '15K+', rating: 4.9, tags: ['React', 'Node.js', 'CSS'] },
         { id: 5, title: 'GATE CS Preparation', provider: 'Community', duration: '16 weeks', level: 'Advanced', icon: '📚', free: true, students: '3K+', rating: 4.5, tags: ['OS', 'DBMS', 'Networks'] },
-        { id: 6, title: 'Aptitude & Reasoning', provider: 'SkillTen', duration: '4 weeks', level: 'Beginner', icon: '🧠', free: true, students: '20K+', rating: 4.4, tags: ['Quant', 'Verbal', 'Logic'] },
+        { id: 6, title: 'Aptitude & Reasoning', provider: 'Mentixy', duration: '4 weeks', level: 'Beginner', icon: '🧠', free: true, students: '20K+', rating: 4.4, tags: ['Quant', 'Verbal', 'Logic'] },
     ];
 
     const levelColor = (l: string) => {

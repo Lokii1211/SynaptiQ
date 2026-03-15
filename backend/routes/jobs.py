@@ -1,4 +1,4 @@
-"""SkillTen Jobs Engine — listing, search, apply, track, AI match"""
+"""Mentixy Jobs Engine — listing, search, apply, track, AI match"""
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional, List

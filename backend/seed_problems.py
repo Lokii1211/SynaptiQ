@@ -1,5 +1,5 @@
 """
-SkillTen — Real Coding Problems Seed (GFG/LeetCode/HackerRank patterns)
+Mentixy — Real Coding Problems Seed (GFG/LeetCode/HackerRank patterns)
 30 problems: 10 Easy, 12 Medium, 8 Hard
 """
 

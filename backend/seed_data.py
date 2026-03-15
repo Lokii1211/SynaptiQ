@@ -1,5 +1,5 @@
 """
-SkillTen — Seed Data
+Mentixy — Seed Data
 Populates the database with production-quality Indian market data
 """
 from datetime import datetime, timezone, timedelta
@@ -146,8 +146,8 @@ def _seed_market_insights(db):
     if db.query(MarketInsight).count() > 0:
         return
     insights = [
-        {"category": "salary_trends", "title": "India Tech Salary Report 2026", "data": {"avg_fresher_ctc": "₹6.5 LPA", "top_10_pct_ctc": "₹25+ LPA", "yoy_growth": "12%", "highest_paying_role": "ML Engineer", "highest_paying_city": "Bangalore"}, "source": "SkillTen Research"},
-        {"category": "hiring_trends", "title": "Most In-Demand Skills Q1 2026", "data": {"top_skills": ["GenAI/LLM", "Python", "React", "AWS", "System Design"], "emerging": ["Rust", "Web3", "Edge AI"], "declining": ["Angular", "jQuery", "PHP"]}, "source": "SkillTen Analysis"},
+        {"category": "salary_trends", "title": "India Tech Salary Report 2026", "data": {"avg_fresher_ctc": "₹6.5 LPA", "top_10_pct_ctc": "₹25+ LPA", "yoy_growth": "12%", "highest_paying_role": "ML Engineer", "highest_paying_city": "Bangalore"}, "source": "Mentixy Research"},
+        {"category": "hiring_trends", "title": "Most In-Demand Skills Q1 2026", "data": {"top_skills": ["GenAI/LLM", "Python", "React", "AWS", "System Design"], "emerging": ["Rust", "Web3", "Edge AI"], "declining": ["Angular", "jQuery", "PHP"]}, "source": "Mentixy Analysis"},
     ]
     for i in insights:
         db.add(MarketInsight(**i))

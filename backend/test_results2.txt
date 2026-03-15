@@ -1,5 +1,5 @@
 ﻿============================================================
-  SkillTen Backend API ù Full Test Suite
+  Mentixy Backend API ù Full Test Suite
 ============================================================
 
 --- Public Endpoints ---

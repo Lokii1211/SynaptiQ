@@ -1,4 +1,4 @@
-"""SkillTen Mock Placement Drive — simulated full placement process
+"""Mentixy Mock Placement Drive — simulated full placement process
 Bible Section 6 (Prompt 6.1 §7) — "VIYA's most emotionally powerful feature"
 
 Round 1: Aptitude Test (30Q, 30 min)

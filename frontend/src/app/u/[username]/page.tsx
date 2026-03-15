@@ -89,7 +89,7 @@ export default function PublicProfilePage() {
 
     useEffect(() => {
         if (!username) return;
-        const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://skillten.vercel.app' : 'http://localhost:8000';
+        const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://mentixy-api.vercel.app' : 'http://localhost:8000';
         fetch(`${BACKEND_URL}/api/auth/profile/${username}`)
             .then(res => {
                 if (!res.ok) throw new Error('Profile not found');
@@ -107,10 +107,10 @@ export default function PublicProfilePage() {
 
     const handleShare = async () => {
         const url = window.location.href;
-        const text = `Check out ${profile?.display_name || username}'s verified career profile on SkillTen!`;
+        const text = `Check out ${profile?.display_name || username}'s verified career profile on Mentixy!`;
         try {
             if (navigator.share) {
-                await navigator.share({ title: `${profile?.display_name} on SkillTen`, text, url });
+                await navigator.share({ title: `${profile?.display_name} on Mentixy`, text, url });
             } else {
                 await navigator.clipboard.writeText(url);
                 setShareMsg('Link copied!');
@@ -141,7 +141,7 @@ export default function PublicProfilePage() {
             <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center">
                 <span className="text-6xl block mb-4">🔍</span>
                 <h1 className="text-2xl font-bold text-slate-900 mb-2">Profile not found</h1>
-                <p className="text-slate-500 mb-8">The user @{username} doesn&apos;t exist on SkillTen yet.</p>
+                <p className="text-slate-500 mb-8">The user @{username} doesn&apos;t exist on Mentixy yet.</p>
                 <div className="flex gap-3 justify-center">
                     <Link href="/" className="st-btn-secondary px-6">Go Home</Link>
                     <Link href="/signup" className="st-btn-primary px-6">Create Yours Free</Link>
@@ -151,7 +151,7 @@ export default function PublicProfilePage() {
     );
 
     const {
-        display_name, archetype_name, skillten_score, college_name, target_role,
+        display_name, archetype_name, mentixy_score, college_name, target_role,
         streak_days, coding_stats, assessment_profile, badges, verified_skills,
         activity_heatmap, score_percentile, placement, bio, aptitude,
         open_to_work, campus_rank, graduation_year, stream,
@@ -159,11 +159,11 @@ export default function PublicProfilePage() {
 
     const tagline = archetype_name
         ? `${archetype_name} · ${target_role || 'Career Explorer'}`
-        : target_role || 'SkillTen Member';
+        : target_role || 'Mentixy Member';
 
     const codingTotal = (coding_stats?.easy || 0) + (coding_stats?.medium || 0) + (coding_stats?.hard || 0);
     const placementReadiness = Math.min(100, Math.round(
-        ((skillten_score || 0) * 0.3) + ((aptitude?.overall_percentile || 0) * 0.3) + (Math.min(codingTotal, 50) * 0.8) + ((verified_skills?.length || 0) * 5)
+        ((mentixy_score || 0) * 0.3) + ((aptitude?.overall_percentile || 0) * 0.3) + (Math.min(codingTotal, 50) * 0.8) + ((verified_skills?.length || 0) * 5)
     ));
 
     return (
@@ -220,9 +220,9 @@ export default function PublicProfilePage() {
                 >
                     <div className="flex items-center justify-between mb-5">
                         <div className="flex items-center gap-5">
-                            <ScoreRing score={skillten_score || 0} />
+                            <ScoreRing score={mentixy_score || 0} />
                             <div>
-                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">SkillTen Score™</p>
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Mentixy Score™</p>
                                 {score_percentile && (
                                     <p className="text-sm text-indigo-600 font-semibold mt-0.5">Top {100 - score_percentile}%</p>
                                 )}
@@ -238,7 +238,7 @@ export default function PublicProfilePage() {
                     {/* Quick Stats Bar (PRO Bible 3.1) */}
                     <div className="grid grid-cols-5 gap-2">
                         {[
-                            { label: 'SkillTen Score', value: skillten_score || 0, icon: '⭐' },
+                            { label: 'Mentixy Score', value: mentixy_score || 0, icon: '⭐' },
                             { label: 'Streak', value: `${streak_days || 0}🔥`, icon: '' },
                             { label: 'Skills', value: `${verified_skills?.length || 0}/10`, icon: '✓' },
                             { label: 'Problems', value: codingTotal, icon: '💻' },
@@ -464,11 +464,11 @@ export default function PublicProfilePage() {
                     </div>
                 </motion.div>
 
-                {/* ─── SkillTen watermark ─── */}
+                {/* ─── Mentixy watermark ─── */}
                 <div className="text-center pt-4 pb-8">
                     <p className="text-xs text-slate-400">
                         Verified career profile on{' '}
-                        <Link href="/" className="text-indigo-600 font-semibold hover:underline">SkillTen</Link>
+                        <Link href="/" className="text-indigo-600 font-semibold hover:underline">Mentixy</Link>
                         {' '}— The last career profile you&apos;ll ever need.
                     </p>
                 </div>

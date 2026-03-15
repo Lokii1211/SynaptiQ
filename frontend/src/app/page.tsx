@@ -21,29 +21,29 @@ export default function Home() {
   const features = [
     { icon: '🧬', title: 'Honest Mirror', desc: 'The truth about your career, not what you want to hear', color: 'from-indigo-500 to-violet-600' },
     { icon: '⚡', title: 'Daily Challenge', desc: 'Code every day. Build the habit that gets you hired.', color: 'from-amber-500 to-orange-600' },
-    { icon: '📊', title: 'SkillTen Score™', desc: 'One number that shows where you stand — verified, not self-claimed', color: 'from-emerald-500 to-teal-600' },
+    { icon: '📊', title: 'Mentixy Score™', desc: 'One number that shows where you stand — verified, not self-claimed', color: 'from-emerald-500 to-teal-600' },
     { icon: '⚔️', title: 'Campus Wars', desc: 'Your college needs you. Compete together. Rise together.', color: 'from-rose-500 to-pink-600' },
     { icon: '✅', title: 'Verified Skills', desc: 'Prove what you know. Beyond your resume. With percentile ranking.', color: 'from-cyan-500 to-blue-600' },
     { icon: '💬', title: 'AI Counselor', desc: 'Career advice that knows your actual profile, not generic tips', color: 'from-purple-500 to-violet-600' },
   ];
 
   const testimonials = [
-    { name: 'Arjun M.', college: 'PICT Pune', result: 'Placed as Data Analyst · 5.8 LPA', quote: "I thought I wanted to be a developer. SkillTen showed me I'm better suited for data. The Honest Mirror saved me 2 years.", photo: '👨‍🎓' },
+    { name: 'Arjun M.', college: 'PICT Pune', result: 'Placed as Data Analyst · 5.8 LPA', quote: "I thought I wanted to be a developer. Mentixy showed me I'm better suited for data. The Honest Mirror saved me 2 years.", photo: '👨‍🎓' },
     { name: 'Priya S.', college: 'JNTU Hyderabad', result: 'Placed at Infosys · 4.5 LPA', quote: "The aptitude section is best I've used. Step-by-step explanations with shortcut tricks — better than any coaching class.", photo: '👩‍🎓' },
-    { name: 'Rahul K.', college: 'VIT Bhopal', result: 'Placed as SDE · 8 LPA', quote: 'Campus Wars got our whole college hooked. 47 students from our batch got placed. SkillTen deserves credit for 30 of them.', photo: '🧑‍💻' },
+    { name: 'Rahul K.', college: 'VIT Bhopal', result: 'Placed as SDE · 8 LPA', quote: 'Campus Wars got our whole college hooked. 47 students from our batch got placed. Mentixy deserves credit for 30 of them.', photo: '🧑‍💻' },
   ];
 
   const comparison = [
-    { feature: 'Career Assessment (4D)', skillten: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Daily Coding Challenge', skillten: true, linkedin: false, leetcode: true, gfg: true },
-    { feature: 'Aptitude Practice', skillten: true, linkedin: false, leetcode: false, gfg: true },
-    { feature: 'AI Career Counselor', skillten: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Campus Wars', skillten: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Verified Skills', skillten: true, linkedin: true, leetcode: false, gfg: false },
-    { feature: 'India Salary Data', skillten: true, linkedin: true, leetcode: false, gfg: false },
-    { feature: 'Solution After 3 Fails', skillten: true, linkedin: false, leetcode: false, gfg: true },
-    { feature: 'Parent Portal', skillten: true, linkedin: false, leetcode: false, gfg: false },
-    { feature: 'Mock Placement Drive', skillten: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Career Assessment (4D)', mentixy: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Daily Coding Challenge', mentixy: true, linkedin: false, leetcode: true, gfg: true },
+    { feature: 'Aptitude Practice', mentixy: true, linkedin: false, leetcode: false, gfg: true },
+    { feature: 'AI Career Counselor', mentixy: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Campus Wars', mentixy: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Verified Skills', mentixy: true, linkedin: true, leetcode: false, gfg: false },
+    { feature: 'India Salary Data', mentixy: true, linkedin: true, leetcode: false, gfg: false },
+    { feature: 'Solution After 3 Fails', mentixy: true, linkedin: false, leetcode: false, gfg: true },
+    { feature: 'Parent Portal', mentixy: true, linkedin: false, leetcode: false, gfg: false },
+    { feature: 'Mock Placement Drive', mentixy: true, linkedin: false, leetcode: false, gfg: false },
   ];
 
   const Check = () => <span className="text-emerald-500 font-bold">✓</span>;
@@ -145,13 +145,13 @@ export default function Home() {
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full translate-y-1/3 -translate-x-1/4" />
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-3xl font-bold mb-4">How SkillTen Works</h2>
+          <h2 className="text-3xl font-bold mb-4">How Mentixy Works</h2>
           <p className="text-white/60 mb-12">Three steps. 25 minutes to your career DNA.</p>
           <div className="grid md:grid-cols-3 gap-8">
             {[
               { step: '01', title: 'Take the Assessment', desc: '45 questions in 25 minutes. No right or wrong answers. Pure self-discovery.' },
               { step: '02', title: 'Get Your Honest Mirror', desc: 'AI reveals your career archetype, top 3 matches, and what to work on — honestly.' },
-              { step: '03', title: 'Build & Get Placed', desc: 'Practice daily. Verify skills. Apply to jobs — all from your SkillTen profile.' },
+              { step: '03', title: 'Build & Get Placed', desc: 'Practice daily. Verify skills. Apply to jobs — all from your Mentixy profile.' },
             ].map((item, i) => (
               <motion.div key={item.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }}>
                 <div className="relative">
@@ -170,7 +170,7 @@ export default function Home() {
       <section className="py-20 px-5">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Why students switch to SkillTen</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Why students switch to Mentixy</h2>
             <p className="text-slate-500 text-lg">Not features. Solutions. Built by people who understand Indian placements.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -193,7 +193,7 @@ export default function Home() {
       <section className="py-16 px-5 bg-slate-50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">How SkillTen compares</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3">How Mentixy compares</h2>
             <p className="text-sm text-slate-500">Honest comparison. We don&apos;t claim to win everything.</p>
           </div>
           <div className="st-card overflow-hidden">
@@ -202,7 +202,7 @@ export default function Home() {
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
                     <th className="text-left px-4 py-3 font-semibold text-slate-600">Feature</th>
-                    <th className="px-4 py-3 font-bold text-indigo-600 text-center">SkillTen</th>
+                    <th className="px-4 py-3 font-bold text-indigo-600 text-center">Mentixy</th>
                     <th className="px-4 py-3 font-semibold text-slate-500 text-center">LinkedIn</th>
                     <th className="px-4 py-3 font-semibold text-slate-500 text-center">LeetCode</th>
                     <th className="px-4 py-3 font-semibold text-slate-500 text-center">GFG</th>
@@ -212,7 +212,7 @@ export default function Home() {
                   {comparison.map((row, i) => (
                     <tr key={i} className={`border-b border-slate-100 ${i % 2 === 0 ? '' : 'bg-slate-50/50'}`}>
                       <td className="px-4 py-3 font-medium text-slate-700">{row.feature}</td>
-                      <td className="px-4 py-3 text-center">{row.skillten ? <Check /> : <Cross />}</td>
+                      <td className="px-4 py-3 text-center">{row.mentixy ? <Check /> : <Cross />}</td>
                       <td className="px-4 py-3 text-center">{row.linkedin ? <Check /> : <Cross />}</td>
                       <td className="px-4 py-3 text-center">{row.leetcode ? <Check /> : <Cross />}</td>
                       <td className="px-4 py-3 text-center">{row.gfg ? <Check /> : <Cross />}</td>
@@ -325,7 +325,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-xs text-slate-500">© 2026 SkillTen. Built with ❤️ for Indian students.</p>
+            <p className="text-xs text-slate-500">© 2026 Mentixy. Built with ❤️ for Indian students.</p>
           </div>
         </div>
       </footer>

@@ -27,7 +27,7 @@ function parseJSON(text: string): Record<string, unknown> | null {
 }
 
 // ─── MASTER PERSONA ─────────────────────────────────────────
-const MASTER_PERSONA = `You are SkillSync's AI Career Counselor — a trusted guide for Indian students aged 16-25.
+const MASTER_PERSONA = `You are Mentixy's AI Career Counselor — a trusted guide for Indian students aged 16-25.
 Your personality is the combination of:
 - A brilliant older sibling who took the unconventional path and succeeded
 - A data scientist who knows the India job market cold

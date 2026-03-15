@@ -1,4 +1,4 @@
-"""SkillTen Leaderboard & Campus Wars — college vs college gamification
+"""Mentixy Leaderboard & Campus Wars — college vs college gamification
 Bible Section 1 (Prompt 1.2 §9) + Section 3 (Prompt 3.1 §Screen 9)
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -24,10 +24,10 @@ router = APIRouter()
 def leaderboard_overview(
     db: Session = Depends(get_db),
 ):
-    """Get leaderboard overview — top users by SkillTen Score."""
+    """Get leaderboard overview — top users by Mentixy Score."""
     profiles = db.query(UserProfile).filter(
-        UserProfile.viya_score > 0,
-    ).order_by(desc(UserProfile.viya_score)).limit(20).all()
+        UserProfile.mentixy_score > 0,
+    ).order_by(desc(UserProfile.mentixy_score)).limit(20).all()
 
     return {
         "total": len(profiles),
@@ -37,7 +37,7 @@ def leaderboard_overview(
             "display_name": p.display_name,
             "avatar_url": p.avatar_url,
             "college_name": p.college_name,
-            "viya_score": p.viya_score or 0,
+            "mentixy_score": p.mentixy_score or 0,
             "streak_days": p.streak_days or 0,
             "archetype_name": p.archetype_name,
         } for i, p in enumerate(profiles)],
@@ -48,24 +48,24 @@ def leaderboard_overview(
 
 @router.get("/individual")
 def individual_leaderboard(
-    metric: str = "viya_score",  # viya_score | streak | problems_solved
+    metric: str = "mentixy_score",  # mentixy_score | streak | problems_solved
     period: str = "all",         # all | weekly | monthly
     skip: int = 0, limit: int = 50,
     db: Session = Depends(get_db),
 ):
     """
-    Individual leaderboard ranked by Viya Score, streak, or problems solved.
+    Individual leaderboard ranked by Mentixy Score, streak, or problems solved.
     """
     q = db.query(UserProfile)
 
-    if metric == "viya_score":
-        q = q.order_by(desc(UserProfile.viya_score))
+    if metric == "mentixy_score":
+        q = q.order_by(desc(UserProfile.mentixy_score))
     elif metric == "streak":
         q = q.order_by(desc(UserProfile.streak_days))
     elif metric == "problems_solved":
         q = q.order_by(desc(UserProfile.total_points))
     else:
-        q = q.order_by(desc(UserProfile.viya_score))
+        q = q.order_by(desc(UserProfile.mentixy_score))
 
     total = q.count()
     profiles = q.offset(skip).limit(limit).all()
@@ -79,7 +79,7 @@ def individual_leaderboard(
             "display_name": p.display_name,
             "avatar_url": p.avatar_url,
             "college_name": p.college_name,
-            "viya_score": p.viya_score or 0,
+            "mentixy_score": p.mentixy_score or 0,
             "streak_days": p.streak_days or 0,
             "total_points": p.total_points or 0,
             "archetype_name": p.archetype_name,
@@ -115,9 +115,9 @@ def campus_wars_leaderboard(
         ).count()
 
         # Aggregate Viya score
-        avg_score = db.query(func.avg(UserProfile.viya_score)).filter(
+        avg_score = db.query(func.avg(UserProfile.mentixy_score)).filter(
             UserProfile.college_name.ilike(f"%{college.name}%"),
-            UserProfile.viya_score > 0,
+            UserProfile.mentixy_score > 0,
         ).scalar() or 0
 
         results.append({
@@ -130,7 +130,7 @@ def campus_wars_leaderboard(
             "tier": college.tier,
             "nirf_rank": college.nirf_rank,
             "active_students": student_count,
-            "avg_viya_score": round(float(avg_score), 1),
+            "avg_mentixy_score": round(float(avg_score), 1),
             "placement_rate": college.placement_rate_viya,
             "avg_ctc": college.avg_ctc_viya,
         })
@@ -153,8 +153,8 @@ def my_college_rank(
     # Find college peers
     peers = db.query(UserProfile).filter(
         UserProfile.college_name == profile.college_name,
-        UserProfile.viya_score > 0,
-    ).order_by(desc(UserProfile.viya_score)).all()
+        UserProfile.mentixy_score > 0,
+    ).order_by(desc(UserProfile.mentixy_score)).all()
 
     my_rank = None
     for i, p in enumerate(peers, 1):
@@ -162,7 +162,7 @@ def my_college_rank(
             my_rank = i
             break
 
-    college_avg = sum(p.viya_score or 0 for p in peers) / max(len(peers), 1)
+    college_avg = sum(p.mentixy_score or 0 for p in peers) / max(len(peers), 1)
 
     return {
         "has_college": True,
@@ -170,12 +170,12 @@ def my_college_rank(
         "my_rank_in_college": my_rank,
         "total_students": len(peers),
         "college_avg_score": round(college_avg, 1),
-        "my_score": profile.viya_score or 0,
+        "my_score": profile.mentixy_score or 0,
         "top_students": [{
             "rank": i + 1,
             "username": p.username,
             "display_name": p.display_name,
-            "viya_score": p.viya_score or 0,
+            "mentixy_score": p.mentixy_score or 0,
             "archetype_name": p.archetype_name,
         } for i, p in enumerate(peers[:10])],
     }

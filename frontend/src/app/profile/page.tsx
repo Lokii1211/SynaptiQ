@@ -30,7 +30,7 @@ const HEAT_COLOR = (c: number) => c >= 6 ? HEAT_COLORS_PROFILE[6] : c >= 4 ? HEA
 const MOCK_PROFILE = {
     name: 'Arjun Kumar',
     username: 'arjunk26',
-    headline: 'Aspiring Data Analyst | Python & SQL Verified | SkillTen Score 68',
+    headline: 'Aspiring Data Analyst | Python & SQL Verified | Mentixy Score 68',
     headlineStrength: 72,
     about: 'Final-year CSE student at SKCT, Coimbatore. Passionate about data analysis and problem-solving. Verified in Python (74th %ile) and SQL (61st %ile). Currently targeting Data Analyst roles at mid-tier and product companies.',
     college: 'Sri Krishna College of Technology, Coimbatore',
@@ -49,7 +49,7 @@ const MOCK_PROFILE = {
     availability: 'June 2026',
     profilePhoto: null,
     coverStyle: 'data-science',
-    skilltenScore: 68,
+    mentixyScore: 68,
     scoreBreakdown: { skills: 74, coding: 62, aptitude: 71, assessment: 75, community: 55, consistency: 68 },
     scorePercentile: 72,
     collegePeerPercentile: 81,
@@ -78,8 +78,8 @@ const MOCK_PROFILE = {
         { name: 'E-Commerce Sales Dashboard', tech: 'SQL, Power BI', desc: 'Interactive dashboard analyzing 3 years of e-commerce sales data. Used CTEs, window functions, and DAX measures.' },
     ],
     certifications: [
-        { name: 'Python Verified (SkillTen)', issuer: 'SkillTen', verified: true, date: 'Feb 2026' },
-        { name: 'SQL Verified (SkillTen)', issuer: 'SkillTen', verified: true, date: 'Jan 2026' },
+        { name: 'Python Verified (Mentixy)', issuer: 'Mentixy', verified: true, date: 'Feb 2026' },
+        { name: 'SQL Verified (Mentixy)', issuer: 'Mentixy', verified: true, date: 'Jan 2026' },
         { name: 'NPTEL — Data Science Basics', issuer: 'NPTEL/IIT Madras', verified: false, date: 'Nov 2025' },
     ],
     connections: 47,
@@ -176,12 +176,12 @@ export default function ProfilePage() {
                     <div className="grid md:grid-cols-3 gap-4">
                         {/* Left Column - Score + Quick Stats */}
                         <div className="space-y-4">
-                            {/* SkillTen Score™ */}
+                            {/* Mentixy Score™ */}
                             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
                                 className="st-card p-5 bg-gradient-to-br from-indigo-50 to-violet-50">
                                 <div className="text-center mb-3">
-                                    <p className="text-4xl font-bold text-indigo-600">{profile.skilltenScore}</p>
-                                    <p className="text-xs font-bold text-slate-700 mt-1">SkillTen Score™</p>
+                                    <p className="text-4xl font-bold text-indigo-600">{profile.mentixyScore}</p>
+                                    <p className="text-xs font-bold text-slate-700 mt-1">Mentixy Score™</p>
                                     <p className="text-[10px] text-slate-400">Top {100 - profile.scorePercentile}% overall · Top {100 - profile.collegePeerPercentile}% at college</p>
                                 </div>
                                 <div className="space-y-1.5">
@@ -446,7 +446,7 @@ export default function ProfilePage() {
                         <p className="text-[10px] text-slate-400 mb-4">Choose who can see each section of your profile</p>
                         <div className="space-y-3">
                             {[
-                                { key: 'score', label: 'SkillTen Score™', icon: '📊' },
+                                { key: 'score', label: 'Mentixy Score™', icon: '📊' },
                                 { key: 'aptitude', label: 'Aptitude Scores', icon: '🧠' },
                                 { key: 'coding', label: 'Coding Activity', icon: '💻' },
                                 { key: 'cgpa', label: 'CGPA / Grades', icon: '🎓' },
@@ -476,7 +476,7 @@ export default function ProfilePage() {
                     {/* Public Profile URL */}
                     <div className="mt-4 st-card p-4 flex items-center gap-3">
                         <span className="text-xs text-slate-400">🔗 Public Profile:</span>
-                        <code className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-0.5 rounded">skillten.in/u/{profile.username}</code>
+                        <code className="text-xs text-indigo-600 font-semibold bg-indigo-50 px-2 py-0.5 rounded">mentixy.in/u/{profile.username}</code>
                         <button className="text-xs text-slate-500 hover:text-slate-700">📋 Copy</button>
                         <button className="text-xs text-slate-500 hover:text-slate-700">📲 QR Code</button>
                     </div>

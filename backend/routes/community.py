@@ -1,5 +1,5 @@
 """
-SkillTen Community API — Real DB-backed posts, comments, likes
+Mentixy Community API — Real DB-backed posts, comments, likes
 Uses SQLAlchemy with SQLite/PostgreSQL (no supabase client)
 """
 from fastapi import APIRouter, Depends, HTTPException, Query

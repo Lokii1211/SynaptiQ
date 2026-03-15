@@ -1,5 +1,5 @@
 /**
- * SkillTen — Assessment Store (Zustand)
+ * Mentixy — Assessment Store (Zustand)
  */
 import { create } from 'zustand';
 

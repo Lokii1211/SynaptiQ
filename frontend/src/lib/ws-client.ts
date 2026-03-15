@@ -1,5 +1,5 @@
 /**
- * SkillTen — Notification Client
+ * Mentixy — Notification Client
  * Hybrid approach: tries WebSocket first, falls back to HTTP polling
  * Vercel serverless doesn't support persistent WebSocket connections,
  * so polling is the production-grade solution.
@@ -27,13 +27,13 @@ type MessageHandler = (message: WSMessage) => void;
 const BACKEND_URL = typeof window !== 'undefined' &&
     window.location.hostname !== 'localhost' &&
     window.location.hostname !== '127.0.0.1'
-    ? 'https://skillten.vercel.app'
+    ? 'https://mentixy-api.vercel.app'
     : 'http://localhost:8000';
 
 const IS_LOCAL = typeof window !== 'undefined' &&
     (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
-class SkillTenNotificationClient {
+class MentixyNotificationClient {
     private ws: WebSocket | null = null;
     private userId: string = '';
     private listeners: Map<string, Set<MessageHandler>> = new Map();
@@ -111,7 +111,7 @@ class SkillTenNotificationClient {
             this.send({ type: 'read_receipt', notification_id: notificationId });
         } else {
             // HTTP fallback
-            const token = typeof window !== 'undefined' ? localStorage.getItem('skillten_token') : null;
+            const token = typeof window !== 'undefined' ? localStorage.getItem('mentixy_token') : null;
             if (token) {
                 fetch(`${BACKEND_URL}/api/notifications/${notificationId}/read`, {
                     method: 'PATCH',
@@ -198,7 +198,7 @@ class SkillTenNotificationClient {
     }
 
     private async pollNotifications(): Promise<void> {
-        const token = typeof window !== 'undefined' ? localStorage.getItem('skillten_token') : null;
+        const token = typeof window !== 'undefined' ? localStorage.getItem('mentixy_token') : null;
         if (!token) return;
 
         try {
@@ -215,7 +215,7 @@ class SkillTenNotificationClient {
             for (const notif of notifications) {
                 const message: WSMessage = {
                     type: 'notification',
-                    title: notif.title || 'SkillTen',
+                    title: notif.title || 'Mentixy',
                     message: notif.message || notif.content || '',
                     icon: notif.icon || '🔔',
                     action_url: notif.action_url || notif.link || '',
@@ -255,11 +255,11 @@ class SkillTenNotificationClient {
         if (typeof window === 'undefined' || !('Notification' in window)) return;
 
         if (Notification.permission === 'granted') {
-            const notification = new Notification(message.title || 'SkillTen', {
+            const notification = new Notification(message.title || 'Mentixy', {
                 body: message.message || '',
                 icon: '/icons/icon-192x192.png',
                 badge: '/icons/icon-72x72.png',
-                tag: message.notification_type || 'skillten',
+                tag: message.notification_type || 'mentixy',
             });
 
             notification.onclick = () => {
@@ -276,4 +276,4 @@ class SkillTenNotificationClient {
 }
 
 // Singleton instance
-export const wsClient = new SkillTenNotificationClient();
+export const wsClient = new MentixyNotificationClient();

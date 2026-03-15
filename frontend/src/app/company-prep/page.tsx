@@ -201,9 +201,9 @@ export default function CompanyPrepPage() {
                         <div className="st-card p-5">
                             <div className="flex items-center gap-2 mb-3">
                                 <h3 className="text-sm font-bold text-slate-900">🤖 AI Interview Pattern Analysis</h3>
-                                <span className="text-[8px] bg-violet-100 text-violet-600 px-2 py-0.5 rounded-full font-bold">SKILLTEN EXCLUSIVE</span>
+                                <span className="text-[8px] bg-violet-100 text-violet-600 px-2 py-0.5 rounded-full font-bold">MENTIXY EXCLUSIVE</span>
                             </div>
-                            <p className="text-[10px] text-slate-400 mb-3">Analyzed from {selectedKit.interviewExperiences}+ interview experiences of SkillTen students</p>
+                            <p className="text-[10px] text-slate-400 mb-3">Analyzed from {selectedKit.interviewExperiences}+ interview experiences of Mentixy students</p>
                             <div className="space-y-2">
                                 {selectedKit.pattern.map((round, i) => (
                                     <div key={i} className="flex items-start gap-3 py-2 border-b border-slate-50 last:border-0">

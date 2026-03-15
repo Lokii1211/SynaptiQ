@@ -210,7 +210,7 @@ export default function RecruiterPortalPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[
                             { label: 'Total Candidates', value: '12,435', icon: '👥', change: '+340 this week', color: 'bg-indigo-50 text-indigo-600' },
-                            { label: 'Avg SkillTen Score', value: '724', icon: '📊', change: '+12 vs last month', color: 'bg-emerald-50 text-emerald-600' },
+                            { label: 'Avg Mentixy Score', value: '724', icon: '📊', change: '+12 vs last month', color: 'bg-emerald-50 text-emerald-600' },
                             { label: 'Verified Skills', value: '38,920', icon: '✅', change: '+2,100 this month', color: 'bg-violet-50 text-violet-600' },
                             { label: 'Colleges Covered', value: '450+', icon: '🏫', change: '22 states', color: 'bg-amber-50 text-amber-600' },
                             { label: 'Avg Response Rate', value: '78%', icon: '📧', change: '4x vs LinkedIn', color: 'bg-cyan-50 text-cyan-600' },
@@ -255,7 +255,7 @@ export default function RecruiterPortalPage() {
                         </div>
 
                         <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-100 md:col-span-2 lg:col-span-3">
-                            <h3 className="font-bold text-slate-900 text-sm mb-3">🏢 Why SkillTen for Recruiters?</h3>
+                            <h3 className="font-bold text-slate-900 text-sm mb-3">🏢 Why Mentixy for Recruiters?</h3>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 {[
                                     { icon: '✅', title: 'Verified Skills', desc: 'Every skill badge is verified through timed assessments with percentile rankings. Not self-reported.' },

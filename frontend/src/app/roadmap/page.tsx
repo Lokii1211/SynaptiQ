@@ -66,8 +66,8 @@ const MOCK_ROADMAP: Roadmap = {
         {
             phase_number: 4, title: 'Visibility + Apply', duration_weeks: 6,
             milestones: [
-                { id: '11', skill: 'Resume + Portfolio', resource: 'SkillTen Resume Builder', is_free: true, hours: 5, project: 'ATS-optimized resume', status: 'upcoming' },
-                { id: '12', skill: 'Mock Interviews', resource: 'SkillTen Simulator', is_free: true, hours: 10, project: '5 mock interviews', status: 'upcoming' },
+                { id: '11', skill: 'Resume + Portfolio', resource: 'Mentixy Resume Builder', is_free: true, hours: 5, project: 'ATS-optimized resume', status: 'upcoming' },
+                { id: '12', skill: 'Mock Interviews', resource: 'Mentixy Simulator', is_free: true, hours: 10, project: '5 mock interviews', status: 'upcoming' },
             ]
         },
     ],

@@ -1,4 +1,4 @@
-"""SkillTen Coding Arena — problems, submit, stats"""
+"""Mentixy Coding Arena — problems, submit, stats"""
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional

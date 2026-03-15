@@ -1,4 +1,4 @@
-"""SkillTen Score Route — compute and return Viya Score™
+"""Mentixy Score Route — compute and return Mentixy Score™
 Bible Section 1 (Prompt 1.2 §6) + Section 4 (Prompt 4.1 §6)
 """
 from fastapi import APIRouter, Depends
@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import User, UserViyaScoreLog
 from auth import require_user
-from score_calculator import calculate_viya_score
+from score_calculator import calculate_mentixy_score
 
 router = APIRouter()
 
@@ -17,10 +17,10 @@ def get_score(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Get current SkillTen Score™ overview."""
+    """Get current Mentixy Score™ overview."""
     profile = user.profile
     return {
-        "viya_score": profile.viya_score if profile else 0,
+        "mentixy_score": profile.mentixy_score if profile else 0,
         "streak_days": profile.streak_days if profile else 0,
         "archetype_name": profile.archetype_name if profile else None,
         "archetype_code": profile.archetype_code if profile else None,
@@ -32,8 +32,8 @@ def recalculate_score(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Recalculate the user's Viya Score™ with full breakdown."""
-    result = calculate_viya_score(user.id, db)
+    """Recalculate the user's Mentixy Score™ with full breakdown."""
+    result = calculate_mentixy_score(user.id, db)
     return result
 
 
@@ -42,10 +42,10 @@ def current_score(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Get current Viya Score™ without recalculating."""
+    """Get current Mentixy Score™ without recalculating."""
     profile = user.profile
     return {
-        "viya_score": profile.viya_score if profile else 0,
+        "mentixy_score": profile.mentixy_score if profile else 0,
         "streak_days": profile.streak_days if profile else 0,
         "archetype_name": profile.archetype_name if profile else None,
     }
@@ -57,7 +57,7 @@ def score_history(
     user: User = Depends(require_user),
     db: Session = Depends(get_db),
 ):
-    """Get Viya Score™ history for trend chart."""
+    """Get Mentixy Score™ history for trend chart."""
     logs = db.query(UserViyaScoreLog).filter_by(
         user_id=user.id,
     ).order_by(UserViyaScoreLog.calculated_at.desc()).limit(limit).all()

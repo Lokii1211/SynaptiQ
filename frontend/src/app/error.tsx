@@ -10,7 +10,7 @@ export default function Error({
     reset: () => void;
 }) {
     useEffect(() => {
-        console.error('SkillTen Error:', error);
+        console.error('Mentixy Error:', error);
     }, [error]);
 
     return (
@@ -44,7 +44,7 @@ export default function Error({
 
                 <p className="text-xs text-slate-400 mt-8">
                     If this keeps happening, contact{' '}
-                    <a href="mailto:support@skillten.in" className="text-indigo-500 hover:underline">support@skillten.in</a>
+                    <a href="mailto:support@mentixy.in" className="text-indigo-500 hover:underline">support@mentixy.in</a>
                 </p>
             </div>
         </div>

@@ -57,7 +57,7 @@ export default function ParentPage() {
                     <span className="text-5xl block mb-4">👨‍👩‍👧‍👦</span>
                     <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">For Parents</h1>
                     <p className="text-slate-500 text-lg max-w-xl mx-auto">
-                        Understand what your child is doing on SkillTen and why it matters for their career
+                        Understand what your child is doing on Mentixy and why it matters for their career
                     </p>
                 </motion.div>
             </section>
@@ -81,19 +81,19 @@ export default function ParentPage() {
                 <AnimatePresence mode="wait">
                     {activeTab === 'overview' && (
                         <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-8">
-                            {/* What is SkillTen */}
+                            {/* What is Mentixy */}
                             <section>
-                                <h2 className="text-2xl font-bold text-slate-900 mb-4">What is SkillTen?</h2>
+                                <h2 className="text-2xl font-bold text-slate-900 mb-4">What is Mentixy?</h2>
                                 <p className="text-slate-600 leading-relaxed mb-4">
-                                    SkillTen is an AI-powered career guidance platform designed for Indian students. Unlike traditional
-                                    career counseling (which can cost ₹5,000-50,000), SkillTen provides the same quality of career
+                                    Mentixy is an AI-powered career guidance platform designed for Indian students. Unlike traditional
+                                    career counseling (which can cost ₹5,000-50,000), Mentixy provides the same quality of career
                                     assessment and guidance for free.
                                 </p>
                                 <div className="grid md:grid-cols-3 gap-4">
                                     {[
                                         { icon: '🧬', title: 'Career Assessment', desc: 'Scientific psychometric test that identifies your child\'s natural strengths and ideal career paths' },
                                         { icon: '💻', title: 'Skill Building', desc: 'Coding practice, interview prep, and learning roadmaps — all using free resources' },
-                                        { icon: '📊', title: 'SkillTen Score', desc: 'A verified score that proves their skills to recruiters — like a CIBIL score for careers' },
+                                        { icon: '📊', title: 'Mentixy Score', desc: 'A verified score that proves their skills to recruiters — like a CIBIL score for careers' },
                                     ].map((item) => (
                                         <div key={item.title} className="st-card p-5">
                                             <span className="text-2xl block mb-2">{item.icon}</span>
@@ -110,7 +110,7 @@ export default function ParentPage() {
                                 <div className="space-y-3">
                                     {[
                                         { emoji: '🎯', title: 'Career Clarity', text: 'Instead of guessing, your child discovers careers that match their actual strengths — backed by AI analysis, not opinions.' },
-                                        { emoji: '📈', title: 'Measurable Progress', text: 'Every action (solving problems, learning skills, building projects) contributes to their SkillTen Score — visible to recruiters.' },
+                                        { emoji: '📈', title: 'Measurable Progress', text: 'Every action (solving problems, learning skills, building projects) contributes to their Mentixy Score — visible to recruiters.' },
                                         { emoji: '🏢', title: 'Placement Readiness', text: 'Company-specific preparation for TCS, Infosys, Wipro, and product companies. Real patterns, real questions.' },
                                         { emoji: '💪', title: 'Confidence', text: 'When they know their strengths and have data to prove it, interviews become much less stressful.' },
                                     ].map(item => (
@@ -130,10 +130,10 @@ export default function ParentPage() {
                                 <h2 className="text-2xl font-bold text-slate-900 mb-4">Common Questions</h2>
                                 <div className="space-y-3">
                                     {[
-                                        { q: 'Is it really free?', a: 'Yes. SkillTen is completely free for students. We don\'t sell courses or charge for assessments. Our mission is to make career guidance accessible to every Indian student.' },
+                                        { q: 'Is it really free?', a: 'Yes. Mentixy is completely free for students. We don\'t sell courses or charge for assessments. Our mission is to make career guidance accessible to every Indian student.' },
                                         { q: 'Is my child\'s data safe?', a: 'Absolutely. We follow strict data privacy practices. Your child\'s assessment results and personal information are never shared without their explicit consent.' },
-                                        { q: 'How is this different from Naukri/LinkedIn?', a: 'Those platforms are for experienced professionals. SkillTen is built specifically for students and freshers — with features like career assessment, coding arena, and college-specific guidance.' },
-                                        { q: 'Will this replace their college placement cell?', a: 'No. SkillTen complements college placements by helping students prepare better, discover careers they might not have considered, and build verifiable skills.' },
+                                        { q: 'How is this different from Naukri/LinkedIn?', a: 'Those platforms are for experienced professionals. Mentixy is built specifically for students and freshers — with features like career assessment, coding arena, and college-specific guidance.' },
+                                        { q: 'Will this replace their college placement cell?', a: 'No. Mentixy complements college placements by helping students prepare better, discover careers they might not have considered, and build verifiable skills.' },
                                         { q: 'My child wants to do engineering but I think they should do MBA/UPSC...', a: 'Our career assessment is unbiased and based on your child\'s actual strengths and interests. It often reveals career paths that neither parents nor students had considered — and that\'s where the best outcomes happen.' },
                                     ].map((faq, i) => (
                                         <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.1 }}
@@ -363,7 +363,7 @@ export default function ParentPage() {
                 <div className="bg-indigo-50 rounded-2xl p-8 text-center border border-indigo-100">
                     <h3 className="text-xl font-bold text-slate-900 mb-2">Want to try it yourself?</h3>
                     <p className="text-sm text-slate-500 mb-4">Create a free account and take the assessment — it takes 5 minutes</p>
-                    <Link href="/signup" className="st-btn-primary px-8 inline-block">Try SkillTen Free →</Link>
+                    <Link href="/signup" className="st-btn-primary px-8 inline-block">Try Mentixy Free →</Link>
                 </div>
             </div>
         </div>

@@ -1,4 +1,4 @@
-// ─── SkillSync AI — Comprehensive Career Profiles Database ───
+// ─── Mentixy — Comprehensive Career Profiles Database ───
 // 60+ India-focused career profiles across 12 categories
 
 export interface CareerProfile {

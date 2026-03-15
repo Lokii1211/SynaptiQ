@@ -1,4 +1,4 @@
-"""SkillTen Auth Routes — signup, login, me, profile update, forgot/reset password, Google OAuth"""
+"""Mentixy Auth Routes — signup, login, me, profile update, forgot/reset password, Google OAuth"""
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, EmailStr
 from typing import Optional
@@ -76,7 +76,7 @@ def _user_response(user: User, profile: UserProfile):
             "target_role": profile.target_role,
             "target_industry": profile.target_industry,
             "open_to_work": profile.open_to_work,
-            "skillten_score": profile.viya_score,
+            "mentixy_score": profile.mentixy_score,
             "streak_days": profile.streak_days,
             "archetype_name": profile.archetype_name,
             "linkedin_url": profile.linkedin_url,
@@ -122,7 +122,7 @@ def signup(req: SignupReq, db: Session = Depends(get_db)):
         notif = ViyaNotification(
             user_id=user.id,
             type="welcome",
-            title="Welcome to SkillTen! 🎉",
+            title="Welcome to Mentixy! 🎉",
             body="Take your 4D Career Assessment to discover your career archetype.",
             action_url="/assessment",
             icon="🧬",
@@ -301,8 +301,8 @@ import os, httpx
 
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
-GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "https://skillten.vercel.app/api/auth/google/callback")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://synaptiqq.vercel.app")
+GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "https://mentixy-api.vercel.app/api/auth/google/callback")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://mentixy.vercel.app")
 
 
 @router.get("/google")

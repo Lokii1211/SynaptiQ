@@ -1,5 +1,5 @@
 /**
- * SkillTen — Auth Store (Zustand)
+ * Mentixy — Auth Store (Zustand)
  */
 import { create } from 'zustand';
 import { api, auth } from '@/lib/api';
@@ -17,7 +17,7 @@ interface User {
         graduation_year?: number;
         target_role?: string;
         archetype_name?: string;
-        skillten_score: number;
+        mentixy_score: number;
         streak_days: number;
         avatar_url?: string;
     };

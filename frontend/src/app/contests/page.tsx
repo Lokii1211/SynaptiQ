@@ -21,7 +21,7 @@ interface PastResult {
 
 const CONTESTS: Contest[] = [
     {
-        id: 'w48', name: 'SkillTen Weekly Sprint #48', type: 'weekly', status: 'upcoming',
+        id: 'w48', name: 'Mentixy Weekly Sprint #48', type: 'weekly', status: 'upcoming',
         startTime: 'Sunday 9:00 AM IST', duration: '90 min', problems: 4,
         difficulty: 'Easy + Med + Med + Hard', registeredCount: 1247,
         description: '4 problems in 90 minutes. Rating change: ±20 to ±80. Solve fast, climb ranks!',
@@ -41,7 +41,7 @@ const CONTESTS: Contest[] = [
         prizes: ['Direct interview at TCS', 'Certificate of Excellence', 'Goodies'],
     },
     {
-        id: 'cc-mar', name: 'SkillTen College Cup — March', type: 'college-cup', status: 'upcoming',
+        id: 'cc-mar', name: 'Mentixy College Cup — March', type: 'college-cup', status: 'upcoming',
         startTime: 'Mar 15, 2026 · 10:00 AM', duration: '3 hours', problems: 6,
         difficulty: 'Easy to Hard', registeredCount: 3891,
         description: 'Monthly inter-college competition. Your score contributes to Campus Wars!',
@@ -55,7 +55,7 @@ const CONTESTS: Contest[] = [
         ratingChange: '±30 to ±100',
     },
     {
-        id: 'mar-01', name: 'SkillTen Marathon — System Design', type: 'marathon', status: 'upcoming',
+        id: 'mar-01', name: 'Mentixy Marathon — System Design', type: 'marathon', status: 'upcoming',
         startTime: 'Mar 1-7, 2026', duration: '7 days', problems: 1,
         difficulty: '1 Complex Real-World Problem', registeredCount: 234,
         description: 'Design and implement a complete system. LLD + HLD. 7 days to build.',

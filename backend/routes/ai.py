@@ -1,4 +1,4 @@
-"""SkillTen AI Routes — exposes all AI engine capabilities"""
+"""Mentixy AI Routes — exposes all AI engine capabilities"""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List

@@ -1,4 +1,4 @@
-"""SkillTen — Master API Router (Bible-Complete)"""
+"""Mentixy — Master API Router (Bible-Complete)"""
 from fastapi import APIRouter
 from .auth import router as auth_router
 from .assessment import router as assessment_router
@@ -57,7 +57,7 @@ master_router.include_router(parent_router, prefix="/parent", tags=["Parent Port
 master_router.include_router(leaderboard_router, prefix="/leaderboard", tags=["Leaderboard & Campus Wars"])
 master_router.include_router(profile_router, prefix="/profile", tags=["Public Profile"])
 master_router.include_router(mock_drive_router, prefix="/mock-drive", tags=["Mock Placement Drive"])
-master_router.include_router(score_router, prefix="/score", tags=["Viya Score™"])
+master_router.include_router(score_router, prefix="/score", tags=["Mentixy Score™"])
 master_router.include_router(achievements_router, prefix="/achievements", tags=["Achievements"])
 master_router.include_router(tracker_router, prefix="/tracker", tags=["Streak Tracker"])
 master_router.include_router(referral_router, prefix="/referral", tags=["Referral System"])

@@ -1,5 +1,5 @@
 /**
- * SkillTen — Route Constants
+ * Mentixy — Route Constants
  */
 export const ROUTES = {
     HOME: '/',

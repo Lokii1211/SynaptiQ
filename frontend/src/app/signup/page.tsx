@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/store/auth.store';
 import { auth } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
-const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://skillten.vercel.app' : 'http://localhost:8000';
+const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://mentixy-api.vercel.app' : 'http://localhost:8000';
 
 export default function SignupPage() {
     const [form, setForm] = useState({ email: '', password: '', display_name: '', username: '' });
@@ -59,7 +59,7 @@ export default function SignupPage() {
                 <div className="text-white max-w-md relative z-10">
                     <h2 className="text-3xl font-bold mb-4">Start your career<br />journey today</h2>
                     <p className="text-white/70 text-lg leading-relaxed mb-8">
-                        Join thousands of Indian students who discovered their career DNA with SkillTen&apos;s AI-powered platform.
+                        Join thousands of Indian students who discovered their career DNA with Mentixy&apos;s AI-powered platform.
                     </p>
                     <div className="grid grid-cols-2 gap-4">
                         {[

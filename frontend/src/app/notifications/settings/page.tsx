@@ -30,7 +30,7 @@ const RULES: NotifRule[] = [
     },
     {
         id: 'contest', icon: '🏆', title: 'Contest Starting', description: 'Reminder 1 hour before contests you\'ve registered for',
-        urgency: 'medium', enabled: true, example: 'SkillTen Weekly Contest starts in 1 hour. You\'re registered.'
+        urgency: 'medium', enabled: true, example: 'Mentixy Weekly Contest starts in 1 hour. You\'re registered.'
     },
     {
         id: 'campus_wars', icon: '📈', title: 'Campus Wars Movement', description: 'When your college\'s rank changes by 2+ positions',

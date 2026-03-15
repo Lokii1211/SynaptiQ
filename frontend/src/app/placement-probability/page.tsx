@@ -99,14 +99,14 @@ export default function PlacementProbabilityPage() {
                 <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
                     <div className="flex items-center gap-2 mb-1">
                         <h1 className="text-2xl font-bold text-slate-900 st-font-heading">🎯 Placement Probability</h1>
-                        <span className="text-[9px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-2 py-0.5 rounded-full font-bold">SKILLTEN EXCLUSIVE</span>
+                        <span className="text-[9px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-2 py-0.5 rounded-full font-bold">MENTIXY EXCLUSIVE</span>
                     </div>
                     <p className="text-sm text-slate-500">AI-calculated probability of cracking each company based on YOUR actual skills, CGPA, and practice data</p>
                 </motion.div>
 
                 {/* Disclaimer */}
                 <div className="bg-amber-50 rounded-xl p-3 border border-amber-100 mb-5">
-                    <p className="text-[11px] text-amber-700">⚠️ Probabilities are estimated using ML models trained on <strong>10,000+ placement records</strong> from SkillTen students across 200+ colleges. Accuracy: ~78%. Use as directional guidance, not guarantee.</p>
+                    <p className="text-[11px] text-amber-700">⚠️ Probabilities are estimated using ML models trained on <strong>10,000+ placement records</strong> from Mentixy students across 200+ colleges. Accuracy: ~78%. Use as directional guidance, not guarantee.</p>
                 </div>
 
                 {selectedCompany ? (

@@ -1,5 +1,5 @@
 """
-SkillTen AI Engine — Gemini-Powered Intelligence Layer
+Mentixy AI Engine — Gemini-Powered Intelligence Layer
 Covers: Assessment 4D, Career Chat, Skill Gap, Resume ATS, Code Review,
         Job Matching, Roadmap Generation, Interview Prep
 """
@@ -36,7 +36,7 @@ def _safe_generate(prompt: str, fallback: dict) -> dict:
         response = model.generate_content(prompt)
         return _clean_json(response.text)
     except Exception as e:
-        print(f"[SkillTen AI] Error: {e}")
+        print(f"[Mentixy AI] Error: {e}")
         return fallback
 
 
@@ -46,7 +46,7 @@ def _safe_generate(prompt: str, fallback: dict) -> dict:
 
 def analyze_4d_assessment(answers: list, time_data: list = None) -> dict:
     """Analyze 4D assessment answers → archetype + career matches"""
-    prompt = f"""You are SkillTen's 4D Career Profiling Engine for Indian students.
+    prompt = f"""You are Mentixy's 4D Career Profiling Engine for Indian students.
 
 Analyze these psychometric answers across 4 dimensions:
 - Analytical (A): Logic, data, patterns, systems thinking
@@ -98,14 +98,14 @@ Use Indian salary data (LPA). Be honest, not generic."""
 # ═══════════════════════════════════════════════════════════════
 
 def career_chat(message: str, context: list = None, user_profile: dict = None) -> str:
-    """AI career counselor chat — SkillTen's conversational advisor"""
+    """AI career counselor chat — Mentixy's conversational advisor"""
     if not model:
         return _mock_chat_response(message)
 
     history = ""
     if context:
         for msg in context[-8:]:
-            role = "User" if msg.get("role") == "user" else "SkillTen"
+            role = "User" if msg.get("role") == "user" else "Mentixy"
             history += f"{role}: {msg.get('content', '')}\n"
 
     profile_context = ""
@@ -118,10 +118,10 @@ User Profile:
 - CGPA: {user_profile.get('cgpa', 'N/A')}
 - Target Role: {user_profile.get('target_role', 'N/A')}
 - Archetype: {user_profile.get('archetype_name', 'N/A')}
-- Viya Score: {user_profile.get('viya_score', 0)}
+- Mentixy Score: {user_profile.get('mentixy_score', 0)}
 """
 
-    prompt = f"""You are SkillTen AI, an expert career guidance counselor for Indian students.
+    prompt = f"""You are Mentixy AI, an expert career guidance counselor for Indian students.
 
 You are NOT generic. You know:
 - Indian salary benchmarks (fresher vs experienced, tier 1 vs tier 2/3 colleges)
@@ -144,13 +144,13 @@ Rules:
 5. If user asks something you're unsure about, say so honestly
 6. Use ₹ for salary references
 
-Respond as SkillTen AI:"""
+Respond as Mentixy AI:"""
 
     try:
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as e:
-        print(f"[SkillTen AI] Chat error: {e}")
+        print(f"[Mentixy AI] Chat error: {e}")
         return _mock_chat_response(message)
 
 
@@ -164,7 +164,7 @@ def analyze_skill_gap(current_skills: list, target_career: str, user_context: di
     if user_context:
         ctx = f"User: {user_context.get('college_tier', 'N/A')} tier, {user_context.get('stream', 'N/A')}, graduating {user_context.get('graduation_year', 'N/A')}"
 
-    prompt = f"""You are SkillTen's Skill Gap Analyzer for Indian students.
+    prompt = f"""You are Mentixy's Skill Gap Analyzer for Indian students.
 
 Current Skills: {json.dumps(current_skills)}
 Target Career: {target_career}
@@ -208,7 +208,7 @@ Be realistic with timelines for an Indian student."""
 
 def analyze_resume(resume_data: dict, target_role: str) -> dict:
     """ATS score + improvement suggestions for resume"""
-    prompt = f"""You are SkillTen's Resume ATS Analyzer for Indian job market.
+    prompt = f"""You are Mentixy's Resume ATS Analyzer for Indian job market.
 
 Resume Data: {json.dumps(resume_data)}
 Target Role: {target_role}
@@ -252,7 +252,7 @@ Be tough but constructive. Indian freshers need honest feedback."""
 
 def review_code(code: str, language: str, problem_title: str = "") -> dict:
     """AI code review for coding submissions"""
-    prompt = f"""You are SkillTen's Code Review AI, an expert competitive programmer.
+    prompt = f"""You are Mentixy's Code Review AI, an expert competitive programmer.
 
 Language: {language}
 Problem: {problem_title}
@@ -290,7 +290,7 @@ Review this code and return ONLY raw JSON:
 
 def calculate_job_match(user_profile: dict, job_data: dict) -> dict:
     """Calculate AI match score between user and job"""
-    prompt = f"""You are SkillTen's Job Match Engine.
+    prompt = f"""You are Mentixy's Job Match Engine.
 
 User Profile: {json.dumps(user_profile)}
 Job Details: {json.dumps(job_data)}
@@ -328,7 +328,7 @@ def generate_roadmap(target_career: str, current_skills: list, user_context: dic
     if user_context:
         ctx = f"College tier: {user_context.get('college_tier', 'N/A')}, Stream: {user_context.get('stream', 'N/A')}, Year: {user_context.get('graduation_year', 'N/A')}, Hours/week available: {user_context.get('hours_per_week', 10)}"
 
-    prompt = f"""You are SkillTen's AI Roadmap Generator for Indian students.
+    prompt = f"""You are Mentixy's AI Roadmap Generator for Indian students.
 
 Target Career: {target_career}
 Current Skills: {json.dumps(current_skills)}
@@ -378,7 +378,7 @@ Rules:
 
 def generate_interview_prep(company: str, role: str, round_type: str = "technical") -> dict:
     """Generate interview preparation guide"""
-    prompt = f"""You are SkillTen's Interview Prep AI, specialized in Indian tech hiring.
+    prompt = f"""You are Mentixy's Interview Prep AI, specialized in Indian tech hiring.
 
 Company: {company}
 Role: {role}
@@ -485,7 +485,7 @@ Be honest. Don't sugar-coat. India-specific reality."""
 
 def generate_parent_report(student_profile: dict, weekly_activity: dict) -> dict:
     """Generate parent-friendly weekly report (Bible XF-10)"""
-    prompt = f"""You are SkillTen's Parent Report Generator. Write for Indian parents.
+    prompt = f"""You are Mentixy's Parent Report Generator. Write for Indian parents.
 
 Student Profile: {json.dumps(student_profile)}
 This Week's Activity: {json.dumps(weekly_activity)}
@@ -537,7 +537,7 @@ RULES:
 
 def check_salary_truth(ctc_lpa: float, role: str, city: str, college_tier: int = 2) -> dict:
     """Help parents understand CTC vs in-hand salary (Bible XF-10)"""
-    prompt = f"""You are SkillTen's Salary Truth Engine for Indian parents.
+    prompt = f"""You are Mentixy's Salary Truth Engine for Indian parents.
 
 Offer CTC: ₹{ctc_lpa} LPA
 Role: {role}
@@ -723,7 +723,7 @@ def emotion_aware_intervention(
     milestones = student_data.get("milestones_hit", 0)
 
     prompt = f"""
-A student needs support right now. You are SkillSync's wellbeing layer.
+A student needs support right now. You are Mentixy's wellbeing layer.
 
 SIGNAL TYPE: {signal_type}
 STUDENT DATA: streak={streak}, milestones_hit={milestones}
@@ -797,7 +797,7 @@ def _mock_chat_response(message: str) -> str:
     elif any(k in msg_lower for k in ["intern", "internship"]):
         return "For internships in India, here's the truth:\n\n**Best platforms:** LinkedIn, Unstop, Internshala (filter for stipend > ₹10K)\n**Best time to apply:** August-October for summer internships\n**What matters most:** Projects > CGPA > College name\n\n**Pro tip:** Cold DM startup founders on LinkedIn with 'I built X using your tech stack, can I intern?' — this works better than formal applications. What domain interests you?"
     else:
-        return f"That's a great question! As your SkillTen AI career advisor, I'm here to help you navigate the Indian job market.\n\nI can help you with:\n- 💼 Salary benchmarks & company insights\n- 📚 Skill development roadmaps\n- 💻 Coding interview preparation\n- 📝 Resume optimization\n- 🎯 Career path planning\n\nWhat specific aspect would you like to explore?"
+        return f"That's a great question! As your Mentixy AI career advisor, I'm here to help you navigate the Indian job market.\n\nI can help you with:\n- 💼 Salary benchmarks & company insights\n- 📚 Skill development roadmaps\n- 💻 Coding interview preparation\n- 📝 Resume optimization\n- 🎯 Career path planning\n\nWhat specific aspect would you like to explore?"
 
 
 def _mock_skill_gap(current_skills: list, target_career: str) -> dict:

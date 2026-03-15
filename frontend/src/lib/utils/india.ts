@@ -1,5 +1,5 @@
 /**
- * SkillTen — India-specific helpers
+ * Mentixy — India-specific helpers
  */
 
 /** Format salary in LPA (Lakhs Per Annum) */

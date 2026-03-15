@@ -1,5 +1,5 @@
 /**
- * SkillTen WebSocket Service — Real-time Communication Layer
+ * Mentixy WebSocket Service — Real-time Communication Layer
  * Phase 10: Production-grade architecture for real-time features
  * 
  * Features:
@@ -30,7 +30,7 @@ interface WSMessage {
     timestamp: number;
 }
 
-class SkillTenWebSocket {
+class MentixyWebSocket {
     private ws: WebSocket | null = null;
     private url: string;
     private handlers: Map<WSEvent, Set<WSHandler>> = new Map();
@@ -210,7 +210,7 @@ class SkillTenWebSocket {
 }
 
 // Singleton instance
-export const ws = new SkillTenWebSocket();
+export const ws = new MentixyWebSocket();
 
 /**
  * React hook for WebSocket events
@@ -225,4 +225,4 @@ export function useWSEvent(event: WSEvent, handler: WSHandler): void {
 }
 
 export type { WSEvent, WSMessage, WSHandler };
-export default SkillTenWebSocket;
+export default MentixyWebSocket;

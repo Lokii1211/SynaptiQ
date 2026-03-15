@@ -1,4 +1,4 @@
-"""SkillTen — Streak Tracker API (Bible §16)"""
+"""Mentixy — Streak Tracker API (Bible §16)"""
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session

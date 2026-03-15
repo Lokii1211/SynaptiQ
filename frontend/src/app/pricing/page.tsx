@@ -80,7 +80,7 @@ const PLANS = [
 
 const B2B_PLANS = [
     { name: 'Campus Plan', price: '₹50', unit: '/student/month', min: 'Min 200 students', features: ['All Pro features for students', 'T&P Officer dashboard', 'Student readiness analytics', 'Placement drive management', 'Campus Wars tracking', 'Custom assessments', 'NIRF/NAAC report generation'] },
-    { name: 'Corporate Plan', price: '₹5,000', unit: '/recruiter/month', min: 'Per recruiter seat', features: ['Verified talent pool search', 'Skill-filtered candidates', 'Job posting on SkillTen', 'Assessment hosting', 'Direct messaging to candidates', 'Candidate pipeline management', 'Analytics dashboard'] },
+    { name: 'Corporate Plan', price: '₹5,000', unit: '/recruiter/month', min: 'Per recruiter seat', features: ['Verified talent pool search', 'Skill-filtered candidates', 'Job posting on Mentixy', 'Assessment hosting', 'Direct messaging to candidates', 'Candidate pipeline management', 'Analytics dashboard'] },
     { name: 'Enterprise', price: 'Custom', unit: '', min: 'For large institutions', features: ['Custom pricing & SLA', 'Dedicated account manager', 'Custom learning paths', 'White-label option', 'API access', 'Priority support', 'On-campus training'] },
 ];
 
@@ -92,11 +92,11 @@ const TESTIMONIALS = [
 
 const FAQ = [
     { q: 'Can I try Pro for free?', a: 'Yes! Start with the Free tier—it has genuine value. When you hit the limits of 75 problems/month or 15 AI messages/month, you\'ll know it\'s time to upgrade. We also offer a 7-day Pro trial for new users.' },
-    { q: 'What happens if I don\'t get placed?', a: 'SkillTen Pro Plus comes with a placement-readiness promise. Complete the path, follow the plan, and if your Skillten Score doesn\'t improve by at least 20 points, we refund your subscription month.' },
+    { q: 'What happens if I don\'t get placed?', a: 'Mentixy Pro Plus comes with a placement-readiness promise. Complete the path, follow the plan, and if your Mentixy Score doesn\'t improve by at least 20 points, we refund your subscription month.' },
     { q: 'Is the Free tier actually useful?', a: 'Absolutely. Free includes the full psychometric assessment, daily challenges, 75 problems/month, basic aptitude tests, and Campus Wars. Many students stay on Free until placement season approaches.' },
     { q: 'Can my college buy Pro for all students?', a: 'Yes! Our Campus Plan is ₹50/student/month (min 200 students). The T&P Officer gets a full dashboard with student readiness analytics, placement drive management, and more.' },
-    { q: 'How does pricing compare to competitors?', a: 'LeetCode Premium is ₹2,900/month ($35). Coursera courses cost ₹3,000–₹30,000 each. SkillTen Pro at ₹299/month gives you everything: coding, aptitude, AI, career intelligence, and more.' },
-    { q: 'Can I pay yearly?', a: 'Yes! SkillTen Pro is ₹1,999/year (saves 44% vs monthly). Pro Plus yearly plans coming soon.' },
+    { q: 'How does pricing compare to competitors?', a: 'LeetCode Premium is ₹2,900/month ($35). Coursera courses cost ₹3,000–₹30,000 each. Mentixy Pro at ₹299/month gives you everything: coding, aptitude, AI, career intelligence, and more.' },
+    { q: 'Can I pay yearly?', a: 'Yes! Mentixy Pro is ₹1,999/year (saves 44% vs monthly). Pro Plus yearly plans coming soon.' },
 ];
 
 export default function PricingPage() {
@@ -116,8 +116,8 @@ export default function PricingPage() {
         const key = planId === 'pro' ? (isYearly ? 'pro-yearly' : 'pro-monthly') : 'pro-plus-monthly';
         const amount = planPrices[key] || 29900;
         const planName = planId === 'pro'
-            ? `SkillTen Pro (${isYearly ? 'Yearly' : 'Monthly'})`
-            : 'SkillTen Pro Plus (Monthly)';
+            ? `Mentixy Pro (${isYearly ? 'Yearly' : 'Monthly'})`
+            : 'Mentixy Pro Plus (Monthly)';
 
         // Load Razorpay script if not already loaded
         const loadScript = () => new Promise<void>((resolve) => {
@@ -133,7 +133,7 @@ export default function PricingPage() {
                 key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
                 amount,
                 currency: 'INR',
-                name: 'SkillTen',
+                name: 'Mentixy',
                 description: planName,
                 image: '/icon-192.png',
                 prefill: {
@@ -174,7 +174,7 @@ export default function PricingPage() {
                                 Invest in Your Career.<br />Not in Expensive Courses.
                             </h1>
                             <p className="text-white/50 text-lg max-w-2xl mx-auto mb-8">
-                                SkillTen Pro costs less than one Coursera certificate — but gives you coding,
+                                Mentixy Pro costs less than one Coursera certificate — but gives you coding,
                                 aptitude, AI career guidance, placement intelligence, and more. All in one platform.
                             </p>
                             {/* Billing Toggle */}
@@ -255,7 +255,7 @@ export default function PricingPage() {
                 {/* Competitor Comparison */}
                 <div className="px-4 md:px-6 py-12 max-w-5xl mx-auto">
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
-                        <h2 className="text-xl font-bold text-slate-900 text-center mb-6 st-font-heading">How SkillTen Compares</h2>
+                        <h2 className="text-xl font-bold text-slate-900 text-center mb-6 st-font-heading">How Mentixy Compares</h2>
                         <div className="overflow-x-auto">
                             <table className="w-full text-xs">
                                 <thead>
@@ -264,7 +264,7 @@ export default function PricingPage() {
                                         <th className="text-center py-3 px-2 text-slate-400 font-semibold">LeetCode Premium<br /><span className="text-red-400">₹2,900/mo</span></th>
                                         <th className="text-center py-3 px-2 text-slate-400 font-semibold">Coursera Plus<br /><span className="text-red-400">₹4,000/mo</span></th>
                                         <th className="text-center py-3 px-2 text-slate-400 font-semibold">LinkedIn Premium<br /><span className="text-red-400">₹1,800/mo</span></th>
-                                        <th className="text-center py-3 px-2 font-bold bg-indigo-50 text-indigo-700 rounded-t-xl">SkillTen Pro<br /><span className="text-emerald-600">₹299/mo</span></th>
+                                        <th className="text-center py-3 px-2 font-bold bg-indigo-50 text-indigo-700 rounded-t-xl">Mentixy Pro<br /><span className="text-emerald-600">₹299/mo</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -298,7 +298,7 @@ export default function PricingPage() {
                 {/* B2B Plans */}
                 <div className="px-4 md:px-6 py-8 max-w-5xl mx-auto">
                     <h2 className="text-xl font-bold text-slate-900 text-center mb-2 st-font-heading">For Colleges & Companies</h2>
-                    <p className="text-sm text-slate-400 text-center mb-6">Partner with SkillTen to power your campus placements or hire verified talent</p>
+                    <p className="text-sm text-slate-400 text-center mb-6">Partner with Mentixy to power your campus placements or hire verified talent</p>
                     <div className="grid md:grid-cols-3 gap-4">
                         {B2B_PLANS.map((plan, i) => (
                             <motion.div key={plan.name}

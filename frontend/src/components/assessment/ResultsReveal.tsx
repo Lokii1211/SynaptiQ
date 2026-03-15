@@ -262,7 +262,7 @@ export function ResultsReveal({ archetype, dimensions, matches, advice, personal
                         <ShareableArchetypeCard
                             displayName={auth.getUser()?.profile?.display_name || auth.getUser()?.display_name || 'Student'}
                             archetype={archetype.name}
-                            score={auth.getUser()?.profile?.skillten_score || 0}
+                            score={auth.getUser()?.profile?.mentixy_score || 0}
                             dimensions={dimensions}
                             college={auth.getUser()?.profile?.college_name}
                             targetRole={auth.getUser()?.profile?.target_role}

@@ -4,7 +4,7 @@ import json
 BASE = 'http://localhost:8000/api'
 
 # Login 
-r = requests.post(f'{BASE}/auth/login', json={'email': 'flow@skillten.in', 'password': 'Test1234!'})
+r = requests.post(f'{BASE}/auth/login', json={'email': 'flow@mentixy.in', 'password': 'Test1234!'})
 print(f'Login: {r.status_code}')
 login_data = r.json()
 print(f'Login keys: {list(login_data.keys())}')
@@ -12,7 +12,7 @@ print(f'Login keys: {list(login_data.keys())}')
 token = login_data.get('access_token') or login_data.get('token') or ''
 if not token:
     print('No token found in response, trying to signup fresh...')
-    r = requests.post(f'{BASE}/auth/signup', json={'email': 'flow2@skillten.in', 'password': 'Test1234!', 'display_name': 'Flow Test 2', 'username': 'flowtest2'})
+    r = requests.post(f'{BASE}/auth/signup', json={'email': 'flow2@mentixy.in', 'password': 'Test1234!', 'display_name': 'Flow Test 2', 'username': 'flowtest2'})
     print(f'Signup: {r.status_code}')
     signup_data = r.json()
     print(f'Signup keys: {list(signup_data.keys())}')
@@ -34,7 +34,7 @@ endpoints = [
     ('GET', '/market/insights', None),
     ('GET', '/resume/', None),
     ('GET', '/internships/', None),
-    ('POST', '/chat/', {'message': 'Hello SkillTen!'}),
+    ('POST', '/chat/', {'message': 'Hello Mentixy!'}),
     ('GET', '/learning/roadmaps', None),
     ('GET', '/challenges/', None),
     ('GET', '/companies/', None),

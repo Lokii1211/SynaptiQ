@@ -41,7 +41,7 @@ function LogoMark({ size = 32 }: { size?: number }) {
             />
             {/* Base bar — symbolizes foundation/skills */}
             <rect x="16" y="31" width="16" height="3.5" rx="1.75" fill="white" opacity="0.7" />
-            {/* Bottom dots — represent the "10" in SkillTen / scoring */}
+            {/* Bottom dots — represent the "10" in Mentixy / scoring */}
             <circle cx="18.5" cy="39" r="2" fill="white" opacity="0.5" />
             <circle cx="24" cy="39" r="2" fill="url(#logoGradLight)" opacity="0.8" />
             <circle cx="29.5" cy="39" r="2" fill="white" opacity="0.5" />

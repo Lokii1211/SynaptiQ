@@ -31,9 +31,9 @@ export function ShareableCard({
 
         // Try native share
         const shareData = {
-            title: `${name}'s Career DNA — SkillTen`,
-            text: `🧬 My Career DNA says I'm a ${archetype || 'Future Leader'}! Top career match: ${topCareer}. SkillTen Score™: ${score}/100\n\nDiscover YOUR career DNA for free on SkillTen`,
-            url: 'https://skillten.in',
+            title: `${name}'s Career DNA — Mentixy`,
+            text: `🧬 My Career DNA says I'm a ${archetype || 'Future Leader'}! Top career match: ${topCareer}. Mentixy Score™: ${score}/100\n\nDiscover YOUR career DNA for free on Mentixy`,
+            url: 'https://mentixy.in',
         };
 
         if (navigator.share) {
@@ -54,7 +54,7 @@ export function ShareableCard({
 
     const handleDownload = async () => {
         // Copy card content as text for sharing
-        const text = `🧬 ${name}'s Career DNA — SkillTen\n\n🏷️ Archetype: ${archetype || 'Future Leader'}\n🎯 Top Career: ${topCareer}\n📊 SkillTen Score™: ${score}/100\n\n📐 4D Dimensions:\n  Analytical: ${dimensions.analytical}\n  Interpersonal: ${dimensions.interpersonal}\n  Creative: ${dimensions.creative}\n  Systematic: ${dimensions.systematic}\n\n🔗 Discover YOUR Career DNA: https://skillten.in`;
+        const text = `🧬 ${name}'s Career DNA — Mentixy\n\n🏷️ Archetype: ${archetype || 'Future Leader'}\n🎯 Top Career: ${topCareer}\n📊 Mentixy Score™: ${score}/100\n\n📐 4D Dimensions:\n  Analytical: ${dimensions.analytical}\n  Interpersonal: ${dimensions.interpersonal}\n  Creative: ${dimensions.creative}\n  Systematic: ${dimensions.systematic}\n\n🔗 Discover YOUR Career DNA: https://mentixy.in`;
         try {
             await navigator.clipboard.writeText(text);
             setShared(true);
@@ -79,7 +79,7 @@ export function ShareableCard({
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-4">
                         <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">ST</div>
-                        <span className="text-xs font-semibold text-white/60">SkillTen Career DNA™</span>
+                        <span className="text-xs font-semibold text-white/60">Mentixy Career DNA™</span>
                     </div>
 
                     {/* Name & Archetype */}
@@ -116,11 +116,11 @@ export function ShareableCard({
                     {/* Score */}
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-[10px] text-white/40 uppercase font-semibold">SkillTen Score™</p>
+                            <p className="text-[10px] text-white/40 uppercase font-semibold">Mentixy Score™</p>
                             <p className="text-2xl font-bold">{score}<span className="text-sm text-white/50">/100</span></p>
                         </div>
                         <div className="text-right text-[10px] text-white/30">
-                            <p>skillten.in</p>
+                            <p>mentixy.in</p>
                             <p>Discover YOUR Career DNA →</p>
                         </div>
                     </div>

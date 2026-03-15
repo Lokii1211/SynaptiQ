@@ -1,4 +1,4 @@
-"""SkillTen — Referral System API (Bible §31)"""
+"""Mentixy — Referral System API (Bible §31)"""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -49,7 +49,7 @@ def get_referrals(user=Depends(require_user), db: Session = Depends(get_db)):
 
     return {
         "code": code,
-        "share_link": f"https://skillten.in/signup?ref={code}",
+        "share_link": f"https://mentixy.in/signup?ref={code}",
         "referral_count": referral_count,
         "total_xp": total_xp,
         "rewards": rewards,

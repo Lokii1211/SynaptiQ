@@ -1,5 +1,5 @@
 """
-SkillTen Notifications API — Real DB-backed notifications
+Mentixy Notifications API — Real DB-backed notifications
 Uses SQLAlchemy with SQLite/PostgreSQL
 """
 from fastapi import APIRouter, Depends, HTTPException, Query

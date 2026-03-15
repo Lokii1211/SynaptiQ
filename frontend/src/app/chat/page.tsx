@@ -158,7 +158,7 @@ export default function ChatPage() {
                                 <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                     <span className="text-3xl">💬</span>
                                 </div>
-                                <h2 className="text-xl font-bold text-slate-900 text-center mb-2">SkillTen AI Career Advisor</h2>
+                                <h2 className="text-xl font-bold text-slate-900 text-center mb-2">Mentixy AI Career Advisor</h2>
                                 <p className="text-slate-500 text-sm text-center mb-8 max-w-sm">
                                     Ask anything about careers, salaries, interview prep, or skill development
                                 </p>

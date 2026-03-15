@@ -100,12 +100,12 @@ export default function AnalyticsPage() {
                             ))}
                         </div>
 
-                        {/* SkillTen Score Trend */}
+                        {/* Mentixy Score Trend */}
                         <motion.section initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                             className="st-card p-6">
                             <div className="flex items-center justify-between mb-4">
                                 <div>
-                                    <h2 className="font-bold text-slate-900">SkillTen Score™ Trend</h2>
+                                    <h2 className="font-bold text-slate-900">Mentixy Score™ Trend</h2>
                                     <p className="text-xs text-slate-500">Your career readiness over 8 weeks</p>
                                 </div>
                                 <div className="text-right">
@@ -217,7 +217,7 @@ export default function AnalyticsPage() {
                                     { insight: 'Your Python solving speed increased 15% this week. At this rate, you\'ll hit Expert level by March.', type: 'positive' },
                                     { insight: 'Recruiters from Flipkart, Infosys, and TCS viewed your profile this month. Keep your skills verified!', type: 'opportunity' },
                                     { insight: 'System Design is your weakest area (45%). Consider spending 30 mins/day on HLD concepts to reach 70%+ by placement season.', type: 'action' },
-                                    { insight: 'Your consistency is better than 82% of students on SkillTen. Maintaining this pace puts you in the top 15% by graduation.', type: 'positive' },
+                                    { insight: 'Your consistency is better than 82% of students on Mentixy. Maintaining this pace puts you in the top 15% by graduation.', type: 'positive' },
                                 ].map((item, i) => {
                                     const colors = item.type === 'positive' ? 'bg-green-50 border-green-200' :
                                         item.type === 'opportunity' ? 'bg-blue-50 border-blue-200' :

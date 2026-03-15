@@ -77,9 +77,9 @@ export default function CampusCommandPage() {
                         {/* KPI Cards */}
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {[
-                                { label: 'Total Students', value: MOCK_STUDENTS.length.toString(), icon: '👥', sub: 'Active on SkillTen', color: 'from-indigo-500/20 to-violet-500/20', border: 'border-indigo-500/30' },
+                                { label: 'Total Students', value: MOCK_STUDENTS.length.toString(), icon: '👥', sub: 'Active on Mentixy', color: 'from-indigo-500/20 to-violet-500/20', border: 'border-indigo-500/30' },
                                 { label: 'Placement Rate', value: `${placementRate}%`, icon: '🎯', sub: `${placed.length} placed`, color: 'from-emerald-500/20 to-green-500/20', border: 'border-emerald-500/30' },
-                                { label: 'Avg Score', value: avgScore.toString(), icon: '📊', sub: 'SkillTen Score', color: 'from-amber-500/20 to-orange-500/20', border: 'border-amber-500/30' },
+                                { label: 'Avg Score', value: avgScore.toString(), icon: '📊', sub: 'Mentixy Score', color: 'from-amber-500/20 to-orange-500/20', border: 'border-amber-500/30' },
                                 { label: 'At-Risk Students', value: atRisk.length.toString(), icon: '⚠️', sub: 'Need attention', color: 'from-red-500/20 to-rose-500/20', border: 'border-red-500/30' },
                             ].map((kpi, i) => (
                                 <motion.div key={kpi.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
@@ -360,7 +360,7 @@ export default function CampusCommandPage() {
                                 { title: 'Placement Summary 2025-26', desc: 'Overall placement statistics, company-wise breakdown, CTC analysis', icon: '📊', type: 'PDF' },
                                 { title: 'Student Readiness Report', desc: 'SWOT analysis of current batch, skill gap identification, at-risk students', icon: '📋', type: 'PDF' },
                                 { title: 'Company Engagement Report', desc: 'Companies visited, offers made, conversion rates, feedback summary', icon: '🏢', type: 'PDF' },
-                                { title: 'SkillTen Score Analysis', desc: 'Score distribution, trend over semester, correlation with placement outcomes', icon: '📈', type: 'Excel' },
+                                { title: 'Mentixy Score Analysis', desc: 'Score distribution, trend over semester, correlation with placement outcomes', icon: '📈', type: 'Excel' },
                                 { title: 'Parent Communication Kit', desc: 'WhatsApp-ready summaries, placement highlights, student progress reports', icon: '👨‍👩‍👦', type: 'PDF' },
                                 { title: 'Interview Experience Database', desc: 'All interview experiences shared by students, company-wise, round-wise', icon: '💬', type: 'Excel' },
                             ].map(report => (

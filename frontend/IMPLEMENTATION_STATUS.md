@@ -1,4 +1,4 @@
-# SkillTen — Frontend Implementation Status
+# Mentixy — Frontend Implementation Status
 
 ## Session: Feb 23, 2026 — Complete Polish & Feature Sprint
 
@@ -77,7 +77,7 @@
 | Internships | `/internships` | ✅ |
 | Resume Builder | `/resume` | ✅ |
 | Company Intel | `/company-intel` | ✅ |
-| SkillTen Score | `/score` | ✅ |
+| Mentixy Score | `/score` | ✅ |
 | Skill Stock Market | `/skill-market` | ✅ |
 | Learning Hub | `/learn` | ✅ |
 | Skill Gap Analyzer | `/skills` | ✅ |

@@ -1,5 +1,5 @@
 /**
- * SkillTen — Internationalization (i18n) System
+ * Mentixy — Internationalization (i18n) System
  * Bible §18: Support Hindi, Tamil, Telugu + Hinglish for Tier 2/3 students
  * 4 languages: English, Hindi, Tamil, Telugu
  */
@@ -45,7 +45,7 @@ export const t: Translations = {
     'dash.good_afternoon': { en: 'Good afternoon', hi: 'शुभ दोपहर', ta: 'மதிய வணக்கம்', te: 'శుభ మధ్యాహ్నం' },
     'dash.good_evening': { en: 'Good evening', hi: 'शुभ संध्या', ta: 'மாலை வணக்கம்', te: 'శుభ సాయంత్రం' },
     'dash.streak': { en: 'Day Streak', hi: 'दिन का स्ट्रीक', ta: 'நாள் தொடர்ச்சி', te: 'డేస్ట్రీక్' },
-    'dash.score_label': { en: 'SkillTen Score', hi: 'स्किलटेन स्कोर', ta: 'SkillTen மதிப்பெண்', te: 'SkillTen స్కోరు' },
+    'dash.score_label': { en: 'Mentixy Score', hi: 'स्किलटेन स्कोर', ta: 'Mentixy மதிப்பெண்', te: 'Mentixy స్కోరు' },
     'dash.daily_quest': { en: 'Daily Quest', hi: 'आज का टास्क', ta: 'தினசரி பணி', te: 'డైలీ క్వెస్ట్' },
     'dash.explore': { en: 'Explore Tools', hi: 'टूल्स एक्सप्लोर करें', ta: 'கருவிகளை ஆராயுங்கள்', te: 'టూల్స్ ఎక్స్‌ప్లోర్ చేయండి' },
     'dash.progress': { en: 'Your Progress', hi: 'आपकी प्रगति', ta: 'உங்கள் முன்னேற்றம்', te: 'మీ ప్రగతి' },
@@ -165,7 +165,7 @@ export const t: Translations = {
     'community.rules': { en: 'Community Rules', hi: 'समुदाय नियम', ta: 'சமூக விதிகள்', te: 'కమ్యూనిటీ నియమాలు' },
 
     // ─── Onboarding ───
-    'onboard.welcome': { en: 'Welcome to SkillTen! 🎉', hi: 'SkillTen में स्वागत है! 🎉', ta: 'SkillTen-க்கு வரவேற்கிறோம்! 🎉', te: 'SkillTen కి స్వాగతం! 🎉' },
+    'onboard.welcome': { en: 'Welcome to Mentixy! 🎉', hi: 'Mentixy में स्वागत है! 🎉', ta: 'Mentixy-க்கு வரவேற்கிறோம்! 🎉', te: 'Mentixy కి స్వాగతం! 🎉' },
     'onboard.college': { en: 'College', hi: 'कॉलेज', ta: 'கல்லூரி', te: 'కాలేజీ' },
     'onboard.year': { en: 'Year of Study', hi: 'अध्ययन वर्ष', ta: 'படிப்பு ஆண்டு', te: 'అధ్యయన సంవత్సరం' },
     'onboard.branch': { en: 'Branch', hi: 'शाखा', ta: 'கிளை', te: 'బ్రాంచ్' },

@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
                 <div className="max-w-3xl mx-auto">
                     <Link href="/" className="flex items-center gap-2 mb-8">
                         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-white font-bold text-xs">ST</div>
-                        <span className="text-lg font-bold">SkillTen</span>
+                        <span className="text-lg font-bold">Mentixy</span>
                     </Link>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                         <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
@@ -27,7 +27,7 @@ export default function PrivacyPolicyPage() {
                     </div>
 
                     <h2>1. Who We Are</h2>
-                    <p>SkillTen (&quot;VIYA&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is an AI-powered Career Intelligence Platform designed for Indian engineering students. We provide career assessment, skill verification, AI career counseling, coding practice, and placement preparation tools.</p>
+                    <p>Mentixy (&quot;VIYA&quot;, &quot;we&quot;, &quot;us&quot;, &quot;our&quot;) is an AI-powered Career Intelligence Platform designed for Indian engineering students. We provide career assessment, skill verification, AI career counseling, coding practice, and placement preparation tools.</p>
 
                     <h2>2. What Data We Collect</h2>
                     <h3>2.1 Information You Provide</h3>
@@ -43,7 +43,7 @@ export default function PrivacyPolicyPage() {
                     <ul>
                         <li><strong>Usage Data:</strong> Features accessed, session duration, streak data, activity heatmap.</li>
                         <li><strong>Device Data:</strong> Device type, browser type, operating system, screen resolution.</li>
-                        <li><strong>Performance Data:</strong> SkillTen Score™ calculations, percentile rankings, coding performance metrics.</li>
+                        <li><strong>Performance Data:</strong> Mentixy Score™ calculations, percentile rankings, coding performance metrics.</li>
                     </ul>
 
                     <h3>2.3 Information We Never Collect</h3>
@@ -60,7 +60,7 @@ export default function PrivacyPolicyPage() {
                         <li><strong>Career Assessment:</strong> To generate your CareerDNA™ profile and career recommendations.</li>
                         <li><strong>AI Counseling:</strong> To provide personalized, India-specific career guidance.</li>
                         <li><strong>Skill Verification:</strong> To calculate and display your verified skill scores.</li>
-                        <li><strong>SkillTen Score™:</strong> To compute your composite career readiness score.</li>
+                        <li><strong>Mentixy Score™:</strong> To compute your composite career readiness score.</li>
                         <li><strong>Campus Wars:</strong> To display aggregate college-level leaderboards (never individual details).</li>
                         <li><strong>Parent Portal:</strong> Weekly summary shared only with your explicit consent.</li>
                         <li><strong>Job Matching:</strong> To match you with relevant internship and job opportunities.</li>
@@ -70,8 +70,8 @@ export default function PrivacyPolicyPage() {
                     <h2>4. Data Sharing</h2>
                     <p>We do <strong>NOT</strong> sell your personal data. We share data only in these cases:</p>
                     <ul>
-                        <li><strong>Public Profile:</strong> Information you choose to make public on your SkillTen profile.</li>
-                        <li><strong>Recruiter Portal:</strong> Only your public profile data, verified skills, and SkillTen Score™ — never assessment raw data or chat history.</li>
+                        <li><strong>Public Profile:</strong> Information you choose to make public on your Mentixy profile.</li>
+                        <li><strong>Recruiter Portal:</strong> Only your public profile data, verified skills, and Mentixy Score™ — never assessment raw data or chat history.</li>
                         <li><strong>Campus Command Center:</strong> Only aggregate (college-level) statistics to T&P officers — never individual assessment details.</li>
                         <li><strong>Legal Requirements:</strong> If required by Indian law or court order.</li>
                     </ul>
@@ -93,7 +93,7 @@ export default function PrivacyPolicyPage() {
                         <li><strong>Right to Data Portability:</strong> Export your data in a standard format.</li>
                         <li><strong>Right to Withdraw Consent:</strong> Revoke consent for data processing at any time.</li>
                     </ul>
-                    <p>To exercise any of these rights, email us at <strong>privacy@skillten.in</strong></p>
+                    <p>To exercise any of these rights, email us at <strong>privacy@mentixy.in</strong></p>
 
                     <h2>7. Data Retention</h2>
                     <ul>
@@ -105,7 +105,7 @@ export default function PrivacyPolicyPage() {
                     </ul>
 
                     <h2>8. Children&apos;s Privacy</h2>
-                    <p>SkillTen is intended for users aged 16 and above. Users under 18 may use the platform with parental consent, which can be registered through our Parent Portal.</p>
+                    <p>Mentixy is intended for users aged 16 and above. Users under 18 may use the platform with parental consent, which can be registered through our Parent Portal.</p>
 
                     <h2>9. AI-Specific Disclosures</h2>
                     <ul>
@@ -121,14 +121,14 @@ export default function PrivacyPolicyPage() {
                     <h2>11. Contact Us</h2>
                     <p>For privacy-related queries:</p>
                     <ul>
-                        <li>Email: <strong>privacy@skillten.in</strong></li>
-                        <li>Grievance Officer: As required under Indian law, contact <strong>grievance@skillten.in</strong></li>
+                        <li>Email: <strong>privacy@mentixy.in</strong></li>
+                        <li>Grievance Officer: As required under Indian law, contact <strong>grievance@mentixy.in</strong></li>
                     </ul>
 
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <Link href="/" className="text-sm text-indigo-600 font-medium hover:text-indigo-700">← Back to SkillTen</Link>
+                    <Link href="/" className="text-sm text-indigo-600 font-medium hover:text-indigo-700">← Back to Mentixy</Link>
                     <Link href="/terms" className="text-sm text-slate-500 hover:text-slate-700">Terms of Service →</Link>
                 </div>
             </div>

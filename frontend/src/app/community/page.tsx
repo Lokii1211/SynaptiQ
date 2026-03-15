@@ -66,7 +66,7 @@ const MOCK_POSTS: Post[] = [
         metadata: { problemTitle: 'Trapping Rain Water', language: 'Python', codeSnippet: 'def trap(height):\n    l, r = 0, len(height)-1\n    lmax = rmax = ans = 0\n    while l < r:\n        if height[l] < height[r]:\n            lmax = max(lmax, height[l])\n            ans += lmax - height[l]\n            l += 1\n        else:\n            rmax = max(rmax, height[r])\n            ans += rmax - height[r]\n            r -= 1\n    return ans', complexity: 'O(n) time, O(1) space' }
     },
     {
-        id: '8', author: { name: 'SkillTen Team', avatar: '📊', college: 'Official', badge: 'Staff' },
+        id: '8', author: { name: 'Mentixy Team', avatar: '📊', college: 'Official', badge: 'Staff' },
         content: 'Which company\'s interview process do you find the hardest?',
         tags: ['poll', 'placement'], likes: 67, replies: 34, time: '4h ago', liked: false,
         postType: 'poll',
@@ -132,7 +132,7 @@ export default function CommunityPage() {
         const user = auth.getUser();
         const post: Post = {
             id: Date.now().toString(),
-            author: { name: user?.display_name || 'You', avatar: '😊', college: user?.profile?.college_name || 'SkillTen User' },
+            author: { name: user?.display_name || 'You', avatar: '😊', college: user?.profile?.college_name || 'Mentixy User' },
             content: newPost, tags: selectedTags.length > 0 ? selectedTags : ['general'],
             likes: 0, replies: 0, time: 'Just now', liked: false
         };

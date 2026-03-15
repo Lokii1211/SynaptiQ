@@ -40,11 +40,11 @@ const SKILL_GAPS = [
 const LEARNING_CALENDAR = [
     { week: 'Week 1-2', topic: 'SQL Basics', hours: 8, resource: 'NPTEL SQL Course', status: 'current' as const },
     { week: 'Week 3-4', topic: 'SQL Advanced (Joins, Subqueries)', hours: 10, resource: 'NPTEL SQL + Practice', status: 'upcoming' as const },
-    { week: 'Week 5', topic: 'SkillTen SQL Verification Quiz', hours: 2, resource: 'SkillTen Platform', status: 'upcoming' as const },
+    { week: 'Week 5', topic: 'Mentixy SQL Verification Quiz', hours: 2, resource: 'Mentixy Platform', status: 'upcoming' as const },
     { week: 'Week 6-8', topic: 'Python for Data Analysis', hours: 12, resource: 'Kaggle + Coursera', status: 'upcoming' as const },
-    { week: 'Week 9', topic: 'SkillTen Python Intermediate Verification', hours: 2, resource: 'SkillTen Platform', status: 'upcoming' as const },
+    { week: 'Week 9', topic: 'Mentixy Python Intermediate Verification', hours: 2, resource: 'Mentixy Platform', status: 'upcoming' as const },
     { week: 'Week 10-11', topic: 'Statistics Fundamentals', hours: 10, resource: 'Khan Academy', status: 'upcoming' as const },
-    { week: 'Week 12', topic: 'Excel Basics + Final Assessment', hours: 8, resource: 'YouTube + SkillTen', status: 'upcoming' as const },
+    { week: 'Week 12', topic: 'Excel Basics + Final Assessment', hours: 8, resource: 'YouTube + Mentixy', status: 'upcoming' as const },
 ];
 
 const TRACKED_RESOURCES = [
@@ -167,7 +167,7 @@ export default function LearnPage() {
                                                                 <span>·</span>
                                                                 <span>⭐ {r.rating}</span>
                                                             </div>
-                                                            <p className="text-[9px] text-indigo-500 mt-0.5">{r.passRate}% of students who completed this passed SkillTen&apos;s verification</p>
+                                                            <p className="text-[9px] text-indigo-500 mt-0.5">{r.passRate}% of students who completed this passed Mentixy&apos;s verification</p>
                                                         </div>
                                                         <button className="px-3 py-1.5 bg-indigo-100 text-indigo-700 text-[10px] font-bold rounded-lg hover:bg-indigo-200 flex-shrink-0">
                                                             Start →
@@ -179,9 +179,9 @@ export default function LearnPage() {
                                             {/* Verification CTA */}
                                             <div className="mt-3 flex items-center gap-2 text-[10px] text-indigo-600">
                                                 <span>🏅</span>
-                                                <span>After completing → Take SkillTen {gap.skill} Verification Quiz</span>
+                                                <span>After completing → Take Mentixy {gap.skill} Verification Quiz</span>
                                                 {gap.score > 0 && (
-                                                    <span className="ml-auto text-emerald-600">Verifying would increase your SkillTen Score by ~8 points</span>
+                                                    <span className="ml-auto text-emerald-600">Verifying would increase your Mentixy Score by ~8 points</span>
                                                 )}
                                             </div>
                                         </motion.div>
@@ -263,7 +263,7 @@ export default function LearnPage() {
                                     <div className="text-center pt-4">
                                         <p className="text-sm text-slate-400 mb-2">Completed a course?</p>
                                         <Link href="/skills" className="text-sm text-indigo-600 font-bold hover:text-indigo-800">
-                                            → Take the SkillTen Verification Quiz
+                                            → Take the Mentixy Verification Quiz
                                         </Link>
                                     </div>
                                 </motion.div>

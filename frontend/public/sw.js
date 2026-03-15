@@ -1,9 +1,9 @@
 /**
- * SkillTen — Service Worker
+ * Mentixy — Service Worker
  * Handles offline caching, background sync, and push notifications
  */
 
-const CACHE_NAME = 'skillten-v1';
+const CACHE_NAME = 'mentixy-v1';
 const OFFLINE_URL = '/offline';
 
 // Static assets to pre-cache
@@ -85,12 +85,12 @@ self.addEventListener('fetch', (event) => {
 // Push notification handler
 self.addEventListener('push', (event) => {
     const data = event.data ? event.data.json() : {};
-    const title = data.title || 'SkillTen';
+    const title = data.title || 'Mentixy';
     const options = {
         body: data.message || 'You have a new notification',
         icon: '/icons/icon-192x192.png',
         badge: '/icons/icon-72x72.png',
-        tag: data.tag || 'skillten-notification',
+        tag: data.tag || 'mentixy-notification',
         data: { url: data.action_url || '/dashboard' },
         actions: [
             { action: 'open', title: 'Open' },

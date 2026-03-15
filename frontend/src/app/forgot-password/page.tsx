@@ -47,7 +47,7 @@ export default function ForgotPasswordPage() {
                         </div>
                         <h1 className="text-2xl font-bold text-slate-900 mb-2">Check your email</h1>
                         <p className="text-slate-500 text-sm mb-6 leading-relaxed">
-                            If <strong>{email}</strong> is registered with SkillTen,
+                            If <strong>{email}</strong> is registered with Mentixy,
                             you&apos;ll receive a password reset link shortly.
                         </p>
                         <p className="text-xs text-slate-400 mb-6">

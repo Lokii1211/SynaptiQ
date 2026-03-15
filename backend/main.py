@@ -1,5 +1,5 @@
 """
-SkillTen — AI Career Intelligence Platform
+Mentixy — AI Career Intelligence Platform
 Main application entry point
 """
 from fastapi import FastAPI
@@ -37,7 +37,7 @@ async def lifespan(app: FastAPI):
                 try:
                     from seed_data import seed_all
                     seed_all(db)
-                    print("✅ SkillTen seed data loaded")
+                    print("✅ Mentixy seed data loaded")
                 except Exception as e:
                     print(f"⚠️ Seed data error (non-fatal): {e}")
         finally:
@@ -49,10 +49,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="SkillTen",
+    title="Mentixy",
     redirect_slashes=False,
     description="""
-## SkillTen — AI Career Intelligence Platform
+## Mentixy — AI Career Intelligence Platform
 
 **Discover. Plan. Achieve.**
 
@@ -81,8 +81,8 @@ Built for Indian students. Powered by AI.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://synaptiqq.vercel.app",
-        "https://skillten.vercel.app",
+        "https://mentixy.vercel.app",
+        "https://mentixy-api.vercel.app",
         "http://localhost:3000",
         "http://localhost:8000",
         "http://127.0.0.1:3000",
@@ -146,7 +146,7 @@ def universal_search(
 @app.get("/")
 def root():
     return {
-        "platform": "SkillTen",
+        "platform": "Mentixy",
         "tagline": "AI Career Intelligence Platform",
         "version": "2.1.0",
         "docs": "/docs",
@@ -157,13 +157,13 @@ def root():
 
 @app.get("/health")
 def health():
-    return {"status": "healthy", "platform": "SkillTen"}
+    return {"status": "healthy", "platform": "Mentixy"}
 
 
 @app.get("/api/health")
 def api_health():
     """Health check accessible through frontend rewrite."""
-    return {"status": "healthy", "platform": "SkillTen"}
+    return {"status": "healthy", "platform": "Mentixy"}
 
 
 @app.get("/health/db")

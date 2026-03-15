@@ -1,4 +1,4 @@
-"""SkillTen Skills Verification — quiz per skill, percentile, 90-day decay, badges
+"""Mentixy Skills Verification — quiz per skill, percentile, 90-day decay, badges
 Bible Section 1 (Prompt 1.2 §5) + Section 6 (Prompt 6.1 §A/B)
 """
 from fastapi import APIRouter, Depends, HTTPException, Query

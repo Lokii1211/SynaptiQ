@@ -1,4 +1,4 @@
-"""SkillTen Assessment 4D — start, submit answers, get profile (AI-powered)"""
+"""Mentixy Assessment 4D — start, submit answers, get profile (AI-powered)"""
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List

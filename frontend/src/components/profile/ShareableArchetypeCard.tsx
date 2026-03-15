@@ -27,9 +27,9 @@ export function ShareableArchetypeCard({ displayName, archetype, score, dimensio
     const style = ARCHETYPE_STYLES[archetype] || ARCHETYPE_STYLES['Analytical Builder'];
 
     const handleShare = async () => {
-        const text = `🧬 My SkillTen archetype: ${archetype}!\n📊 Score: ${score}/1000\n${style.tagline}\n\nDiscover your career DNA → skillten.in`;
+        const text = `🧬 My Mentixy archetype: ${archetype}!\n📊 Score: ${score}/1000\n${style.tagline}\n\nDiscover your career DNA → mentixy.in`;
         if (navigator.share) {
-            try { await navigator.share({ title: `SkillTen - ${archetype}`, text }); } catch { /* cancelled */ }
+            try { await navigator.share({ title: `Mentixy - ${archetype}`, text }); } catch { /* cancelled */ }
         } else {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -56,7 +56,7 @@ export function ShareableArchetypeCard({ displayName, archetype, score, dimensio
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-4">
                         <div className="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center text-[10px] font-bold">ST</div>
-                        <span className="text-xs text-white/60 font-medium">SkillTen Career DNA</span>
+                        <span className="text-xs text-white/60 font-medium">Mentixy Career DNA</span>
                     </div>
 
                     {/* Name + Archetype */}
@@ -70,7 +70,7 @@ export function ShareableArchetypeCard({ displayName, archetype, score, dimensio
                     <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-4 mb-4">
                         <div className="flex items-end justify-between mb-3">
                             <div>
-                                <p className="text-xs text-white/60">SkillTen Score</p>
+                                <p className="text-xs text-white/60">Mentixy Score</p>
                                 <p className="text-4xl font-bold tabular-nums">{score}</p>
                             </div>
                             <p className="text-xs text-white/40">/ 1000</p>
@@ -120,7 +120,7 @@ export function ShareableArchetypeCard({ displayName, archetype, score, dimensio
 
                     {/* Footer */}
                     <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-white/30">skillten.in</span>
+                        <span className="text-[10px] text-white/30">mentixy.in</span>
                         <button onClick={handleShare}
                             className="bg-white/20 hover:bg-white/30 px-4 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95">
                             {copied ? '✓ Copied!' : '📤 Share'}

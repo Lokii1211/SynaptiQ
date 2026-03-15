@@ -9,7 +9,7 @@ export default function TermsPage() {
                 <div className="max-w-3xl mx-auto">
                     <Link href="/" className="flex items-center gap-2 mb-8">
                         <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-white font-bold text-xs">ST</div>
-                        <span className="text-lg font-bold">SkillTen</span>
+                        <span className="text-lg font-bold">Mentixy</span>
                     </Link>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                         <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
@@ -22,17 +22,17 @@ export default function TermsPage() {
                 <div className="prose prose-slate max-w-none prose-headings:text-slate-900 prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600">
 
                     <h2>1. Acceptance of Terms</h2>
-                    <p>By creating an account or using SkillTen (&quot;VIYA&quot;, &quot;the Platform&quot;), you agree to these Terms of Service. If you do not agree, do not use the Platform. If you are under 18, you must have parental consent to use SkillTen.</p>
+                    <p>By creating an account or using Mentixy (&quot;VIYA&quot;, &quot;the Platform&quot;), you agree to these Terms of Service. If you do not agree, do not use the Platform. If you are under 18, you must have parental consent to use Mentixy.</p>
 
                     <h2>2. Description of Service</h2>
-                    <p>SkillTen is an AI-powered career intelligence platform providing:</p>
+                    <p>Mentixy is an AI-powered career intelligence platform providing:</p>
                     <ul>
                         <li>Psychometric career assessment (4D model)</li>
                         <li>AI-powered career counseling</li>
                         <li>Coding practice and compilation (multi-language)</li>
                         <li>Aptitude test preparation</li>
                         <li>Skill verification and certification</li>
-                        <li>SkillTen Score™ career readiness metric</li>
+                        <li>Mentixy Score™ career readiness metric</li>
                         <li>Campus Wars (gamified college competition)</li>
                         <li>Mock placement drive simulation</li>
                         <li>Career roadmap generation</li>
@@ -64,7 +64,7 @@ export default function TermsPage() {
                     <h2>5. Assessment & Scores</h2>
                     <ul>
                         <li>The 4D Psychometric Assessment provides career guidance based on your responses. It is <strong>not</strong> a clinical psychological evaluation.</li>
-                        <li>SkillTen Score™ is a relative metric of career readiness, not an absolute measure of ability.</li>
+                        <li>Mentixy Score™ is a relative metric of career readiness, not an absolute measure of ability.</li>
                         <li>Assessment results and skill scores are <strong>recommendations</strong>, not guarantees of employment.</li>
                         <li>Verified skill badges expire after 90 days and must be renewed through re-assessment.</li>
                     </ul>
@@ -102,7 +102,7 @@ export default function TermsPage() {
 
                     <h2>10. Free & Premium Plans</h2>
                     <ul>
-                        <li><strong>Free tier:</strong> Assessment, limited daily coding challenges, basic AI counseling, SkillTen Score™.</li>
+                        <li><strong>Free tier:</strong> Assessment, limited daily coding challenges, basic AI counseling, Mentixy Score™.</li>
                         <li><strong>Pro tier (₹299/month):</strong> Unlimited AI sessions, full compiler access, detailed analytics, priority support.</li>
                         <li>Payments processed securely through Razorpay.</li>
                         <li>Refund policy: 7-day money-back guarantee, no questions asked.</li>
@@ -110,13 +110,13 @@ export default function TermsPage() {
 
                     <h2>11. Intellectual Property</h2>
                     <ul>
-                        <li>SkillTen, VIYA, CareerDNA™, SkillTen Score™, and Honest Mirror are trademarks of SkillTen.</li>
+                        <li>Mentixy, VIYA, CareerDNA™, Mentixy Score™, and Honest Mirror are trademarks of Mentixy.</li>
                         <li>Assessment questions, algorithms, and AI system prompts are proprietary.</li>
                         <li>User-generated content (community posts, code) remains your property but is licensed to us for platform display.</li>
                     </ul>
 
                     <h2>12. Limitation of Liability</h2>
-                    <p>SkillTen provides career guidance tools. We are <strong>not</strong> an employment agency, educational institution, or placement guarantee service. We do not guarantee:</p>
+                    <p>Mentixy provides career guidance tools. We are <strong>not</strong> an employment agency, educational institution, or placement guarantee service. We do not guarantee:</p>
                     <ul>
                         <li>Placement or employment outcomes</li>
                         <li>Accuracy of AI-generated salary predictions</li>
@@ -134,12 +134,12 @@ export default function TermsPage() {
                     <p>These Terms are governed by the laws of India. Disputes shall be subject to the exclusive jurisdiction of courts in Bengaluru, Karnataka.</p>
 
                     <h2>15. Contact</h2>
-                    <p>Questions about these Terms? Contact us at <strong>legal@skillten.in</strong></p>
+                    <p>Questions about these Terms? Contact us at <strong>legal@mentixy.in</strong></p>
 
                 </div>
 
                 <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <Link href="/" className="text-sm text-indigo-600 font-medium hover:text-indigo-700">← Back to SkillTen</Link>
+                    <Link href="/" className="text-sm text-indigo-600 font-medium hover:text-indigo-700">← Back to Mentixy</Link>
                     <Link href="/privacy" className="text-sm text-slate-500 hover:text-slate-700">Privacy Policy →</Link>
                 </div>
             </div>

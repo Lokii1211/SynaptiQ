@@ -95,7 +95,7 @@ export default function CertificationsPage() {
                         <div className="max-w-4xl mx-auto relative z-10">
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                                 <span className="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full mb-3 inline-block">🏅 CERTIFICATIONS</span>
-                                <h1 className="text-3xl font-bold mb-2 st-font-heading">SkillTen Certifications</h1>
+                                <h1 className="text-3xl font-bold mb-2 st-font-heading">Mentixy Certifications</h1>
                                 <p className="text-white/60 text-sm mb-4">Industry-recognized skill certifications with proctored assessments and shareable credentials</p>
                                 <div className="flex items-center gap-3">
                                     <div className="bg-white/15 backdrop-blur-sm rounded-xl px-4 py-2 text-center">
@@ -232,7 +232,7 @@ export default function CertificationsPage() {
                                                     <p className="text-[10px] text-violet-600 uppercase font-bold mb-1.5">🎁 What You Get</p>
                                                     <ul className="text-xs text-violet-700 space-y-1">
                                                         <li>• Certificate PDF with QR code verification</li>
-                                                        <li>• Badge on your SkillTen profile</li>
+                                                        <li>• Badge on your Mentixy profile</li>
                                                         <li>• Shareable URL for LinkedIn & resume</li>
                                                         <li>• Recruiter visibility boost</li>
                                                     </ul>
@@ -261,7 +261,7 @@ export default function CertificationsPage() {
                         {/* How It Works */}
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}
                             className="mt-8 st-card p-6">
-                            <h3 className="font-bold text-slate-900 mb-4">🎯 How SkillTen Certifications Work</h3>
+                            <h3 className="font-bold text-slate-900 mb-4">🎯 How Mentixy Certifications Work</h3>
                             <div className="grid md:grid-cols-4 gap-4 text-center">
                                 {[
                                     { step: '1', title: 'Choose', desc: 'Select a certification matching your career goals', icon: '🎯' },

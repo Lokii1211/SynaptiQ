@@ -1,5 +1,5 @@
 """
-SkillTen — Email API Routes
+Mentixy — Email API Routes
 Endpoints for triggering emails (internal use + admin)
 """
 from fastapi import APIRouter, Depends, HTTPException
@@ -50,7 +50,7 @@ def send_email_endpoint(req: SendEmailReq, user: User = Depends(require_user)):
         success = send_streak_reminder(email, name, req.data.get("streak_days", 7), req.data.get("hours_left", 6))
     elif req.email_type == "weekly_digest":
         success = send_weekly_digest(email, name, {
-            "skillten_score": req.data.get("skillten_score", profile.viya_score if profile else 0),
+            "mentixy_score": req.data.get("mentixy_score", profile.mentixy_score if profile else 0),
             "streak_days": req.data.get("streak_days", profile.streak_days if profile else 0),
             "problems_solved": req.data.get("problems_solved", 0),
             "rank_change": req.data.get("rank_change", 0),

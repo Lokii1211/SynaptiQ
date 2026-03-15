@@ -1,4 +1,4 @@
-"""SkillTen Internships — filtered view of job_listings where role_type=internship"""
+"""Mentixy Internships — filtered view of job_listings where role_type=internship"""
 from fastapi import APIRouter, Depends, Query
 from typing import Optional
 from sqlalchemy.orm import Session

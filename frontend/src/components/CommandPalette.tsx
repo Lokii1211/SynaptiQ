@@ -15,7 +15,7 @@ const ALL_PAGES: SearchResult[] = [
     // Core
     { title: 'Dashboard', subtitle: 'Your home base', icon: '🏠', href: '/dashboard', category: 'Navigation' },
     { title: 'Analytics', subtitle: 'Growth insights', icon: '📊', href: '/analytics', category: 'Navigation' },
-    { title: 'Score Breakdown', subtitle: 'Your SkillTen Score™', icon: '⭐', href: '/score', category: 'Navigation' },
+    { title: 'Score Breakdown', subtitle: 'Your Mentixy Score™', icon: '⭐', href: '/score', category: 'Navigation' },
     { title: 'Settings', subtitle: 'Profile & privacy', icon: '⚙️', href: '/settings', category: 'Navigation' },
 
     // Practice
@@ -66,7 +66,7 @@ const ALL_PAGES: SearchResult[] = [
     { title: 'Pro Plans & Pricing', subtitle: 'Free vs Pro vs Pro Plus', icon: '💎', href: '/pricing', category: 'Navigation' },
     { title: '1v1 Battle', subtitle: 'Challenge peers live', icon: '🎮', href: '/battle', category: 'Practice' },
     { title: 'T&P Dashboard', subtitle: 'College placement HQ', icon: '🏫', href: '/tpo-dashboard', category: 'Navigation' },
-    { title: 'My Profile', subtitle: 'Your SkillTen profile', icon: '👤', href: '/profile', category: 'Navigation' },
+    { title: 'My Profile', subtitle: 'Your Mentixy profile', icon: '👤', href: '/profile', category: 'Navigation' },
 
     // Tools
     { title: 'Streak Tracker', subtitle: 'Maintain your streak', icon: '🔥', href: '/tracker', category: 'Tools' },
@@ -244,7 +244,7 @@ export function CommandPalette() {
                                     <span>↵ Select</span>
                                     <span>Esc Close</span>
                                 </div>
-                                <span className="text-indigo-400 font-medium">SkillTen Search</span>
+                                <span className="text-indigo-400 font-medium">Mentixy Search</span>
                             </div>
                         </motion.div>
                     </>

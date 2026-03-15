@@ -1,4 +1,4 @@
-"""SkillTen Network — connections, community posts"""
+"""Mentixy Network — connections, community posts"""
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 from typing import Optional
@@ -75,7 +75,7 @@ def find_peers(
     return {"peers": [{
         "user_id": p.user_id, "username": p.username, "display_name": p.display_name,
         "college_name": p.college_name, "target_role": p.target_role,
-        "skillten_score": p.viya_score,
+        "mentixy_score": p.mentixy_score,
     } for p in peers]}
 
 

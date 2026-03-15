@@ -71,7 +71,7 @@ export default function ResumePage() {
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                 <span className="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full mb-3 inline-block">📄 AI RESUME</span>
                 <h1 className="text-3xl font-bold mb-2 st-font-heading">AI Resume Builder</h1>
-                <p className="text-white/60 text-sm">ATS-ready resumes generated from your SkillTen profile in seconds</p>
+                <p className="text-white/60 text-sm">ATS-ready resumes generated from your Mentixy profile in seconds</p>
               </motion.div>
             </div>
           </div>
@@ -278,7 +278,7 @@ export default function ResumePage() {
 
                     <div className="bg-indigo-50 rounded-xl p-3 flex items-start gap-2 text-xs text-indigo-700">
                       <span className="text-lg">💡</span>
-                      <p>Your SkillTen profile data, verified skills, coding stats, and assessment results will be automatically included. Just add the basics above!</p>
+                      <p>Your Mentixy profile data, verified skills, coding stats, and assessment results will be automatically included. Just add the basics above!</p>
                     </div>
 
                     <button onClick={createResume} disabled={creating || !form.title || !form.target_role}

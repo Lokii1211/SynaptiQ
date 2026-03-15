@@ -1,5 +1,5 @@
 """
-SkillTen — Real Aptitude Questions Seed
+Mentixy — Real Aptitude Questions Seed
 50 questions across 5 categories (TCS NQT / Infosys InfyTQ / Wipro NLTH patterns)
 """
 

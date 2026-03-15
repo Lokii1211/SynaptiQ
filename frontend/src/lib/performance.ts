@@ -1,5 +1,5 @@
 /**
- * SkillTen — Performance Monitoring
+ * Mentixy — Performance Monitoring
  * Tracks Core Web Vitals and custom metrics
  */
 

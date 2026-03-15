@@ -1,15 +1,15 @@
 'use client';
 import { motion } from 'framer-motion';
 
-// ─── SkillTenScore Component (Bible FE-01 #1) ───
-interface SkillTenScoreProps {
+// ─── MentixyScore Component (Bible FE-01 #1) ───
+interface MentixyScoreProps {
     score: number;
     trend?: number;
     percentile?: number;
     size?: 'hero' | 'card' | 'inline';
 }
 
-export function SkillTenScore({ score, trend, percentile, size = 'card' }: SkillTenScoreProps) {
+export function MentixyScore({ score, trend, percentile, size = 'card' }: MentixyScoreProps) {
     const sizes = {
         hero: { font: 'text-7xl', trend: 'text-lg', sub: 'text-sm' },
         card: { font: 'text-4xl', trend: 'text-sm', sub: 'text-xs' },

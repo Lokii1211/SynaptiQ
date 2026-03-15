@@ -1,5 +1,5 @@
 """
-SkillSync AI - Career Data Seed
+Mentixy - Career Data Seed
 Pre-populated career profiles for the platform
 """
 

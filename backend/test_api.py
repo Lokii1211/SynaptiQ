@@ -1,4 +1,4 @@
-"""SkillTen — Full API Test Suite"""
+"""Mentixy — Full API Test Suite"""
 import requests
 
 BASE = "http://localhost:8000"
@@ -33,7 +33,7 @@ def test(name, url, method="get", json_data=None, headers=None):
         print(f"  ERR {name}: {e}")
 
 print("=" * 60)
-print("  SkillTen Backend API — Full Test Suite")
+print("  Mentixy Backend API — Full Test Suite")
 print("=" * 60)
 
 # Public endpoints
@@ -60,10 +60,10 @@ test("Community Posts", f"{BASE}/api/network/community/posts")
 # Auth flow
 print("\n--- Auth Flow ---")
 test("Signup", f"{BASE}/api/auth/signup", "post", {
-    "email": "test@skillten.ai", "password": "test123456",
+    "email": "test@mentixy.ai", "password": "test123456",
     "display_name": "Test User", "username": "testuser"
 })
-r = requests.post(f"{BASE}/api/auth/login", json={"email": "test@skillten.ai", "password": "test123456"})
+r = requests.post(f"{BASE}/api/auth/login", json={"email": "test@mentixy.ai", "password": "test123456"})
 if r.status_code == 200:
     token = r.json()["token"]
     h = {"Authorization": f"Bearer {token}"}

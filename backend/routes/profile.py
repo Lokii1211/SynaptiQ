@@ -1,4 +1,4 @@
-"""SkillTen Public Profile — viya.ai/u/username
+"""Mentixy Public Profile — viya.ai/u/username
 Bible Section 3 (Prompt 3.1 §Screen 7) + Section 12 (Prompt 12.1)
 """
 from fastapi import APIRouter, Depends, HTTPException
@@ -21,7 +21,7 @@ router = APIRouter()
 def public_profile(username: str, db: Session = Depends(get_db)):
     """
     Public career profile page.
-    Shows: Viya Score, verified skill badges, activity heatmap, placement readiness.
+    Shows: Mentixy Score, verified skill badges, activity heatmap, placement readiness.
     URL: /api/profile/{username}
     """
     profile = db.query(UserProfile).filter_by(username=username).first()
@@ -105,7 +105,7 @@ def public_profile(username: str, db: Session = Depends(get_db)):
         "linkedin_url": profile.linkedin_url,
         "github_username": profile.github_username,
 
-        "viya_score": profile.viya_score or 0,
+        "mentixy_score": profile.mentixy_score or 0,
         "streak_days": profile.streak_days or 0,
         "archetype": {
             "code": profile.archetype_code,

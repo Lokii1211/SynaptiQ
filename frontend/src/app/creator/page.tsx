@@ -90,7 +90,7 @@ export default function CreatorPage() {
                         <motion.div key="overview" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4">
                             {/* Free Badge */}
                             <div className="bg-gradient-to-r from-emerald-50 to-teal-50 rounded-xl p-3 border border-emerald-100">
-                                <p className="text-xs text-emerald-700 font-medium">💚 Content analytics are <strong>FREE</strong> on SkillTen — not paywalled like LinkedIn Premium</p>
+                                <p className="text-xs text-emerald-700 font-medium">💚 Content analytics are <strong>FREE</strong> on Mentixy — not paywalled like LinkedIn Premium</p>
                             </div>
 
                             {/* Stats Grid */}
@@ -292,7 +292,7 @@ export default function CreatorPage() {
                                             <h2 className="text-lg font-bold text-slate-900">Arjun Kumar</h2>
                                             <span className="text-[9px] bg-gradient-to-r from-indigo-600 to-violet-600 text-white px-2 py-0.5 rounded-full font-bold">⚡ MENTOR</span>
                                         </div>
-                                        <p className="text-xs text-slate-500">SDE @ Amazon · SkillTen Score: 89</p>
+                                        <p className="text-xs text-slate-500">SDE @ Amazon · Mentixy Score: 89</p>
                                         <p className="text-xs text-slate-400">342 followers · 67 connections</p>
                                     </div>
                                 </div>
@@ -341,7 +341,7 @@ export default function CreatorPage() {
                                         { req: '30+ connections', met: true },
                                         { req: 'Placed or senior status', met: true },
                                         { req: '10+ quality posts', met: true },
-                                        { req: 'SkillTen Score ≥ 75', met: true },
+                                        { req: 'Mentixy Score ≥ 75', met: true },
                                     ].map((r, i) => (
                                         <div key={i} className="flex items-center gap-2 text-xs">
                                             <span>{r.met ? '✅' : '❌'}</span>

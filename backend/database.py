@@ -1,5 +1,5 @@
 """
-SkillTen — Database Configuration
+Mentixy — Database Configuration
 Supports: Supabase PostgreSQL (production) + SQLite (local dev)
 """
 
@@ -21,9 +21,9 @@ if _database_url:
 elif _supabase_url:
     DATABASE_URL = _supabase_url
 elif os.getenv("VERCEL"):
-    DATABASE_URL = "sqlite:///tmp/skillten.db"
+    DATABASE_URL = "sqlite:///tmp/mentixy.db"
 else:
-    DATABASE_URL = "sqlite:///./skillten.db"
+    DATABASE_URL = "sqlite:///./mentixy.db"
 
 # Fix Supabase URL format (supabase uses postgres:// but SQLAlchemy needs postgresql://)
 if DATABASE_URL.startswith("postgres://"):

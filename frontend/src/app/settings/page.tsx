@@ -98,7 +98,7 @@ export default function SettingsPage() {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `skillten-data-${form.username || 'export'}.json`;
+            a.download = `mentixy-data-${form.username || 'export'}.json`;
             a.click();
             URL.revokeObjectURL(url);
         } catch { /* ignore */ }
@@ -322,7 +322,7 @@ export default function SettingsPage() {
                                                 { key: 'recruiter_visible', label: '🔍 Recruiter Visibility', desc: 'Let recruiters find you in search results' },
                                                 { key: 'show_heatmap', label: '📊 Activity Heatmap', desc: 'Display your coding activity publicly' },
                                                 { key: 'show_coding_stats', label: '💻 Coding Stats', desc: 'Show problem-solving statistics' },
-                                                { key: 'show_score', label: '🏅 SkillTen Score', desc: 'Display your verified score publicly' },
+                                                { key: 'show_score', label: '🏅 Mentixy Score', desc: 'Display your verified score publicly' },
                                                 { key: 'show_college', label: '🎓 College Name', desc: 'Show your college on public profile' },
                                             ].map(item => (
                                                 <div key={item.key} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
@@ -362,7 +362,7 @@ export default function SettingsPage() {
                                 <motion.div key="appearance" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-6">
                                     <section className="st-card p-6">
                                         <h2 className="font-bold text-slate-900 mb-1">Theme</h2>
-                                        <p className="text-xs text-slate-500 mb-5">Customize how SkillTen looks for you</p>
+                                        <p className="text-xs text-slate-500 mb-5">Customize how Mentixy looks for you</p>
                                         <div className="grid grid-cols-3 gap-3">
                                             {[
                                                 { key: 'light', icon: '☀️', label: 'Light', bg: 'bg-white border-2', active: 'border-indigo-500' },
@@ -423,7 +423,7 @@ export default function SettingsPage() {
                                 <motion.div key="account" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-6">
                                     <section className="st-card p-6">
                                         <h2 className="font-bold text-slate-900 mb-1">Export Data</h2>
-                                        <p className="text-xs text-slate-500 mb-4">Download all your SkillTen data as JSON. GDPR compliant.</p>
+                                        <p className="text-xs text-slate-500 mb-4">Download all your Mentixy data as JSON. GDPR compliant.</p>
                                         <button onClick={handleExportData} disabled={exportLoading} className="st-btn-secondary text-sm">
                                             {exportLoading ? '⏳ Preparing...' : '📥 Download My Data'}
                                         </button>
@@ -485,7 +485,7 @@ export default function SettingsPage() {
                                     </section>
 
                                     <p className="text-center text-xs text-slate-400 pb-4">
-                                        SkillTen v1.0 · <a href="/parent" className="text-indigo-500">Privacy Policy</a> · Made in India 🇮🇳
+                                        Mentixy v1.0 · <a href="/parent" className="text-indigo-500">Privacy Policy</a> · Made in India 🇮🇳
                                     </p>
                                 </motion.div>
                             )}

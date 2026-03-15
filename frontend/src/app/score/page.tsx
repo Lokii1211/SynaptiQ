@@ -33,7 +33,7 @@ export default function ScorePage() {
         });
     }, []);
 
-    const score = profile?.skillten_score || 0;
+    const score = profile?.mentixy_score || 0;
     const maxScore = 1000;
     const percentage = (score / maxScore) * 100;
 
@@ -66,7 +66,7 @@ export default function ScorePage() {
                     <div className="bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 text-white px-6 py-10 text-center relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-60 h-60 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3" />
                         <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/4" />
-                        <p className="text-white/70 text-sm mb-2 relative z-10">Your SkillTen Score™</p>
+                        <p className="text-white/70 text-sm mb-2 relative z-10">Your Mentixy Score™</p>
                         {loading ? (
                             <div className="w-16 h-16 border-3 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
                         ) : (
@@ -194,7 +194,7 @@ export default function ScorePage() {
                         {/* Anti-Gaming Notice — Bible XF-12 */}
                         <div className="bg-slate-100 rounded-xl p-4 text-center">
                             <p className="text-xs text-slate-500">
-                                🔒 SkillTen Score™ cannot be gamed — every point requires verified, real activity.
+                                🔒 Mentixy Score™ cannot be gamed — every point requires verified, real activity.
                                 <br />Skills older than 180 days contribute &lt;50%. Max +50 points/day.
                             </p>
                         </div>

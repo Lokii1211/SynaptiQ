@@ -374,7 +374,7 @@ export default function StudyGroupsPage() {
                             <motion.div key="teammates" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                                 <div className="bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl p-4 border border-violet-100 mb-5">
                                     <p className="text-xs font-bold text-violet-800">🤝 Looking for Teammates?</p>
-                                    <p className="text-[11px] text-violet-600 mt-1">Post your skills and what you&apos;re looking for. Browse others and send team invites via SkillTen messaging.</p>
+                                    <p className="text-[11px] text-violet-600 mt-1">Post your skills and what you&apos;re looking for. Browse others and send team invites via Mentixy messaging.</p>
                                 </div>
 
                                 <div className="space-y-3">

@@ -30,7 +30,7 @@ export default function AdminPage() {
         { label: 'Problems Solved', value: '18,392', change: '+2.1K this week', icon: '💻', color: 'from-emerald-500 to-teal-500' },
         { label: 'Active Streaks', value: '847', change: '29.7% of users', icon: '🔥', color: 'from-amber-500 to-orange-500' },
         { label: 'DAU', value: '412', change: '14.5% DAU/MAU', icon: '📈', color: 'from-rose-500 to-pink-500' },
-        { label: 'Avg SkillTen Score', value: '48.2', change: '+3.1 from last month', icon: '📊', color: 'from-indigo-500 to-blue-500' },
+        { label: 'Avg Mentixy Score', value: '48.2', change: '+3.1 from last month', icon: '📊', color: 'from-indigo-500 to-blue-500' },
     ];
 
     const recentUsers = [
@@ -76,7 +76,7 @@ export default function AdminPage() {
             <div className="bg-slate-900 border-b border-slate-800 px-6 py-3 flex items-center justify-between sticky top-0 z-50">
                 <div className="flex items-center gap-4">
                     <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-lg flex items-center justify-center text-white font-bold text-xs">ST</div>
-                    <span className="font-bold text-lg">SkillTen <span className="text-indigo-400">Admin</span></span>
+                    <span className="font-bold text-lg">Mentixy <span className="text-indigo-400">Admin</span></span>
                     <span className="text-[10px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full font-semibold">ADMIN PANEL</span>
                 </div>
                 <div className="flex items-center gap-3">

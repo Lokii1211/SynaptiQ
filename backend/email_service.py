@@ -1,5 +1,5 @@
 """
-SkillTen — Email Integration Service
+Mentixy — Email Integration Service
 Handles transactional emails: welcome, streak reminders, weekly digest, password reset
 Uses Resend API (primary) or SMTP (fallback). Configure via env vars.
 """
@@ -17,9 +17,9 @@ SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USER = os.getenv("SMTP_USER", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-FROM_EMAIL = os.getenv("FROM_EMAIL", "hello@skillten.in")
-FROM_NAME = os.getenv("FROM_NAME", "SkillTen")
-FRONTEND_URL = os.getenv("FRONTEND_URL", "https://synaptiqq.vercel.app")
+FROM_EMAIL = os.getenv("FROM_EMAIL", "hello@mentixy.in")
+FROM_NAME = os.getenv("FROM_NAME", "Mentixy")
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://mentixy.vercel.app")
 
 
 def _send_via_resend(to_email: str, subject: str, html_body: str) -> bool:
@@ -84,7 +84,7 @@ def _send_email(to_email: str, subject: str, html_body: str, text_body: str = ""
 
 
 def _base_template(content: str, cta_text: str = "", cta_url: str = "") -> str:
-    """Wrap content in the SkillTen email template."""
+    """Wrap content in the Mentixy email template."""
     cta_html = ""
     if cta_text and cta_url:
         cta_html = f"""
@@ -113,7 +113,7 @@ def _base_template(content: str, cta_text: str = "", cta_url: str = "") -> str:
         <!-- Footer -->
         <div style="padding:20px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center">
             <p style="color:#94a3b8;font-size:11px;margin:0">
-                SkillTen — AI Career Intelligence for Indian Students<br>
+                Mentixy — AI Career Intelligence for Indian Students<br>
                 <a href="{FRONTEND_URL}/settings" style="color:#6366F1;text-decoration:none">Manage preferences</a> ·
                 <a href="{FRONTEND_URL}/privacy" style="color:#6366F1;text-decoration:none">Privacy</a> ·
                 <a href="{FRONTEND_URL}/help" style="color:#6366F1;text-decoration:none">Help</a>
@@ -128,7 +128,7 @@ def _base_template(content: str, cta_text: str = "", cta_url: str = "") -> str:
 def send_welcome_email(to_email: str, name: str) -> bool:
     """Welcome email sent after signup."""
     content = f"""
-    <h1 style="color:#0f172a;font-size:24px;margin:0 0 12px">Welcome to SkillTen, {name}! 🎉</h1>
+    <h1 style="color:#0f172a;font-size:24px;margin:0 0 12px">Welcome to Mentixy, {name}! 🎉</h1>
     <p style="color:#475569;font-size:14px;line-height:1.7">
         You just took the first step toward discovering your career DNA.
         Here's what to do next:
@@ -158,8 +158,8 @@ def send_welcome_email(to_email: str, name: str) -> bool:
     </div>"""
 
     html = _base_template(content, "Start Your Assessment →", f"{FRONTEND_URL}/assessment")
-    return _send_email(to_email, "Welcome to SkillTen! 🧬 Your career journey starts now", html,
-                       f"Welcome to SkillTen, {name}! Start your career assessment at {FRONTEND_URL}/assessment")
+    return _send_email(to_email, "Welcome to Mentixy! 🧬 Your career journey starts now", html,
+                       f"Welcome to Mentixy, {name}! Start your career assessment at {FRONTEND_URL}/assessment")
 
 
 def send_streak_reminder(to_email: str, name: str, streak_days: int, hours_left: int) -> bool:
@@ -181,7 +181,7 @@ def send_streak_reminder(to_email: str, name: str, streak_days: int, hours_left:
 
 def send_weekly_digest(to_email: str, name: str, stats: dict) -> bool:
     """Weekly progress digest sent every Sunday."""
-    score = stats.get("skillten_score", 0)
+    score = stats.get("mentixy_score", 0)
     problems_solved = stats.get("problems_solved", 0)
     streak = stats.get("streak_days", 0)
     rank_change = stats.get("rank_change", 0)
@@ -194,7 +194,7 @@ def send_weekly_digest(to_email: str, name: str, stats: dict) -> bool:
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
         <div style="background:#EEF2FF;border-radius:12px;padding:16px;text-align:center">
             <p style="font-size:28px;font-weight:800;color:#4F46E5;margin:0">{score}</p>
-            <p style="font-size:11px;color:#6366F1;margin:4px 0 0;font-weight:600">SKILLTEN SCORE</p>
+            <p style="font-size:11px;color:#6366F1;margin:4px 0 0;font-weight:600">MENTIXY SCORE</p>
         </div>
         <div style="background:#ECFDF5;border-radius:12px;padding:16px;text-align:center">
             <p style="font-size:28px;font-weight:800;color:#059669;margin:0">{streak}</p>
@@ -211,7 +211,7 @@ def send_weekly_digest(to_email: str, name: str, stats: dict) -> bool:
     </div>"""
 
     html = _base_template(content, "View Full Analytics →", f"{FRONTEND_URL}/analytics")
-    return _send_email(to_email, f"📊 Your SkillTen Weekly Digest — Score: {score}", html,
+    return _send_email(to_email, f"📊 Your Mentixy Weekly Digest — Score: {score}", html,
                        f"Your weekly stats: Score {score}, Streak {streak}, Problems {problems_solved}")
 
 
@@ -265,5 +265,5 @@ def send_password_reset(to_email: str, name: str, reset_token: str) -> bool:
     </p>"""
 
     html = _base_template(content, "Reset Password →", reset_url)
-    return _send_email(to_email, "🔐 Reset your SkillTen password", html,
+    return _send_email(to_email, "🔐 Reset your Mentixy password", html,
                        f"Reset your password: {reset_url}")

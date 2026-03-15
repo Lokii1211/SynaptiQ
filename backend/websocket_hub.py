@@ -1,5 +1,5 @@
 """
-SkillTen — WebSocket Notifications Hub
+Mentixy — WebSocket Notifications Hub
 Real-time push notifications via WebSocket connections
 Bible §30: Push notifications for streaks, achievements, jobs, challenges
 """
@@ -85,7 +85,7 @@ async def websocket_endpoint(websocket: WebSocket, user_id: str):
     # Send welcome message
     await websocket.send_json({
         "type": "connected",
-        "message": "Connected to SkillTen notifications",
+        "message": "Connected to Mentixy notifications",
         "online_users": manager.get_online_count(),
         "timestamp": datetime.utcnow().isoformat(),
     })
@@ -187,7 +187,7 @@ async def notify_recruiter_view(user_id: str, company_name: str):
     await notify_user(
         user_id, "recruiter_view",
         f"👀 {company_name} viewed your profile",
-        "A recruiter checked your SkillTen profile. Keep it updated!",
+        "A recruiter checked your Mentixy profile. Keep it updated!",
         "👀", "/settings"
     )
 
@@ -196,7 +196,7 @@ async def broadcast_system(message: str, icon: str = "📢"):
     """Broadcast a system notification to all online users."""
     await manager.broadcast({
         "type": "system",
-        "title": "SkillTen",
+        "title": "Mentixy",
         "message": message,
         "icon": icon,
         "timestamp": datetime.utcnow().isoformat(),

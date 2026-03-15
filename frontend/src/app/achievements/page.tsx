@@ -33,9 +33,9 @@ const BADGE_CATALOG: Badge[] = [
 
     // ── Assessment badges ──
     { id: 'assessed', name: 'Know Thyself', icon: '🧬', description: 'Complete the 4D Career Assessment', category: 'Assessment', rarity: 'common', earned: false },
-    { id: 'score-50', name: 'Half Century', icon: '📈', description: 'Reach SkillTen Score of 50+', category: 'Assessment', rarity: 'common', earned: false },
-    { id: 'score-75', name: 'Top Performer', icon: '🏆', description: 'Reach SkillTen Score of 75+', category: 'Assessment', rarity: 'epic', earned: false },
-    { id: 'score-90', name: 'Elite Status', icon: '👑', description: 'Reach SkillTen Score of 90+', category: 'Assessment', rarity: 'legendary', earned: false },
+    { id: 'score-50', name: 'Half Century', icon: '📈', description: 'Reach Mentixy Score of 50+', category: 'Assessment', rarity: 'common', earned: false },
+    { id: 'score-75', name: 'Top Performer', icon: '🏆', description: 'Reach Mentixy Score of 75+', category: 'Assessment', rarity: 'epic', earned: false },
+    { id: 'score-90', name: 'Elite Status', icon: '👑', description: 'Reach Mentixy Score of 90+', category: 'Assessment', rarity: 'legendary', earned: false },
 
     // ── Aptitude badges ──
     { id: 'apt-first', name: 'Quick Thinker', icon: '🧮', description: 'Complete your first aptitude test', category: 'Aptitude', rarity: 'common', earned: false },
@@ -50,7 +50,7 @@ const BADGE_CATALOG: Badge[] = [
     // ── Social badges ──
     { id: 'profile-shared', name: 'Put Yourself Out', icon: '📤', description: 'Share your public profile', category: 'Social', rarity: 'common', earned: false },
     { id: 'referral-1', name: 'Brand Ambassador', icon: '🤝', description: 'Get 1 friend to sign up', category: 'Social', rarity: 'common', earned: false },
-    { id: 'referral-5', name: 'Campus Influencer', icon: '📣', description: 'Refer 5 friends to SkillTen', category: 'Social', rarity: 'rare', earned: false, max_progress: 5 },
+    { id: 'referral-5', name: 'Campus Influencer', icon: '📣', description: 'Refer 5 friends to Mentixy', category: 'Social', rarity: 'rare', earned: false, max_progress: 5 },
     { id: 'campus-top3', name: 'Campus Champion', icon: '⚔️', description: 'Get your college in Campus Wars Top 3', category: 'Social', rarity: 'epic', earned: false },
 
     // ── Mock Drive badges ──
@@ -60,8 +60,8 @@ const BADGE_CATALOG: Badge[] = [
 
     // ── Learning & Career ──
     { id: 'roadmap-created', name: 'Pathfinder', icon: '🗺️', description: 'Generate your first career roadmap', category: 'Career', rarity: 'common', earned: false },
-    { id: 'resume-built', name: 'Resume Master', icon: '📄', description: 'Build your resume on SkillTen', category: 'Career', rarity: 'common', earned: false },
-    { id: 'job-applied', name: 'Go-Getter', icon: '🎯', description: 'Apply to your first job through SkillTen', category: 'Career', rarity: 'common', earned: false },
+    { id: 'resume-built', name: 'Resume Master', icon: '📄', description: 'Build your resume on Mentixy', category: 'Career', rarity: 'common', earned: false },
+    { id: 'job-applied', name: 'Go-Getter', icon: '🎯', description: 'Apply to your first job through Mentixy', category: 'Career', rarity: 'common', earned: false },
 ];
 
 const RARITY_STYLES: Record<string, { bg: string; border: string; text: string; glow: string }> = {
@@ -86,7 +86,7 @@ export default function AchievementsPage() {
             setUser(u);
             // Hydrate badge progress from user data
             const streak = u?.profile?.streak_days || 0;
-            const score = u?.profile?.skillten_score || 0;
+            const score = u?.profile?.mentixy_score || 0;
             const easy = u?.profile?.coding_stats?.easy || 0;
             const medium = u?.profile?.coding_stats?.medium || 0;
             const hard = u?.profile?.coding_stats?.hard || 0;

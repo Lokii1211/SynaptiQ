@@ -2,7 +2,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { hashSync, compareSync } from "bcryptjs";
 import { NextRequest } from "next/server";
 
-const SECRET = new TextEncoder().encode(process.env.SECRET_KEY || "skillsync-default-secret-key-2026");
+const SECRET = new TextEncoder().encode(process.env.SECRET_KEY || "mentixy-default-secret-key-2026");
 
 export function hashPassword(password: string): string {
     return hashSync(password, 10);

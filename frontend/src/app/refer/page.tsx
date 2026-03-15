@@ -31,8 +31,8 @@ export default function ReferPage() {
         setTotalXP(175);
     }, []);
 
-    const shareLink = `https://skillten.in/signup?ref=${referralCode}`;
-    const shareText = `🧬 I discovered my Career DNA on SkillTen — find out which career suits YOU! Free AI-powered career intelligence for Indian students.\n\n${shareLink}`;
+    const shareLink = `https://mentixy.in/signup?ref=${referralCode}`;
+    const shareText = `🧬 I discovered my Career DNA on Mentixy — find out which career suits YOU! Free AI-powered career intelligence for Indian students.\n\n${shareLink}`;
 
     const handleCopy = async () => {
         try {
@@ -55,7 +55,7 @@ export default function ReferPage() {
     const handleShare = async () => {
         if (navigator.share) {
             try {
-                await navigator.share({ title: 'Join SkillTen', text: shareText, url: shareLink });
+                await navigator.share({ title: 'Join Mentixy', text: shareText, url: shareLink });
             } catch { /* cancelled */ }
         } else {
             handleCopy();
@@ -92,7 +92,7 @@ export default function ReferPage() {
                             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                                 <span className="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full mb-3 inline-block">🎁 REFER & EARN</span>
                                 <h1 className="text-3xl font-bold mb-2">Invite Friends, Earn Rewards</h1>
-                                <p className="text-white/60 text-sm mb-2">Both you and your friend get XP when they join. Help your campus grow on SkillTen.</p>
+                                <p className="text-white/60 text-sm mb-2">Both you and your friend get XP when they join. Help your campus grow on Mentixy.</p>
                                 <div className="flex items-center gap-4 mt-4">
                                     <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center">
                                         <p className="text-2xl font-bold">{referrals.length}</p>

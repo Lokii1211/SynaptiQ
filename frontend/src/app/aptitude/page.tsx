@@ -713,9 +713,9 @@ export default function AptitudePage() {
 
                         {/* Certification CTA */}
                         <div className="bg-teal-50 rounded-2xl p-6 border border-teal-200 text-center">
-                            <h3 className="font-bold text-slate-900 mb-2 st-font-heading">🏅 SkillTen Aptitude Certified</h3>
+                            <h3 className="font-bold text-slate-900 mb-2 st-font-heading">🏅 Mentixy Aptitude Certified</h3>
                             <p className="text-sm text-slate-600 mb-4">
-                                Score 80%+ across all 4 categories to earn the SkillTen Aptitude Certification — visible on your public profile.
+                                Score 80%+ across all 4 categories to earn the Mentixy Aptitude Certification — visible on your public profile.
                             </p>
                             <Link href="/score" className="st-btn-primary text-sm px-6 py-2.5 inline-block">
                                 View My Score →

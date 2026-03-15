@@ -1,5 +1,5 @@
 /**
- * SkillTen — Dynamic Component Loader
+ * Mentixy — Dynamic Component Loader
  * Performance optimization via code splitting
  * Heavy components are loaded on demand to reduce initial bundle size
  */

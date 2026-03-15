@@ -1,5 +1,5 @@
 """
-SkillTen Connections/Network API — Real DB-backed peer connections
+Mentixy Connections/Network API — Real DB-backed peer connections
 Uses SQLAlchemy with SQLite/PostgreSQL
 """
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -37,7 +37,7 @@ def _peer_response(user: User, connection_status: str = "none"):
         "stream": profile.stream if profile else None,
         "target_role": profile.target_role if profile else None,
         "city": profile.city if profile else None,
-        "skillten_score": profile.viya_score if profile else 0,
+        "mentixy_score": profile.mentixy_score if profile else 0,
         "streak_days": profile.streak_days if profile else 0,
         "connection_status": connection_status,
     }
@@ -200,7 +200,7 @@ def connect_with_peer(req: ConnectReq, user: User = Depends(require_user), db: S
         user_id=req.user_id,
         type="new_connection",
         title=f"{name} connected with you",
-        body="You have a new connection on SkillTen!",
+        body="You have a new connection on Mentixy!",
         action_url=f"/u/{user.profile.username}" if user.profile else "/network",
         icon="🤝",
     )
