@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { auth, api } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -15,43 +15,125 @@ interface ReadinessData {
     timeline: string;
 }
 
-const MOCK_PROFILE = {
-    name: 'Arjun Kumar',
-    college: 'SKCT, Coimbatore',
-    branch: 'CSE',
-    year: 2026,
-    cgpa: 7.2,
-    mentixyScore: 68,
-    streak: 23,
-    problemsSolved: 87,
-    skills: { python: 74, java: 0, sql: 61, dsa: 55, aptitude: 71 },
-    careerTarget: 'Data Analyst',
-    dreamCompany: 'Product Company (Flipkart/Zomato)',
-};
-
-const READINESS: ReadinessData[] = [
-    { company: 'TCS', probability: 78, strengths: ['Aptitude 71st %ile (cutoff: 65th) ✓', 'CGPA 7.2 (cutoff: 6.0) ✓', 'Python verified ✓'], gaps: ['Only 87 problems solved (target: 100+)', 'Java not verified (TCS tests Java)', 'No mock interview practice'], nextAction: 'Verify Java + solve 15 more TCS-pattern problems', timeline: '2 weeks to ready' },
-    { company: 'Infosys', probability: 65, strengths: ['Python verified ✓', 'Aptitude above InfyTQ cutoff ✓'], gaps: ['DSA score 55 (need 65+ for InfyTQ)', 'SQL not strong enough for Infosys SP role', 'No DBMS fundamentals prep'], nextAction: 'Improve DSA to 65+ and verify SQL', timeline: '4 weeks to ready' },
-    { company: 'Wipro', probability: 82, strengths: ['All basic criteria met ✓', 'Aptitude strong ✓', 'CGPA above cutoff ✓'], gaps: ['Communication skills not assessed', 'Essay writing section (Wipro specific)'], nextAction: 'Practice 3 essay topics + mock HR round', timeline: '1 week to ready' },
-    { company: 'Amazon SDE-1', probability: 12, strengths: ['Python verified ✓', 'Problem-solving attitude ✓'], gaps: ['Need 300+ Medium/Hard problems (you have 87)', 'System Design knowledge missing', 'No Data Structures mastery', 'DSA at 55th %ile (need 90th for FAANG)'], nextAction: 'This is a 6-month goal, not 1-month. Start with LeetCode 150 plan.', timeline: '6+ months of dedicated prep' },
-    { company: 'Zoho', probability: 45, strengths: ['Good logical thinking ✓', 'CGPA acceptable ✓'], gaps: ['Zoho requires C programming (you haven\'t practiced)', 'System design basics needed', 'Need puzzle/brain teaser prep'], nextAction: 'Learn C basics + solve 20 Zoho-pattern problems', timeline: '6 weeks to ready' },
-];
+interface UserProfile {
+    name: string;
+    college: string;
+    branch: string;
+    year: number;
+    cgpa: number;
+    mentixyScore: number;
+    streak: number;
+    problemsSolved: number;
+    skills: Record<string, number>;
+    careerTarget: string;
+    dreamCompany: string;
+}
 
 export default function HonestMirrorPage() {
-    const [profile] = useState(MOCK_PROFILE);
-    const [readiness] = useState(READINESS);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [readiness] = useState<ReadinessData[]>([
+        { company: 'TCS', probability: 78, strengths: ['Aptitude above cutoff ✓', 'CGPA above 6.0 ✓'], gaps: ['Need 100+ problems solved', 'Java not verified'], nextAction: 'Verify Java + solve TCS-pattern problems', timeline: '2 weeks to ready' },
+        { company: 'Infosys', probability: 65, strengths: ['Python verified ✓', 'Aptitude above InfyTQ cutoff ✓'], gaps: ['DSA score needs improvement', 'SQL not strong enough'], nextAction: 'Improve DSA and verify SQL', timeline: '4 weeks to ready' },
+        { company: 'Wipro', probability: 82, strengths: ['All basic criteria met ✓', 'Aptitude strong ✓'], gaps: ['Communication not assessed', 'Essay writing prep needed'], nextAction: 'Practice essay topics + mock HR round', timeline: '1 week to ready' },
+        { company: 'Amazon SDE-1', probability: 12, strengths: ['Problem-solving attitude ✓'], gaps: ['Need 300+ Medium/Hard problems', 'System Design missing', 'DSA mastery needed'], nextAction: '6-month dedicated plan needed', timeline: '6+ months' },
+    ]);
     const [selectedCompany, setSelectedCompany] = useState<ReadinessData | null>(null);
     const [showOfferEval, setShowOfferEval] = useState(false);
     const [offerCtc, setOfferCtc] = useState('');
     const [offerCompany, setOfferCompany] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        fetchProfile();
     }, []);
+
+    const fetchProfile = async () => {
+        try {
+            setLoading(true);
+            const user = auth.getUser();
+            let streakData: any = {};
+            let codingStats: any = {};
+            try { streakData = await api.getStreak(); } catch {}
+            try { codingStats = await api.getCodingStats(); } catch {}
+            
+            setProfile({
+                name: user?.profile?.display_name || user?.display_name || 'Student',
+                college: user?.profile?.college_name || 'Not set',
+                branch: user?.profile?.stream || 'CSE',
+                year: user?.profile?.graduation_year || 2026,
+                cgpa: user?.profile?.cgpa || 0,
+                mentixyScore: user?.profile?.mentixy_score ?? 0,
+                streak: streakData?.current_streak ?? 0,
+                problemsSolved: codingStats?.total_solved ?? 0,
+                skills: {},
+                careerTarget: user?.profile?.target_role || 'Not set',
+                dreamCompany: 'Product Company',
+            });
+        } catch (err) {
+            // Still show page with basic data from local storage
+            const user = auth.getUser();
+            if (user) {
+                setProfile({
+                    name: user?.profile?.display_name || user?.display_name || 'Student',
+                    college: user?.profile?.college_name || 'Not set',
+                    branch: user?.profile?.stream || 'CSE',
+                    year: user?.profile?.graduation_year || 2026,
+                    cgpa: user?.profile?.cgpa || 0,
+                    mentixyScore: user?.profile?.mentixy_score ?? 0,
+                    streak: 0, problemsSolved: 0, skills: {},
+                    careerTarget: user?.profile?.target_role || 'Not set',
+                    dreamCompany: 'Product Company',
+                });
+            } else {
+                setError('Failed to load profile. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const getScoreColor = (score: number) => score >= 75 ? 'text-emerald-600' : score >= 50 ? 'text-amber-600' : 'text-red-600';
     const getProbColor = (prob: number) => prob >= 70 ? 'from-emerald-500 to-teal-500' : prob >= 40 ? 'from-amber-500 to-orange-500' : 'from-red-500 to-rose-500';
     const getProbBg = (prob: number) => prob >= 70 ? 'bg-emerald-50' : prob >= 40 ? 'bg-amber-50' : 'bg-red-50';
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <TopBar />
+                <div className="px-4 py-12 max-w-4xl mx-auto space-y-4">
+                    {[1,2,3].map(i => (
+                        <div key={i} className="bg-white rounded-2xl p-6 shadow-sm animate-pulse">
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-12 h-12 bg-slate-200 rounded-2xl" />
+                                <div className="flex-1 space-y-2"><div className="h-4 bg-slate-200 rounded w-1/3" /><div className="h-3 bg-slate-100 rounded w-1/2" /></div>
+                            </div>
+                            <div className="space-y-2">{[1,2,3].map(j => <div key={j} className="h-3 bg-slate-100 rounded w-full" />)}</div>
+                        </div>
+                    ))}
+                </div>
+                <BottomNav />
+            </div>
+        );
+    }
+
+    if (error && !profile) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <TopBar />
+                <div className="px-4 py-20 max-w-lg mx-auto text-center">
+                    <div className="text-5xl mb-4">⚠️</div>
+                    <h2 className="text-lg font-bold text-slate-900 mb-2">Something went wrong</h2>
+                    <p className="text-sm text-slate-500 mb-6">{error}</p>
+                    <button onClick={fetchProfile} className="px-6 py-3 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors">Try Again</button>
+                </div>
+                <BottomNav />
+            </div>
+        );
+    }
+
+    if (!profile) return null;
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -123,11 +205,10 @@ export default function HonestMirrorPage() {
                         <div className="st-card p-5 border-l-4 border-amber-400 bg-amber-50/50">
                             <p className="text-xs font-bold text-amber-700 uppercase mb-2">⚠️ Honest Weekly Check-In</p>
                             <div className="space-y-2 text-xs text-slate-700 leading-relaxed">
-                                <p>📊 <strong>Coding:</strong> You solved 8 problems this week (last week: 12). Momentum is dropping.</p>
-                                <p>🧠 <strong>Aptitude:</strong> Your accuracy is 71% — OK for TCS/Wipro, risky for Infosys.</p>
-                                <p>✅ <strong>Skills:</strong> Python verified (74th %ile). Java NOT verified (critical for service companies).</p>
-                                <p>📄 <strong>Resume:</strong> Last updated 34 days ago. Add your recent project.</p>
-                                <p className="font-bold text-amber-800 mt-2">💡 At current pace: TCS-ready in 3 weeks. Infosys-ready in 6 weeks. Wipro-ready NOW.</p>
+                                <p>📊 <strong>Coding:</strong> {profile.problemsSolved} problems solved total. {profile.problemsSolved < 100 ? 'Target: 100+ for service companies.' : 'Good progress!'}</p>
+                                <p>🔥 <strong>Streak:</strong> {profile.streak > 0 ? `${profile.streak}-day streak active.` : 'No active streak. Start solving daily!'}</p>
+                                <p>🎯 <strong>Target:</strong> {profile.careerTarget !== 'Not set' ? profile.careerTarget : 'Set your career target in Settings.'}</p>
+                                <p>📈 <strong>Score:</strong> Mentixy Score is {profile.mentixyScore}. {profile.mentixyScore >= 70 ? 'Good range for service companies.' : profile.mentixyScore > 0 ? 'Keep improving through daily practice.' : 'Complete your assessment to get scored.'}</p>
                             </div>
                         </div>
 
@@ -250,13 +331,14 @@ export default function HonestMirrorPage() {
                         <div className="bg-slate-900 text-white rounded-2xl p-5">
                             <p className="text-xs text-slate-400 font-semibold uppercase mb-2">🪞 The Mirror Speaks</p>
                             <p className="text-sm leading-relaxed text-slate-300">
-                                <strong className="text-white">Arjun</strong>, your Mentixy Score of <strong className="text-indigo-400">68</strong> puts you in the{' '}
-                                <strong className="text-amber-400">service company zone</strong>. TCS and Wipro are realistic targets.
-                                Infosys is achievable with 4 more weeks of focused prep. Product companies like Flipkart
-                                need <strong className="text-red-400">6+ months</strong> of dedicated DSA practice.{' '}
-                                <strong className="text-emerald-400">Your honest path</strong>: Secure a service company offer first,
-                                then prepare for product companies while working. This is the realistic, proven strategy
-                                for students from Tier-3 colleges.
+                                <strong className="text-white">{profile.name.split(' ')[0]}</strong>, your Mentixy Score of <strong className="text-indigo-400">{profile.mentixyScore}</strong>{' '}
+                                {profile.mentixyScore >= 80 ? (
+                                    <>puts you in a <strong className="text-emerald-400">strong position</strong>. Product companies are within reach with continued effort.</>
+                                ) : profile.mentixyScore >= 50 ? (
+                                    <>puts you in the <strong className="text-amber-400">service company zone</strong>. TCS and Wipro are realistic targets. Keep building your score for product companies.</>
+                                ) : (
+                                    <>is just the starting point. <strong className="text-amber-400">Focus on daily practice</strong> — aptitude, coding, and skill verification will boost your score rapidly.</>
+                                )}
                             </p>
                         </div>
                     </div>

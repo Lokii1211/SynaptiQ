@@ -8,8 +8,9 @@ import { BottomNav } from '@/components/layout/BottomNav';
 
 /* ─── Heatmap helpers ─── */
 function generateHeatmapData() {
+    // TODO: Replace with real activity data from API
     const data: number[] = [];
-    for (let i = 0; i < 91; i++) data.push(Math.random() > 0.4 ? Math.floor(Math.random() * 4) + 1 : 0);
+    for (let i = 0; i < 91; i++) data.push(0);
     return data;
 }
 
@@ -87,8 +88,8 @@ export default function DashboardPage() {
     );
 
     const displayName = user?.profile?.display_name || user?.display_name || user?.email?.split('@')[0] || 'User';
-    const score = user?.profile?.mentixy_score || 742;
-    const streak = user?.profile?.streak_days || 23;
+    const score = user?.profile?.mentixy_score || 0;
+    const streak = user?.profile?.streak_days || 0;
     const hasProfile = profile?.has_profile;
     const archetype = user?.profile?.archetype_name || profile?.archetype_name;
 
@@ -104,11 +105,7 @@ export default function DashboardPage() {
 
     const campusRank = { rank: 7, total: 243, change: 3, points: 12 };
 
-    const skills = [
-        { name: 'Python', score: 82, expiry: null },
-        { name: 'SQL', score: 65, expiry: '5 days' },
-        { name: 'JavaScript', score: 0, expiry: null },
-    ];
+    const skills: { name: string; score: number; expiry: string | null }[] = user?.profile?.verified_skills || [];
 
     const recommendedProblems = [
         { title: 'Valid Parentheses', diff: 'Easy', company: 'Google', topic: 'Stacks' },
@@ -319,29 +316,37 @@ export default function DashboardPage() {
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Skill Health</p>
                                     <Link href="/skills" className="text-xs text-indigo-600 font-medium hover:underline">All skills →</Link>
                                 </div>
-                                <div className="space-y-3">
-                                    {skills.map((s, i) => (
-                                        <div key={i} className="flex items-center gap-3">
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between mb-1">
-                                                    <span className="text-sm font-medium text-slate-900">{s.name}</span>
-                                                    {s.score > 0 ? (
-                                                        <span className="text-xs font-bold text-indigo-600">{s.score}%</span>
-                                                    ) : (
-                                                        <span className="text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full font-medium">Verify</span>
+                                {skills.length > 0 ? (
+                                    <div className="space-y-3">
+                                        {skills.map((s, i) => (
+                                            <div key={i} className="flex items-center gap-3">
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-center justify-between mb-1">
+                                                        <span className="text-sm font-medium text-slate-900">{s.name}</span>
+                                                        {s.score > 0 ? (
+                                                            <span className="text-xs font-bold text-indigo-600">{s.score}%</span>
+                                                        ) : (
+                                                            <span className="text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full font-medium">Verify</span>
+                                                        )}
+                                                    </div>
+                                                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                        <div className={`h-full rounded-full transition-all duration-700 ${s.score >= 70 ? 'bg-emerald-400' : s.score >= 40 ? 'bg-amber-400' : 'bg-slate-200'}`}
+                                                            style={{ width: `${s.score}%` }} />
+                                                    </div>
+                                                    {s.expiry && (
+                                                        <p className="text-[10px] text-rose-500 mt-0.5">⚠ Expires in {s.expiry}</p>
                                                     )}
                                                 </div>
-                                                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                                    <div className={`h-full rounded-full transition-all duration-700 ${s.score >= 70 ? 'bg-emerald-400' : s.score >= 40 ? 'bg-amber-400' : 'bg-slate-200'}`}
-                                                        style={{ width: `${s.score}%` }} />
-                                                </div>
-                                                {s.expiry && (
-                                                    <p className="text-[10px] text-rose-500 mt-0.5">⚠ Expires in {s.expiry}</p>
-                                                )}
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-4">
+                                        <p className="text-3xl mb-2">🎯</p>
+                                        <p className="text-xs text-slate-500 mb-2">No verified skills yet</p>
+                                        <Link href="/skills" className="text-xs font-semibold text-indigo-600 hover:underline">Add your first skill →</Link>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
 
