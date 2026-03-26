@@ -1,24 +1,19 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { auth, api } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
 
-// Generate 365-day heatmap data
+// Generate empty 365-day heatmap (TODO: pull from API)
 function generateYearHeatmap() {
     const data: { date: string; count: number }[] = [];
     const today = new Date();
     for (let i = 364; i >= 0; i--) {
         const d = new Date(today);
         d.setDate(d.getDate() - i);
-        const dateStr = d.toISOString().split('T')[0];
-        const rand = Math.random();
-        let count = 0;
-        if (rand > 0.35) count = Math.floor(Math.random() * 4) + 1;
-        if (rand > 0.85) count = Math.floor(Math.random() * 3) + 4;
-        data.push({ date: dateStr, count });
+        data.push({ date: d.toISOString().split('T')[0], count: 0 });
     }
     return data;
 }
@@ -27,87 +22,111 @@ const YEAR_HEATMAP = generateYearHeatmap();
 const HEAT_COLORS_PROFILE = ['bg-slate-100', 'bg-emerald-200', 'bg-emerald-300', 'bg-emerald-400', 'bg-emerald-500', 'bg-emerald-600', 'bg-emerald-700'];
 const HEAT_COLOR = (c: number) => c >= 6 ? HEAT_COLORS_PROFILE[6] : c >= 4 ? HEAT_COLORS_PROFILE[5] : c >= 3 ? HEAT_COLORS_PROFILE[4] : c >= 2 ? HEAT_COLORS_PROFILE[3] : c >= 1 ? HEAT_COLORS_PROFILE[2] : HEAT_COLORS_PROFILE[0];
 
-const MOCK_PROFILE = {
-    name: 'Arjun Kumar',
-    username: 'arjunk26',
-    headline: 'Aspiring Data Analyst | Python & SQL Verified | Mentixy Score 68',
-    headlineStrength: 72,
-    about: 'Final-year CSE student at SKCT, Coimbatore. Passionate about data analysis and problem-solving. Verified in Python (74th %ile) and SQL (61st %ile). Currently targeting Data Analyst roles at mid-tier and product companies.',
-    college: 'Sri Krishna College of Technology, Coimbatore',
-    degree: 'B.E. Computer Science',
-    year: 2026,
-    cgpa: 7.2,
-    tenthPct: 89.4,
-    twelfthPct: 82.1,
-    city: 'Coimbatore',
-    relocate: true,
-    careerTarget: ['Data Analyst', 'Backend Developer'],
-    archetype: 'The Analytical Builder',
-    archetypeEmoji: '🔬',
-    openToWork: true,
-    openTags: ['Full-time', 'Internship'],
-    availability: 'June 2026',
-    profilePhoto: null,
-    coverStyle: 'data-science',
-    mentixyScore: 68,
-    scoreBreakdown: { skills: 74, coding: 62, aptitude: 71, assessment: 75, community: 55, consistency: 68 },
-    scorePercentile: 72,
-    collegePeerPercentile: 81,
-    streak: 23,
-    longestStreak: 47,
-    totalSolved: { easy: 45, medium: 35, hard: 7 },
-    languages: { Python: 62, SQL: 18, 'C++': 7 },
-    topicCoverage: { Arrays: 85, Strings: 78, 'Linked Lists': 42, Trees: 30, DP: 15, Graphs: 8, Sorting: 90, Math: 65 },
-    verifiedSkills: [
-        { name: 'Python', score: 74, percentile: 74, badge: 'Proficient', expiry: '2026-05-15' },
-        { name: 'SQL', score: 61, percentile: 61, badge: 'Emerging', expiry: '2026-04-20' },
-        { name: 'Aptitude', score: 71, percentile: 71, badge: 'Proficient', expiry: '2026-06-01' },
-    ],
-    selfReportedSkills: ['Java', 'HTML/CSS', 'Excel', 'Power BI'],
-    achievements: [
-        { icon: '🔥', title: '30-Day Streak', desc: 'Maintained 30+ day coding streak' },
-        { icon: '🏆', title: 'Campus Wars Top 10', desc: 'College ranked in top 10 nationally' },
-        { icon: '⚡', title: 'First Hard Solve', desc: 'Solved first Hard problem' },
-        { icon: '📚', title: '100 Problems Club', desc: 'Solved 100+ coding problems' },
-    ],
-    experience: [
-        { role: 'Data Analyst Intern', company: 'TechSoft Solutions', duration: 'May–Jul 2025', bullets: ['Analyzed 50K+ rows of sales data using Python & Pandas, reducing report generation time by 60%', 'Built 3 interactive dashboards in Power BI for sales team KPI tracking'] },
-    ],
-    projects: [
-        { name: 'Student Placement Predictor', tech: 'Python, Scikit-Learn, Flask', github: 'github.com/arjunk26/placement-predictor', desc: 'ML model predicting placement probability based on CGPA, skills, and aptitude scores. 84% accuracy.' },
-        { name: 'E-Commerce Sales Dashboard', tech: 'SQL, Power BI', desc: 'Interactive dashboard analyzing 3 years of e-commerce sales data. Used CTEs, window functions, and DAX measures.' },
-    ],
-    certifications: [
-        { name: 'Python Verified (Mentixy)', issuer: 'Mentixy', verified: true, date: 'Feb 2026' },
-        { name: 'SQL Verified (Mentixy)', issuer: 'Mentixy', verified: true, date: 'Jan 2026' },
-        { name: 'NPTEL — Data Science Basics', issuer: 'NPTEL/IIT Madras', verified: false, date: 'Nov 2025' },
-    ],
-    connections: 47,
-    followers: 12,
-    endorsements: 8,
-    profileCompletion: 84,
-    nextAction: 'Verify Java skill to reach 90% completion',
-    privacy: {
-        score: 'public',
-        aptitude: 'connections',
-        coding: 'public',
-        cgpa: 'recruiters',
-        connectionList: 'connections',
-        assessment: 'connections',
-    } as Record<string, string>,
-};
+function buildProfileFromUser(user: any, codingStats: any, streakData: any) {
+    const p = user?.profile || {};
+    return {
+        name: p.display_name || user?.display_name || 'User',
+        username: p.username || user?.username || 'user',
+        headline: p.headline || `${p.stream || 'Engineering'} Student | Mentixy User`,
+        headlineStrength: p.headline ? 70 : 30,
+        about: p.about || '',
+        college: p.college_name || 'Not set',
+        degree: p.degree || 'B.Tech',
+        year: p.graduation_year || 2026,
+        cgpa: p.cgpa || 0,
+        tenthPct: p.tenth_pct || 0,
+        twelfthPct: p.twelfth_pct || 0,
+        city: p.city || 'Not set',
+        relocate: p.willing_to_relocate || false,
+        careerTarget: p.target_roles || [],
+        archetype: p.archetype_name || 'Not assessed yet',
+        archetypeEmoji: p.archetype_emoji || '🧬',
+        openToWork: p.open_to_work || false,
+        openTags: p.open_tags || [],
+        availability: p.available_from || 'Not set',
+        profilePhoto: p.avatar_url || null,
+        coverStyle: 'default',
+        mentixyScore: p.mentixy_score || 0,
+        scoreBreakdown: p.score_breakdown || { skills: 0, coding: 0, aptitude: 0, assessment: 0, community: 0, consistency: 0 },
+        scorePercentile: p.score_percentile || 0,
+        collegePeerPercentile: p.college_peer_percentile || 0,
+        streak: streakData?.current_streak || 0,
+        longestStreak: streakData?.longest_streak || 0,
+        totalSolved: codingStats?.difficulty_breakdown || { easy: 0, medium: 0, hard: 0 },
+        languages: codingStats?.language_breakdown || {},
+        topicCoverage: codingStats?.topic_coverage || {},
+        verifiedSkills: p.verified_skills || [],
+        selfReportedSkills: p.self_reported_skills || [],
+        achievements: p.achievements || [],
+        experience: p.experience || [],
+        projects: p.projects || [],
+        certifications: p.certifications || [],
+        connections: p.connections_count || 0,
+        followers: p.followers_count || 0,
+        endorsements: p.endorsements_count || 0,
+        profileCompletion: p.profile_completion || 10,
+        nextAction: p.next_action || 'Complete your profile in Settings',
+        privacy: p.privacy || {
+            score: 'public', aptitude: 'connections', coding: 'public',
+            cgpa: 'recruiters', connectionList: 'connections', assessment: 'connections',
+        } as Record<string, string>,
+    };
+}
 
 export default function ProfilePage() {
-    const [profile, setProfile] = useState(MOCK_PROFILE);
+    const [profile, setProfile] = useState<any>(null);
     const [activeSection, setActiveSection] = useState('about');
     const [viewAsRecruiter, setViewAsRecruiter] = useState(false);
-    const [privacy, setPrivacy] = useState(MOCK_PROFILE.privacy);
+    const [privacy, setPrivacy] = useState<Record<string, string>>({});
+    const [loading, setLoading] = useState(true);
 
     const updatePrivacy = (key: string, val: string) => {
         setPrivacy(prev => ({ ...prev, [key]: val }));
     };
 
-    useEffect(() => { if (!auth.isLoggedIn()) { window.location.href = '/login'; } }, []);
+    useEffect(() => {
+        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        loadProfile();
+    }, []);
+
+    const loadProfile = async () => {
+        try {
+            setLoading(true);
+            const user = auth.getUser();
+            let codingStats: any = {};
+            let streakData: any = {};
+            try { codingStats = await api.getCodingStats(); } catch {}
+            try { streakData = await api.getStreak(); } catch {}
+            
+            const built = buildProfileFromUser(user, codingStats, streakData);
+            setProfile(built);
+            setPrivacy(built.privacy);
+        } catch {
+            const user = auth.getUser();
+            const built = buildProfileFromUser(user, {}, {});
+            setProfile(built);
+            setPrivacy(built.privacy);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading || !profile) {
+        return (
+            <div className="min-h-screen bg-slate-50">
+                <TopBar />
+                <div className="max-w-4xl mx-auto px-4 py-8 space-y-4">
+                    <div className="h-36 bg-gradient-to-br from-indigo-200 to-violet-200 rounded-2xl animate-pulse" />
+                    <div className="flex items-end gap-4 -mt-14 px-4">
+                        <div className="w-24 h-24 bg-slate-200 rounded-2xl animate-pulse" />
+                        <div className="flex-1 space-y-2 pb-2"><div className="h-5 bg-slate-200 rounded w-1/3" /><div className="h-3 bg-slate-100 rounded w-1/2" /></div>
+                    </div>
+                    {[1,2,3].map(i => <div key={i} className="bg-white rounded-2xl p-6 animate-pulse"><div className="h-4 bg-slate-100 rounded w-1/4 mb-3" /><div className="h-3 bg-slate-50 rounded w-full" /><div className="h-3 bg-slate-50 rounded w-4/5 mt-2" /></div>)}
+                </div>
+                <BottomNav />
+            </div>
+        );
+    }
 
     const badgeColor = (badge: string) => badge === 'Master' ? 'bg-violet-50 text-violet-700' : badge === 'Expert' ? 'bg-indigo-50 text-indigo-700' :
         badge === 'Proficient' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700';
