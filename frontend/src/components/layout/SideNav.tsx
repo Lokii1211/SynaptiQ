@@ -69,9 +69,9 @@ export function SideNav() {
             <div className="px-6 py-5 border-b border-slate-100">
                 <Link href="/dashboard" className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-                        ST
+                        M
                     </div>
-                    <span className="text-lg font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
+                    <span className="text-lg font-bold text-slate-900">Ment<span className="text-indigo-600">ixy</span></span>
                 </Link>
             </div>
 

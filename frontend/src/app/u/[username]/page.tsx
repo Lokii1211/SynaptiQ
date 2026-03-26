@@ -172,8 +172,8 @@ export default function PublicProfilePage() {
             <nav className="bg-white/95 backdrop-blur-lg border-b border-slate-200 px-6 py-3 sticky top-0 z-50">
                 <div className="max-w-2xl mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="w-7 h-7 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">ST</div>
-                        <span className="text-base font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
+                        <div className="w-7 h-7 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">M</div>
+                        <span className="text-base font-bold text-slate-900">Mentixy</span>
                     </Link>
                     <div className="flex items-center gap-2">
                         <button onClick={handleShare} className="text-sm text-slate-500 hover:text-indigo-600 transition-colors font-medium px-3 py-1.5 rounded-lg hover:bg-indigo-50">

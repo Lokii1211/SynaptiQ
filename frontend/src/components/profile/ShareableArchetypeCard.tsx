@@ -55,7 +55,7 @@ export function ShareableArchetypeCard({ displayName, archetype, score, dimensio
                 <div className="relative z-10">
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center text-[10px] font-bold">ST</div>
+                        <div className="w-6 h-6 bg-white/20 rounded-md flex items-center justify-center text-[10px] font-bold">M</div>
                         <span className="text-xs text-white/60 font-medium">Mentixy Career DNA</span>
                     </div>
 

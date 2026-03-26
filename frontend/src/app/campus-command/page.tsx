@@ -48,8 +48,8 @@ export default function CampusCommandPage() {
                 <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Link href="/" className="flex items-center gap-2">
-                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">ST</div>
-                            <span className="text-xl font-bold">Skill<span className="text-indigo-400">Ten</span></span>
+                            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">M</div>
+                            <span className="text-xl font-bold">Mentixy</span>
                         </Link>
                         <span className="text-xs bg-emerald-500/20 text-emerald-400 px-2.5 py-0.5 rounded-full font-semibold border border-emerald-500/30">Campus Command</span>
                     </div>

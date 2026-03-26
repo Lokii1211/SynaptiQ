@@ -42,8 +42,8 @@ export default function ParentPage() {
             <nav className="bg-white border-b border-slate-100 px-6 py-3">
                 <div className="max-w-4xl mx-auto flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="w-7 h-7 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">ST</div>
-                        <span className="text-base font-bold text-slate-900">Skill<span className="text-indigo-600">Ten</span></span>
+                        <div className="w-7 h-7 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-[10px]">M</div>
+                        <span className="text-base font-bold text-slate-900">Mentixy</span>
                     </Link>
                     {auth.isLoggedIn() && (
                         <Link href="/dashboard" className="text-sm text-indigo-600 font-medium hover:underline">Dashboard</Link>

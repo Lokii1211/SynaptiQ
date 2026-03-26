@@ -64,7 +64,7 @@ export default function HelpPage() {
             <div className="bg-gradient-to-br from-indigo-600 to-violet-700 text-white px-6 py-12">
                 <div className="max-w-3xl mx-auto">
                     <Link href="/" className="flex items-center gap-2 mb-8">
-                        <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-white font-bold text-xs">ST</div>
+                        <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-white font-bold text-xs">M</div>
                         <span className="text-lg font-bold">Mentixy</span>
                     </Link>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>

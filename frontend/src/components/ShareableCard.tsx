@@ -78,7 +78,7 @@ export function ShareableCard({
                 <div className="relative z-10">
                     {/* Header */}
                     <div className="flex items-center gap-2 mb-4">
-                        <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">ST</div>
+                        <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center text-white text-[10px] font-bold">M</div>
                         <span className="text-xs font-semibold text-white/60">Mentixy Career DNA™</span>
                     </div>
 
