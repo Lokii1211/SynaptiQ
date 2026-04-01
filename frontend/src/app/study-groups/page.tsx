@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 /* ═══ Study Group Types ═══ */
@@ -17,87 +17,6 @@ interface StudyGroup {
     tags: string[]; lastActive: string;
 }
 
-const MOCK_GROUPS: StudyGroup[] = [
-    {
-        id: '1', name: 'DSA Warriors', icon: '⚔️', topic: 'Data Structures & Algorithms',
-        privacy: 'open', maxMembers: 20, jointStreak: 23, dailyChallenge: 'Two Sum — Solve before 11 PM',
-        description: 'Daily DSA practice for placement prep. We solve one problem together every day.',
-        createdBy: 'Priya S.', tags: ['dsa', 'placement', 'daily'],
-        lastActive: '2 min ago',
-        members: [
-            { name: 'Priya S.', avatar: '👩‍💻', streak: 45, solved: 234, active: true },
-            { name: 'Rohit K.', avatar: '💻', streak: 31, solved: 187, active: true },
-            { name: 'Ananya M.', avatar: '🧠', streak: 28, solved: 156, active: false },
-            { name: 'Vikram R.', avatar: '🔥', streak: 19, solved: 142, active: true },
-            { name: 'Deepa T.', avatar: '📊', streak: 23, solved: 98, active: true },
-        ],
-        leaderboard: [
-            { name: 'Priya S.', points: 892 }, { name: 'Rohit K.', points: 734 },
-            { name: 'Ananya M.', points: 612 }, { name: 'Vikram R.', points: 587 },
-            { name: 'Deepa T.', points: 443 },
-        ],
-    },
-    {
-        id: '2', name: 'SQL Mastery Club', icon: '🗃️', topic: 'SQL & Databases',
-        privacy: 'open', maxMembers: 15, jointStreak: 11, dailyChallenge: 'Write a JOIN query with 3 tables',
-        description: 'Learning SQL from basics to advanced. Focus on interview-style queries.',
-        createdBy: 'Arjun P.', tags: ['sql', 'databases', 'analytics'],
-        lastActive: '15 min ago',
-        members: [
-            { name: 'Arjun P.', avatar: '🗃️', streak: 22, solved: 89, active: true },
-            { name: 'Sneha R.', avatar: '📈', streak: 18, solved: 76, active: true },
-            { name: 'Karthik V.', avatar: '💡', streak: 14, solved: 54, active: false },
-        ],
-        leaderboard: [
-            { name: 'Arjun P.', points: 534 }, { name: 'Sneha R.', points: 478 },
-            { name: 'Karthik V.', points: 321 },
-        ],
-    },
-    {
-        id: '3', name: 'TCS NQT Prep', icon: '🏢', topic: 'TCS National Qualifier Test',
-        privacy: 'closed', maxMembers: 10, jointStreak: 7, dailyChallenge: 'Aptitude: Pipes & Cisterns set',
-        description: 'Focused preparation for TCS NQT. Aptitude + Coding + Company-specific practice.',
-        createdBy: 'Meera K.', tags: ['tcs', 'nqt', 'aptitude', 'service-company'],
-        lastActive: '1 hour ago',
-        members: [
-            { name: 'Meera K.', avatar: '📚', streak: 15, solved: 67, active: true },
-            { name: 'Ravi S.', avatar: '🎯', streak: 12, solved: 45, active: true },
-            { name: 'Pooja L.', avatar: '✨', streak: 9, solved: 38, active: true },
-            { name: 'Sanjay M.', avatar: '💪', streak: 7, solved: 29, active: false },
-        ],
-        leaderboard: [
-            { name: 'Meera K.', points: 412 }, { name: 'Ravi S.', points: 356 },
-            { name: 'Pooja L.', points: 298 }, { name: 'Sanjay M.', points: 187 },
-        ],
-    },
-    {
-        id: '4', name: 'Python Data Science', icon: '🐍', topic: 'Python for Data Analysis',
-        privacy: 'open', maxMembers: 20, jointStreak: 16, dailyChallenge: 'Pandas: GroupBy + Aggregation exercise',
-        description: 'Learn Python with pandas, numpy, and matplotlib. Practice with real datasets.',
-        createdBy: 'Kavitha N.', tags: ['python', 'data-science', 'pandas', 'analytics'],
-        lastActive: '30 min ago',
-        members: [
-            { name: 'Kavitha N.', avatar: '🐍', streak: 30, solved: 112, active: true },
-            { name: 'Arun B.', avatar: '📊', streak: 25, solved: 98, active: true },
-            { name: 'Divya S.', avatar: '🤖', streak: 20, solved: 87, active: true },
-            { name: 'Mohan R.', avatar: '💻', streak: 16, solved: 65, active: false },
-            { name: 'Preethi V.', avatar: '🎓', streak: 14, solved: 54, active: true },
-            { name: 'Suresh K.', avatar: '🔬', streak: 11, solved: 43, active: false },
-        ],
-        leaderboard: [
-            { name: 'Kavitha N.', points: 723 }, { name: 'Arun B.', points: 645 },
-            { name: 'Divya S.', points: 578 }, { name: 'Preethi V.', points: 398 },
-            { name: 'Mohan R.', points: 312 }, { name: 'Suresh K.', points: 267 },
-        ],
-    },
-];
-
-const LOOKING_FOR_TEAM = [
-    { name: 'Aditya R.', skills: ['React', 'Node.js', 'MongoDB'], seeking: 'Frontend Dev', college: 'VIT Vellore' },
-    { name: 'Sanya P.', skills: ['Python', 'TensorFlow', 'SQL'], seeking: 'ML Engineer', college: 'IIIT Hyderabad' },
-    { name: 'Kiran T.', skills: ['Figma', 'HTML/CSS', 'React'], seeking: 'Backend Dev', college: 'SRM Chennai' },
-    { name: 'Nisha G.', skills: ['Java', 'Spring Boot', 'AWS'], seeking: 'DevOps', college: 'BITS Pilani' },
-];
 
 export default function StudyGroupsPage() {
     const [tab, setTab] = useState<'discover' | 'my-groups' | 'create' | 'teammates'>('discover');
@@ -106,10 +25,11 @@ export default function StudyGroupsPage() {
     const [createForm, setCreateForm] = useState({ name: '', topic: '', description: '', privacy: 'open' as const, maxMembers: 10 });
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
-    const filteredGroups = MOCK_GROUPS.filter(g =>
+    const groups: StudyGroup[] = []; // TODO: Fetch from API
+
+    const filteredGroups = groups.filter(g =>
         g.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         g.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
         g.tags.some(t => t.includes(searchQuery.toLowerCase()))
@@ -128,8 +48,8 @@ export default function StudyGroupsPage() {
                 {/* Tabs */}
                 <div className="flex gap-1 mb-6 bg-white rounded-xl p-1 border border-slate-200 overflow-x-auto">
                     {([
-                        { id: 'discover', label: '🔍 Discover', count: MOCK_GROUPS.length },
-                        { id: 'my-groups', label: '👥 My Groups', count: 2 },
+                        { id: 'discover', label: '🔍 Discover', count: groups.length },
+                        { id: 'my-groups', label: '👥 My Groups', count: 0 },
                         { id: 'teammates', label: '🤝 Find Teammates' },
                         { id: 'create', label: '➕ Create Group' },
                     ] as const).map(t => (
@@ -345,7 +265,13 @@ export default function StudyGroupsPage() {
                         {tab === 'my-groups' && (
                             <motion.div key="my-groups" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                                 <div className="grid md:grid-cols-2 gap-4">
-                                    {MOCK_GROUPS.slice(0, 2).map((group, i) => (
+                                    {groups.length === 0 ? (
+                                        <div className="col-span-2 text-center py-12">
+                                            <span className="text-4xl block mb-3">📚</span>
+                                            <p className="text-sm text-slate-500 mb-3">You haven't joined any study groups yet</p>
+                                            <button onClick={() => setTab('discover')} className="st-btn-primary text-sm">Discover Groups →</button>
+                                        </div>
+                                    ) : groups.slice(0, 2).map((group, i) => (
                                         <div key={group.id} onClick={() => setSelectedGroup(group)} className="st-card p-5 cursor-pointer hover:shadow-lg transition-all border-l-4 border-indigo-500">
                                             <div className="flex items-center gap-3 mb-2">
                                                 <span className="text-xl">{group.icon}</span>
@@ -378,27 +304,11 @@ export default function StudyGroupsPage() {
                                 </div>
 
                                 <div className="space-y-3">
-                                    {LOOKING_FOR_TEAM.map((person, i) => (
-                                        <motion.div key={i} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
-                                            className="st-card p-4 flex items-center gap-4">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-400 to-violet-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                                                {person.name[0]}
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-bold text-slate-900">{person.name}</p>
-                                                <p className="text-[10px] text-slate-400">{person.college}</p>
-                                                <div className="flex flex-wrap gap-1 mt-1.5">
-                                                    {person.skills.map(s => (
-                                                        <span key={s} className="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">{s}</span>
-                                                    ))}
-                                                </div>
-                                                <p className="text-[10px] text-indigo-600 mt-1 font-medium">Looking for: {person.seeking}</p>
-                                            </div>
-                                            <button className="px-3 py-1.5 bg-indigo-600 text-white text-[10px] font-bold rounded-lg hover:bg-indigo-700 flex-shrink-0">
-                                                Invite
-                                            </button>
-                                        </motion.div>
-                                    ))}
+                                    <div className="text-center py-12">
+                                        <span className="text-4xl block mb-3">🤝</span>
+                                        <p className="text-sm font-semibold text-slate-900 mb-1">No teammate posts yet</p>
+                                        <p className="text-xs text-slate-500">Be the first to post your skills and find study partners!</p>
+                                    </div>
                                 </div>
 
                                 <button className="w-full mt-4 st-card p-4 text-center text-sm text-indigo-600 font-semibold hover:bg-indigo-50 transition-colors">

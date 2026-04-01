@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 /* ═══ Contest Types ═══ */
@@ -89,7 +89,6 @@ export default function ContestsPage() {
     }) || RATING_TIERS[2];
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     const filteredContests = filterType === 'all' ? CONTESTS : CONTESTS.filter(c => c.type === filterType);

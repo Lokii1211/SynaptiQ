@@ -2,6 +2,9 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { ROUTES } from '@/lib/constants/routes';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
+import { LoadingSkeleton } from '@/components/ui/StateComponents';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -17,12 +20,13 @@ const SCORE_COMPONENTS = [
 ];
 
 export default function ScorePage() {
+    const { isReady } = useAuthGuard();
     const [profile, setProfile] = useState<any>(null);
     const [codingStats, setCodingStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!isReady) return;
         Promise.all([
             api.getAssessmentProfile().catch(() => null),
             api.getCodingStats().catch(() => null),
@@ -31,7 +35,9 @@ export default function ScorePage() {
             setCodingStats(c);
             setLoading(false);
         });
-    }, []);
+    }, [isReady]);
+
+    if (!isReady) return <div className="min-h-screen bg-slate-50"><TopBar /><main className="max-w-4xl mx-auto px-4 py-6"><LoadingSkeleton variant="card" count={3} /></main></div>;
 
     const score = profile?.mentixy_score || 0;
     const maxScore = 1000;

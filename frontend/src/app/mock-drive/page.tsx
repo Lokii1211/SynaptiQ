@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -62,7 +63,6 @@ export default function MockDrivePage() {
     const timerRef = useRef<any>(null);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     // Timer

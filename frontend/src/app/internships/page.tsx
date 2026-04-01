@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -22,48 +23,6 @@ interface Internship {
     featured?: boolean;
 }
 
-const MOCK_INTERNSHIPS: Internship[] = [
-    {
-        id: '1', title: 'Software Development Intern', company: 'Flipkart', logo: '🛒',
-        location: 'Bangalore', stipend: '₹40,000/mo', duration: '6 months', type: 'onsite',
-        skills: ['Java', 'Spring Boot', 'MySQL'], deadline: '5 days left', applicants: 342, match: 92, featured: true
-    },
-    {
-        id: '2', title: 'Data Science Intern', company: 'Zomato', logo: '🍕',
-        location: 'Gurgaon', stipend: '₹35,000/mo', duration: '3 months', type: 'hybrid',
-        skills: ['Python', 'Pandas', 'SQL', 'ML'], deadline: '12 days left', applicants: 567, match: 85
-    },
-    {
-        id: '3', title: 'Frontend Developer Intern', company: 'Razorpay', logo: '💳',
-        location: 'Remote', stipend: '₹25,000/mo', duration: '3 months', type: 'remote',
-        skills: ['React', 'TypeScript', 'CSS'], deadline: '8 days left', applicants: 423, match: 88
-    },
-    {
-        id: '4', title: 'Backend Engineering Intern', company: 'Swiggy', logo: '🍔',
-        location: 'Bangalore', stipend: '₹30,000/mo', duration: '6 months', type: 'onsite',
-        skills: ['Go', 'Microservices', 'Redis'], deadline: '3 days left', applicants: 189, match: 78
-    },
-    {
-        id: '5', title: 'ML/AI Research Intern', company: 'Google India', logo: '🔍',
-        location: 'Hyderabad', stipend: '₹80,000/mo', duration: '4 months', type: 'onsite',
-        skills: ['Python', 'TensorFlow', 'NLP', 'Research'], deadline: '20 days left', applicants: 1200, match: 72, featured: true
-    },
-    {
-        id: '6', title: 'Product Management Intern', company: 'PhonePe', logo: '📱',
-        location: 'Bangalore', stipend: '₹45,000/mo', duration: '3 months', type: 'hybrid',
-        skills: ['Analytics', 'SQL', 'Communication'], deadline: '15 days left', applicants: 278, match: 65
-    },
-    {
-        id: '7', title: 'DevOps Intern', company: 'Freshworks', logo: '🔧',
-        location: 'Chennai', stipend: '₹28,000/mo', duration: '6 months', type: 'onsite',
-        skills: ['Docker', 'AWS', 'Linux', 'CI/CD'], deadline: '10 days left', applicants: 145, match: 71
-    },
-    {
-        id: '8', title: 'Full Stack Developer Intern', company: 'Meesho', logo: '🛍️',
-        location: 'Remote', stipend: '₹20,000/mo', duration: '3 months', type: 'remote',
-        skills: ['React', 'Node.js', 'MongoDB'], deadline: '7 days left', applicants: 890, match: 82
-    },
-];
 
 const TYPE_STYLES = {
     remote: { bg: 'bg-green-50', text: 'text-green-700', label: '🏠 Remote' },
@@ -72,13 +31,12 @@ const TYPE_STYLES = {
 };
 
 export default function InternshipsPage() {
-    const [internships] = useState<Internship[]>(MOCK_INTERNSHIPS);
+    const [internships] = useState<Internship[]>([]); // TODO: Fetch from internships API
     const [filter, setFilter] = useState<'all' | 'remote' | 'onsite' | 'hybrid'>('all');
     const [sortBy, setSortBy] = useState<'match' | 'stipend' | 'deadline'>('match');
     const [saved, setSaved] = useState<Set<string>>(new Set());
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     const toggleSave = (id: string) => {

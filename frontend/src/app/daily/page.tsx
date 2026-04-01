@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -11,7 +11,6 @@ export default function DailyPage() {
     const [countdown, setCountdown] = useState('');
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         // Update countdown every second
         const tick = () => {
             const now = new Date();

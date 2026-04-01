@@ -1,30 +1,26 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { api, auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
 export default function PeopleLikeYouPage() {
+    const { isReady } = useAuthGuard();
     const [peers, setPeers] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!isReady) return;
         api.findPeers().then(data => {
             setPeers(data.peers || []);
             setLoading(false);
         }).catch(() => {
-            // fallback mock data for demo
-            setPeers([
-                { display_name: 'Ananya K.', college: 'NIT Warangal', archetype: 'Analytical Builder', target_role: 'SDE', score: 720, match: 92 },
-                { display_name: 'Rohit M.', college: 'VIT Vellore', archetype: 'Creative Thinker', target_role: 'Product Manager', score: 680, match: 87 },
-                { display_name: 'Priyanka S.', college: 'BITS Pilani', archetype: 'Technical Lead', target_role: 'Data Scientist', score: 810, match: 85 },
-                { display_name: 'Vikash T.', college: 'KIIT Bhubaneswar', archetype: 'Analytical Builder', target_role: 'Backend Dev', score: 620, match: 80 },
-            ]);
+            setPeers([]);
             setLoading(false);
         });
-    }, []);
+    }, [isReady]);
 
     return (
         <div className="min-h-screen bg-slate-50">

@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -12,36 +12,15 @@ interface StudentRow {
     skillsVerified: number; lastActive: string;
 }
 
-const MOCK_STUDENTS: StudentRow[] = [
-    { id: '1', name: 'Sneha R.', branch: 'CSE', cgpa: 8.4, mentixyScore: 82, problemsSolved: 234, aptitudePercentile: 87, streak: 47, readiness: 'highly-ready', skillsVerified: 5, lastActive: '2 hrs ago' },
-    { id: '2', name: 'Arjun K.', branch: 'CSE', cgpa: 7.2, mentixyScore: 68, problemsSolved: 87, aptitudePercentile: 71, streak: 23, readiness: 'ready', skillsVerified: 3, lastActive: '5 hrs ago' },
-    { id: '3', name: 'Priya M.', branch: 'ECE', cgpa: 7.8, mentixyScore: 73, problemsSolved: 156, aptitudePercentile: 79, streak: 15, readiness: 'ready', skillsVerified: 4, lastActive: '1 day ago' },
-    { id: '4', name: 'Vikram S.', branch: 'CSE', cgpa: 6.8, mentixyScore: 45, problemsSolved: 23, aptitudePercentile: 52, streak: 0, readiness: 'needs-work', skillsVerified: 1, lastActive: '5 days ago' },
-    { id: '5', name: 'Deepa L.', branch: 'IT', cgpa: 7.5, mentixyScore: 61, problemsSolved: 67, aptitudePercentile: 65, streak: 8, readiness: 'ready', skillsVerified: 2, lastActive: '12 hrs ago' },
-    { id: '6', name: 'Rahul D.', branch: 'CSE', cgpa: 8.1, mentixyScore: 78, problemsSolved: 189, aptitudePercentile: 84, streak: 31, readiness: 'highly-ready', skillsVerified: 4, lastActive: '1 hr ago' },
-    { id: '7', name: 'Kavya N.', branch: 'ECE', cgpa: 6.2, mentixyScore: 32, problemsSolved: 8, aptitudePercentile: 38, streak: 0, readiness: 'at-risk', skillsVerified: 0, lastActive: '12 days ago' },
-    { id: '8', name: 'Arun T.', branch: 'Mech', cgpa: 7.0, mentixyScore: 55, problemsSolved: 45, aptitudePercentile: 62, streak: 5, readiness: 'needs-work', skillsVerified: 2, lastActive: '2 days ago' },
-    { id: '9', name: 'Meena S.', branch: 'CSE', cgpa: 9.1, mentixyScore: 91, problemsSolved: 312, aptitudePercentile: 95, streak: 89, readiness: 'highly-ready', skillsVerified: 7, lastActive: '30 min ago' },
-    { id: '10', name: 'Karthik P.', branch: 'IT', cgpa: 6.5, mentixyScore: 41, problemsSolved: 19, aptitudePercentile: 45, streak: 0, readiness: 'at-risk', skillsVerified: 0, lastActive: '14 days ago' },
-];
-
-const UPCOMING_DRIVES = [
-    { company: 'TCS', date: 'Mar 10, 2026', roles: 'System Engineer', eligibility: 'CSE/IT/ECE, 6.0+ CGPA', eligible: 8, registered: 6, status: 'Registration Open' },
-    { company: 'Infosys', date: 'Mar 18, 2026', roles: 'Systems Engineer', eligibility: 'All branches, 6.5+ CGPA', eligible: 7, registered: 4, status: 'Registration Open' },
-    { company: 'Wipro', date: 'Mar 25, 2026', roles: 'Project Engineer', eligibility: 'CSE/IT, 6.0+ CGPA', eligible: 6, registered: 0, status: 'Upcoming' },
-    { company: 'Zoho', date: 'Apr 5, 2026', roles: 'MTS', eligibility: 'CSE, 7.0+ CGPA', eligible: 4, registered: 0, status: 'Upcoming' },
-];
-
 export default function TPODashboardPage() {
-    const [students] = useState(MOCK_STUDENTS);
-    const [drives] = useState(UPCOMING_DRIVES);
+    const [students] = useState<StudentRow[]>([]); // TODO: Fetch from campus API
+    const [drives] = useState<{ company: string; date: string; roles: string; eligibility: string; eligible: number; registered: number; status: string }[]>([]);
     const [activeTab, setActiveTab] = useState<'overview' | 'students' | 'drives' | 'analytics'>('overview');
     const [readinessFilter, setReadinessFilter] = useState('all');
     const [branchFilter, setBranchFilter] = useState('all');
     const [sortBy, setSortBy] = useState<'score' | 'cgpa' | 'streak'>('score');
 
-    useEffect(() => { if (!auth.isLoggedIn()) { window.location.href = '/login'; } }, []);
-
+    
     const readinessColor = (r: string) => r === 'highly-ready' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' :
         r === 'ready' ? 'bg-blue-50 text-blue-700 border-blue-200' :
             r === 'needs-work' ? 'bg-amber-50 text-amber-700 border-amber-200' :
@@ -63,8 +42,8 @@ export default function TPODashboardPage() {
         atRisk: students.filter(s => s.readiness === 'at-risk').length,
     };
 
-    const avgScore = Math.round(students.reduce((a, s) => a + s.mentixyScore, 0) / students.length);
-    const avgCgpa = (students.reduce((a, s) => a + s.cgpa, 0) / students.length).toFixed(1);
+    const avgScore = students.length > 0 ? Math.round(students.reduce((a, s) => a + s.mentixyScore, 0) / students.length) : 0;
+    const avgCgpa = students.length > 0 ? (students.reduce((a, s) => a + s.cgpa, 0) / students.length).toFixed(1) : '0.0';
     const activeStudents = students.filter(s => !s.lastActive.includes('day')).length;
 
     return (
@@ -120,7 +99,7 @@ export default function TPODashboardPage() {
                                 {[
                                     { label: 'Avg Mentixy Score', value: avgScore.toString(), color: 'text-indigo-600', sub: `vs national avg: 54` },
                                     { label: 'Avg CGPA', value: avgCgpa, color: 'text-violet-600', sub: 'B.E. CSE batch' },
-                                    { label: 'Active This Week', value: `${activeStudents}/${students.length}`, color: 'text-emerald-600', sub: `${Math.round(activeStudents / students.length * 100)}% engagement` },
+                                    { label: 'Active This Week', value: `${activeStudents}/${students.length}`, color: 'text-emerald-600', sub: `${students.length > 0 ? Math.round(activeStudents / students.length * 100) : 0}% engagement` },
                                     { label: 'Campus Wars Rank', value: '#7', color: 'text-amber-600', sub: 'South India ranking' },
                                 ].map(m => (
                                     <div key={m.label} className="st-card p-4">
@@ -136,10 +115,10 @@ export default function TPODashboardPage() {
                                 <h3 className="font-bold text-sm text-slate-900 mb-3">📊 Student Readiness Clusters</h3>
                                 <div className="grid grid-cols-4 gap-3">
                                     {[
-                                        { label: 'Highly Ready', count: clusters.highlyReady, pct: Math.round(clusters.highlyReady / students.length * 100), color: 'bg-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', desc: 'Score 75+, active, skills verified' },
-                                        { label: 'Ready', count: clusters.ready, pct: Math.round(clusters.ready / students.length * 100), color: 'bg-blue-500', bg: 'bg-blue-50', text: 'text-blue-700', desc: 'Score 60-74, active within 3 days' },
-                                        { label: 'Needs Work', count: clusters.needsWork, pct: Math.round(clusters.needsWork / students.length * 100), color: 'bg-amber-500', bg: 'bg-amber-50', text: 'text-amber-700', desc: 'Score 40-59, sporadic activity' },
-                                        { label: 'At Risk', count: clusters.atRisk, pct: Math.round(clusters.atRisk / students.length * 100), color: 'bg-red-500', bg: 'bg-red-50', text: 'text-red-700', desc: 'Score <40, inactive 7+ days' },
+                                        { label: 'Highly Ready', count: clusters.highlyReady, pct: students.length > 0 ? Math.round(clusters.highlyReady / students.length * 100) : 0, color: 'bg-emerald-500', bg: 'bg-emerald-50', text: 'text-emerald-700', desc: 'Score 75+, active, skills verified' },
+                                        { label: 'Ready', count: clusters.ready, pct: students.length > 0 ? Math.round(clusters.ready / students.length * 100) : 0, color: 'bg-blue-500', bg: 'bg-blue-50', text: 'text-blue-700', desc: 'Score 60-74, active within 3 days' },
+                                        { label: 'Needs Work', count: clusters.needsWork, pct: students.length > 0 ? Math.round(clusters.needsWork / students.length * 100) : 0, color: 'bg-amber-500', bg: 'bg-amber-50', text: 'text-amber-700', desc: 'Score 40-59, sporadic activity' },
+                                        { label: 'At Risk', count: clusters.atRisk, pct: students.length > 0 ? Math.round(clusters.atRisk / students.length * 100) : 0, color: 'bg-red-500', bg: 'bg-red-50', text: 'text-red-700', desc: 'Score <40, inactive 7+ days' },
                                     ].map(c => (
                                         <div key={c.label} className={`${c.bg} rounded-xl p-3 text-center`}>
                                             <p className={`text-2xl font-bold ${c.text}`}>{c.count}</p>
@@ -154,14 +133,16 @@ export default function TPODashboardPage() {
                             </div>
 
                             {/* Urgent Alerts */}
+                            {(students.length > 0 || drives.length > 0) && (
                             <div className="st-card p-5 border-l-4 border-red-400 bg-red-50/30">
                                 <h3 className="font-bold text-sm text-red-700 mb-2">⚠️ Urgent Attention Required</h3>
                                 <div className="space-y-2 text-xs text-slate-700">
-                                    <p>🔴 <strong>{clusters.atRisk} students</strong> haven't logged in for 7+ days. Last active: {students.filter(s => s.readiness === 'at-risk').map(s => s.name).join(', ')}.</p>
-                                    <p>🟡 <strong>TCS drive on Mar 10</strong> — only {drives[0].registered} of {drives[0].eligible} eligible students have registered.</p>
-                                    <p>🟡 <strong>{students.filter(s => s.aptitudePercentile < 65).length} students</strong> below TCS aptitude cutoff (65th %ile). Borderline: {students.filter(s => s.aptitudePercentile >= 58 && s.aptitudePercentile < 65).map(s => s.name).join(', ') || 'None'}.</p>
+                                    {clusters.atRisk > 0 && <p>🔴 <strong>{clusters.atRisk} students</strong> haven't logged in for 7+ days. Last active: {students.filter(s => s.readiness === 'at-risk').map(s => s.name).join(', ')}.</p>}
+                                    {drives.length > 0 && <p>🟡 <strong>{drives[0].company} drive on {drives[0].date}</strong> — only {drives[0].registered} of {drives[0].eligible} eligible students have registered.</p>}
+                                    {students.filter(s => s.aptitudePercentile < 65).length > 0 && <p>🟡 <strong>{students.filter(s => s.aptitudePercentile < 65).length} students</strong> below aptitude cutoff (65th %ile). Borderline: {students.filter(s => s.aptitudePercentile >= 58 && s.aptitudePercentile < 65).map(s => s.name).join(', ') || 'None'}.</p>}
                                 </div>
                             </div>
+                            )}
 
                             {/* Upcoming Drives */}
                             <div className="st-card p-5">
@@ -317,20 +298,9 @@ export default function TPODashboardPage() {
                                 {/* Department-wise */}
                                 <div className="st-card p-5">
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">🏛️ Department-Wise Readiness</h3>
-                                    {[
-                                        { dept: 'CSE', avg: 68, ready: '4/6', top: 'Meena S. (91)' },
-                                        { dept: 'IT', avg: 51, ready: '1/2', top: 'Deepa L. (61)' },
-                                        { dept: 'ECE', avg: 53, ready: '1/2', top: 'Priya M. (73)' },
-                                    ].map(d => (
-                                        <div key={d.dept} className="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
-                                            <span className="text-xs font-bold text-slate-700 w-10">{d.dept}</span>
-                                            <div className="flex-1 bg-slate-100 rounded-full h-3">
-                                                <div className={`h-3 rounded-full ${d.avg >= 65 ? 'bg-emerald-500' : d.avg >= 45 ? 'bg-amber-500' : 'bg-red-400'}`} style={{ width: `${d.avg}%` }} />
-                                            </div>
-                                            <span className="text-xs font-bold text-slate-600 w-8">{d.avg}</span>
-                                            <span className="text-[10px] text-slate-400 w-16 text-right">{d.ready} ready</span>
-                                        </div>
-                                    ))}
+                                    <div className="text-center py-6">
+                                        <p className="text-xs text-slate-500">Department data will populate when students are tracked</p>
+                                    </div>
                                 </div>
 
                                 {/* Vs Last Year */}
@@ -338,9 +308,9 @@ export default function TPODashboardPage() {
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">📈 vs Last Year (Class of 2025)</h3>
                                     {[
                                         { metric: 'Average Mentixy Score', current: avgScore, prev: 48, unit: '' },
-                                        { metric: 'Avg Problems Solved', current: Math.round(students.reduce((a, s) => a + s.problemsSolved, 0) / students.length), prev: 34, unit: '' },
-                                        { metric: 'Active Rate (7-day)', current: Math.round(activeStudents / students.length * 100), prev: 42, unit: '%' },
-                                        { metric: 'Skills Verified (avg)', current: +(students.reduce((a, s) => a + s.skillsVerified, 0) / students.length).toFixed(1), prev: 1.2, unit: '' },
+                                        { metric: 'Avg Problems Solved', current: students.length > 0 ? Math.round(students.reduce((a, s) => a + s.problemsSolved, 0) / students.length) : 0, prev: 34, unit: '' },
+                                        { metric: 'Active Rate (7-day)', current: students.length > 0 ? Math.round(activeStudents / students.length * 100) : 0, prev: 42, unit: '%' },
+                                        { metric: 'Skills Verified (avg)', current: students.length > 0 ? +(students.reduce((a, s) => a + s.skillsVerified, 0) / students.length).toFixed(1) : 0, prev: 1.2, unit: '' },
                                     ].map(m => {
                                         const delta = Math.round(((m.current - m.prev) / m.prev) * 100);
                                         return (

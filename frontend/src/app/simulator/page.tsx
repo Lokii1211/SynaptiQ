@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -76,7 +77,6 @@ export default function SimulatorPage() {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     useEffect(() => {

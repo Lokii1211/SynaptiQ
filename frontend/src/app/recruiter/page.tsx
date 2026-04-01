@@ -3,16 +3,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 
-const MOCK_CANDIDATES = [
-    { id: '1', name: 'Arjun Sharma', username: 'arjunsharma', college: 'VIT Vellore', tier: 2, stream: 'CSE', cgpa: 8.2, score: 812, archetype: 'Analytical Builder', skills: ['Python', 'React', 'ML', 'SQL'], streak: 45, problemsSolved: 128, match: 94, avatar: '👨‍💻', status: 'open', verified: ['Python', 'React'] },
-    { id: '2', name: 'Priya Patel', username: 'priyap', college: 'BITS Pilani', tier: 1, stream: 'IT', cgpa: 8.7, score: 875, archetype: 'Creative Strategist', skills: ['Java', 'Spring Boot', 'AWS', 'Docker'], streak: 67, problemsSolved: 203, match: 91, avatar: '👩‍💻', status: 'open', verified: ['Java', 'AWS'] },
-    { id: '3', name: 'Rahul Kumar', username: 'rahulk', college: 'NIT Trichy', tier: 1, stream: 'CSE', cgpa: 7.9, score: 756, archetype: 'Systematic Analyst', skills: ['C++', 'DSA', 'System Design', 'Go'], streak: 30, problemsSolved: 312, match: 88, avatar: '👨‍🎓', status: 'open', verified: ['C++', 'DSA'] },
-    { id: '4', name: 'Sneha Reddy', username: 'snehar', college: 'IIIT Hyderabad', tier: 1, stream: 'CSE', cgpa: 9.1, score: 923, archetype: 'Innovation Driver', skills: ['Python', 'TensorFlow', 'NLP', 'Research'], streak: 89, problemsSolved: 89, match: 95, avatar: '👩‍🔬', status: 'open', verified: ['Python', 'TensorFlow', 'NLP'] },
-    { id: '5', name: 'Karthik Iyer', username: 'karthiki', college: 'SRM Chennai', tier: 2, stream: 'ECE', cgpa: 7.5, score: 698, archetype: 'Practical Engineer', skills: ['Embedded C', 'IoT', 'Python', 'VHDL'], streak: 22, problemsSolved: 67, match: 79, avatar: '👨‍🔧', status: 'interviewing', verified: ['Embedded C'] },
-    { id: '6', name: 'Ananya Gupta', username: 'ananyag', college: 'DTU Delhi', tier: 1, stream: 'IT', cgpa: 8.4, score: 841, archetype: 'Full-Stack Generalist', skills: ['React', 'Node.js', 'MongoDB', 'TypeScript'], streak: 55, problemsSolved: 176, match: 90, avatar: '👩‍💼', status: 'open', verified: ['React', 'Node.js', 'TypeScript'] },
-    { id: '7', name: 'Vikram Singh', username: 'vikrams', college: 'LNMIIT Jaipur', tier: 2, stream: 'CSE', cgpa: 7.8, score: 729, archetype: 'Backend Specialist', skills: ['Java', 'Microservices', 'Kafka', 'PostgreSQL'], streak: 38, problemsSolved: 145, match: 85, avatar: '👨‍💻', status: 'open', verified: ['Java', 'PostgreSQL'] },
-    { id: '8', name: 'Divya Nair', username: 'divyan', college: 'CBIT Hyderabad', tier: 3, stream: 'CSE', cgpa: 8.0, score: 781, archetype: 'Data Storyteller', skills: ['Python', 'Pandas', 'Tableau', 'SQL'], streak: 41, problemsSolved: 92, match: 87, avatar: '👩‍📊', status: 'open', verified: ['Python', 'SQL', 'Tableau'] },
-];
+type Candidate = { id: string; name: string; username: string; college: string; tier: number; stream: string; cgpa: number; score: number; archetype: string; skills: string[]; streak: number; problemsSolved: number; match: number; avatar: string; status: string; verified: string[] };
 
 const FILTER_SKILLS = ['Python', 'React', 'Java', 'ML', 'C++', 'Node.js', 'AWS', 'Docker', 'TypeScript', 'SQL', 'Go', 'TensorFlow'];
 
@@ -21,7 +12,8 @@ export default function RecruiterPortalPage() {
     const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
     const [minScore, setMinScore] = useState(0);
     const [tierFilter, setTierFilter] = useState<number | null>(null);
-    const [selectedCandidate, setSelectedCandidate] = useState<typeof MOCK_CANDIDATES[0] | null>(null);
+    const [candidates] = useState<Candidate[]>([]); // TODO: Fetch from recruiter API
+    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
     const [shortlist, setShortlist] = useState<Set<string>>(new Set());
     const [activeTab, setActiveTab] = useState<'search' | 'shortlist' | 'analytics'>('search');
 
@@ -31,7 +23,7 @@ export default function RecruiterPortalPage() {
     const toggleShortlist = (id: string) =>
         setShortlist(prev => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
-    const filtered = MOCK_CANDIDATES.filter(c => {
+    const filtered = candidates.filter(c => {
         if (search && !c.name.toLowerCase().includes(search.toLowerCase()) && !c.college.toLowerCase().includes(search.toLowerCase())) return false;
         if (selectedSkills.length && !selectedSkills.some(s => c.skills.includes(s))) return false;
         if (minScore && c.score < minScore) return false;
@@ -39,7 +31,7 @@ export default function RecruiterPortalPage() {
         return true;
     });
 
-    const shortlisted = MOCK_CANDIDATES.filter(c => shortlist.has(c.id));
+    const shortlisted = candidates.filter(c => shortlist.has(c.id));
 
     const scoreColor = (s: number) => s >= 850 ? 'text-emerald-600 bg-emerald-50' : s >= 700 ? 'text-indigo-600 bg-indigo-50' : s >= 500 ? 'text-amber-600 bg-amber-50' : 'text-slate-500 bg-slate-50';
 

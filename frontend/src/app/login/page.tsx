@@ -1,14 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/lib/store/auth.store';
-import { auth } from '@/lib/api';
+import { api, auth, BACKEND_URL } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
-const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://mentixy-api.vercel.app' : 'http://localhost:8000';
-
 export default function LoginPage() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +16,7 @@ export default function LoginPage() {
     const { login, loading, error, clearError } = useAuthStore();
 
     useEffect(() => {
-        if (auth.isLoggedIn()) window.location.href = '/dashboard';
+        if (auth.isLoggedIn()) router.replace('/dashboard');
         return () => clearError();
     }, []);
 
@@ -24,12 +24,16 @@ export default function LoginPage() {
         e.preventDefault();
         try {
             await login(email, password);
-            window.location.href = '/dashboard';
+            router.push('/dashboard');
         } catch { /* error handled by store */ }
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = `${BACKEND_URL}/api/auth/google`;
+        // Google OAuth must go directly to the backend (not through the rewrite proxy)
+        const backendBase = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+            ? 'http://localhost:8000'
+            : 'https://mentixy-api.vercel.app';
+        window.location.href = `${backendBase}/api/auth/google`;
     };
 
     return (

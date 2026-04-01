@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 type AdminTab = 'overview' | 'users' | 'content' | 'analytics' | 'system';
@@ -12,7 +13,6 @@ export default function AdminPage() {
     const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         const user = auth.getUser();
         if (!user?.is_admin) { window.location.href = '/dashboard'; return; }
         setIsAdmin(true);
@@ -24,43 +24,17 @@ export default function AdminPage() {
         </div>
     );
 
-    const overviewStats = [
-        { label: 'Total Users', value: '2,847', change: '+124 this week', icon: '👤', color: 'from-blue-500 to-cyan-500' },
-        { label: 'Assessments', value: '1,205', change: '+89 this week', icon: '🧬', color: 'from-violet-500 to-purple-500' },
-        { label: 'Problems Solved', value: '18,392', change: '+2.1K this week', icon: '💻', color: 'from-emerald-500 to-teal-500' },
-        { label: 'Active Streaks', value: '847', change: '29.7% of users', icon: '🔥', color: 'from-amber-500 to-orange-500' },
-        { label: 'DAU', value: '412', change: '14.5% DAU/MAU', icon: '📈', color: 'from-rose-500 to-pink-500' },
-        { label: 'Avg Mentixy Score', value: '48.2', change: '+3.1 from last month', icon: '📊', color: 'from-indigo-500 to-blue-500' },
-    ];
+    // TODO: Fetch from /api/admin/stats
+    const overviewStats: { label: string; value: string; change: string; icon: string; color: string }[] = [];
 
-    const recentUsers = [
-        { name: 'Priya Sharma', email: 'priya@gmail.com', college: 'IIT Bombay', score: 920, joined: '2h ago', status: 'active' },
-        { name: 'Arjun Patel', email: 'arjun@gmail.com', college: 'NIT Trichy', score: 885, joined: '5h ago', status: 'active' },
-        { name: 'Sneha Roy', email: 'sneha@gmail.com', college: 'BITS Pilani', score: 860, joined: '1d ago', status: 'active' },
-        { name: 'Vikram Desai', email: 'vikram@gmail.com', college: 'NIT Warangal', score: 830, joined: '1d ago', status: 'inactive' },
-        { name: 'Anjali Gupta', email: 'anjali@gmail.com', college: 'VIT Vellore', score: 810, joined: '2d ago', status: 'active' },
-        { name: 'Rahul Kumar', email: 'rahul@gmail.com', college: 'SRM Chennai', score: 790, joined: '3d ago', status: 'active' },
-        { name: 'Deepika Nair', email: 'deepika@gmail.com', college: 'IIIT Hyd', score: 775, joined: '4d ago', status: 'inactive' },
-        { name: 'Karthik Iyer', email: 'karthik@gmail.com', college: 'NIT Karnataka', score: 760, joined: '5d ago', status: 'active' },
-    ];
+    // TODO: Fetch from /api/admin/users
+    const recentUsers: { name: string; email: string; college: string; score: number; joined: string; status: string }[] = [];
 
-    const systemHealth = [
-        { label: 'API Uptime', value: '99.97%', status: 'green' },
-        { label: 'Avg Response Time', value: '142ms', status: 'green' },
-        { label: 'DB Connections', value: '12/100', status: 'green' },
-        { label: 'Error Rate (24h)', value: '0.03%', status: 'green' },
-        { label: 'Storage Used', value: '2.4 GB', status: 'yellow' },
-        { label: 'AI API Credits', value: '78% remaining', status: 'yellow' },
-    ];
+    // TODO: Fetch from /api/admin/system-health
+    const systemHealth: { label: string; value: string; status: string }[] = [];
 
-    const contentStats = [
-        { label: 'Job Openings', value: 10, active: 8 },
-        { label: 'Community Posts', value: 52, active: 52 },
-        { label: 'Course Resources', value: 6, active: 6 },
-        { label: 'Career Paths', value: 12, active: 12 },
-        { label: 'Coding Problems', value: 150, active: 142 },
-        { label: 'Aptitude Questions', value: 200, active: 200 },
-    ];
+    // TODO: Fetch from /api/admin/content-stats
+    const contentStats: { label: string; value: number; active: number }[] = [];
 
     const TABS: { key: AdminTab; label: string; icon: string }[] = [
         { key: 'overview', label: 'Overview', icon: '📊' },
@@ -205,30 +179,8 @@ export default function AdminPage() {
                             {/* Engagement funnel */}
                             <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
                                 <h2 className="font-bold mb-4">📊 Engagement Funnel</h2>
-                                <div className="space-y-3">
-                                    {[
-                                        { stage: 'Signed Up', count: 2847, pct: 100 },
-                                        { stage: 'Completed Onboarding', count: 2134, pct: 75 },
-                                        { stage: 'Took Assessment', count: 1205, pct: 42 },
-                                        { stage: 'Solved 1+ Problem', count: 890, pct: 31 },
-                                        { stage: 'Active 7+ Days', count: 412, pct: 14.5 },
-                                        { stage: 'Referred a Friend', count: 89, pct: 3.1 },
-                                    ].map((f, i) => (
-                                        <div key={f.stage} className="flex items-center gap-3">
-                                            <span className="text-xs text-slate-500 w-44 shrink-0">{f.stage}</span>
-                                            <div className="flex-1 h-6 bg-slate-800 rounded-full overflow-hidden">
-                                                <motion.div
-                                                    className="h-full bg-gradient-to-r from-indigo-500 to-violet-500 rounded-full flex items-center justify-end pr-2"
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${f.pct}%` }}
-                                                    transition={{ delay: 0.2 + i * 0.08, duration: 0.5 }}
-                                                >
-                                                    <span className="text-[9px] text-white font-bold">{f.count.toLocaleString()}</span>
-                                                </motion.div>
-                                            </div>
-                                            <span className="text-xs text-slate-500 w-12 text-right">{f.pct}%</span>
-                                        </div>
-                                    ))}
+                                <div className="text-center py-8">
+                                    <p className="text-slate-500 text-sm">Engagement data will populate when connected to analytics API</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -333,49 +285,16 @@ export default function AdminPage() {
                                 {/* Feature Usage */}
                                 <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
                                     <h2 className="font-bold mb-4">Feature Usage (7 days)</h2>
-                                    <div className="space-y-3">
-                                        {[
-                                            { feature: 'Coding Arena', usage: 89 },
-                                            { feature: 'AI Career Chat', usage: 72 },
-                                            { feature: 'Assessment', usage: 65 },
-                                            { feature: 'Mock Interview', usage: 45 },
-                                            { feature: 'Daily Quests', usage: 38 },
-                                            { feature: 'Community', usage: 28 },
-                                            { feature: 'Mock Drive', usage: 15 },
-                                        ].map((f, i) => (
-                                            <div key={f.feature} className="flex items-center gap-3">
-                                                <span className="text-xs text-slate-400 w-28 shrink-0">{f.feature}</span>
-                                                <div className="flex-1 h-3 bg-slate-800 rounded-full overflow-hidden">
-                                                    <motion.div className="h-full bg-indigo-500 rounded-full" initial={{ width: 0 }}
-                                                        animate={{ width: `${f.usage}%` }} transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }} />
-                                                </div>
-                                                <span className="text-xs text-slate-500 w-8 text-right">{f.usage}%</span>
-                                            </div>
-                                        ))}
+                                    <div className="text-center py-8">
+                                        <p className="text-slate-500 text-sm">Feature usage data will populate from analytics API</p>
                                     </div>
                                 </div>
 
                                 {/* College Distribution */}
                                 <div className="bg-slate-900 border border-slate-800 rounded-xl p-5">
                                     <h2 className="font-bold mb-4">Top Colleges</h2>
-                                    <div className="space-y-2">
-                                        {[
-                                            { college: 'VIT Vellore', count: 312 },
-                                            { college: 'SRM Chennai', count: 289 },
-                                            { college: 'NIT Trichy', count: 187 },
-                                            { college: 'BITS Pilani', count: 156 },
-                                            { college: 'IIT Bombay', count: 134 },
-                                            { college: 'NIT Warangal', count: 98 },
-                                            { college: 'IIIT Hyderabad', count: 87 },
-                                        ].map((c, i) => (
-                                            <div key={c.college} className="flex items-center justify-between py-2 border-b border-slate-800/50">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-xs text-slate-500 w-5">{i + 1}.</span>
-                                                    <span className="text-sm">{c.college}</span>
-                                                </div>
-                                                <span className="text-xs text-indigo-400 font-bold">{c.count} users</span>
-                                            </div>
-                                        ))}
+                                    <div className="text-center py-8">
+                                        <p className="text-slate-500 text-sm">College distribution will populate from user data</p>
                                     </div>
                                 </div>
                             </div>

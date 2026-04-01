@@ -1,21 +1,21 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useAuthStore } from '@/lib/store/auth.store';
-import { auth } from '@/lib/api';
+import { auth, BACKEND_URL } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
-const BACKEND_URL = (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') ? 'https://mentixy-api.vercel.app' : 'http://localhost:8000';
-
 export default function SignupPage() {
+    const router = useRouter();
     const [form, setForm] = useState({ email: '', password: '', display_name: '', username: '' });
     const [showPassword, setShowPassword] = useState(false);
     const [passwordStrength, setPasswordStrength] = useState(0);
     const { signup, loading, error, clearError } = useAuthStore();
 
     useEffect(() => {
-        if (auth.isLoggedIn()) window.location.href = '/dashboard';
+        if (auth.isLoggedIn()) router.replace('/dashboard');
         return () => clearError();
     }, []);
 
@@ -35,13 +35,15 @@ export default function SignupPage() {
         e.preventDefault();
         try {
             await signup(form);
-            window.location.href = '/assessment';
+            router.push('/assessment');
         } catch { /* error handled by store */ }
     };
 
     const handleGoogleSignup = () => {
-        // Redirect to backend Google OAuth flow
-        window.location.href = `${BACKEND_URL}/api/auth/google`;
+        const backendBase = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+            ? 'http://localhost:8000'
+            : 'https://mentixy-api.vercel.app';
+        window.location.href = `${backendBase}/api/auth/google`;
     };
 
     const update = (field: string) => (e: React.ChangeEvent<HTMLInputElement>) =>

@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 
 interface StepConfig {
     title: string;
@@ -61,7 +62,6 @@ export default function OnboardingPage() {
     });
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     const toggleInterest = (val: string) => {

@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -57,6 +58,7 @@ function containsDistress(text: string): boolean {
 }
 
 export default function ChatPage() {
+    const { isReady } = useAuthGuard();
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -66,13 +68,11 @@ export default function ChatPage() {
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) window.location.href = '/login';
-
-        // Bible XF-09 — Late night guardrail
+        if (!isReady) return;
         if (isLateNight()) {
             setShowLateNightBanner(true);
         }
-    }, []);
+    }, [isReady]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

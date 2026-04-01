@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -25,82 +26,11 @@ interface Post {
     };
 }
 
-const MOCK_POSTS: Post[] = [
-    {
-        id: '1', author: { name: 'Priya S.', avatar: '🧑‍💻', college: 'VIT Vellore', badge: 'Top Contributor' },
-        content: 'Just cleared Amazon OA! Key tip: Practice sliding window and two-pointer problems. The HLD round was about designing a URL shortener. Happy to share my prep resources 🎉',
-        tags: ['placement', 'amazon', 'tips'], likes: 42, replies: 18, time: '2h ago', liked: false
-    },
-    {
-        id: '2', author: { name: 'Rohit K.', avatar: '👨‍🎓', college: 'NIT Trichy' },
-        content: 'Can someone explain the difference between observability and monitoring? Getting conflicting answers from different sources. Preparing for SRE roles.',
-        tags: ['devops', 'question'], likes: 15, replies: 8, time: '5h ago', liked: false
-    },
-    {
-        id: '3', author: { name: 'Ananya M.', avatar: '👩‍💼', college: 'BITS Pilani', badge: 'Mentor' },
-        content: 'Free resource dump for Data Science prep:\n• Statistics: Khan Academy + StatQuest\n• ML: Andrew Ng Coursera (financial aid available)\n• Projects: Kaggle micro-courses\n• SQL: Mode Analytics\nDon\'t pay for overpriced courses!',
-        tags: ['resources', 'data-science', 'free'], likes: 87, replies: 32, time: '1d ago', liked: false
-    },
-    {
-        id: '4', author: { name: 'Vikram P.', avatar: '🧑', college: 'SRM Chennai' },
-        content: 'CGPA 6.8 — placed at Zoho for 6.5 LPA! Proof that CGPA isn\'t everything. Focus on DSA + projects + communication skills. Campus placement isn\'t the only way.',
-        tags: ['success-story', 'motivation'], likes: 156, replies: 45, time: '2d ago', liked: false
-    },
-    {
-        id: '5', author: { name: 'Kavitha R.', avatar: '👩‍🔬', college: 'Anna University' },
-        content: 'Which is better for a fresher: service company (TCS, Infosys) or startup? I have offers from both. The startup pays more but less job security. Parents want the big brand name.',
-        tags: ['career-advice', 'dilemma'], likes: 28, replies: 22, time: '3d ago', liked: false
-    },
-    {
-        id: '6', author: { name: 'Suresh V.', avatar: '🎉', college: 'PSG Tech, Coimbatore', badge: 'Placed' },
-        content: 'Got placed at Amazon! 6 months of prep, 200+ problems, 4 mock interviews. Hard work pays off!',
-        tags: ['placement', 'amazon', 'success-story'], likes: 234, replies: 67, time: '6h ago', liked: false,
-        postType: 'placement',
-        metadata: { company: 'Amazon', role: 'SDE-1', ctc: '28.5 LPA', rounds: ['Online Assessment', 'Technical 1', 'Technical 2', 'Bar Raiser', 'HR'] }
-    },
-    {
-        id: '7', author: { name: 'Deepa M.', avatar: '💡', college: 'IIIT Hyderabad' },
-        content: 'Clean O(n) solution for "Trapping Rain Water" using two pointers. No extra space needed!',
-        tags: ['solution', 'dsa', 'two-pointers'], likes: 89, replies: 15, time: '8h ago', liked: false,
-        postType: 'solution',
-        metadata: { problemTitle: 'Trapping Rain Water', language: 'Python', codeSnippet: 'def trap(height):\n    l, r = 0, len(height)-1\n    lmax = rmax = ans = 0\n    while l < r:\n        if height[l] < height[r]:\n            lmax = max(lmax, height[l])\n            ans += lmax - height[l]\n            l += 1\n        else:\n            rmax = max(rmax, height[r])\n            ans += rmax - height[r]\n            r -= 1\n    return ans', complexity: 'O(n) time, O(1) space' }
-    },
-    {
-        id: '8', author: { name: 'Mentixy Team', avatar: '📊', college: 'Official', badge: 'Staff' },
-        content: 'Which company\'s interview process do you find the hardest?',
-        tags: ['poll', 'placement'], likes: 67, replies: 34, time: '4h ago', liked: false,
-        postType: 'poll',
-        metadata: {
-            pollOptions: [
-                { text: 'Amazon (HLD + LP rounds)', votes: 142 },
-                { text: 'Google (5 rounds + committee)', votes: 198 },
-                { text: 'Flipkart (Machine Coding round)', votes: 87 },
-                { text: 'Microsoft (Group Fly round)', votes: 64 },
-            ],
-            pollTotal: 491,
-        }
-    },
-    {
-        id: '9', author: { name: 'Arun K.', avatar: '🎤', college: 'IIT Bombay', badge: 'SDE @ Google' },
-        content: 'AMA: I\'m a Google SDE-2 (ex-Amazon). Ask me anything about FAANG interviews, work culture, or career transitions!',
-        tags: ['ama', 'google', 'faang'], likes: 312, replies: 89, time: '1h ago', liked: false,
-        postType: 'ama',
-        metadata: { amaHost: 'Arun K.', amaRole: 'SDE-2 @ Google', amaStatus: 'live' }
-    },
-];
-
-const TRENDING_TOPICS = [
-    { tag: 'placement-2026', count: 342, emoji: '🎯' },
-    { tag: 'off-campus', count: 218, emoji: '🌐' },
-    { tag: 'dsa-roadmap', count: 189, emoji: '🗺️' },
-    { tag: 'salary-negotiation', count: 156, emoji: '💰' },
-    { tag: 'resume-tips', count: 134, emoji: '📄' },
-];
 
 const CATEGORIES = ['All', 'Placements', 'Career Advice', 'Resources', 'Success Stories', 'Questions', 'Off-Campus'];
 
 export default function CommunityPage() {
-    const [posts, setPosts] = useState<Post[]>(MOCK_POSTS);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [filter, setFilter] = useState('All');
     const [showCompose, setShowCompose] = useState(false);
     const [newPost, setNewPost] = useState('');
@@ -118,7 +48,6 @@ export default function CommunityPage() {
     ];
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     const toggleLike = (id: string) => {
@@ -369,15 +298,7 @@ export default function CommunityPage() {
                                 <div className="st-card p-4">
                                     <h3 className="font-bold text-slate-900 text-sm mb-3">🔥 Trending Topics</h3>
                                     <div className="space-y-2">
-                                        {TRENDING_TOPICS.map(topic => (
-                                            <div key={topic.tag} className="flex items-center gap-2.5 group cursor-pointer">
-                                                <span className="text-lg">{topic.emoji}</span>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-medium text-slate-700 group-hover:text-indigo-600 transition-colors">#{topic.tag}</p>
-                                                    <p className="text-[10px] text-slate-400">{topic.count} discussions</p>
-                                                </div>
-                                            </div>
-                                        ))}
+                                        <p className="text-xs text-slate-400 text-center py-4">Topics will appear as the community grows</p>
                                     </div>
                                 </div>
 

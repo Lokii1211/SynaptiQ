@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { difficultyColor } from '@/lib/utils/india';
 import { classifyError } from '@/components/PaywallTrigger';
 
@@ -41,14 +42,15 @@ export default function CodingProblemPage() {
     const [leftTab, setLeftTab] = useState<'desc' | 'solution' | 'discuss' | 'notes'>('desc');
     const [userNotes, setUserNotes] = useState('');
 
+    const { isReady } = useAuthGuard();
+
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
-        if (!slug) return;
+        if (!isReady || !slug) return;
         api.getCodingProblem(slug).then(p => {
             setProblem(p);
             setLoading(false);
         }).catch(() => setLoading(false));
-    }, [slug]);
+    }, [slug, isReady]);
 
     const handleLanguageChange = (newLang: string) => {
         setLanguage(newLang);
@@ -272,23 +274,10 @@ export default function CodingProblemPage() {
 
                     {leftTab === 'discuss' && (
                         <div className="p-4 space-y-3">
-                            {[
-                                { user: 'Priya S.', comment: 'Used HashMap approach, runs in O(n). Clean solution!', time: '2h ago', likes: 12 },
-                                { user: 'Rohit K.', comment: 'For Java users: use TreeMap if you need sorted order.', time: '5h ago', likes: 8 },
-                                { user: 'Ananya M.', comment: 'Edge case: what if array is empty? Add a check at start.', time: '1d ago', likes: 5 },
-                            ].map((c, i) => (
-                                <div key={i} className="bg-slate-800 rounded-lg p-3 border border-slate-700">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <span className="text-xs text-indigo-300 font-semibold">{c.user}</span>
-                                        <span className="text-[9px] text-slate-500">{c.time}</span>
-                                    </div>
-                                    <p className="text-xs text-slate-300">{c.comment}</p>
-                                    <div className="flex items-center gap-2 mt-2">
-                                        <button className="text-[10px] text-slate-500 hover:text-red-400">❤ {c.likes}</button>
-                                        <button className="text-[10px] text-slate-500 hover:text-indigo-400">Reply</button>
-                                    </div>
-                                </div>
-                            ))}
+                            <div className="text-center py-8">
+                                <span className="text-3xl block mb-2">💬</span>
+                                <p className="text-xs text-slate-500 mb-3">No discussions yet. Be the first to share your approach!</p>
+                            </div>
                             <button className="w-full text-center text-xs text-indigo-400 hover:text-indigo-300 py-2">💬 Add a comment...</button>
                         </div>
                     )}

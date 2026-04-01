@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -81,7 +82,6 @@ export default function AchievementsPage() {
     const [user, setUser] = useState<any>(null);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         api.getMe().then(u => {
             setUser(u);
             // Hydrate badge progress from user data

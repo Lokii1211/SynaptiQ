@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -51,8 +52,10 @@ export default function AptitudePage() {
     // Question start time tracking
     const questionStartTime = useRef(Date.now());
 
+    const { isReady } = useAuthGuard();
+
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; }
+        // Auth handled by useAuthGuard
     }, []);
 
     // Timer for timed mode

@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -31,19 +32,6 @@ interface Notification {
     icon: string;
 }
 
-const MOCK_NOTIFICATIONS: Notification[] = [
-    { id: '1', type: 'streak', title: '🔥 Streak at Risk!', message: "You haven't logged in today. Complete any task to keep your 12-day streak alive!", time: '2 hours ago', read: false, action_url: '/tracker', icon: '🔥' },
-    { id: '2', type: 'achievement', title: '🏅 Badge Unlocked!', message: 'You earned "Problem Crusher" — solve 10 coding problems. +75 XP!', time: '5 hours ago', read: false, action_url: '/achievements', icon: '🏅' },
-    { id: '3', type: 'job', title: '💼 New Match: Flipkart', message: 'SDE-1 at Flipkart matches your profile (92% fit). ₹18-24 LPA. Apply before March 5.', time: '1 day ago', read: false, action_url: '/jobs', icon: '💼' },
-    { id: '4', type: 'challenge', title: '🏆 Weekly Challenge Available', message: 'This week: Solve 5 Dynamic Programming problems. +200 XP bonus!', time: '1 day ago', read: true, action_url: '/challenges', icon: '🏆' },
-    { id: '5', type: 'community', title: '🗣️ New Reply to Your Post', message: 'Sneha Roy replied to "How to prepare for TCS NQT?" in the Community Forum.', time: '2 days ago', read: true, action_url: '/community', icon: '🗣️' },
-    { id: '6', type: 'system', title: '📊 Weekly Progress Report', message: 'You solved 12 problems, improved your Mentixy Score by 5 points, and maintained a 12-day streak. Great week!', time: '3 days ago', read: true, icon: '📊' },
-    { id: '7', type: 'achievement', title: '⭐ Score Milestone', message: 'Your Mentixy Score™ crossed 50! You earned the "Rising Star" badge.', time: '4 days ago', read: true, action_url: '/score', icon: '⭐' },
-    { id: '8', type: 'job', title: '🎯 Internship Alert', message: 'Google STEP Internship 2026 applications are now open. Recommended based on your coding score.', time: '5 days ago', read: true, action_url: '/internships', icon: '🎯' },
-    { id: '9', type: 'streak', title: '🎉 30-Day Streak!', message: "Incredible! You've maintained a 30-day streak. You earned +200 XP and the Monthly Machine badge!", time: '1 week ago', read: true, action_url: '/tracker', icon: '🎉' },
-    { id: '10', type: 'system', title: '🆕 New Feature: Mock Interview', message: 'Practice with our AI-powered Mock Interview Simulator. Choose from 10 companies and 4 interview types.', time: '1 week ago', read: true, action_url: '/simulator', icon: '🆕' },
-];
-
 const TYPE_COLORS: Record<string, { bg: string; border: string }> = {
     streak: { bg: 'bg-orange-50', border: 'border-l-orange-500' },
     achievement: { bg: 'bg-amber-50', border: 'border-l-amber-500' },
@@ -59,11 +47,8 @@ export default function NotificationsPage() {
     const [filter, setFilter] = useState<string>('all');
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
-        // Try real API first, then fallback to mock
         api.getNotifications().then(data => {
             const raw = data.notifications || [];
-            // Map API fields to component fields
             const mapped: Notification[] = raw.map((n: any) => ({
                 id: n.id,
                 type: n.type || 'system',
@@ -74,10 +59,10 @@ export default function NotificationsPage() {
                 action_url: n.action_url,
                 icon: n.icon || '🔔',
             }));
-            setNotifications(mapped.length > 0 ? mapped : MOCK_NOTIFICATIONS);
+            setNotifications(mapped);
             setLoading(false);
         }).catch(() => {
-            setNotifications(MOCK_NOTIFICATIONS);
+            setNotifications([]);
             setLoading(false);
         });
     }, []);

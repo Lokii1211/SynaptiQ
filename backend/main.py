@@ -81,13 +81,9 @@ Built for Indian students. Powered by AI.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://mentixy.vercel.app",
-        "https://mentixy-api.vercel.app",
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "http://127.0.0.1:3000",
+        "*",  # Allow all origins — frontend may be on any Vercel subdomain
     ],
-    allow_credentials=True,
+    allow_credentials=False,  # Must be False when using allow_origins=["*"]
     allow_methods=["*"],
     allow_headers=["*"],
 )

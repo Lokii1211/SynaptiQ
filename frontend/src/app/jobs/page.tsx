@@ -3,22 +3,24 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { formatSalaryRange } from '@/lib/utils/india';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
 export default function JobsPage() {
+    const { isReady } = useAuthGuard();
     const [jobs, setJobs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState({ type: '', location: '' });
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!isReady) return;
         api.getJobs().then((data) => {
             setJobs(data.jobs || []);
             setLoading(false);
         }).catch(() => setLoading(false));
-    }, []);
+    }, [isReady]);
 
     const filteredJobs = jobs.filter(j => {
         if (filter.type && j.job_type !== filter.type) return false;

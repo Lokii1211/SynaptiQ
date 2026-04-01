@@ -1,7 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { api, auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { QuestionCard } from '@/components/assessment/QuestionCard';
 import { ResultsReveal } from '@/components/assessment/ResultsReveal';
 import { useAssessmentStore } from '@/lib/store/assessment.store';
@@ -9,15 +10,10 @@ import { useAssessmentStore } from '@/lib/store/assessment.store';
 type AssessmentPhase = 'intro' | 'questions' | 'submitting' | 'results';
 
 export default function AssessmentPage() {
+    const { isReady } = useAuthGuard();
     const [phase, setPhase] = useState<AssessmentPhase>('intro');
-    const { sessionId, questions, answers, currentIndex, setSession, addAnswer, nextQuestion, setResults, results, reset } = useAssessmentStore();
+    const { sessionId, questions, answers, currentIndex, setSession, addAnswer, nextQuestion, setResults, results } = useAssessmentStore();
     const [error, setError] = useState('');
-
-    useEffect(() => {
-        if (!auth.isLoggedIn()) {
-            window.location.href = '/login';
-        }
-    }, []);
 
     const startAssessment = async () => {
         try {
@@ -42,7 +38,6 @@ export default function AssessmentPage() {
         });
 
         if (currentIndex + 1 >= questions.length) {
-            // Submit
             setPhase('submitting');
             try {
                 const allAnswers = [
@@ -60,6 +55,12 @@ export default function AssessmentPage() {
             nextQuestion();
         }
     };
+
+    if (!isReady) return (
+        <div className="min-h-screen bg-white flex items-center justify-center">
+            <div className="w-10 h-10 border-3 border-slate-200 border-t-indigo-600 rounded-full animate-spin" />
+        </div>
+    );
 
     // Intro screen
     if (phase === 'intro') {

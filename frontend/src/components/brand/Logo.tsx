@@ -57,8 +57,8 @@ export function Logo({ size = 'md', showText = true, href, className = '' }: Log
             <LogoMark size={s.icon} />
             {showText && (
                 <span className={`${s.text} font-extrabold tracking-tight`} style={{ fontFamily: "'Outfit', 'Inter', system-ui, sans-serif" }}>
-                    <span className="text-slate-900">Skill</span>
-                    <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Ten</span>
+                    <span className="text-slate-900">Menti</span>
+                    <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">xy</span>
                 </span>
             )}
         </div>

@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 /* ═══ Concepts Library Data ═══ */
@@ -99,8 +99,7 @@ export default function ConceptsPage() {
     const [viewTab, setViewTab] = useState<'concepts' | 'sheets' | 'micro'>('concepts');
     const [quizMode, setQuizMode] = useState(false);
 
-    useEffect(() => { if (!auth.isLoggedIn()) window.location.href = '/login'; }, []);
-
+    
     const filteredConcepts = activeCategory === 'all' ? CONCEPTS : CONCEPTS.filter(c => c.category === activeCategory);
 
     return (

@@ -1,7 +1,6 @@
-'use client';
+﻿'use client';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth } from '@/lib/api';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -25,73 +24,12 @@ interface InterviewExp {
     verified: boolean;
 }
 
-const MOCK_EXPERIENCES: InterviewExp[] = [
-    {
-        id: '1', company: 'TCS', role: 'System Engineer', city: 'Chennai', date: 'Jan 2026',
-        collegeTier: 'Tier-3', cgpa: '7.2 – 8.0', prepTime: '4 weeks',
-        outcome: 'selected', ctc: '3.6 LPA', mentixyScore: 68,
-        rounds: [
-            { type: 'Online Test (NQT)', duration: '180 min', questions: ['Aptitude (Quant, LR, VA) — 60 questions', 'Coding — 1 Easy problem (Two Sum variant)', 'Email Writing section'], difficulty: 'Easy-Medium', performance: 'confident' },
-            { type: 'Technical Interview', duration: '25 min', questions: ['Tell me about yourself', 'What is OOP? Explain 4 pillars with examples', 'Difference between ArrayList and LinkedList', 'Write a program to reverse a string'], difficulty: 'Easy', performance: 'confident' },
-            { type: 'HR Interview', duration: '15 min', questions: ['Why TCS?', 'Are you willing to relocate?', 'Where do you see yourself in 5 years?', 'Expected salary?'], difficulty: 'Easy', performance: 'confident' },
-        ],
-        tips: 'Focus on NQT aptitude — it is the main filter. Coding was basic, just know arrays and strings. For HR, research TCS values and mention them.',
-        author: { name: 'Sneha R.', college: 'SKCT, Coimbatore', avatar: '👩‍💻' }, helpful: 234, verified: true,
-    },
-    {
-        id: '2', company: 'Infosys', role: 'Systems Engineer', city: 'Mysore', date: 'Dec 2025',
-        collegeTier: 'Tier-2', cgpa: '8.0 – 9.0', prepTime: '3 weeks',
-        outcome: 'selected', ctc: '3.6 LPA', mentixyScore: 72,
-        rounds: [
-            { type: 'Online Test (InfyTQ)', duration: '120 min', questions: ['MCQ on Java/Python basics — 20 questions', 'Hands-on coding — 2 problems (String manipulation, Array sorting)', 'Pseudo-code reading — 5 questions'], difficulty: 'Medium', performance: 'struggled' },
-            { type: 'Technical + HR', duration: '30 min', questions: ['Explain your final year project', 'What is normalization in DBMS?', 'Difference between TCP and UDP', 'Why Infosys over TCS?'], difficulty: 'Medium', performance: 'confident' },
-        ],
-        tips: 'InfyTQ coding is harder than TCS NQT. Practice Medium-level problems. They ask DBMS and Networks theory — don\'t skip CS fundamentals.',
-        author: { name: 'Arjun K.', college: 'PSG Tech, Coimbatore', avatar: '👨‍💻' }, helpful: 189, verified: true,
-    },
-    {
-        id: '3', company: 'Wipro', role: 'Project Engineer', city: 'Bangalore', date: 'Nov 2025',
-        collegeTier: 'Tier-3', cgpa: '6.0 – 7.0', prepTime: '2 weeks',
-        outcome: 'selected', ctc: '3.5 LPA',
-        rounds: [
-            { type: 'Online Assessment', duration: '90 min', questions: ['Aptitude — 20 MCQs (Time & Work, Percentages, Probability)', 'Written Communication — Essay on "AI in Education"', 'Coding — 2 Easy problems'], difficulty: 'Easy', performance: 'confident' },
-            { type: 'Technical Interview', duration: '20 min', questions: ['What are data types in Java?', 'Explain inheritance with example', 'What is SQL join?', 'What project did you do?'], difficulty: 'Easy', performance: 'confident' },
-            { type: 'HR Interview', duration: '10 min', questions: ['Bond period — are you okay with 1 year?', 'Relocation preference', 'Any backlogs?'], difficulty: 'Easy', performance: 'confident' },
-        ],
-        tips: 'Wipro is the easiest service company to crack. Focus on aptitude basics and know your project well. Bond period is 1 year, ₹75K penalty.',
-        author: { name: 'Priya M.', college: 'KCT, Coimbatore', avatar: '👩' }, helpful: 312, verified: true,
-    },
-    {
-        id: '4', company: 'Amazon', role: 'SDE-1', city: 'Hyderabad', date: 'Oct 2025',
-        collegeTier: 'Tier-1 (NIT)', cgpa: '8.0 – 9.0', prepTime: '3 months',
-        outcome: 'rejected', mentixyScore: 81,
-        rounds: [
-            { type: 'Online Assessment', duration: '120 min', questions: ['2 Medium-Hard coding problems (Graph BFS, Dynamic Programming)', 'Work simulation assessment — 7 scenarios'], difficulty: 'Hard', performance: 'confident' },
-            { type: 'Technical Round 1', duration: '60 min', questions: ['Design a LRU Cache', 'Merge K Sorted Lists (optimal solution required)', 'Time and space complexity analysis'], difficulty: 'Hard', performance: 'struggled' },
-            { type: 'Technical Round 2', duration: '60 min', questions: ['System Design: Design URL Shortener', 'Behavioral: Tell me about a time you disagreed with a team member (LP: Have Backbone)', 'Implement Trie from scratch'], difficulty: 'Hard', performance: 'blanked' },
-        ],
-        tips: 'Amazon expects OPTIMAL solutions, not just correct ones. I got stuck on System Design — start preparing early. Leadership Principles are real — prepare 5 STAR stories.',
-        author: { name: 'Vikram S.', college: 'NIT Trichy', avatar: '🧑‍💻' }, helpful: 456, verified: true,
-    },
-    {
-        id: '5', company: 'Zoho', role: 'Member Technical Staff', city: 'Chennai', date: 'Sep 2025',
-        collegeTier: 'Tier-2', cgpa: '7.2 – 8.0', prepTime: '6 weeks',
-        outcome: 'selected', ctc: '6.0 LPA',
-        rounds: [
-            { type: 'Round 1 - C Programming', duration: '90 min', questions: ['10 C output prediction questions', '5 pointer-based problems', '2 coding problems (string reversal, matrix rotation)'], difficulty: 'Medium', performance: 'confident' },
-            { type: 'Round 2 - Advanced Programming', duration: '120 min', questions: ['Implement a simple file system in C', 'Design a library management system (class design)', 'Database schema design for e-commerce'], difficulty: 'Hard', performance: 'struggled' },
-            { type: 'Round 3 - HR + Technical', duration: '45 min', questions: ['Deep dive into projects', 'Why not higher studies?', 'Design a parking lot system (OOP)', 'Puzzle: 8 balls problem'], difficulty: 'Medium', performance: 'confident' },
-        ],
-        tips: 'Zoho loves C programming. If you only know Python/Java, you\'ll struggle. They test system design thinking even for freshers. Prepare puzzles — they ask 1-2 brain teasers.',
-        author: { name: 'Rahul D.', college: 'CEG Anna University', avatar: '👨‍🎓' }, helpful: 278, verified: true,
-    },
-];
 
 const COMPANIES = ['All', 'TCS', 'Infosys', 'Wipro', 'Amazon', 'Google', 'Flipkart', 'Zoho', 'Microsoft', 'Cognizant'];
 const OUTCOMES = ['All Outcomes', 'Selected', 'Rejected'];
 
 export default function InterviewExperiencesPage() {
-    const [experiences] = useState<InterviewExp[]>(MOCK_EXPERIENCES);
+    const [experiences] = useState<InterviewExp[]>([]); // TODO: Fetch from community API
     const [companyFilter, setCompanyFilter] = useState('All');
     const [outcomeFilter, setOutcomeFilter] = useState('All Outcomes');
     const [expandedId, setExpandedId] = useState<string | null>(null);

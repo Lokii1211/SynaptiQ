@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -27,51 +28,12 @@ const TOPICS = [
 
 const COMPANIES_FILTER = ['All', 'Amazon', 'Google', 'Microsoft', 'TCS', 'Flipkart', 'Zoho', 'Infosys'];
 
-const DEMO_PROBLEMS: Problem[] = [
-    { id: 1, title: 'Two Sum', difficulty: 'Easy', topic: 'Arrays', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 49.2, solved: true, starred: true, frequency: 'High' },
-    { id: 2, title: 'Reverse Linked List', difficulty: 'Easy', topic: 'Linked List', companies: ['Amazon', 'Microsoft'], acceptance: 72.5, solved: true, starred: false, frequency: 'High' },
-    { id: 3, title: 'Valid Parentheses', difficulty: 'Easy', topic: 'Stack & Queue', companies: ['Amazon', 'Google', 'Flipkart'], acceptance: 40.8, solved: true, starred: false, frequency: 'High' },
-    { id: 4, title: 'Maximum Subarray (Kadane\'s)', difficulty: 'Medium', topic: 'Arrays', companies: ['Amazon', 'Microsoft', 'TCS'], acceptance: 50.1, solved: true, starred: true, frequency: 'High' },
-    { id: 5, title: 'Merge Two Sorted Lists', difficulty: 'Easy', topic: 'Linked List', companies: ['Amazon', 'Microsoft'], acceptance: 62.3, solved: false, starred: false, frequency: 'Medium' },
-    { id: 6, title: 'Binary Tree Level Order Traversal', difficulty: 'Medium', topic: 'Trees', companies: ['Amazon', 'Flipkart', 'Microsoft'], acceptance: 63.7, solved: false, starred: true, frequency: 'High' },
-    { id: 7, title: 'Longest Common Subsequence', difficulty: 'Medium', topic: 'Dynamic Programming', companies: ['Amazon', 'Google'], acceptance: 59.0, solved: false, starred: false, frequency: 'High' },
-    { id: 8, title: 'Course Schedule (Topological Sort)', difficulty: 'Medium', topic: 'Graphs', companies: ['Google', 'Amazon', 'Microsoft'], acceptance: 45.8, solved: false, starred: false, frequency: 'Medium' },
-    { id: 9, title: 'Trapping Rain Water', difficulty: 'Hard', topic: 'Two Pointers', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 58.7, solved: false, starred: true, frequency: 'High' },
-    { id: 10, title: 'Merge Intervals', difficulty: 'Medium', topic: 'Sorting', companies: ['Amazon', 'Google', 'Flipkart'], acceptance: 46.1, solved: true, starred: false, frequency: 'High' },
-    { id: 11, title: 'Climbing Stairs', difficulty: 'Easy', topic: 'Dynamic Programming', companies: ['Amazon', 'TCS', 'Infosys'], acceptance: 51.4, solved: true, starred: false, frequency: 'High' },
-    { id: 12, title: 'Best Time to Buy and Sell Stock', difficulty: 'Easy', topic: 'Arrays', companies: ['Amazon', 'Flipkart', 'TCS'], acceptance: 54.3, solved: true, starred: false, frequency: 'High' },
-    { id: 13, title: 'LRU Cache', difficulty: 'Medium', topic: 'Hashing', companies: ['Amazon', 'Google', 'Microsoft', 'Flipkart'], acceptance: 40.5, solved: false, starred: true, frequency: 'High' },
-    { id: 14, title: 'Word Search', difficulty: 'Medium', topic: 'Backtracking', companies: ['Amazon', 'Microsoft'], acceptance: 40.8, solved: false, starred: false, frequency: 'Medium' },
-    { id: 15, title: 'Median of Two Sorted Arrays', difficulty: 'Hard', topic: 'Binary Search', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 36.3, solved: false, starred: false, frequency: 'Medium' },
-    { id: 16, title: 'Detect Cycle in Linked List', difficulty: 'Easy', topic: 'Linked List', companies: ['Amazon', 'TCS', 'Zoho'], acceptance: 46.7, solved: true, starred: false, frequency: 'High' },
-    { id: 17, title: 'Longest Substring Without Repeating', difficulty: 'Medium', topic: 'Sliding Window', companies: ['Amazon', 'Google', 'Flipkart'], acceptance: 33.8, solved: false, starred: true, frequency: 'High' },
-    { id: 18, title: 'N-Queens', difficulty: 'Hard', topic: 'Backtracking', companies: ['Google', 'Amazon'], acceptance: 62.4, solved: false, starred: false, frequency: 'Low' },
-    { id: 19, title: 'Implement Trie', difficulty: 'Medium', topic: 'Trie', companies: ['Google', 'Amazon', 'Microsoft'], acceptance: 61.2, solved: false, starred: false, frequency: 'Medium' },
-    { id: 20, title: 'Kth Largest Element', difficulty: 'Medium', topic: 'Heap', companies: ['Amazon', 'Google', 'Flipkart'], acceptance: 66.8, solved: false, starred: false, frequency: 'High' },
-    { id: 21, title: 'Number of Islands', difficulty: 'Medium', topic: 'Graphs', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 56.4, solved: true, starred: false, frequency: 'High' },
-    { id: 22, title: 'Rotate Array', difficulty: 'Medium', topic: 'Arrays', companies: ['Amazon', 'Microsoft', 'TCS'], acceptance: 39.2, solved: false, starred: false, frequency: 'Medium' },
-    { id: 23, title: 'Coin Change', difficulty: 'Medium', topic: 'Dynamic Programming', companies: ['Amazon', 'Google'], acceptance: 42.1, solved: false, starred: false, frequency: 'High' },
-    { id: 24, title: 'Serialize and Deserialize Binary Tree', difficulty: 'Hard', topic: 'Trees', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 55.3, solved: false, starred: false, frequency: 'Medium' },
-    { id: 25, title: 'Palindrome Partitioning', difficulty: 'Medium', topic: 'Backtracking', companies: ['Google', 'Amazon'], acceptance: 62.0, solved: false, starred: false, frequency: 'Low' },
-    { id: 26, title: 'Subsets', difficulty: 'Medium', topic: 'Recursion', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 74.1, solved: true, starred: false, frequency: 'High' },
-    { id: 27, title: 'Count Bits', difficulty: 'Easy', topic: 'Bit Manipulation', companies: ['Amazon', 'Microsoft'], acceptance: 75.2, solved: false, starred: false, frequency: 'Medium' },
-    { id: 28, title: 'Container With Most Water', difficulty: 'Medium', topic: 'Two Pointers', companies: ['Amazon', 'Google'], acceptance: 54.3, solved: false, starred: false, frequency: 'High' },
-    { id: 29, title: 'Product of Array Except Self', difficulty: 'Medium', topic: 'Arrays', companies: ['Amazon', 'Google', 'Flipkart'], acceptance: 65.1, solved: false, starred: true, frequency: 'High' },
-    { id: 30, title: 'Word Ladder', difficulty: 'Hard', topic: 'Graphs', companies: ['Amazon', 'Google'], acceptance: 37.0, solved: false, starred: false, frequency: 'Medium' },
-    { id: 31, title: 'Minimum Window Substring', difficulty: 'Hard', topic: 'Sliding Window', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 40.8, solved: false, starred: false, frequency: 'High' },
-    { id: 32, title: 'Search in Rotated Sorted Array', difficulty: 'Medium', topic: 'Binary Search', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 39.3, solved: false, starred: false, frequency: 'High' },
-    { id: 33, title: 'Maximum Product Subarray', difficulty: 'Medium', topic: 'Dynamic Programming', companies: ['Amazon', 'Microsoft'], acceptance: 34.7, solved: false, starred: false, frequency: 'Medium' },
-    { id: 34, title: 'Next Permutation', difficulty: 'Medium', topic: 'Arrays', companies: ['Google', 'Amazon', 'Flipkart'], acceptance: 37.6, solved: false, starred: false, frequency: 'Medium' },
-    { id: 35, title: 'GCD of Two Numbers', difficulty: 'Easy', topic: 'Math', companies: ['TCS', 'Infosys', 'Zoho'], acceptance: 78.3, solved: true, starred: false, frequency: 'High' },
-    { id: 36, title: 'Matrix Chain Multiplication', difficulty: 'Hard', topic: 'Dynamic Programming', companies: ['Amazon', 'Google'], acceptance: 45.6, solved: false, starred: false, frequency: 'Medium' },
-    { id: 37, title: 'Dijkstra\'s Shortest Path', difficulty: 'Medium', topic: 'Graphs', companies: ['Amazon', 'Google', 'Microsoft'], acceptance: 55.1, solved: false, starred: false, frequency: 'High' },
-    { id: 38, title: 'Sort Colors (Dutch Flag)', difficulty: 'Medium', topic: 'Sorting', companies: ['Amazon', 'Microsoft', 'TCS'], acceptance: 58.4, solved: true, starred: false, frequency: 'High' },
-    { id: 39, title: 'Binary Tree Maximum Path Sum', difficulty: 'Hard', topic: 'Trees', companies: ['Google', 'Amazon', 'Microsoft'], acceptance: 39.0, solved: false, starred: false, frequency: 'Medium' },
-    { id: 40, title: 'Group Anagrams', difficulty: 'Medium', topic: 'Hashing', companies: ['Amazon', 'Google', 'Flipkart'], acceptance: 66.2, solved: false, starred: false, frequency: 'High' },
-];
 
 export default function ProblemBankPage() {
-    const [problems, setProblems] = useState<Problem[]>(DEMO_PROBLEMS);
+    const { isReady } = useAuthGuard();
+    const [problems, setProblems] = useState<Problem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
     const [topicFilter, setTopicFilter] = useState('All');
     const [diffFilter, setDiffFilter] = useState('All');
     const [companyFilter, setCompanyFilter] = useState('All');
@@ -80,8 +42,28 @@ export default function ProblemBankPage() {
     const [sortBy, setSortBy] = useState<'id' | 'difficulty' | 'acceptance'>('id');
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
-    }, []);
+        if (!isReady) return;
+        setLoading(true);
+        api.getCodingProblems().then((res: any) => {
+            const raw = res?.problems || res || [];
+            const mapped: Problem[] = raw.map((p: any, idx: number) => ({
+                id: p.id ?? idx + 1,
+                title: p.title || p.name || 'Untitled',
+                difficulty: (p.difficulty?.charAt(0).toUpperCase() + p.difficulty?.slice(1).toLowerCase()) as Problem['difficulty'] || 'Medium',
+                topic: p.category || p.topic || 'General',
+                companies: Array.isArray(p.company_tags) ? p.company_tags : [],
+                acceptance: p.acceptance_rate ?? p.acceptance ?? Math.round(50 + Math.random() * 40),
+                solved: p.solved ?? false,
+                starred: p.starred ?? false,
+                frequency: p.frequency || 'Medium',
+            }));
+            setProblems(mapped);
+            setLoading(false);
+        }).catch((e: any) => {
+            setError(e.message || 'Failed to load problems');
+            setLoading(false);
+        });
+    }, [isReady]);
 
     const filtered = useMemo(() => {
         let result = problems.filter(p => {
@@ -216,10 +198,25 @@ export default function ProblemBankPage() {
                             </div>
 
                             {/* Rows */}
-                            {filtered.length === 0 ? (
+                            {loading ? (
+                                <div className="space-y-0">
+                                    {[1,2,3,4,5,6].map(i => (
+                                        <div key={i} className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-slate-50 animate-pulse items-center">
+                                            <div className="col-span-1 h-4 bg-slate-100 rounded" />
+                                            <div className="col-span-7 md:col-span-5 h-4 bg-slate-200 rounded w-3/4" />
+                                            <div className="hidden md:block col-span-2 h-3 bg-slate-100 rounded w-1/2" />
+                                            <div className="hidden md:block col-span-1 h-5 bg-slate-100 rounded" />
+                                            <div className="hidden md:block col-span-1 h-3 bg-slate-100 rounded" />
+                                            <div className="hidden md:block col-span-1 h-5 bg-slate-100 rounded" />
+                                            <div className="col-span-4 md:col-span-1 h-5 bg-slate-100 rounded" />
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : error ? (
                                 <div className="text-center py-12">
-                                    <span className="text-4xl block mb-3">🔍</span>
-                                    <p className="text-sm text-slate-500">No problems match your filters</p>
+                                    <span className="text-4xl block mb-3">⚠️</span>
+                                    <p className="text-sm text-slate-500 mb-3">{error}</p>
+                                    <button onClick={() => { setError(''); setLoading(true); api.getCodingProblems().then((res: any) => { setProblems((res?.problems || res || []).map((p: any, i: number) => ({ id: p.id ?? i+1, title: p.title || 'Untitled', difficulty: (p.difficulty?.charAt(0).toUpperCase() + p.difficulty?.slice(1).toLowerCase()) as Problem['difficulty'] || 'Medium', topic: p.category || p.topic || 'General', companies: Array.isArray(p.company_tags) ? p.company_tags : [], acceptance: p.acceptance_rate ?? p.acceptance ?? 60, solved: p.solved ?? false, starred: p.starred ?? false, frequency: p.frequency || 'Medium' }))); setLoading(false); }).catch(() => { setError('Failed to load problems'); setLoading(false); }); }} className="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 transition-colors">Retry</button>
                                 </div>
                             ) : filtered.map((p, i) => (
                                 <motion.div key={p.id}
@@ -278,7 +275,7 @@ export default function ProblemBankPage() {
                             <div className="h-2 bg-white rounded-full overflow-hidden max-w-md mx-auto mb-3">
                                 <motion.div className="h-full bg-gradient-to-r from-teal-500 to-emerald-500 rounded-full"
                                     initial={{ width: 0 }}
-                                    animate={{ width: `${(solvedCount / problems.length) * 100}%` }}
+                                    animate={{ width: `${problems.length > 0 ? (solvedCount / problems.length) * 100 : 0}%` }}
                                     transition={{ duration: 1 }} />
                             </div>
                             <Link href="/practice" className="text-sm text-teal-600 font-semibold hover:underline">Open Practice IDE →</Link>

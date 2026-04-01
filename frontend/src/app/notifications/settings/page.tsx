@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -59,7 +59,6 @@ export default function NotificationSettingsPage() {
     const [maxPerDay, setMaxPerDay] = useState(5);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     const toggleRule = (id: string) => {

@@ -2,6 +2,8 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
+import { ROUTES } from '@/lib/constants/routes';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import { useLanguage } from '@/lib/language-context';
@@ -59,8 +61,10 @@ export default function SettingsPage() {
         compact_mode: false,
     });
 
+    const { isReady } = useAuthGuard();
+
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!isReady) return;
         api.getMe().then(u => {
             setUser(u);
             setForm({
@@ -78,8 +82,8 @@ export default function SettingsPage() {
                 open_to_work: u?.profile?.open_to_work || false,
             });
             setLoading(false);
-        }).catch(() => { auth.clearToken(); window.location.href = '/login'; });
-    }, []);
+        }).catch(() => { auth.clearToken(); window.location.href = ROUTES.LOGIN; });
+    }, [isReady]);
 
     const handleSave = async () => {
         setSaved(false);
@@ -113,7 +117,7 @@ export default function SettingsPage() {
 
     const handleLogout = () => {
         auth.clearToken();
-        window.location.href = '/login';
+        window.location.href = ROUTES.LOGIN;
     };
 
     const tabs: { key: Tab; icon: string; label: string }[] = [

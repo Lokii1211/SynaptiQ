@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 /* ═══ Probability Calculator Data (Bible VX2) ═══ */
@@ -88,8 +88,7 @@ const COMPANY_PROBABILITIES: CompanyProbability[] = [
 export default function PlacementProbabilityPage() {
     const [selectedCompany, setSelectedCompany] = useState<CompanyProbability | null>(null);
 
-    useEffect(() => { if (!auth.isLoggedIn()) window.location.href = '/login'; }, []);
-
+    
     const sortedCompanies = [...COMPANY_PROBABILITIES].sort((a, b) => b.probability - a.probability);
 
     return (

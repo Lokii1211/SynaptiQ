@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { api, auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -13,23 +14,25 @@ interface Referral {
 }
 
 export default function ReferPage() {
+    const { isReady } = useAuthGuard();
     const [referralCode, setReferralCode] = useState('');
     const [copied, setCopied] = useState(false);
     const [referrals, setReferrals] = useState<Referral[]>([]);
     const [totalXP, setTotalXP] = useState(0);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
-        const user = auth.getUser();
-        const code = user?.profile?.username ? `SKTN-${user.profile.username.toUpperCase().slice(0, 6)}` : 'SKTN-USER';
-        setReferralCode(code);
-        // Mock referral data
-        setReferrals([
-            { name: 'Rahul K.', joined: '2 days ago', status: 'completed_assessment' },
-            { name: 'Sneha M.', joined: '5 days ago', status: 'active' },
-        ]);
-        setTotalXP(175);
-    }, []);
+        if (!isReady) return;
+        // Fetch real user + referral data
+        Promise.all([
+            api.getMe().catch(() => null),
+            api.getReferrals().catch(() => ({ referrals: [], total_xp: 0 })),
+        ]).then(([user, refData]) => {
+            const username = user?.profile?.username || user?.username || 'USER';
+            setReferralCode(`MNTXY-${username.toUpperCase().slice(0, 6)}`);
+            setReferrals(refData?.referrals || []);
+            setTotalXP(refData?.total_xp || 0);
+        });
+    }, [isReady]);
 
     const shareLink = `https://mentixy.in/signup?ref=${referralCode}`;
     const shareText = `🧬 I discovered my Career DNA on Mentixy — find out which career suits YOU! Free AI-powered career intelligence for Indian students.\n\n${shareLink}`;

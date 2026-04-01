@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 /* ═══ Company Prep Kit Data ═══ */
@@ -134,8 +134,7 @@ export default function CompanyPrepPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [filterType, setFilterType] = useState<'all' | 'service' | 'product'>('all');
 
-    useEffect(() => { if (!auth.isLoggedIn()) window.location.href = '/login'; }, []);
-
+    
     const filteredKits = COMPANY_KITS.filter(k => {
         const matchesSearch = k.company.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesType = filterType === 'all' || k.type.toLowerCase() === filterType;

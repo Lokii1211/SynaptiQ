@@ -1,8 +1,8 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { api, auth } from '@/lib/api';
 import { Logo } from '@/components/brand/Logo';
 
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {

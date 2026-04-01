@@ -3,18 +3,20 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { difficultyColor } from '@/lib/utils/india';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
 export default function CodingArenaPage() {
+    const { isReady } = useAuthGuard();
     const [problems, setProblems] = useState<any[]>([]);
     const [stats, setStats] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('all');
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!isReady) return;
         Promise.all([
             api.getCodingProblems().catch(() => ({ problems: [], total: 0 })),
             api.getCodingStats().catch(() => null),
@@ -23,7 +25,7 @@ export default function CodingArenaPage() {
             setStats(s);
             setLoading(false);
         });
-    }, []);
+    }, [isReady]);
 
     const filtered = problems.filter(p =>
         filter === 'all' || p.difficulty === filter

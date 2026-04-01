@@ -1,40 +1,31 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
-const MOCK_STUDENTS = [
-    { id: '1', name: 'Arjun Sharma', stream: 'CSE', year: 3, score: 812, streak: 45, status: 'placed', company: 'Infosys', ctc: 6.5, avatar: '👨‍💻', risk: 'low' },
-    { id: '2', name: 'Priya Patel', stream: 'IT', year: 4, score: 875, streak: 67, status: 'placed', company: 'TCS', ctc: 5.2, avatar: '👩‍💻', risk: 'low' },
-    { id: '3', name: 'Rahul Kumar', stream: 'CSE', year: 3, score: 456, streak: 5, status: 'preparing', company: '', ctc: 0, avatar: '👨‍🎓', risk: 'high' },
-    { id: '4', name: 'Sneha Reddy', stream: 'ECE', year: 4, score: 723, streak: 30, status: 'interviewing', company: 'Wipro', ctc: 0, avatar: '👩‍🔬', risk: 'medium' },
-    { id: '5', name: 'Karthik Iyer', stream: 'CSE', year: 3, score: 389, streak: 2, status: 'inactive', company: '', ctc: 0, avatar: '👨‍🔧', risk: 'critical' },
-    { id: '6', name: 'Ananya Gupta', stream: 'IT', year: 4, score: 841, streak: 55, status: 'placed', company: 'Cognizant', ctc: 4.8, avatar: '👩‍💼', risk: 'low' },
-    { id: '7', name: 'Vikram Singh', stream: 'CSE', year: 3, score: 612, streak: 15, status: 'preparing', company: '', ctc: 0, avatar: '👨‍💻', risk: 'medium' },
-    { id: '8', name: 'Divya Nair', stream: 'MECH', year: 4, score: 334, streak: 0, status: 'inactive', company: '', ctc: 0, avatar: '👩‍📊', risk: 'critical' },
-    { id: '9', name: 'Amit Joshi', stream: 'CSE', year: 4, score: 756, streak: 38, status: 'interviewing', company: 'Capgemini', ctc: 0, avatar: '👨‍💻', risk: 'low' },
-    { id: '10', name: 'Meera Das', stream: 'IT', year: 3, score: 567, streak: 10, status: 'preparing', company: '', ctc: 0, avatar: '👩‍💻', risk: 'medium' },
-];
-
-const UPCOMING_DRIVES = [
-    { company: 'TCS', date: 'Mar 5, 2026', roles: 'Software Engineer, Business Analyst', ctc: '3.36 - 7.0 LPA', eligible: 42, registered: 38 },
-    { company: 'Infosys', date: 'Mar 12, 2026', roles: 'System Engineer, Power Programmer', ctc: '3.6 - 9.5 LPA', eligible: 56, registered: 31 },
-    { company: 'Wipro', date: 'Mar 20, 2026', roles: 'Project Engineer, WILP', ctc: '3.5 - 6.5 LPA', eligible: 48, registered: 22 },
-    { company: 'Cognizant', date: 'Apr 1, 2026', roles: 'GenC, GenC Next', ctc: '4.0 - 6.75 LPA', eligible: 38, registered: 15 },
-];
+type Student = { id: string; name: string; stream: string; year: number; score: number; streak: number; status: string; company: string; ctc: number; avatar: string; risk: string };
+type Drive = { company: string; date: string; roles: string; ctc: string; eligible: number; registered: number };
 
 export default function CampusCommandPage() {
     const [activeTab, setActiveTab] = useState<'overview' | 'students' | 'drives' | 'analytics' | 'reports'>('overview');
     const [studentFilter, setStudentFilter] = useState<string>('all');
+    const [students, setStudents] = useState<Student[]>([]);
+    const [upcomingDrives, setUpcomingDrives] = useState<Drive[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const placed = MOCK_STUDENTS.filter(s => s.status === 'placed');
-    const atRisk = MOCK_STUDENTS.filter(s => s.risk === 'critical' || s.risk === 'high');
-    const avgScore = Math.round(MOCK_STUDENTS.reduce((s, c) => s + c.score, 0) / MOCK_STUDENTS.length);
-    const placementRate = Math.round((placed.length / MOCK_STUDENTS.length) * 100);
+    useEffect(() => {
+        // TODO: Fetch from real campus admin API
+        setLoading(false);
+    }, []);
 
-    const filteredStudents = studentFilter === 'all' ? MOCK_STUDENTS :
+    const placed = students.filter(s => s.status === 'placed');
+    const atRisk = students.filter(s => s.risk === 'critical' || s.risk === 'high');
+    const avgScore = students.length > 0 ? Math.round(students.reduce((s, c) => s + c.score, 0) / students.length) : 0;
+    const placementRate = students.length > 0 ? Math.round((placed.length / students.length) * 100) : 0;
+
+    const filteredStudents = studentFilter === 'all' ? students :
         studentFilter === 'at-risk' ? atRisk :
-            MOCK_STUDENTS.filter(s => s.status === studentFilter);
+            students.filter(s => s.status === studentFilter);
 
     const riskColor = (r: string) => r === 'critical' ? 'bg-red-100 text-red-700' : r === 'high' ? 'bg-orange-100 text-orange-700' : r === 'medium' ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700';
     const statusBadge = (s: string) => s === 'placed' ? 'bg-emerald-100 text-emerald-700' : s === 'interviewing' ? 'bg-blue-100 text-blue-700' : s === 'preparing' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
@@ -77,7 +68,7 @@ export default function CampusCommandPage() {
                         {/* KPI Cards */}
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {[
-                                { label: 'Total Students', value: MOCK_STUDENTS.length.toString(), icon: '👥', sub: 'Active on Mentixy', color: 'from-indigo-500/20 to-violet-500/20', border: 'border-indigo-500/30' },
+                                { label: 'Total Students', value: students.length.toString(), icon: '👥', sub: 'Active on Mentixy', color: 'from-indigo-500/20 to-violet-500/20', border: 'border-indigo-500/30' },
                                 { label: 'Placement Rate', value: `${placementRate}%`, icon: '🎯', sub: `${placed.length} placed`, color: 'from-emerald-500/20 to-green-500/20', border: 'border-emerald-500/30' },
                                 { label: 'Avg Score', value: avgScore.toString(), icon: '📊', sub: 'Mentixy Score', color: 'from-amber-500/20 to-orange-500/20', border: 'border-amber-500/30' },
                                 { label: 'At-Risk Students', value: atRisk.length.toString(), icon: '⚠️', sub: 'Need attention', color: 'from-red-500/20 to-rose-500/20', border: 'border-red-500/30' },
@@ -122,7 +113,7 @@ export default function CampusCommandPage() {
                             <div className="bg-slate-800 rounded-xl border border-slate-700 p-5">
                                 <h3 className="font-bold text-sm mb-4">🏢 Upcoming Placement Drives</h3>
                                 <div className="space-y-3">
-                                    {UPCOMING_DRIVES.slice(0, 3).map(d => (
+                                    {upcomingDrives.slice(0, 3).map(d => (
                                         <div key={d.company} className="bg-slate-700/50 rounded-lg p-3">
                                             <div className="flex items-center justify-between">
                                                 <p className="font-semibold text-sm">{d.company}</p>
@@ -147,10 +138,10 @@ export default function CampusCommandPage() {
                             <h3 className="font-bold text-sm mb-4">📊 Placement Funnel</h3>
                             <div className="grid grid-cols-5 gap-2">
                                 {[
-                                    { label: 'Registered', count: MOCK_STUDENTS.length, pct: 100, color: 'bg-slate-600' },
-                                    { label: 'Active', count: MOCK_STUDENTS.filter(s => s.status !== 'inactive').length, pct: 80, color: 'bg-indigo-500' },
-                                    { label: 'Applying', count: MOCK_STUDENTS.filter(s => ['interviewing', 'placed'].includes(s.status)).length, pct: 50, color: 'bg-violet-500' },
-                                    { label: 'Interviewing', count: MOCK_STUDENTS.filter(s => s.status === 'interviewing').length, pct: 20, color: 'bg-amber-500' },
+                                    { label: 'Registered', count: students.length, pct: 100, color: 'bg-slate-600' },
+                                    { label: 'Active', count: students.filter(s => s.status !== 'inactive').length, pct: students.length > 0 ? 80 : 0, color: 'bg-indigo-500' },
+                                    { label: 'Applying', count: students.filter(s => ['interviewing', 'placed'].includes(s.status)).length, pct: students.length > 0 ? 50 : 0, color: 'bg-violet-500' },
+                                    { label: 'Interviewing', count: students.filter(s => s.status === 'interviewing').length, pct: students.length > 0 ? 20 : 0, color: 'bg-amber-500' },
                                     { label: 'Placed', count: placed.length, pct: placementRate, color: 'bg-emerald-500' },
                                 ].map((stage, i) => (
                                     <div key={stage.label} className="text-center">
@@ -246,7 +237,7 @@ export default function CampusCommandPage() {
                             </button>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {UPCOMING_DRIVES.map(d => (
+                            {upcomingDrives.map(d => (
                                 <motion.div key={d.company} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                                     className="bg-slate-800 rounded-xl border border-slate-700 p-5">
                                     <div className="flex items-start justify-between mb-3">
@@ -309,14 +300,14 @@ export default function CampusCommandPage() {
                             <div className="grid grid-cols-5 gap-3">
                                 {[
                                     { range: '0-200', count: 0, color: 'bg-red-500' },
-                                    { range: '201-400', count: 2, color: 'bg-orange-500' },
-                                    { range: '401-600', count: 2, color: 'bg-amber-500' },
-                                    { range: '601-800', count: 3, color: 'bg-indigo-500' },
-                                    { range: '801+', count: 3, color: 'bg-emerald-500' },
+                                    { range: '201-400', count: 0, color: 'bg-orange-500' },
+                                    { range: '401-600', count: 0, color: 'bg-amber-500' },
+                                    { range: '601-800', count: 0, color: 'bg-indigo-500' },
+                                    { range: '801+', count: 0, color: 'bg-emerald-500' },
                                 ].map(b => (
                                     <div key={b.range} className="text-center">
                                         <div className="relative h-24 flex items-end justify-center mb-2">
-                                            <motion.div initial={{ height: 0 }} animate={{ height: `${(b.count / MOCK_STUDENTS.length) * 100 * 2.5}%` }}
+                                            <motion.div initial={{ height: 0 }} animate={{ height: `${students.length > 0 ? (b.count / students.length) * 100 * 2.5 : 0}%` }}
                                                 transition={{ duration: 0.6 }}
                                                 className={`w-full rounded-t-lg ${b.color}`} />
                                         </div>

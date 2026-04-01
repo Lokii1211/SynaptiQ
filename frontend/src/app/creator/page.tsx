@@ -1,9 +1,9 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import Link from 'next/link';
 
 /* ═══ Creator Analytics Data ═══ */
@@ -55,8 +55,7 @@ export default function CreatorPage() {
     const [tab, setTab] = useState<'overview' | 'analytics' | 'series' | 'mentor'>('overview');
     const [period, setPeriod] = useState<'7d' | '30d' | '90d' | '365d'>('30d');
 
-    useEffect(() => { if (!auth.isLoggedIn()) window.location.href = '/login'; }, []);
-
+    
     return (
         <div className="min-h-screen bg-slate-50">
             <TopBar />

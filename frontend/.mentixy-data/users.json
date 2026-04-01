@@ -1,0 +1,10 @@
+[
+  {
+    "id": "admin-001",
+    "email": "admin@mentixy.ai",
+    "name": "Mentixy Admin",
+    "passwordHash": "$2b$10$K1RVhek98iyzBKtedwG5BuNvpQB1H68H/jwr7Yh1VM6hmBk2vHaDO",
+    "role": "admin",
+    "points": 0
+  }
+]

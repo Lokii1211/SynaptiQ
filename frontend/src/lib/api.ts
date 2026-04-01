@@ -1,24 +1,31 @@
 /**
  * Mentixy — API Client
- * All frontend requests go through here to the Python backend
+ * All frontend requests go through here to the Python backend.
+ *
+ * URL Strategy:
+ * - Local dev: hits localhost:8000 directly (NEXT_PUBLIC_BACKEND_URL=http://localhost:8000)
+ * - Production (Vercel): uses a RELATIVE path '' so requests go to same origin.
+ *   The vercel.json rewrite then forwards /api/* → mentixy-api.vercel.app/api/*
+ *   This avoids CORS entirely since same-origin requests don't need CORS headers.
  */
-
-// On production, call the backend directly at mentixy-api.vercel.app.
-// The Vercel rewrite proxy was stripping POST request bodies, causing signup/login to fail.
-// CORS is enabled on the backend (allow_origins=["*"]) so direct cross-origin calls work.
-// On localhost, hit the local backend directly.
 function getBackendUrl(): string {
+    // SSR: use env var
     if (typeof window === 'undefined') {
-        // Server-side rendering
-        return (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000').replace(/\/+$/, '');
+        return (process.env.NEXT_PUBLIC_BACKEND_URL || '').replace(/\/+$/, '');
     }
+    // Local dev: use explicit env var (http://localhost:8000)
+    if (process.env.NEXT_PUBLIC_BACKEND_URL && process.env.NEXT_PUBLIC_BACKEND_URL !== '') {
+        return process.env.NEXT_PUBLIC_BACKEND_URL.replace(/\/+$/, '');
+    }
+    // localhost: direct to local backend
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
         return 'http://localhost:8000';
     }
-    // Production: call the backend directly
-    return 'https://mentixy-api.vercel.app';
+    // Production: use EMPTY string = same origin, Vercel rewrite handles /api/* forwarding
+    return '';
 }
 const BACKEND_URL = getBackendUrl();
+export { BACKEND_URL }; // Export for Google OAuth redirect
 
 class ApiError extends Error {
     status: number;
@@ -47,8 +54,11 @@ async function request<T = any>(endpoint: string, options: RequestInit = {}): Pr
             headers,
         });
     } catch (networkError) {
-        console.error('Network error — is the backend running?', networkError);
-        throw new ApiError('Cannot connect to server. Please check your internet connection or try again later.', 0);
+        console.error(`[Mentixy] Network error hitting ${BACKEND_URL}/api${endpoint}`, networkError);
+        throw new ApiError(
+            'Cannot connect to server. Please check your internet connection and try again.',
+            0
+        );
     }
 
     if (!res.ok) {
@@ -326,6 +336,37 @@ export const api = {
     // ═══════════ REFERRAL SYSTEM ═══════════
     getReferrals: () => request('/referral/'),
     applyReferral: (code: string) => request('/referral/apply', { method: 'POST', body: JSON.stringify({ ref_code: code }) }),
+
+    // ═══════════ LEADERBOARD & CAMPUS WARS ═══════════
+    getLeaderboard: (metric: string = 'mentixy_score', period: string = 'all') =>
+        request(`/leaderboard/individual?metric=${metric}&period=${period}`),
+
+    getLeaderboardOverview: () => request('/leaderboard'),
+
+    getCampusWars: (state?: string, tier?: number) => {
+        const params = new URLSearchParams();
+        if (state) params.set('state', state);
+        if (tier) params.set('tier', String(tier));
+        const q = params.toString() ? `?${params.toString()}` : '';
+        return request(`/leaderboard/campus-wars${q}`);
+    },
+
+    getMyCollegeRank: () => request('/leaderboard/my-college'),
+
+    getTodayContribution: () => request('/leaderboard/today-contribution'),
+
+    // ═══════════ 1v1 BATTLE ═══════════
+    getBattleStats: () => request('/battle/stats/me'),
+
+    getBattleHistory: (limit: number = 10) => request(`/battle/history?limit=${limit}`),
+
+    getFriendsOnline: () => request('/battle/friends-online'),
+
+    startBattle: (data: { difficulty: string; time_limit: number; topic: string; mode: 'random' | 'friend'; friend_id?: string }) =>
+        request('/battle/start', { method: 'POST', body: JSON.stringify(data) }),
+
+    submitBattle: (battle_id: string, data: { language: string; code: string }) =>
+        request(`/battle/${battle_id}/submit`, { method: 'POST', body: JSON.stringify(data) }),
 };
 
 // Auth helpers

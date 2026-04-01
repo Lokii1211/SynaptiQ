@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { auth, api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -85,7 +86,6 @@ export default function ProfilePage() {
     };
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         loadProfile();
     }, []);
 
@@ -204,7 +204,7 @@ export default function ProfilePage() {
                                     <p className="text-[10px] text-slate-400">Top {100 - profile.scorePercentile}% overall · Top {100 - profile.collegePeerPercentile}% at college</p>
                                 </div>
                                 <div className="space-y-1.5">
-                                    {Object.entries(profile.scoreBreakdown).map(([key, val]) => (
+                                    {(Object.entries(profile.scoreBreakdown) as [string, number][]).map(([key, val]) => (
                                         <div key={key} className="flex items-center gap-2">
                                             <span className="text-[10px] text-slate-500 w-20 capitalize">{key}</span>
                                             <div className="flex-1 bg-white rounded-full h-2">
@@ -221,7 +221,7 @@ export default function ProfilePage() {
                             <div className="st-card p-4">
                                 <p className="text-[10px] text-slate-400 uppercase font-bold mb-2">🎯 Career Target</p>
                                 <div className="flex flex-wrap gap-1.5">
-                                    {profile.careerTarget.map(t => (
+                                    {profile.careerTarget.map((t: string) => (
                                         <span key={t} className="text-xs px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg font-semibold">{t}</span>
                                     ))}
                                 </div>
@@ -294,7 +294,7 @@ export default function ProfilePage() {
                                     </div>
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">🗂️ Projects</h3>
-                                        {profile.projects.map((p, i) => (
+                                        {profile.projects.map((p: any, i: number) => (
                                             <div key={i} className="p-3 bg-slate-50 rounded-xl mb-2 last:mb-0">
                                                 <p className="text-xs font-bold text-slate-900">{p.name}</p>
                                                 <p className="text-[10px] text-indigo-500 font-semibold mb-1">{p.tech}</p>
@@ -305,7 +305,7 @@ export default function ProfilePage() {
                                     </div>
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">📜 Certifications</h3>
-                                        {profile.certifications.map((c, i) => (
+                                        {profile.certifications.map((c: any, i: number) => (
                                             <div key={i} className="flex items-center gap-3 py-2 border-b border-slate-50 last:border-0">
                                                 <span className="text-lg">{c.verified ? '✅' : '📄'}</span>
                                                 <div className="flex-1">
@@ -324,7 +324,7 @@ export default function ProfilePage() {
                                 <div className="space-y-4">
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">✅ Verified Skills</h3>
-                                        {profile.verifiedSkills.map((s, i) => (
+                                        {profile.verifiedSkills.map((s: any, i: number) => (
                                             <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl mb-2 last:mb-0">
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-2">
@@ -342,7 +342,7 @@ export default function ProfilePage() {
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">📝 Self-Reported Skills <span className="text-[10px] text-slate-400 font-normal">(unverified)</span></h3>
                                         <div className="flex flex-wrap gap-1.5">
-                                            {profile.selfReportedSkills.map(s => (
+                                            {profile.selfReportedSkills.map((s: string) => (
                                                 <span key={s} className="text-xs px-2.5 py-1 bg-slate-100 text-slate-500 rounded-lg">{s} <Link href="/skills" className="text-indigo-500 font-semibold ml-1">Verify →</Link></span>
                                             ))}
                                         </div>
@@ -392,11 +392,11 @@ export default function ProfilePage() {
                                     </div>
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">🔤 Language Breakdown</h3>
-                                        {Object.entries(profile.languages).map(([lang, count]) => (
+                                        {(Object.entries(profile.languages) as [string, number][]).map(([lang, count]) => (
                                             <div key={lang} className="flex items-center gap-2 py-1">
                                                 <span className="text-xs text-slate-600 w-16">{lang}</span>
                                                 <div className="flex-1 bg-slate-100 rounded-full h-3">
-                                                    <div className="h-3 rounded-full bg-indigo-500" style={{ width: `${(count / (profile.totalSolved.easy + profile.totalSolved.medium + profile.totalSolved.hard)) * 100}%` }} />
+                                                    <div className="h-3 rounded-full bg-indigo-500" style={{ width: `${(count / Math.max(profile.totalSolved.easy + profile.totalSolved.medium + profile.totalSolved.hard, 1)) * 100}%` }} />
                                                 </div>
                                                 <span className="text-xs font-bold text-slate-600 w-8 text-right">{count}</span>
                                             </div>
@@ -405,7 +405,7 @@ export default function ProfilePage() {
                                     <div className="st-card p-5">
                                         <h3 className="font-bold text-sm text-slate-900 mb-3">🕸️ Topic Coverage</h3>
                                         <div className="grid grid-cols-2 gap-2">
-                                            {Object.entries(profile.topicCoverage).map(([topic, pct]) => (
+                                            {(Object.entries(profile.topicCoverage) as [string, number][]).map(([topic, pct]) => (
                                                 <div key={topic} className="flex items-center gap-2">
                                                     <span className="text-[10px] text-slate-500 w-20">{topic}</span>
                                                     <div className="flex-1 bg-slate-100 rounded-full h-2">
@@ -423,11 +423,11 @@ export default function ProfilePage() {
                             {activeSection === 'experience' && (
                                 <div className="st-card p-5">
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">💼 Experience</h3>
-                                    {profile.experience.map((exp, i) => (
+                                    {profile.experience.map((exp: any, i: number) => (
                                         <div key={i} className="p-3 bg-slate-50 rounded-xl">
                                             <p className="text-xs font-bold text-slate-900">{exp.role}</p>
                                             <p className="text-[10px] text-slate-500 mb-2">{exp.company} · {exp.duration}</p>
-                                            {exp.bullets.map((b, bi) => (
+                                            {exp.bullets.map((b: string, bi: number) => (
                                                 <p key={bi} className="text-[10px] text-slate-600 py-0.5 flex items-start gap-1.5">
                                                     <span className="text-indigo-400 mt-0.5">•</span> {b}
                                                 </p>
@@ -445,7 +445,7 @@ export default function ProfilePage() {
                                 <div className="st-card p-5">
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">🏅 Achievements</h3>
                                     <div className="grid grid-cols-2 gap-2">
-                                        {profile.achievements.map((a, i) => (
+                                        {profile.achievements.map((a: any, i: number) => (
                                             <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
                                                 className="p-3 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl text-center border border-amber-100">
                                                 <span className="text-2xl block mb-1">{a.icon}</span>

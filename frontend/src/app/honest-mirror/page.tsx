@@ -1,7 +1,8 @@
-'use client';
+﻿'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { auth, api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -31,12 +32,7 @@ interface UserProfile {
 
 export default function HonestMirrorPage() {
     const [profile, setProfile] = useState<UserProfile | null>(null);
-    const [readiness] = useState<ReadinessData[]>([
-        { company: 'TCS', probability: 78, strengths: ['Aptitude above cutoff ✓', 'CGPA above 6.0 ✓'], gaps: ['Need 100+ problems solved', 'Java not verified'], nextAction: 'Verify Java + solve TCS-pattern problems', timeline: '2 weeks to ready' },
-        { company: 'Infosys', probability: 65, strengths: ['Python verified ✓', 'Aptitude above InfyTQ cutoff ✓'], gaps: ['DSA score needs improvement', 'SQL not strong enough'], nextAction: 'Improve DSA and verify SQL', timeline: '4 weeks to ready' },
-        { company: 'Wipro', probability: 82, strengths: ['All basic criteria met ✓', 'Aptitude strong ✓'], gaps: ['Communication not assessed', 'Essay writing prep needed'], nextAction: 'Practice essay topics + mock HR round', timeline: '1 week to ready' },
-        { company: 'Amazon SDE-1', probability: 12, strengths: ['Problem-solving attitude ✓'], gaps: ['Need 300+ Medium/Hard problems', 'System Design missing', 'DSA mastery needed'], nextAction: '6-month dedicated plan needed', timeline: '6+ months' },
-    ]);
+    const [readiness, setReadiness] = useState<ReadinessData[]>([]); // TODO: compute from user profile via API
     const [selectedCompany, setSelectedCompany] = useState<ReadinessData | null>(null);
     const [showOfferEval, setShowOfferEval] = useState(false);
     const [offerCtc, setOfferCtc] = useState('');
@@ -45,7 +41,6 @@ export default function HonestMirrorPage() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
         fetchProfile();
     }, []);
 
@@ -215,29 +210,38 @@ export default function HonestMirrorPage() {
                         {/* Company Readiness Cards */}
                         <div>
                             <h3 className="font-bold text-sm text-slate-900 mb-3">🎯 Company Placement Probability</h3>
-                            <div className="grid md:grid-cols-2 gap-3">
-                                {readiness.map((r, i) => (
-                                    <motion.div key={r.company}
-                                        initial={{ opacity: 0, y: 15 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: i * 0.08 }}
-                                        className={`st-card p-4 cursor-pointer hover:shadow-lg transition-all ${getProbBg(r.probability)}`}
-                                        onClick={() => setSelectedCompany(r)}
-                                    >
-                                        <div className="flex items-center justify-between mb-2">
-                                            <h4 className="font-bold text-sm text-slate-900">{r.company}</h4>
-                                            <span className={`text-lg font-bold bg-gradient-to-r ${getProbColor(r.probability)} bg-clip-text text-transparent`}>
-                                                {r.probability}%
-                                            </span>
-                                        </div>
-                                        <div className="w-full bg-white/60 rounded-full h-2 mb-2">
-                                            <div className={`h-2 rounded-full bg-gradient-to-r ${getProbColor(r.probability)}`}
-                                                style={{ width: `${r.probability}%` }} />
-                                        </div>
-                                        <p className="text-[10px] text-slate-500">{r.timeline} · {r.gaps.length} gaps to close</p>
-                                    </motion.div>
-                                ))}
-                            </div>
+                            {readiness.length > 0 ? (
+                                <div className="grid md:grid-cols-2 gap-3">
+                                    {readiness.map((r, i) => (
+                                        <motion.div key={r.company}
+                                            initial={{ opacity: 0, y: 15 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: i * 0.08 }}
+                                            className={`st-card p-4 cursor-pointer hover:shadow-lg transition-all ${getProbBg(r.probability)}`}
+                                            onClick={() => setSelectedCompany(r)}
+                                        >
+                                            <div className="flex items-center justify-between mb-2">
+                                                <h4 className="font-bold text-sm text-slate-900">{r.company}</h4>
+                                                <span className={`text-lg font-bold bg-gradient-to-r ${getProbColor(r.probability)} bg-clip-text text-transparent`}>
+                                                    {r.probability}%
+                                                </span>
+                                            </div>
+                                            <div className="w-full bg-white/60 rounded-full h-2 mb-2">
+                                                <div className={`h-2 rounded-full bg-gradient-to-r ${getProbColor(r.probability)}`}
+                                                    style={{ width: `${r.probability}%` }} />
+                                            </div>
+                                            <p className="text-[10px] text-slate-500">{r.timeline} · {r.gaps.length} gaps to close</p>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="st-card p-8 text-center">
+                                    <p className="text-3xl mb-3">🎯</p>
+                                    <p className="text-sm font-semibold text-slate-900 mb-1">Your readiness analysis is being prepared</p>
+                                    <p className="text-xs text-slate-500 mb-4">Complete your assessment and solve problems to see company-specific placement probabilities</p>
+                                    <Link href="/assessment" className="text-xs font-semibold text-indigo-600 hover:underline">Take Assessment →</Link>
+                                </div>
+                            )}
                         </div>
 
                         {/* Company Detail Modal */}

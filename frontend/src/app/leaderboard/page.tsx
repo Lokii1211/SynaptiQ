@@ -1,7 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { api, auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { ROUTES } from '@/lib/constants/routes';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
+import { LoadingSkeleton, EmptyState, ErrorState } from '@/components/ui/StateComponents';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -10,82 +13,56 @@ interface LeaderboardEntry {
     rank: number;
     display_name: string;
     username: string;
-    score: number;
-    college: string;
-    problems_solved: number;
-    streak: number;
-    badges: number;
-    isYou?: boolean;
-    change?: number; // rank change from last week
+    mentixy_score: number;
+    college_name: string;
+    streak_days: number;
+    total_points: number;
+    archetype_name?: string;
+    avatar_url?: string;
 }
 
-const MOCK_DATA: LeaderboardEntry[] = [
-    { rank: 1, display_name: 'Priya Sharma', username: 'priya_dev', score: 920, college: 'IIT Bombay', problems_solved: 180, streak: 45, badges: 12, change: 0 },
-    { rank: 2, display_name: 'Arjun Patel', username: 'arjun_p', score: 885, college: 'NIT Trichy', problems_solved: 165, streak: 32, badges: 9, change: 2 },
-    { rank: 3, display_name: 'Sneha Roy', username: 'sneha_codes', score: 860, college: 'BITS Pilani', problems_solved: 155, streak: 28, badges: 11, change: -1 },
-    { rank: 4, display_name: 'Vikram Desai', username: 'vikram_d', score: 830, college: 'NIT Warangal', problems_solved: 142, streak: 21, badges: 7, change: 1 },
-    { rank: 5, display_name: 'Anjali Gupta', username: 'anjali_g', score: 810, college: 'VIT Vellore', problems_solved: 138, streak: 19, badges: 8, change: -2 },
-    { rank: 6, display_name: 'Rahul Kumar', username: 'rahul_k', score: 790, college: 'SRM Chennai', problems_solved: 125, streak: 15, badges: 6, change: 0 },
-    { rank: 7, display_name: 'Deepika Nair', username: 'deepika_n', score: 775, college: 'IIIT Hyderabad', problems_solved: 120, streak: 25, badges: 8, change: 3 },
-    { rank: 8, display_name: 'Karthik Iyer', username: 'karthik_i', score: 760, college: 'NIT Karnataka', problems_solved: 118, streak: 14, badges: 5, change: -1 },
-    { rank: 9, display_name: 'Meera Reddy', username: 'meera_r', score: 740, college: 'DSCE Bangalore', problems_solved: 110, streak: 12, badges: 4, change: 1 },
-    { rank: 10, display_name: 'Aditya Joshi', username: 'aditya_j', score: 720, college: 'BMS Bangalore', problems_solved: 105, streak: 10, badges: 3, change: 0 },
-];
-
-const COLLEGE_DATA = [
-    { rank: 1, name: 'IIT Bombay', score: 45200, students: 85, topStudent: 'Priya Sharma', change: 0 },
-    { rank: 2, name: 'NIT Trichy', score: 38900, students: 120, topStudent: 'Arjun Patel', change: 1 },
-    { rank: 3, name: 'BITS Pilani', score: 36500, students: 95, topStudent: 'Sneha Roy', change: -1 },
-    { rank: 4, name: 'VIT Vellore', score: 32100, students: 200, topStudent: 'Anjali Gupta', change: 2 },
-    { rank: 5, name: 'NIT Warangal', score: 29800, students: 78, topStudent: 'Vikram Desai', change: 0 },
-    { rank: 6, name: 'SRM Chennai', score: 27500, students: 180, topStudent: 'Rahul Kumar', change: -2 },
-    { rank: 7, name: 'IIIT Hyderabad', score: 25200, students: 65, topStudent: 'Deepika Nair', change: 1 },
-    { rank: 8, name: 'NIT Karnataka', score: 23800, students: 90, topStudent: 'Karthik Iyer', change: 0 },
-];
-
 export default function LeaderboardPage() {
-    const [tab, setTab] = useState<'overall' | 'coding' | 'college' | 'weekly'>('overall');
+    const { isReady, user } = useAuthGuard();
+    const [tab, setTab] = useState<'overall' | 'coding' | 'streak' | 'campus'>('overall');
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
     const [loading, setLoading] = useState(true);
-    const [myRank, setMyRank] = useState(42);
+    const [error, setError] = useState(false);
+    const [myCollege, setMyCollege] = useState<any>(null);
+    const [campusWars, setCampusWars] = useState<any[]>([]);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!isReady) return;
         loadData();
-    }, [tab]);
+    }, [isReady, tab]);
 
     const loadData = async () => {
         setLoading(true);
+        setError(false);
         try {
-            const me = await api.getMe().catch(() => null);
-            const data = [...MOCK_DATA];
-            // Insert current user somewhere mid-board
-            if (me) {
-                data.splice(3, 0, {
-                    rank: 4,
-                    display_name: me.profile?.display_name || me.display_name || 'You',
-                    username: me.profile?.username || 'you',
-                    score: me.profile?.mentixy_score || 750,
-                    college: me.profile?.college_name || 'Your College',
-                    problems_solved: 90,
-                    streak: 7,
-                    badges: 2,
-                    isYou: true,
-                    change: 5,
-                });
-                // Re-rank
-                data.forEach((d, i) => { d.rank = i + 1; });
+            if (tab === 'campus') {
+                const [cw, mc] = await Promise.all([
+                    api.getCampusWars().catch(() => ({ campus_wars: [] })),
+                    api.getMyCollegeRank().catch(() => null),
+                ]);
+                setCampusWars(cw.campus_wars || []);
+                setMyCollege(mc);
+            } else {
+                const metric = tab === 'coding' ? 'problems_solved' : tab === 'streak' ? 'streak' : 'mentixy_score';
+                const data = await api.getLeaderboard(metric);
+                setLeaderboard(data.leaderboard || []);
             }
-            setLeaderboard(data);
         } catch {
-            setLeaderboard(MOCK_DATA);
+            setError(true);
         }
         setLoading(false);
     };
 
     const getMedal = (r: number) => r === 1 ? '🥇' : r === 2 ? '🥈' : r === 3 ? '🥉' : `#${r}`;
 
+    if (!isReady) return <div className="min-h-screen bg-slate-50"><TopBar /><main className="max-w-3xl mx-auto px-4 py-6"><LoadingSkeleton variant="card" count={5} /></main></div>;
+
     const top3 = leaderboard.slice(0, 3);
+    const currentUsername = user?.username;
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -100,16 +77,6 @@ export default function LeaderboardPage() {
                                 <span className="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full mb-3 inline-block">🏆 LEADERBOARD</span>
                                 <h1 className="text-3xl font-bold mb-2">Top Students</h1>
                                 <p className="text-white/60 text-sm mb-4">See how you rank against students across India. Updated every 15 minutes.</p>
-                                <div className="flex items-center gap-4">
-                                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center">
-                                        <p className="text-2xl font-bold">#{myRank}</p>
-                                        <p className="text-[10px] text-white/60 uppercase font-semibold">Your Rank</p>
-                                    </div>
-                                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-5 py-3 text-center">
-                                        <p className="text-2xl font-bold">2,340</p>
-                                        <p className="text-[10px] text-white/60 uppercase font-semibold">Total Users</p>
-                                    </div>
-                                </div>
                             </motion.div>
                         </div>
                     </div>
@@ -120,8 +87,8 @@ export default function LeaderboardPage() {
                             {([
                                 { key: 'overall' as const, label: '🏅 Overall' },
                                 { key: 'coding' as const, label: '💻 Coding' },
-                                { key: 'weekly' as const, label: '📆 This Week' },
-                                { key: 'college' as const, label: '🏫 Colleges' },
+                                { key: 'streak' as const, label: '🔥 Streaks' },
+                                { key: 'campus' as const, label: '🏫 Campus Wars' },
                             ]).map(t => (
                                 <button key={t.key} onClick={() => setTab(t.key)}
                                     className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-all ${tab === t.key
@@ -131,108 +98,123 @@ export default function LeaderboardPage() {
                             ))}
                         </div>
 
-                        {/* Podium (top 3) */}
-                        {!loading && tab !== 'college' && top3.length >= 3 && (
-                            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                                className="flex items-end justify-center gap-3 mb-6">
-                                {/* 2nd place */}
-                                <div className="text-center flex-1">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full mx-auto flex items-center justify-center text-white font-bold text-lg mb-1">
-                                        {top3[1].display_name[0]}
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-900 truncate">{top3[1].display_name}</p>
-                                    <p className="text-[10px] text-slate-400 truncate">{top3[1].college}</p>
-                                    <div className="bg-gray-100 rounded-t-xl mt-1 h-16 flex items-center justify-center">
-                                        <span className="text-lg">🥈</span>
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-700">{top3[1].score}</p>
-                                </div>
-                                {/* 1st place */}
-                                <div className="text-center flex-1">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full mx-auto flex items-center justify-center text-white font-bold text-xl mb-1 ring-4 ring-amber-200">
-                                        {top3[0].display_name[0]}
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-900 truncate">{top3[0].display_name}</p>
-                                    <p className="text-[10px] text-slate-400 truncate">{top3[0].college}</p>
-                                    <div className="bg-amber-50 rounded-t-xl mt-1 h-24 flex items-center justify-center">
-                                        <span className="text-2xl">🥇</span>
-                                    </div>
-                                    <p className="text-sm font-bold text-amber-600">{top3[0].score}</p>
-                                </div>
-                                {/* 3rd place */}
-                                <div className="text-center flex-1">
-                                    <div className="w-14 h-14 bg-gradient-to-br from-amber-600 to-orange-700 rounded-full mx-auto flex items-center justify-center text-white font-bold text-lg mb-1">
-                                        {top3[2].display_name[0]}
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-900 truncate">{top3[2].display_name}</p>
-                                    <p className="text-[10px] text-slate-400 truncate">{top3[2].college}</p>
-                                    <div className="bg-orange-50 rounded-t-xl mt-1 h-12 flex items-center justify-center">
-                                        <span className="text-lg">🥉</span>
-                                    </div>
-                                    <p className="text-xs font-bold text-slate-700">{top3[2].score}</p>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {/* Loading */}
-                        {loading ? (
-                            <div className="space-y-3">
-                                {[1, 2, 3, 4, 5].map(i => <div key={i} className="st-card p-4 animate-pulse h-16" />)}
-                            </div>
-                        ) : tab === 'college' ? (
-                            /* College leaderboard */
-                            <div className="space-y-2">
-                                {COLLEGE_DATA.map((college, i) => (
-                                    <motion.div key={college.name}
-                                        initial={{ opacity: 0, x: -15 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.05 }}
-                                        className="st-card p-4 flex items-center gap-4 hover:shadow-md transition-all"
-                                    >
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${college.rank <= 3 ? 'bg-amber-100' : 'bg-slate-100'
-                                            }`}>{getMedal(college.rank)}</div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-bold text-sm text-slate-900">{college.name}</p>
-                                            <p className="text-xs text-slate-500">{college.students} students · Top: {college.topStudent}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-lg font-bold text-indigo-600">{college.score.toLocaleString()}</p>
-                                            <div className="flex items-center gap-1 justify-end">
-                                                {college.change > 0 && <span className="text-[10px] text-green-600">▲{college.change}</span>}
-                                                {college.change < 0 && <span className="text-[10px] text-red-500">▼{Math.abs(college.change)}</span>}
-                                                {college.change === 0 && <span className="text-[10px] text-slate-400">—</span>}
+                        {error ? (
+                            <ErrorState message="Could not load leaderboard. Please try again." onRetry={loadData} />
+                        ) : loading ? (
+                            <LoadingSkeleton variant="list" count={8} />
+                        ) : tab === 'campus' ? (
+                            /* ═══ Campus Wars View ═══ */
+                            <div className="space-y-4">
+                                {/* My College Card */}
+                                {myCollege?.has_college && (
+                                    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+                                        className="st-card p-5 bg-gradient-to-br from-indigo-50 to-violet-50 border-indigo-200">
+                                        <h3 className="font-bold text-slate-900 mb-2">🏫 Your College</h3>
+                                        <p className="text-sm font-semibold text-indigo-700 mb-1">{myCollege.college_name}</p>
+                                        <div className="grid grid-cols-3 gap-3 mt-3">
+                                            <div className="text-center bg-white rounded-xl p-2">
+                                                <p className="text-lg font-bold text-indigo-600">#{myCollege.my_rank_in_college || '—'}</p>
+                                                <p className="text-[10px] text-slate-500">Your Rank</p>
+                                            </div>
+                                            <div className="text-center bg-white rounded-xl p-2">
+                                                <p className="text-lg font-bold text-slate-700">{myCollege.total_students}</p>
+                                                <p className="text-[10px] text-slate-500">Students</p>
+                                            </div>
+                                            <div className="text-center bg-white rounded-xl p-2">
+                                                <p className="text-lg font-bold text-emerald-600">{myCollege.college_avg_score}</p>
+                                                <p className="text-[10px] text-slate-500">Avg Score</p>
                                             </div>
                                         </div>
                                     </motion.div>
-                                ))}
+                                )}
+
+                                {campusWars.length === 0 ? (
+                                    <EmptyState icon="🏫" title="No colleges yet" subtitle="Campus Wars data will populate as colleges join Mentixy." />
+                                ) : (
+                                    campusWars.map((c, i) => (
+                                        <motion.div key={c.college_id} initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                                            className="st-card p-4 flex items-center gap-4">
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${i < 3 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}`}>
+                                                {getMedal(i + 1)}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="font-semibold text-sm text-slate-900 truncate">{c.college_name}</p>
+                                                <p className="text-xs text-slate-500">{c.city}, {c.state} · {c.active_students} students</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="text-lg font-bold text-indigo-600">{c.avg_mentixy_score}</p>
+                                                <p className="text-[10px] text-slate-400">Avg Score</p>
+                                            </div>
+                                        </motion.div>
+                                    ))
+                                )}
                             </div>
+                        ) : leaderboard.length === 0 ? (
+                            <EmptyState icon="🏆" title="Leaderboard is empty" subtitle="Be the first to climb the ranks! Complete assessments and solve problems to appear here." cta="Start Solving" ctaHref={ROUTES.CODING} />
                         ) : (
-                            /* Individual leaderboard */
+                            /* ═══ Individual Leaderboard ═══ */
                             <div className="space-y-2">
-                                {leaderboard.map((user, i) => (
-                                    <motion.div key={user.username}
+                                {/* Podium (top 3) */}
+                                {top3.length >= 3 && (
+                                    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                                        className="flex items-end justify-center gap-3 mb-6">
+                                        {/* 2nd place */}
+                                        <div className="text-center flex-1">
+                                            <div className="w-14 h-14 bg-gradient-to-br from-gray-300 to-gray-400 rounded-full mx-auto flex items-center justify-center text-white font-bold text-lg mb-1">
+                                                {top3[1].display_name?.[0] || '?'}
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-900 truncate">{top3[1].display_name}</p>
+                                            <p className="text-[10px] text-slate-400 truncate">{top3[1].college_name || '—'}</p>
+                                            <div className="bg-gray-100 rounded-t-xl mt-1 h-16 flex items-center justify-center"><span className="text-lg">🥈</span></div>
+                                            <p className="text-xs font-bold text-slate-700">{top3[1].mentixy_score}</p>
+                                        </div>
+                                        {/* 1st place */}
+                                        <div className="text-center flex-1">
+                                            <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-yellow-500 rounded-full mx-auto flex items-center justify-center text-white font-bold text-xl mb-1 ring-4 ring-amber-200">
+                                                {top3[0].display_name?.[0] || '?'}
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-900 truncate">{top3[0].display_name}</p>
+                                            <p className="text-[10px] text-slate-400 truncate">{top3[0].college_name || '—'}</p>
+                                            <div className="bg-amber-50 rounded-t-xl mt-1 h-24 flex items-center justify-center"><span className="text-2xl">🥇</span></div>
+                                            <p className="text-sm font-bold text-amber-600">{top3[0].mentixy_score}</p>
+                                        </div>
+                                        {/* 3rd place */}
+                                        <div className="text-center flex-1">
+                                            <div className="w-14 h-14 bg-gradient-to-br from-amber-600 to-orange-700 rounded-full mx-auto flex items-center justify-center text-white font-bold text-lg mb-1">
+                                                {top3[2].display_name?.[0] || '?'}
+                                            </div>
+                                            <p className="text-xs font-bold text-slate-900 truncate">{top3[2].display_name}</p>
+                                            <p className="text-[10px] text-slate-400 truncate">{top3[2].college_name || '—'}</p>
+                                            <div className="bg-orange-50 rounded-t-xl mt-1 h-12 flex items-center justify-center"><span className="text-lg">🥉</span></div>
+                                            <p className="text-xs font-bold text-slate-700">{top3[2].mentixy_score}</p>
+                                        </div>
+                                    </motion.div>
+                                )}
+
+                                {/* Full list */}
+                                {leaderboard.map((entry, i) => (
+                                    <motion.div key={entry.username}
                                         initial={{ opacity: 0, x: -15 }}
                                         animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: i * 0.05 }}
-                                        className={`st-card p-4 flex items-center gap-4 hover:shadow-md transition-all ${user.isYou ? 'ring-2 ring-indigo-500 bg-indigo-50/50' : ''}`}
+                                        transition={{ delay: i * 0.04 }}
+                                        className={`st-card p-4 flex items-center gap-4 hover:shadow-md transition-all ${entry.username === currentUsername ? 'ring-2 ring-indigo-500 bg-indigo-50/50' : ''}`}
                                     >
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${user.rank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
-                                            }`}>{getMedal(user.rank)}</div>
+                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold ${entry.rank <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}`}>
+                                            {getMedal(entry.rank)}
+                                        </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <p className="font-semibold text-sm text-slate-900">{user.display_name}</p>
-                                                {user.isYou && <span className="text-[9px] bg-indigo-600 text-white px-1.5 py-0.5 rounded-full font-bold">YOU</span>}
-                                                {user.streak >= 30 && <span className="text-[10px]">🔥</span>}
+                                                <p className="font-semibold text-sm text-slate-900">{entry.display_name}</p>
+                                                {entry.username === currentUsername && <span className="text-[9px] bg-indigo-600 text-white px-1.5 py-0.5 rounded-full font-bold">YOU</span>}
+                                                {entry.streak_days >= 30 && <span className="text-[10px]">🔥</span>}
                                             </div>
-                                            <p className="text-xs text-slate-500">{user.college} · {user.problems_solved} problems · 🔥{user.streak}d</p>
+                                            <p className="text-xs text-slate-500">{entry.college_name || 'Unknown'} · 🔥{entry.streak_days}d</p>
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-lg font-bold text-indigo-600">{user.score}</p>
-                                            <div className="flex items-center gap-1 justify-end">
-                                                {user.change && user.change > 0 && <span className="text-[10px] text-green-600">▲{user.change}</span>}
-                                                {user.change && user.change < 0 && <span className="text-[10px] text-red-500">▼{Math.abs(user.change)}</span>}
-                                                {(!user.change || user.change === 0) && <span className="text-[10px] text-slate-400">—</span>}
-                                            </div>
+                                            <p className="text-lg font-bold text-indigo-600">{entry.mentixy_score}</p>
+                                            <p className="text-[10px] text-slate-400">
+                                                {tab === 'coding' ? 'points' : tab === 'streak' ? 'days' : 'score'}
+                                            </p>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -246,8 +228,8 @@ export default function LeaderboardPage() {
                             <h3 className="font-bold text-slate-900 mb-1">Climb the Ranks</h3>
                             <p className="text-sm text-slate-500 mb-3">Complete challenges, solve problems, and verify skills to boost your rank.</p>
                             <div className="flex gap-2 justify-center">
-                                <Link href="/challenges" className="st-btn-primary text-xs px-4 py-2">Daily Challenges</Link>
-                                <Link href="/campus" className="st-btn-secondary text-xs px-4 py-2">Campus Wars ⚔️</Link>
+                                <Link href={ROUTES.CHALLENGES} className="st-btn-primary text-xs px-4 py-2">Daily Challenges</Link>
+                                <Link href={ROUTES.CAMPUS} className="st-btn-secondary text-xs px-4 py-2">Campus Wars ⚔️</Link>
                             </div>
                         </motion.div>
                     </div>

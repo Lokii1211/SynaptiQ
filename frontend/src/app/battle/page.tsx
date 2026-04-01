@@ -1,7 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -15,23 +16,8 @@ interface BattleHistory {
     date: string;
 }
 
-const MOCK_HISTORY: BattleHistory[] = [
-    { opponent: 'Rahul D.', oppAvatar: '🧑‍💻', result: 'win', problem: 'Two Sum', difficulty: 'easy', yourTime: '3:24', oppTime: '5:12', date: 'Today' },
-    { opponent: 'Sneha R.', oppAvatar: '👩‍💻', result: 'loss', problem: 'Longest Substring', difficulty: 'medium', yourTime: 'TLE', oppTime: '12:45', date: 'Yesterday' },
-    { opponent: 'Arjun K.', oppAvatar: '👨‍💻', result: 'win', problem: 'Valid Parentheses', difficulty: 'easy', yourTime: '1:56', oppTime: '2:34', date: '2 days ago' },
-    { opponent: 'Priya M.', oppAvatar: '👩', result: 'draw', problem: 'Merge Intervals', difficulty: 'medium', yourTime: 'TLE', oppTime: 'TLE', date: '3 days ago' },
-    { opponent: 'Vikram S.', oppAvatar: '🧑', result: 'win', problem: 'Reverse Linked List', difficulty: 'easy', yourTime: '2:18', oppTime: '4:01', date: 'Last week' },
-];
-
-const FRIENDS_ONLINE = [
-    { name: 'Rahul D.', avatar: '🧑‍💻', score: 78, status: 'online', wins: 3, losses: 2 },
-    { name: 'Sneha R.', avatar: '👩‍💻', score: 82, status: 'online', wins: 1, losses: 4 },
-    { name: 'Deepa L.', avatar: '👩‍🎓', score: 61, status: 'online', wins: 0, losses: 0 },
-    { name: 'Arjun K.', avatar: '👨‍💻', score: 68, status: 'idle', wins: 2, losses: 3 },
-    { name: 'Priya M.', avatar: '👩', score: 73, status: 'in-battle', wins: 1, losses: 1 },
-];
-
 export default function BattlePage() {
+    const { isReady } = useAuthGuard();
     const [battleState, setBattleState] = useState<BattleState>('lobby');
     const [difficulty, setDifficulty] = useState<Difficulty>('medium');
     const [timeLimit, setTimeLimit] = useState(15);
@@ -42,8 +28,22 @@ export default function BattlePage() {
     const [oppProgress, setOppProgress] = useState(0);
     const [winner, setWinner] = useState<'you' | 'opponent' | 'draw' | null>(null);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    const [battleHistory, setBattleHistory] = useState<BattleHistory[]>([]);
+    const [friendsOnline, setFriendsOnline] = useState<{ name: string; avatar: string; score: number; status: string; wins: number; losses: number }[]>([]);
+    const [stats, setStats] = useState({ wins: 0, losses: 0, draws: 0, winRate: 0, elo: 1000 });
 
-    useEffect(() => { if (!auth.isLoggedIn()) { window.location.href = '/login'; } }, []);
+    useEffect(() => {
+        if (!isReady) return;
+        Promise.all([
+            api.getBattleStats().catch(() => null),
+            api.getBattleHistory(5).catch(() => ({ history: [] })),
+            api.getFriendsOnline().catch(() => ({ friends: [] })),
+        ]).then(([s, h, f]) => {
+            if (s) setStats(s);
+            setBattleHistory(h?.history || []);
+            setFriendsOnline(f?.friends || []);
+        });
+    }, [isReady]);
 
     const startMatch = (mode: 'random' | 'friend') => {
         setBattleState('matching');
@@ -64,21 +64,32 @@ export default function BattlePage() {
                     if (t <= 0) { clearInterval(battleInterval); setBattleState('result'); setWinner('draw'); return 0; }
                     return t - 1;
                 });
-                setOppProgress(p => Math.min(100, p + Math.random() * 2.5));
+                // Simulate opponent progress; detect if opp finishes first
+                setOppProgress(p => {
+                    const next = Math.min(100, p + Math.random() * 2.5);
+                    if (next >= 100 && p < 100) {
+                        clearInterval(battleInterval);
+                        setBattleState('result');
+                        setWinner('opponent');
+                    }
+                    return next;
+                });
             }, 1000);
 
             intervalRef.current = battleInterval;
         }, 3000 + Math.random() * 2000);
     };
 
+    // FIX: use functional setState to read current oppProgress atomically
     const submitSolution = () => {
-        setMyProgress(100);
         if (intervalRef.current) clearInterval(intervalRef.current);
+        setMyProgress(100);
+        setOppProgress(prev => {
+            setWinner(prev >= 100 ? 'draw' : 'you');
+            return prev;
+        });
         setBattleState('result');
-        setWinner(oppProgress < 100 ? 'you' : 'draw');
     };
-
-    const stats = { wins: 3, losses: 2, draws: 1, winRate: 50, elo: 1247 };
 
     return (
         <div className="min-h-screen bg-slate-50">
@@ -163,7 +174,12 @@ export default function BattlePage() {
                                 <div className="st-card p-5">
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">👥 Friends Online</h3>
                                     <div className="space-y-2">
-                                        {FRIENDS_ONLINE.map((f, i) => (
+                                        {friendsOnline.length === 0 ? (
+                                            <div className="text-center py-6">
+                                                <span className="text-3xl block mb-2">👥</span>
+                                                <p className="text-xs text-slate-500">No friends online yet. Add connections to challenge them!</p>
+                                            </div>
+                                        ) : friendsOnline.map((f, i) => (
                                             <div key={i} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl">
                                                 <span className="text-xl">{f.avatar}</span>
                                                 <div className="flex-1">
@@ -189,7 +205,12 @@ export default function BattlePage() {
                                 <div className="st-card p-5">
                                     <h3 className="font-bold text-sm text-slate-900 mb-3">📜 Recent Battles</h3>
                                     <div className="space-y-2">
-                                        {MOCK_HISTORY.map((h, i) => (
+                                        {battleHistory.length === 0 ? (
+                                            <div className="text-center py-6">
+                                                <span className="text-3xl block mb-2">⚔️</span>
+                                                <p className="text-xs text-slate-500">No battles yet. Start a match to see your history!</p>
+                                            </div>
+                                        ) : battleHistory.map((h, i) => (
                                             <div key={i} className={`flex items-center gap-3 p-3 rounded-xl ${h.result === 'win' ? 'bg-emerald-50' : h.result === 'loss' ? 'bg-red-50' : 'bg-slate-50'}`}>
                                                 <span className="text-xl">{h.result === 'win' ? '🏆' : h.result === 'loss' ? '💔' : '🤝'}</span>
                                                 <div className="flex-1 min-w-0">
@@ -248,7 +269,7 @@ export default function BattlePage() {
 
                                         <div className="flex items-center gap-3">
                                             <div className="text-right">
-                                                <p className="text-xs font-bold">Rahul D.</p>
+                                                <p className="text-xs font-bold">Opponent</p>
                                                 <div className="w-24 bg-white/20 rounded-full h-2 mt-1">
                                                     <div className="h-2 rounded-full bg-rose-500 transition-all" style={{ width: `${oppProgress}%` }} />
                                                 </div>
@@ -317,7 +338,7 @@ export default function BattlePage() {
                                         <span className="text-2xl font-bold text-slate-300">VS</span>
                                         <div className="flex items-center gap-2">
                                             <div className="text-right">
-                                                <p className="text-xs font-bold text-slate-900">Rahul D.</p>
+                                                <p className="text-xs font-bold text-slate-900">Opponent</p>
                                                 <p className={`text-[10px] font-bold ${winner === 'opponent' ? 'text-emerald-600' : 'text-red-500'}`}>{winner === 'opponent' ? 'WINNER' : winner === 'draw' ? 'DRAW' : 'LOST'}</p>
                                             </div>
                                             <div className="w-10 h-10 bg-rose-500 rounded-full flex items-center justify-center text-lg">🧑‍💻</div>
@@ -325,7 +346,7 @@ export default function BattlePage() {
                                     </div>
                                     <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-3">
                                         <span>Rating: {winner === 'you' ? '+15' : winner === 'draw' ? '+0' : '-12'} Elo</span>
-                                        <span>New: {winner === 'you' ? 1262 : winner === 'draw' ? 1247 : 1235}</span>
+                                        <span>New: {winner === 'you' ? 1015 : winner === 'draw' ? 1000 : 988}</span>
                                     </div>
                                 </div>
 

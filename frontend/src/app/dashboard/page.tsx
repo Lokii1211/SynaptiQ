@@ -3,6 +3,7 @@ import { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
+import { ROUTES } from '@/lib/constants/routes';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
@@ -46,6 +47,9 @@ export default function DashboardPage() {
     const [trending, setTrending] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [heatmap, setHeatmap] = useState<number[]>(EMPTY_HEATMAP);
+    const [dailyChallenge, setDailyChallenge] = useState<{ title: string; difficulty: string; company: string; topic: string; solvedToday: boolean; solvedCount: number; timeLeft: string } | null>(null); // TODO: fetch from /api/daily-challenge
+    const [campusRank, setCampusRank] = useState<{ rank: number; total: number; change: number; points: number } | null>(null); // TODO: fetch from /api/campus/rank
+    const [recommendedProblems, setRecommendedProblems] = useState<{ title: string; diff: string; company: string; topic: string }[]>([]); // TODO: fetch from /api/recommended-problems
 
     useEffect(() => {
         setHeatmap(generateHeatmapData());
@@ -57,13 +61,13 @@ export default function DashboardPage() {
                 window.history.replaceState({}, '', '/dashboard');
             }
         }
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
+        if (!auth.isLoggedIn()) { window.location.href = ROUTES.LOGIN; return; }
         Promise.all([
             api.getMe().catch(() => null),
             api.getAssessmentProfile().catch(() => null),
             api.getTrendingSkills().catch(() => ({ skills: [] })),
         ]).then(([u, p, t]) => {
-            if (!u) { auth.clearToken(); window.location.href = '/login'; return; }
+            if (!u) { auth.clearToken(); window.location.href = ROUTES.LOGIN; return; }
             setUser(u); setProfile(p); setTrending(t?.skills || []); auth.setUser(u); setLoading(false);
         });
     }, []);
@@ -93,25 +97,12 @@ export default function DashboardPage() {
     const hasProfile = profile?.has_profile;
     const archetype = user?.profile?.archetype_name || profile?.archetype_name;
 
-    const dailyChallenge = {
-        title: 'Two Sum',
-        difficulty: 'Easy',
-        company: 'Amazon',
-        topic: 'Arrays',
-        solvedToday: false,
-        solvedCount: 8432,
-        timeLeft: '11h 43m',
-    };
-
-    const campusRank = { rank: 7, total: 243, change: 3, points: 12 };
+    // TODO: Fetch from /api/daily-challenge → setDailyChallenge()
+    // TODO: Fetch from /api/campus/rank → setCampusRank()
 
     const skills: { name: string; score: number; expiry: string | null }[] = user?.profile?.verified_skills || [];
 
-    const recommendedProblems = [
-        { title: 'Valid Parentheses', diff: 'Easy', company: 'Google', topic: 'Stacks' },
-        { title: 'Merge Intervals', diff: 'Medium', company: 'Microsoft', topic: 'Arrays' },
-        { title: 'LRU Cache', diff: 'Hard', company: 'Amazon', topic: 'Design' },
-    ];
+    // TODO: Fetch from /api/recommended-problems → setRecommendedProblems()
 
     const diffColor = (d: string) => d === 'Easy' ? 'bg-emerald-50 text-emerald-700' : d === 'Medium' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700';
 
@@ -202,22 +193,28 @@ export default function DashboardPage() {
                                     <div className="relative z-10">
                                         <div className="flex items-center justify-between mb-3">
                                             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Daily Challenge</p>
-                                            <span className="text-xs text-slate-400">⏱ {dailyChallenge.timeLeft} left</span>
+                                            {dailyChallenge && <span className="text-xs text-slate-400">⏱ {dailyChallenge.timeLeft} left</span>}
                                         </div>
-                                        <h3 className="font-bold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">{dailyChallenge.title}</h3>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${diffColor(dailyChallenge.difficulty)}`}>{dailyChallenge.difficulty}</span>
-                                            <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{dailyChallenge.company}</span>
-                                            <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{dailyChallenge.topic}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between">
-                                            <span className="text-sm font-semibold text-indigo-600 group-hover:translate-x-1 transition-transform inline-block">
-                                                Solve Now →
-                                            </span>
-                                            <span className="flex items-center gap-1 text-xs text-slate-400">
-                                                🔥 {streak} day streak
-                                            </span>
-                                        </div>
+                                        {dailyChallenge ? (
+                                            <>
+                                                <h3 className="font-bold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">{dailyChallenge.title}</h3>
+                                                <div className="flex items-center gap-2 mb-3">
+                                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${diffColor(dailyChallenge.difficulty)}`}>{dailyChallenge.difficulty}</span>
+                                                    <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{dailyChallenge.company}</span>
+                                                    <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{dailyChallenge.topic}</span>
+                                                </div>
+                                                <div className="flex items-center justify-between">
+                                                    <span className="text-sm font-semibold text-indigo-600 group-hover:translate-x-1 transition-transform inline-block">Solve Now →</span>
+                                                    <span className="flex items-center gap-1 text-xs text-slate-400">🔥 {streak} day streak</span>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="text-center py-4">
+                                                <p className="text-2xl mb-2">⚡</p>
+                                                <p className="text-xs text-slate-500">Daily challenge loading...</p>
+                                                <p className="text-xs text-slate-400 mt-1">🔥 {streak} day streak</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </Link>
                             </motion.div>
@@ -252,7 +249,7 @@ export default function DashboardPage() {
                                     <Link href="/practice" className="text-xs text-indigo-600 font-medium hover:underline">All problems →</Link>
                                 </div>
                                 <div className="space-y-2">
-                                    {recommendedProblems.map((p, i) => (
+                                    {recommendedProblems.length > 0 ? recommendedProblems.map((p, i) => (
                                         <Link key={i} href="/practice" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group">
                                             <div className="w-7 h-7 bg-slate-100 rounded-lg flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">{i + 1}</div>
                                             <div className="flex-1 min-w-0">
@@ -262,7 +259,13 @@ export default function DashboardPage() {
                                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${diffColor(p.diff)}`}>{p.diff}</span>
                                             <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full hidden sm:block">{p.company}</span>
                                         </Link>
-                                    ))}
+                                    )) : (
+                                        <div className="text-center py-6">
+                                            <p className="text-2xl mb-2">💡</p>
+                                            <p className="text-xs text-slate-500">Complete your assessment to get personalized recommendations</p>
+                                            <Link href="/practice" className="text-xs text-indigo-600 font-semibold hover:underline mt-2 inline-block">Browse all problems →</Link>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </motion.div>
@@ -294,18 +297,30 @@ export default function DashboardPage() {
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                             <Link href="/leaderboard" className="block st-card p-5 hover:shadow-xl group">
                                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Campus Wars</p>
-                                <div className="flex items-center gap-3 mb-3">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-2xl shadow-sm">⚔️</div>
-                                    <div>
-                                        <p className="text-2xl font-bold text-slate-900">#{campusRank.rank}</p>
-                                        <p className="text-xs text-slate-500">out of {campusRank.total} colleges</p>
+                                {campusRank ? (
+                                    <>
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-2xl shadow-sm">⚔️</div>
+                                            <div>
+                                                <p className="text-2xl font-bold text-slate-900">#{campusRank.rank}</p>
+                                                <p className="text-xs text-slate-500">out of {campusRank.total} colleges</p>
+                                            </div>
+                                            <span className="ml-auto text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">▲{campusRank.change}</span>
+                                        </div>
+                                        <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-3">
+                                            <span>Your contribution today</span>
+                                            <span className="font-bold text-indigo-600">+{campusRank.points} pts</span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-2xl shadow-sm">⚔️</div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-slate-900">Join Campus Wars</p>
+                                            <p className="text-xs text-slate-500">Help your college climb the ranks →</p>
+                                        </div>
                                     </div>
-                                    <span className="ml-auto text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">▲{campusRank.change}</span>
-                                </div>
-                                <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-3">
-                                    <span>Your contribution today</span>
-                                    <span className="font-bold text-indigo-600">+{campusRank.points} pts</span>
-                                </div>
+                                )}
                             </Link>
                         </motion.div>
 
@@ -352,65 +367,26 @@ export default function DashboardPage() {
 
                         {/* Peer Activity */}
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                            <div className="st-card p-5">
+                            <Link href="/community" className="block st-card p-5 hover:shadow-xl group">
                                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Community</p>
-                                <div className="space-y-3">
-                                    {[
-                                        { icon: '👥', text: '3 friends solved the daily challenge' },
-                                        { icon: '⚔️', text: 'Your college moved to #5 in Campus Wars' },
-                                        { icon: '🏆', text: 'New contest starts in 2 days' },
-                                        { icon: '🎖️', text: 'Rahul earned "50 Streak" badge' },
-                                    ].map((item, i) => (
-                                        <div key={i} className="flex items-start gap-2.5">
-                                            <span className="text-base mt-0.5 shrink-0">{item.icon}</span>
-                                            <p className="text-xs text-slate-600 leading-relaxed">{item.text}</p>
-                                        </div>
-                                    ))}
+                                <div className="text-center py-4">
+                                    <p className="text-2xl mb-2">👥</p>
+                                    <p className="text-xs text-slate-500 mb-1">Join the community to see peer activity</p>
+                                    <span className="text-xs font-semibold text-indigo-600 group-hover:underline">Explore community →</span>
                                 </div>
-                            </div>
+                            </Link>
                         </motion.div>
 
-                        {/* Profile Views + Recruiter Interest (Bible Phase 5) */}
+                        {/* Profile Views (Bible Phase 5) */}
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32 }}>
                             <Link href="/profile" className="block st-card p-5 hover:shadow-xl group">
                                 <div className="flex items-center justify-between mb-3">
                                     <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Profile Views</p>
-                                    <span className="text-xs text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-full">+18% ↑</span>
                                 </div>
-                                <div className="flex items-center gap-3 mb-3">
-                                    <p className="text-3xl font-bold text-slate-900">34</p>
-                                    <p className="text-xs text-slate-400">people viewed your profile this week</p>
-                                </div>
-                                {/* Viewer breakdown */}
-                                <div className="grid grid-cols-3 gap-2 mb-3">
-                                    {[
-                                        { label: 'Students', count: 21, icon: '🎓' },
-                                        { label: 'Recruiters', count: 8, icon: '💼' },
-                                        { label: 'TPOs', count: 5, icon: '🏫' },
-                                    ].map(v => (
-                                        <div key={v.label} className="text-center bg-slate-50 rounded-lg p-2">
-                                            <span className="text-sm">{v.icon}</span>
-                                            <p className="text-sm font-bold text-slate-900">{v.count}</p>
-                                            <p className="text-[9px] text-slate-400">{v.label}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                                {/* Recent recruiter views */}
-                                <div className="border-t border-slate-100 pt-3 space-y-2">
-                                    <p className="text-[10px] font-bold text-slate-500 uppercase">Recent Recruiter Views</p>
-                                    {[
-                                        { company: 'TCS', city: 'Chennai', time: '2h ago' },
-                                        { company: 'Infosys', city: 'Bangalore', time: '5h ago' },
-                                        { company: 'Wipro', city: 'Hyderabad', time: '1d ago' },
-                                    ].map((r, i) => (
-                                        <div key={i} className="flex items-center gap-2">
-                                            <div className="w-5 h-5 bg-indigo-100 rounded-full flex items-center justify-center text-[9px] font-bold text-indigo-600">{r.company[0]}</div>
-                                            <div className="flex-1">
-                                                <p className="text-[10px] font-semibold text-slate-700">Recruiter from {r.company}</p>
-                                                <p className="text-[9px] text-slate-400">{r.city} · {r.time}</p>
-                                            </div>
-                                        </div>
-                                    ))}
+                                <div className="text-center py-4">
+                                    <p className="text-2xl mb-2">👁️</p>
+                                    <p className="text-xs text-slate-500 mb-1">Complete your profile to attract recruiters</p>
+                                    <span className="text-xs font-semibold text-indigo-600 group-hover:underline">Complete profile →</span>
                                 </div>
                             </Link>
                         </motion.div>

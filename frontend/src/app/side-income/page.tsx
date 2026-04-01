@@ -1,14 +1,13 @@
-'use client';
+﻿'use client';
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 
 export default function SideIncomePage() {
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
     }, []);
 
     const stacks = [

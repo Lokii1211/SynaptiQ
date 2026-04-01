@@ -1,7 +1,7 @@
-'use client';
+﻿'use client';
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { auth } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -101,8 +101,7 @@ export default function CampusCalendarPage() {
     const [selectedDrive, setSelectedDrive] = useState<CampusDrive | null>(null);
     const [view, setView] = useState<'calendar' | 'readiness'>('calendar');
 
-    useEffect(() => { if (!auth.isLoggedIn()) { window.location.href = '/login'; } }, []);
-
+    
     const drives = useMemo(() => {
         const d = CAMPUS_DRIVES.map(dr => ({ ...dr, readiness: calculateReadiness(dr, USER_PROFILE) }));
         if (filter === 'all') return d;

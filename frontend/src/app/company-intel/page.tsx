@@ -1,7 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { api, auth } from '@/lib/api';
+import { api } from '@/lib/api';
+import { useAuthGuard } from '@/hooks/useAuthGuard';
 import { TopBar } from '@/components/layout/TopBar';
 import { BottomNav } from '@/components/layout/BottomNav';
 import Link from 'next/link';
@@ -9,6 +10,7 @@ import Link from 'next/link';
 interface Company {
     slug: string;
     name: string;
+
     logo: string;
     industry: string;
     rating: number;
@@ -24,96 +26,24 @@ interface Company {
     hiresFrom: string[];
 }
 
-const DEMO_COMPANIES: Company[] = [
-    {
-        slug: 'tcs', name: 'Tata Consultancy Services', logo: 'T', industry: 'IT Services & Consulting',
-        rating: 3.8, reviews: 12400, hq: 'Mumbai', size: '6,00,000+', fresherCTC: '₹3.36 – 7 LPA',
-        interviewRounds: ['Online Test (NQT)', 'Technical Interview', 'Managerial', 'HR Round'],
-        topSkills: ['Java', 'SQL', 'Python', 'DSA'], difficulty: 'Medium',
-        placementTrend: 'stable', description: 'India\'s largest IT services company. Mass recruiter with strong training program.',
-        hiresFrom: ['VIT', 'SRM', 'BITS', 'NITs', 'Anna Univ'],
-    },
-    {
-        slug: 'infosys', name: 'Infosys', logo: 'I', industry: 'IT Services & Consulting',
-        rating: 3.6, reviews: 9800, hq: 'Bengaluru', size: '3,50,000+', fresherCTC: '₹3.6 – 9.5 LPA',
-        interviewRounds: ['InfyTQ / Online Test', 'Coding Round', 'Technical', 'HR'],
-        topSkills: ['Python', 'Java', 'Problem Solving', 'Communication'], difficulty: 'Medium',
-        placementTrend: 'up', description: 'Global leader in technology services. Strong DSE & PP tracks for freshers.',
-        hiresFrom: ['NITs', 'IIITs', 'VIT', 'Manipal', 'KIIT'],
-    },
-    {
-        slug: 'wipro', name: 'Wipro', logo: 'W', industry: 'IT Services',
-        rating: 3.5, reviews: 7600, hq: 'Bengaluru', size: '2,50,000+', fresherCTC: '₹3.5 – 6.5 LPA',
-        interviewRounds: ['Written Test', 'Coding', 'Technical Interview', 'HR'],
-        topSkills: ['Java', 'C++', 'SQL', 'Aptitude'], difficulty: 'Easy',
-        placementTrend: 'stable', description: 'Major IT services firm with Project Engineer and WILP programs.',
-        hiresFrom: ['SRM', 'VIT', 'Amrita', 'LNMIIT', 'PESIT'],
-    },
-    {
-        slug: 'amazon', name: 'Amazon', logo: 'A', industry: 'E-Commerce & Cloud',
-        rating: 4.2, reviews: 5200, hq: 'Bengaluru / Hyderabad', size: '1,00,000+ (India)', fresherCTC: '₹26 – 45 LPA',
-        interviewRounds: ['Online Assessment', 'Phone Screen', 'Virtual Onsite (4-5 rounds)', 'Bar Raiser'],
-        topSkills: ['DSA', 'System Design', 'Leadership Principles', 'Problem Solving'], difficulty: 'Hard',
-        placementTrend: 'up', description: 'FAANG tier company. Strong focus on Leadership Principles in interviews.',
-        hiresFrom: ['IITs', 'NITs', 'BITS', 'IIIT-H', 'DAIICT'],
-    },
-    {
-        slug: 'google', name: 'Google', logo: 'G', industry: 'Technology',
-        rating: 4.5, reviews: 3200, hq: 'Bengaluru / Hyderabad', size: '40,000+ (India)', fresherCTC: '₹30 – 55 LPA',
-        interviewRounds: ['Online Test', 'Phone Screen (2)', 'Onsite (4-5 rounds)', 'Team Matching'],
-        topSkills: ['DSA', 'Algorithms', 'System Design', 'Googleyness'], difficulty: 'Hard',
-        placementTrend: 'stable', description: 'World\'s most desired employer. Heavy focus on algorithmic problem solving.',
-        hiresFrom: ['IITs', 'BITS', 'IIIT-H', 'NIT Top 5'],
-    },
-    {
-        slug: 'flipkart', name: 'Flipkart', logo: 'F', industry: 'E-Commerce',
-        rating: 4.0, reviews: 2800, hq: 'Bengaluru', size: '45,000+', fresherCTC: '₹18 – 32 LPA',
-        interviewRounds: ['Online Coding', 'Machine Coding', 'Problem Solving', 'System Design', 'HR'],
-        topSkills: ['DSA', 'LLD', 'HLD', 'Java/Python'], difficulty: 'Hard',
-        placementTrend: 'up', description: 'India\'s leading e-commerce. Great engineering culture, Walmart-backed.',
-        hiresFrom: ['IITs', 'NITs', 'BITS', 'IIIT-H'],
-    },
-    {
-        slug: 'zoho', name: 'Zoho Corporation', logo: 'Z', industry: 'SaaS / Software',
-        rating: 4.1, reviews: 4100, hq: 'Chennai', size: '15,000+', fresherCTC: '₹5 – 8 LPA',
-        interviewRounds: ['Aptitude Test', 'Programming Round', 'Advanced Programming', 'Technical', 'HR'],
-        topSkills: ['C/C++', 'Data Structures', 'Problem Solving', 'Logic'], difficulty: 'Medium',
-        placementTrend: 'up', description: 'Bootstrapped SaaS giant. No CGPA filter — skills matter most.',
-        hiresFrom: ['Anna Univ', 'VIT', 'SRM', 'PSG', 'Tier 2-3'],
-    },
-    {
-        slug: 'microsoft', name: 'Microsoft', logo: 'M', industry: 'Technology',
-        rating: 4.4, reviews: 4500, hq: 'Hyderabad / Bengaluru', size: '20,000+ (India)', fresherCTC: '₹28 – 48 LPA',
-        interviewRounds: ['Online Test', 'Group Fly Round', 'Technical (3 rounds)', 'HR / AA Round'],
-        topSkills: ['DSA', 'System Design', 'OS', 'DBMS'], difficulty: 'Hard',
-        placementTrend: 'stable', description: 'Top tech employer. Strong mentorship and growth for new grads.',
-        hiresFrom: ['IITs', 'NITs', 'BITS', 'IIIT-H', 'DTU'],
-    },
-    {
-        slug: 'cognizant', name: 'Cognizant', logo: 'C', industry: 'IT Services',
-        rating: 3.4, reviews: 8900, hq: 'Chennai', size: '3,50,000+', fresherCTC: '₹4 – 6.75 LPA',
-        interviewRounds: ['AMCAT / Online Test', 'Coding', 'Technical', 'HR'],
-        topSkills: ['Java', 'SQL', 'Aptitude', 'Communication'], difficulty: 'Easy',
-        placementTrend: 'stable', description: 'Large IT services firm. GenC and GenC Elevate programs for freshers.',
-        hiresFrom: ['VIT', 'SRM', 'Amrita', 'KIIT', 'Most Tier 2'],
-    },
-];
 
 const FILTERS = ['All', 'FAANG', 'Mass Recruiters', 'Startups', 'Product'];
 
 export default function CompanyIntelPage() {
-    const [companies, setCompanies] = useState<Company[]>(DEMO_COMPANIES);
+    const { isReady } = useAuthGuard();
+    const [companies, setCompanies] = useState<Company[]>([]);
     const [filter, setFilter] = useState('All');
     const [search, setSearch] = useState('');
     const [expanded, setExpanded] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!auth.isLoggedIn()) { window.location.href = '/login'; return; }
-        // Try real API, fallback to demo
-        api.getCompanies().then(data => {
-            if (data.companies?.length > 0) setCompanies(data.companies);
-        }).catch(() => { });
-    }, []);
+        if (!isReady) return;
+        api.getCompanies().then((data: any) => {
+            if (data?.companies?.length > 0) setCompanies(data.companies);
+            setLoading(false);
+        }).catch(() => setLoading(false));
+    }, [isReady]);
 
     const filtered = companies.filter(c => {
         if (search && !c.name.toLowerCase().includes(search.toLowerCase()) && !c.industry.toLowerCase().includes(search.toLowerCase())) return false;
@@ -168,7 +98,24 @@ export default function CompanyIntelPage() {
 
                         {/* Company Grid */}
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            {filtered.map((company, i) => (
+                            {loading ? (
+                                [1,2,3,4,5,6].map(i => (
+                                    <div key={i} className="st-card p-5 animate-pulse">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <div className="w-12 h-12 bg-slate-200 rounded-2xl shrink-0" />
+                                            <div className="flex-1 space-y-2">
+                                                <div className="h-4 bg-slate-200 rounded w-3/4" />
+                                                <div className="h-3 bg-slate-100 rounded w-1/2" />
+                                            </div>
+                                        </div>
+                                        <div className="h-10 bg-slate-100 rounded-xl mb-3" />
+                                        <div className="flex gap-2 mb-2">
+                                            {[1,2,3].map(j => <div key={j} className="h-5 w-16 bg-slate-100 rounded" />)}
+                                        </div>
+                                        <div className="h-3 bg-slate-100 rounded w-1/3" />
+                                    </div>
+                                ))
+                            ) : filtered.map((company, i) => (
                                 <motion.div key={company.slug}
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}

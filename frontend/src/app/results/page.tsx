@@ -41,27 +41,6 @@ const ARCHETYPE_GRADIENTS: Record<string, string> = {
     'CON': 'from-red-500 to-rose-600',
 };
 
-const MOCK_RESULT: AssessmentResult = {
-    archetype: {
-        code: 'QSB',
-        name: 'The Quiet Systems Builder',
-        description: 'You work best when given a complex problem and the space to solve it deeply. You get energy from untangling systems and making things work elegantly. Your natural environment is behind the scenes — building the infrastructure others rely on.',
-        icon: '🧠',
-    },
-    scores: { analytical: 82, interpersonal: 45, creative: 68, systematic: 91 },
-    career_matches: [
-        { career: 'Software Engineer', score: 92, salary_p50: 12, icon: '💻' },
-        { career: 'Data Scientist', score: 85, salary_p50: 15, icon: '📊' },
-        { career: 'DevOps Engineer', score: 78, salary_p50: 14, icon: '⚙️' },
-        { career: 'ML Engineer', score: 76, salary_p50: 18, icon: '🤖' },
-        { career: 'Cybersecurity Analyst', score: 71, salary_p50: 10, icon: '🔒' },
-    ],
-    first_week_plan: [
-        { days: 'Days 1-2', action: 'CS50 Week 1 on edX', resource: 'edx.org/cs50', hours: 4, free: true },
-        { days: 'Days 3-5', action: 'Python Basics on Kaggle Learn', resource: 'kaggle.com/learn/python', hours: 3, free: true },
-        { days: 'Days 6-7', action: 'Solve 5 Easy problems on LeetCode', resource: 'leetcode.com', hours: 2, free: true },
-    ],
-};
 
 export default function ResultsPage() {
     const [result, setResult] = useState<AssessmentResult | null>(null);
@@ -73,7 +52,7 @@ export default function ResultsPage() {
                 const data = await api.getResults();
                 setResult(data);
             } catch {
-                setResult(MOCK_RESULT);
+                setResult(null);
             }
         };
         fetchResults();
@@ -90,7 +69,19 @@ export default function ResultsPage() {
         sequence.forEach(({ delay, phase: p }) => setTimeout(() => setPhase(p), delay));
     }, []);
 
-    const r = result || MOCK_RESULT;
+    if (!result) {
+        return (
+            <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8">
+                <span className="text-5xl block mb-4">📊</span>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">No Assessment Results Yet</h2>
+                <p className="text-slate-500 text-sm mb-6 text-center max-w-md">Take the career assessment to discover your archetype and get personalized career matches.</p>
+                <button className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors"
+                    onClick={() => window.location.href = '/assessment'}>Take Assessment →</button>
+            </div>
+        );
+    }
+
+    const r = result;
     const gradient = ARCHETYPE_GRADIENTS[r.archetype.code] || 'from-indigo-600 to-violet-700';
 
     return (
@@ -148,7 +139,7 @@ export default function ResultsPage() {
                             transition={{ duration: 0.8 }} className="px-6 py-8 max-w-lg mx-auto w-full">
                             <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-6">Your 4D Profile</h3>
                             <div className="grid grid-cols-2 gap-4">
-                                {Object.entries(r.scores).map(([dim, val]) => (
+                                {(Object.entries(r.scores) as [string, number][]).map(([dim, val]) => (
                                     <div key={dim} className="text-center">
                                         <div className="relative w-20 h-20 mx-auto mb-2">
                                             <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">

@@ -32,46 +32,6 @@ interface Roadmap {
     last_rerouted_at?: string;
 }
 
-const MOCK_ROADMAP: Roadmap = {
-    target_career: 'Software Engineer',
-    total_months: 16,
-    current_phase: 2,
-    generated_at: new Date().toISOString(),
-    phases: [
-        {
-            phase_number: 1, title: 'Foundation', duration_weeks: 8,
-            milestones: [
-                { id: '1', skill: 'Python Fundamentals', resource: 'CS50 on edX (Free)', is_free: true, hours: 20, project: 'CLI Calculator + File Organizer', status: 'complete' },
-                { id: '2', skill: 'Git & Version Control', resource: 'GitHub Learning Lab (Free)', is_free: true, hours: 6, project: 'First GitHub repo with README', status: 'complete' },
-                { id: '3', skill: 'SQL Basics', resource: 'SQLBolt.com (Free)', is_free: true, hours: 10, project: 'Student DB with queries', status: 'complete' },
-                { id: '4', skill: 'HTML/CSS/JS', resource: 'freeCodeCamp (Free)', is_free: true, hours: 25, project: 'Portfolio website', status: 'complete' },
-            ]
-        },
-        {
-            phase_number: 2, title: 'Core Skills', duration_weeks: 10,
-            milestones: [
-                { id: '5', skill: 'DSA — Arrays & Strings', resource: 'NPTEL DSA (Free)', is_free: true, hours: 15, project: 'Solve 30 Easy LeetCode', status: 'complete' },
-                { id: '6', skill: 'DSA — Trees & Graphs', resource: 'Striver SDE Sheet (Free)', is_free: true, hours: 20, project: 'Solve 25 Medium problems', status: 'in_progress' },
-                { id: '7', skill: 'React.js', resource: 'React.dev docs (Free)', is_free: true, hours: 30, project: 'Full CRUD app with API', status: 'upcoming' },
-                { id: '8', skill: 'Node.js + Express', resource: 'The Odin Project (Free)', is_free: true, hours: 20, project: 'REST API with auth', status: 'upcoming' },
-            ]
-        },
-        {
-            phase_number: 3, title: 'Projects', duration_weeks: 8,
-            milestones: [
-                { id: '9', skill: 'System Design Basics', resource: 'Gaurav Sen YouTube (Free)', is_free: true, hours: 15, project: 'Design URL Shortener', status: 'upcoming' },
-                { id: '10', skill: 'Full Stack Project', resource: 'Self-directed', is_free: true, hours: 40, project: 'E-commerce platform', status: 'upcoming' },
-            ]
-        },
-        {
-            phase_number: 4, title: 'Visibility + Apply', duration_weeks: 6,
-            milestones: [
-                { id: '11', skill: 'Resume + Portfolio', resource: 'Mentixy Resume Builder', is_free: true, hours: 5, project: 'ATS-optimized resume', status: 'upcoming' },
-                { id: '12', skill: 'Mock Interviews', resource: 'Mentixy Simulator', is_free: true, hours: 10, project: '5 mock interviews', status: 'upcoming' },
-            ]
-        },
-    ],
-};
 
 export default function RoadmapPage() {
     const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
@@ -81,15 +41,15 @@ export default function RoadmapPage() {
         const fetchRoadmap = async () => {
             try {
                 const data = await api.getMyRoadmaps();
-                setRoadmap(data?.[0] || MOCK_ROADMAP);
+                setRoadmap(data?.[0] || null);
             } catch {
-                setRoadmap(MOCK_ROADMAP);
+                setRoadmap(null);
             } finally {
                 setLoading(false);
             }
         };
         if (auth.isLoggedIn()) fetchRoadmap();
-        else { setRoadmap(MOCK_ROADMAP); setLoading(false); }
+        else { setRoadmap(null); setLoading(false); }
     }, []);
 
     if (loading) return (
@@ -98,10 +58,27 @@ export default function RoadmapPage() {
         </div>
     );
 
-    const r = roadmap || MOCK_ROADMAP;
+    if (!roadmap) {
+        return (
+            <div className="min-h-screen bg-slate-950 text-white">
+                <TopBar />
+                <main className="md:ml-56 pb-24 md:pb-8">
+                    <div className="flex flex-col items-center justify-center min-h-[60vh] px-6">
+                        <span className="text-5xl block mb-4">🗺️</span>
+                        <h2 className="text-2xl font-bold text-white mb-2">No Roadmap Yet</h2>
+                        <p className="text-slate-400 text-sm mb-6 text-center max-w-md">Take the career assessment to get an AI-generated personalized roadmap tailored to your goals.</p>
+                        <Link href="/assessment" className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition-colors">Take Assessment →</Link>
+                    </div>
+                </main>
+                <BottomNav />
+            </div>
+        );
+    }
+
+    const r = roadmap;
     const totalMilestones = r.phases.reduce((acc, p) => acc + p.milestones.length, 0);
     const completedMilestones = r.phases.reduce((acc, p) => acc + p.milestones.filter(m => m.status === 'complete').length, 0);
-    const progress = Math.round((completedMilestones / totalMilestones) * 100);
+    const progress = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0;
 
     const statusIcon = (s: string) => s === 'complete' ? '✅' : s === 'in_progress' ? '🔵' : s === 'missed' ? '❌' : '⬜';
     const statusColor = (s: string) => s === 'complete' ? 'border-green-500/50 bg-green-500/5' : s === 'in_progress' ? 'border-indigo-500/50 bg-indigo-500/10' : s === 'missed' ? 'border-red-500/50 bg-red-500/5' : 'border-slate-700 bg-slate-800/30';
