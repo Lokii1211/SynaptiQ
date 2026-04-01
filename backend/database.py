@@ -35,6 +35,13 @@ _is_serverless = bool(os.getenv("VERCEL") or os.getenv("AWS_LAMBDA_FUNCTION_NAME
 print(f"[DB] Using {'PostgreSQL' if _is_postgres else 'SQLite'} | Serverless: {_is_serverless}")
 
 # ─── Engine Configuration ───
+# Strip pgbouncer=true (Supabase-specific, not a valid psycopg2 option)
+import re as _re
+DATABASE_URL = DATABASE_URL.strip()  # Remove trailing newlines from env vars
+DATABASE_URL = _re.sub(r'[?&]pgbouncer=true', '', DATABASE_URL)
+# Re-fix leading ? if we stripped the first param
+DATABASE_URL = DATABASE_URL.replace('?&', '?')
+
 connect_args = {}
 if not _is_postgres:
     connect_args["check_same_thread"] = False
