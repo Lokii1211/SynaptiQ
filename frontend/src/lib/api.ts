@@ -5,7 +5,7 @@
  * URL Strategy:
  * - Local dev: hits localhost:8000 directly (NEXT_PUBLIC_BACKEND_URL=http://localhost:8000)
  * - Production (Vercel): uses a RELATIVE path '' so requests go to same origin.
- *   The vercel.json rewrite then forwards /api/* → mentixy-api.vercel.app/api/*
+ *   The vercel.json rewrite then forwards /api/* → skillten.vercel.app/api/*
  *   This avoids CORS entirely since same-origin requests don't need CORS headers.
  */
 function getBackendUrl(): string {
