@@ -14,9 +14,11 @@ def list_careers(category: str = None, skip: int = 0, limit: int = 20, db: Sessi
         q = q.filter(Career.category == category)
     return {"careers": [{
         "id": c.id, "title": c.title, "slug": c.slug, "category": c.category,
-        "description": c.description[:150], "salary_range_min": c.salary_range_min,
+        "description": c.description[:150] if c.description else "", "salary_range_min": c.salary_range_min,
         "salary_range_max": c.salary_range_max, "demand_score": c.demand_score,
         "growth_outlook": c.growth_outlook, "icon": c.icon,
+        "required_skills": c.required_skills or [],
+        "avg_salary_lpa": round(((c.salary_range_min or 600000) + (c.salary_range_max or 1500000)) / 200000),
     } for c in q.offset(skip).limit(limit).all()]}
 
 @router.get("/{slug}")

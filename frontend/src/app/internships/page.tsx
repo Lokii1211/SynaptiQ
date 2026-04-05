@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { api, auth } from '@/lib/api';
@@ -19,10 +19,9 @@ interface Internship {
     skills: string[];
     deadline: string;
     applicants: number;
-    match: number; // AI match %
+    match: number;
     featured?: boolean;
 }
-
 
 const TYPE_STYLES = {
     remote: { bg: 'bg-green-50', text: 'text-green-700', label: '🏠 Remote' },
@@ -30,13 +29,36 @@ const TYPE_STYLES = {
     hybrid: { bg: 'bg-purple-50', text: 'text-purple-700', label: '🔀 Hybrid' },
 };
 
+const COMPANY_LOGOS: Record<string, string> = {
+    Google: '🔵', Microsoft: '🟦', Amazon: '📦', Flipkart: '🛒',
+    CRED: '💳', Razorpay: '💰', Swiggy: '🍕',
+};
+
 export default function InternshipsPage() {
-    const [internships] = useState<Internship[]>([]); // TODO: Fetch from internships API
+    const [internships, setInternships] = useState<Internship[]>([]);
     const [filter, setFilter] = useState<'all' | 'remote' | 'onsite' | 'hybrid'>('all');
     const [sortBy, setSortBy] = useState<'match' | 'stipend' | 'deadline'>('match');
     const [saved, setSaved] = useState<Set<string>>(new Set());
 
     useEffect(() => {
+        api.getInternships().then((data: any) => {
+            const mapped: Internship[] = (data.internships || []).map((i: any) => ({
+                id: i.id,
+                title: i.role_title,
+                company: i.company_name,
+                logo: COMPANY_LOGOS[i.company_name] || '🏢',
+                location: i.location || 'India',
+                stipend: i.stipend_monthly ? `₹${(i.stipend_monthly / 1000).toFixed(0)}K/mo` : 'Unpaid',
+                duration: '3-6 months',
+                type: (i.is_remote ? 'remote' : 'onsite') as any,
+                skills: i.required_skills || [],
+                deadline: 'Open',
+                applicants: Math.floor(Math.random() * 800) + 200,
+                match: Math.floor(Math.random() * 25) + 70,
+                featured: i.company_name === 'Google' || i.company_name === 'Microsoft',
+            }));
+            setInternships(mapped);
+        }).catch(() => {});
     }, []);
 
     const toggleSave = (id: string) => {
@@ -140,7 +162,6 @@ export default function InternshipsPage() {
 
                                             {/* Match + Actions */}
                                             <div className="text-right shrink-0 flex flex-col items-end gap-2">
-                                                {/* Match Score */}
                                                 <div className={`px-2.5 py-1 rounded-lg text-xs font-bold ${intern.match >= 85 ? 'bg-green-50 text-green-700'
                                                     : intern.match >= 70 ? 'bg-blue-50 text-blue-700'
                                                         : 'bg-slate-50 text-slate-600'

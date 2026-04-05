@@ -40,7 +40,27 @@ export default function CompanyIntelPage() {
     useEffect(() => {
         if (!isReady) return;
         api.getCompanies().then((data: any) => {
-            if (data?.companies?.length > 0) setCompanies(data.companies);
+            if (data?.companies?.length > 0) {
+                // Map backend ViyaCompany fields to frontend Company interface
+                const mapped = data.companies.map((c: any) => ({
+                    slug: c.slug || c.name?.toLowerCase().replace(/\s+/g, '-'),
+                    name: c.name,
+                    logo: c.name?.[0] || '🏢',
+                    industry: c.industry || 'Technology',
+                    rating: c.viya_overall_rating || 0,
+                    reviews: 0,
+                    hq: c.headquarters_city || 'India',
+                    size: c.team_size_range || (c.company_type === 'MNC' ? '10,000+' : '100-1000'),
+                    fresherCTC: c.salary_data?.sde1?.ctc || c.salary_data?.se?.ctc || (c.company_type === 'MNC' ? '₹6-25 LPA' : '₹8-30 LPA'),
+                    interviewRounds: c.interview_process || ['Online Test', 'Technical', 'HR'],
+                    topSkills: c.required_skills || ['DSA', 'SQL', 'Problem Solving'],
+                    difficulty: c.interview_difficulty >= 4 ? 'Hard' : c.interview_difficulty >= 3 ? 'Medium' : 'Easy',
+                    placementTrend: c.is_hiring_actively ? 'up' : 'stable',
+                    description: c.viya_honest_summary || c.best_for || `${c.name} — ${c.industry}`,
+                    hiresFrom: c.hires_from || ['IITs', 'NITs', 'Top Tier-2'],
+                }));
+                setCompanies(mapped);
+            }
             setLoading(false);
         }).catch(() => setLoading(false));
     }, [isReady]);

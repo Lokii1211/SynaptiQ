@@ -17,7 +17,15 @@ export default function JobsPage() {
     useEffect(() => {
         if (!isReady) return;
         api.getJobs().then((data) => {
-            setJobs(data.jobs || []);
+            // Map backend JobListing fields to frontend expected shape
+            const mapped = (data.jobs || []).map((j: any) => ({
+                ...j,
+                title: j.role_title || j.title,
+                job_type: j.role_type || j.job_type,
+                ctc_min: j.salary_min_lpa,
+                ctc_max: j.salary_max_lpa,
+            }));
+            setJobs(mapped);
             setLoading(false);
         }).catch(() => setLoading(false));
     }, [isReady]);

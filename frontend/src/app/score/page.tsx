@@ -23,6 +23,7 @@ export default function ScorePage() {
     const { isReady } = useAuthGuard();
     const [profile, setProfile] = useState<any>(null);
     const [codingStats, setCodingStats] = useState<any>(null);
+    const [scoreData, setScoreData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -30,24 +31,33 @@ export default function ScorePage() {
         Promise.all([
             api.getAssessmentProfile().catch(() => null),
             api.getCodingStats().catch(() => null),
-        ]).then(([p, c]) => {
+            api.calculateScore().catch(() => null),
+        ]).then(([p, c, sd]) => {
             setProfile(p);
             setCodingStats(c);
+            setScoreData(sd);
             setLoading(false);
         });
     }, [isReady]);
 
     if (!isReady) return <div className="min-h-screen bg-slate-50"><TopBar /><main className="max-w-4xl mx-auto px-4 py-6"><LoadingSkeleton variant="card" count={3} /></main></div>;
 
-    const score = profile?.mentixy_score || 0;
+    // Use score from /score/calculate API, fallback to profile, fallback to user store
+    const userStored = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('mentixy_user') || '{}') : {};
+    const score = scoreData?.mentixy_score || profile?.mentixy_score || userStored?.profile?.mentixy_score || 0;
     const maxScore = 1000;
     const percentage = (score / maxScore) * 100;
 
-    // Simulate breakdown (in prod this comes from API score_components)
-    const componentScores = SCORE_COMPONENTS.map(c => ({
-        ...c,
-        earned: Math.round((score / maxScore) * c.max * (0.6 + Math.random() * 0.4)),
-    }));
+    // Use real breakdown from API if available, otherwise simulate
+    const componentScores = scoreData?.components
+        ? SCORE_COMPONENTS.map(c => ({
+            ...c,
+            earned: scoreData.components[c.label.toLowerCase().replace(/[^a-z]/g, '_')] || Math.round((score / maxScore) * c.max * (0.6 + Math.random() * 0.4)),
+        }))
+        : SCORE_COMPONENTS.map(c => ({
+            ...c,
+            earned: Math.round((score / maxScore) * c.max * (0.6 + Math.random() * 0.4)),
+        }));
     // Recalculate to match total
     const rawTotal = componentScores.reduce((s, c) => s + c.earned, 0);
     if (rawTotal > 0) {

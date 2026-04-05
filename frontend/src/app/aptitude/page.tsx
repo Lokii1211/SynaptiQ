@@ -25,6 +25,40 @@ const CATEGORIES = [
 
 type View = 'home' | 'quiz' | 'review';
 
+// Normalize options: backend sends [{key:"A", text:"..."}, ...] array
+// but UI needs {A: "...", B: "..."} map for Object.entries()
+function normalizeOptions(opts: any): Record<string, string> {
+    if (!opts) return {};
+    // Already a plain map like {A: "text", B: "text"}
+    if (!Array.isArray(opts) && typeof opts === 'object') {
+        // Check if values are strings (already normalized) or objects
+        const entries = Object.entries(opts);
+        if (entries.length > 0 && typeof entries[0][1] === 'string') return opts;
+        // Could be {0: {key, text}, 1: {key, text}} from bad serialization
+        const result: Record<string, string> = {};
+        for (const [, val] of entries) {
+            if (val && typeof val === 'object' && 'key' in (val as any) && 'text' in (val as any)) {
+                result[(val as any).key] = String((val as any).text);
+            }
+        }
+        return Object.keys(result).length > 0 ? result : opts;
+    }
+    // Array format: [{key: "A", text: "..."}, ...]
+    if (Array.isArray(opts)) {
+        const result: Record<string, string> = {};
+        for (const opt of opts) {
+            if (opt && typeof opt === 'object' && 'key' in opt && 'text' in opt) {
+                result[opt.key] = String(opt.text);
+            } else if (typeof opt === 'string') {
+                // Simple string array: ["option1", "option2"]
+                result[String.fromCharCode(65 + Object.keys(result).length)] = opt;
+            }
+        }
+        return result;
+    }
+    return {};
+}
+
 export default function AptitudePage() {
     const [activeTab, setActiveTab] = useState<'practice' | 'tests'>('practice');
     const [view, setView] = useState<View>('home');
@@ -191,7 +225,7 @@ export default function AptitudePage() {
     // ═══════ QUIZ VIEW ═══════
     if (view === 'quiz' && questions.length > 0) {
         const q = questions[currentQ];
-        const options = q.options || {};
+        const options = normalizeOptions(q.options);
         const answered = !!answers[q.id];
         const isLastQ = currentQ === questions.length - 1;
 
@@ -290,7 +324,7 @@ export default function AptitudePage() {
                                                 }`}>
                                                 {hasResult && isCorrect ? '✓' : hasResult && isWrong ? '✗' : key}
                                             </span>
-                                            <span className="text-sm flex-1">{text as string}</span>
+                                            <span className="text-sm flex-1">{String(text)}</span>
                                         </button>
                                     );
                                 })}

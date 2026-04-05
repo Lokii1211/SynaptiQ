@@ -1,0 +1,144 @@
+﻿  Γû▓ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+[Mentixy Store] Loaded 1 users from disk
+[Mentixy Store] Loaded 8 openings
+   Generating static pages (0/100) ...
+   Generating static pages (25/100) 
+   Generating static pages (50/100) 
+   Generating static pages (75/100) 
+ Γ£ô Generating static pages (100/100)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+Γöî Γùï /                                    4.91 kB         144 kB
+Γö£ Γùï /_not-found                          147 B          87.5 kB
+Γö£ Γùï /achievements                        4.01 kB         152 kB
+Γö£ Γùï /admin                               5.56 kB         141 kB
+Γö£ Γùï /analytics                           4.47 kB         152 kB
+Γö£ ╞Æ /api/admin/openings                  0 B                0 B
+Γö£ ╞Æ /api/admin/users                     0 B                0 B
+Γö£ Γùï /api/assessment/questions            0 B                0 B
+Γö£ ╞Æ /api/assessment/results              0 B                0 B
+Γö£ ╞Æ /api/assessment/submit               0 B                0 B
+Γö£ ╞Æ /api/auth/login                      0 B                0 B
+Γö£ ╞Æ /api/auth/me                         0 B                0 B
+Γö£ ╞Æ /api/auth/onboarding                 0 B                0 B
+Γö£ ╞Æ /api/auth/signup                     0 B                0 B
+Γö£ ╞Æ /api/careers                         0 B                0 B
+Γö£ ╞Æ /api/careers/[slug]                  0 B                0 B
+Γö£ Γùï /api/careers/categories              0 B                0 B
+Γö£ ╞Æ /api/chat                            0 B                0 B
+Γö£ ╞Æ /api/college-roi                     0 B                0 B
+Γö£ ╞Æ /api/community                       0 B                0 B
+Γö£ ╞Æ /api/community/interact              0 B                0 B
+Γö£ ╞Æ /api/courses                         0 B                0 B
+Γö£ ╞Æ /api/daily-quiz                      0 B                0 B
+Γö£ ╞Æ /api/jobs                            0 B                0 B
+Γö£ Γùï /api/leaderboard                     0 B                0 B
+Γö£ Γùï /api/market/salary-insights          0 B                0 B
+Γö£ ╞Æ /api/market/trending-skills          0 B                0 B
+Γö£ ╞Æ /api/negotiate                       0 B                0 B
+Γö£ ╞Æ /api/openings                        0 B                0 B
+Γö£ ╞Æ /api/parent-report                   0 B                0 B
+Γö£ ╞Æ /api/practice                        0 B                0 B
+Γö£ ╞Æ /api/simulate                        0 B                0 B
+Γö£ ╞Æ /api/skills/gap-analysis             0 B                0 B
+Γö£ Γùï /aptitude                            8.4 kB          156 kB
+Γö£ Γùï /assessment                          11.6 kB         138 kB
+Γö£ Γùï /battle                              5.22 kB         153 kB
+Γö£ Γùï /campus                              2.44 kB         150 kB
+Γö£ Γùï /campus-calendar                     4.93 kB         153 kB
+Γö£ Γùï /campus-command                      3.92 kB         139 kB
+Γö£ ╞Æ /career/[slug]                       5.23 kB         153 kB
+Γö£ Γùï /careers                             1.48 kB         149 kB
+Γö£ ╞Æ /careers/[slug]                      3.19 kB         151 kB
+Γö£ Γùï /certifications                      3.97 kB         152 kB
+Γö£ Γùï /challenges                          2.81 kB         151 kB
+Γö£ Γùï /chat                                4.48 kB         152 kB
+Γö£ Γùï /college-roi                         1.47 kB         149 kB
+Γö£ Γùï /community                           3.34 kB         151 kB
+Γö£ Γùï /company-intel                       4.36 kB         152 kB
+Γö£ Γùï /company-prep                        4.29 kB         152 kB
+Γö£ ╞Æ /company/[slug]                      3.66 kB         152 kB
+Γö£ Γùï /concepts                            5.74 kB         154 kB
+Γö£ Γùï /contests                            4.23 kB         152 kB
+Γö£ Γùï /courses                             1.51 kB         149 kB
+Γö£ Γùï /creator                             4.23 kB         152 kB
+Γö£ Γùï /daily                               3.38 kB         151 kB
+Γö£ Γùï /dashboard                           5.8 kB          154 kB
+Γö£ Γùï /first-90-days                       1.59 kB         150 kB
+Γö£ Γùï /forgot-password                     1.47 kB         140 kB
+Γö£ Γùï /help                                5.62 kB         141 kB
+Γö£ Γùï /honest-mirror                       4.29 kB         152 kB
+Γö£ Γùï /internships                         2.68 kB         151 kB
+Γö£ Γùï /interview-experiences               2.64 kB         151 kB
+Γö£ Γùï /jobs                                3.06 kB         151 kB
+Γö£ Γùï /leaderboard                         4.91 kB         153 kB
+Γö£ Γùï /learn                               4.26 kB         152 kB
+Γö£ Γùï /login                               3.46 kB         142 kB
+Γö£ Γùï /messages                            4.01 kB         152 kB
+Γö£ Γùï /mock-drive                          6.97 kB         155 kB
+Γö£ Γùï /negotiate                           1.8 kB          150 kB
+Γö£ Γùï /network                             3.89 kB         152 kB
+Γö£ Γùï /notifications                       2.22 kB         150 kB
+Γö£ Γùï /notifications/settings              2.72 kB         151 kB
+Γö£ Γùï /offline                             917 B            97 kB
+Γö£ Γùï /onboarding                          7.03 kB         134 kB
+Γö£ Γùï /parent                              8.74 kB         144 kB
+Γö£ Γùï /people-like-you                     2.37 kB         150 kB
+Γö£ Γùï /placement-probability               3.11 kB         151 kB
+Γö£ Γùï /practice                            3.15 kB         151 kB
+Γö£ ╞Æ /practice/[slug]                     12.9 kB         148 kB
+Γö£ Γùï /pricing                             6.08 kB         154 kB
+Γö£ Γùï /privacy                             3.2 kB          139 kB
+Γö£ Γùï /problems                            4.83 kB         153 kB
+Γö£ Γùï /profile                             5.6 kB          154 kB
+Γö£ Γùï /recruiter                           5.81 kB         141 kB
+Γö£ Γùï /refer                               4.05 kB         152 kB
+Γö£ Γùï /reset-password                      1.88 kB         141 kB
+Γö£ Γùï /results                             6.49 kB         133 kB
+Γö£ Γùï /resume                              4.26 kB         152 kB
+Γö£ Γùï /roadmap                             1.91 kB         150 kB
+Γö£ Γùï /salary-truth                        4.41 kB         152 kB
+Γö£ Γùï /score                               5.29 kB         153 kB
+Γö£ Γùï /settings                            6.45 kB         161 kB
+Γö£ Γùï /side-income                         2.03 kB         150 kB
+Γö£ Γùï /signup                              3.65 kB         143 kB
+Γö£ Γùï /simulator                           4.86 kB         153 kB
+Γö£ Γùï /skill-market                        1.18 kB         149 kB
+Γö£ Γùï /skills                              2.47 kB         150 kB
+Γö£ Γùï /study-groups                        3.98 kB         152 kB
+Γö£ Γùï /study-plans                         4.08 kB         152 kB
+Γö£ Γùï /terms                               3.2 kB          139 kB
+Γö£ Γùï /tpo-dashboard                       4.28 kB         152 kB
+Γö£ Γùï /tracker                             3.14 kB         151 kB
+Γö£ ╞Æ /u/[username]                        4.97 kB         140 kB
+Γöö ╞Æ /verify/[hash]                       1.53 kB         128 kB
++ First Load JS shared by all            87.4 kB
+  Γö£ chunks/2117-c7c4cc152a30bb3d.js      31.7 kB
+  Γö£ chunks/fd9d1056-247eac5569418be1.js  53.6 kB
+  Γöö other shared chunks (total)          1.99 kB
+
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

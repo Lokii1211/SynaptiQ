@@ -27,7 +27,7 @@ type MessageHandler = (message: WSMessage) => void;
 const BACKEND_URL = typeof window !== 'undefined' &&
     window.location.hostname !== 'localhost' &&
     window.location.hostname !== '127.0.0.1'
-    ? 'https://skillten.vercel.app'
+    ? 'https://mentixy.vercel.app'
     : 'http://localhost:8000';
 
 const IS_LOCAL = typeof window !== 'undefined' &&

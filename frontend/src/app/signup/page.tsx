@@ -42,7 +42,7 @@ export default function SignupPage() {
     const handleGoogleSignup = () => {
         const backendBase = (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
             ? 'http://localhost:8000'
-            : 'https://skillten.vercel.app';
+            : 'https://mentixy.vercel.app';
         window.location.href = `${backendBase}/api/auth/google`;
     };
 

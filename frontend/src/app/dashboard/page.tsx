@@ -211,8 +211,10 @@ export default function DashboardPage() {
                                         ) : (
                                             <div className="text-center py-4">
                                                 <p className="text-2xl mb-2">⚡</p>
-                                                <p className="text-xs text-slate-500">Daily challenge loading...</p>
-                                                <p className="text-xs text-slate-400 mt-1">🔥 {streak} day streak</p>
+                                                <p className="text-sm font-semibold text-slate-900 mb-1">Solve Today&apos;s Problem</p>
+                                                <p className="text-xs text-slate-500 mb-2">Practice one problem daily to build consistency</p>
+                                                <span className="text-xs font-semibold text-indigo-600 group-hover:underline">Start practicing →</span>
+                                                <p className="text-xs text-slate-400 mt-2">🔥 {streak} day streak</p>
                                             </div>
                                         )}
                                     </div>

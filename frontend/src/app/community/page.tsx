@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { api, auth } from '@/lib/api';
@@ -48,6 +48,27 @@ export default function CommunityPage() {
     ];
 
     useEffect(() => {
+        api.getCommunityPosts().then((data: any) => {
+            if (data?.posts?.length > 0) {
+                const mapped: Post[] = data.posts.map((p: any) => ({
+                    id: p.id,
+                    author: {
+                        name: p.author_name || 'Anonymous',
+                        avatar: p.author_avatar || '😊',
+                        college: 'Mentixy User',
+                        badge: p.is_pinned ? '📌 Pinned' : undefined,
+                    },
+                    content: p.content,
+                    tags: p.tags || [],
+                    likes: p.likes_count || 0,
+                    replies: p.comments_count || 0,
+                    time: p.created_at ? new Date(p.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'recently',
+                    liked: p.user_liked || false,
+                    postType: p.post_type === 'placements' ? 'placement' : 'text',
+                }));
+                setPosts(mapped);
+            }
+        }).catch(() => {});
     }, []);
 
     const toggleLike = (id: string) => {
@@ -154,7 +175,14 @@ export default function CommunityPage() {
                                 </div>
 
                                 {/* Posts */}
-                                {posts.map((post, i) => (
+                                {posts.length === 0 ? (
+                                    <div className="text-center py-16">
+                                        <span className="text-5xl block mb-4">🗣️</span>
+                                        <h3 className="text-lg font-semibold text-slate-700 mb-2">Community is warming up!</h3>
+                                        <p className="text-sm text-slate-400">Be the first to share something with your peers</p>
+                                    </div>
+                                ) : (
+                                    posts.map((post, i) => (
                                     <motion.div key={post.id}
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
@@ -192,7 +220,7 @@ export default function CommunityPage() {
                                                 </div>
                                                 {post.metadata.rounds && (
                                                     <div className="flex flex-wrap gap-1 mt-2">
-                                                        {post.metadata.rounds.map((r, i) => (
+                                                        {post.metadata.rounds.map((r: string, i: number) => (
                                                             <span key={i} className="text-[9px] bg-white border border-emerald-200 text-emerald-700 px-2 py-0.5 rounded-full font-medium">
                                                                 {i + 1}. {r}
                                                             </span>
@@ -202,75 +230,9 @@ export default function CommunityPage() {
                                             </div>
                                         )}
 
-                                        {/* Structured Post: Solution Share (Bible Phase 4) */}
-                                        {post.postType === 'solution' && post.metadata && (
-                                            <div className="mb-3 bg-slate-900 rounded-xl overflow-hidden border border-slate-700">
-                                                <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
-                                                    <div className="flex items-center gap-2">
-                                                        <span className="text-xs text-indigo-400 font-semibold">💡 {post.metadata.problemTitle}</span>
-                                                        <span className="text-[9px] bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded">{post.metadata.language}</span>
-                                                    </div>
-                                                    <span className="text-[9px] text-emerald-400 font-mono">{post.metadata.complexity}</span>
-                                                </div>
-                                                <pre className="px-4 py-3 text-xs text-slate-300 font-mono overflow-x-auto leading-relaxed">{post.metadata.codeSnippet}</pre>
-                                            </div>
-                                        )}
-
-                                        {/* Structured Post: Poll (Bible Phase 4) */}
-                                        {post.postType === 'poll' && post.metadata?.pollOptions && (
-                                            <div className="mb-3 space-y-2">
-                                                {post.metadata.pollOptions.map((opt, i) => {
-                                                    const voted = votedPolls[post.id] !== undefined;
-                                                    const isSelected = votedPolls[post.id] === i;
-                                                    const pct = voted && post.metadata?.pollTotal ? Math.round((opt.votes / post.metadata.pollTotal) * 100) : 0;
-                                                    return (
-                                                        <button key={i}
-                                                            onClick={() => {
-                                                                if (!voted) setVotedPolls(prev => ({ ...prev, [post.id]: i }));
-                                                            }}
-                                                            className={`w-full text-left relative overflow-hidden rounded-xl px-4 py-3 border transition-all ${voted
-                                                                ? (isSelected ? 'border-indigo-300 bg-indigo-50' : 'border-slate-200 bg-slate-50')
-                                                                : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-indigo-50 cursor-pointer'
-                                                                }`}>
-                                                            {voted && (
-                                                                <div className={`absolute inset-y-0 left-0 ${isSelected ? 'bg-indigo-100' : 'bg-slate-100'} transition-all duration-700`} style={{ width: `${pct}%` }} />
-                                                            )}
-                                                            <div className="relative flex items-center justify-between z-10">
-                                                                <span className={`text-xs font-medium ${isSelected ? 'text-indigo-700' : 'text-slate-700'}`}>
-                                                                    {isSelected && '✓ '}{opt.text}
-                                                                </span>
-                                                                {voted && <span className={`text-xs font-bold ${isSelected ? 'text-indigo-600' : 'text-slate-400'}`}>{pct}%</span>}
-                                                            </div>
-                                                        </button>
-                                                    );
-                                                })}
-                                                <p className="text-[10px] text-slate-400 text-right">
-                                                    {votedPolls[post.id] !== undefined ? `${post.metadata.pollTotal} votes` : 'Tap to vote'}
-                                                </p>
-                                            </div>
-                                        )}
-
-                                        {/* Structured Post: AMA (Bible Phase 4) */}
-                                        {post.postType === 'ama' && post.metadata && (
-                                            <div className="mb-3 bg-gradient-to-r from-violet-50 to-purple-50 rounded-xl p-4 border border-violet-200">
-                                                <div className="flex items-center gap-3 mb-2">
-                                                    {post.metadata.amaStatus === 'live' && (
-                                                        <span className="flex items-center gap-1.5 text-[10px] font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-200">
-                                                            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                                                            LIVE NOW
-                                                        </span>
-                                                    )}
-                                                    <span className="text-xs text-violet-600 font-semibold">🎤 {post.metadata.amaRole}</span>
-                                                </div>
-                                                <button className="w-full text-center bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold py-2.5 rounded-lg transition-colors">
-                                                    💬 Ask a Question
-                                                </button>
-                                            </div>
-                                        )}
-
                                         {/* Tags */}
                                         <div className="flex flex-wrap gap-1.5 mb-3">
-                                            {post.tags.map(tag => (
+                                            {post.tags.map((tag: string) => (
                                                 <span key={tag} className="text-[10px] font-medium bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">#{tag}</span>
                                             ))}
                                         </div>
@@ -289,7 +251,8 @@ export default function CommunityPage() {
                                             </button>
                                         </div>
                                     </motion.div>
-                                ))}
+                                ))
+                                )}
                             </div>
 
                             {/* Sidebar (desktop) */}
@@ -310,7 +273,7 @@ export default function CommunityPage() {
                                         <li>✓ Share real experiences, not rumors</li>
                                         <li>✓ No spamming referral links</li>
                                         <li>✓ Tag posts correctly</li>
-                                        <li>✓ Don't share confidential interview Qs</li>
+                                        <li>✓ Don&apos;t share confidential interview Qs</li>
                                     </ul>
                                 </div>
 

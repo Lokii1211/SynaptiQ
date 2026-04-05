@@ -254,12 +254,17 @@ CODING_PROBLEMS = [
 
 def seed_coding_problems(db):
     """Seed 30 real coding problems into the database."""
+    import json
     from models import CodingProblem
     if db.query(CodingProblem).count() > 0:
         return 0
     count = 0
     for p in CODING_PROBLEMS:
-        db.add(CodingProblem(**p))
+        data = dict(p)
+        # constraints is Column(Text) but seed data has lists — convert to JSON string
+        if isinstance(data.get("constraints"), list):
+            data["constraints"] = json.dumps(data["constraints"])
+        db.add(CodingProblem(**data))
         count += 1
     db.commit()
     return count

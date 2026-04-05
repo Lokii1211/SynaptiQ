@@ -1,0 +1,29 @@
+﻿[DB] Using SQLite | Serverless: False
+[1/3] Recreating database tables...
+      Tables created successfully!
+[2/3] Seeding data...
+  [OK] Seeded 30 coding problems (GFG/LeetCode/HackerRank)
+      Core data seeded!
+[3/3] Verifying...
+
+========================================
+DATABASE SEED RESULTS
+========================================
+  Coding Problems           30
+  Questions (Total)         47
+    - Assessment            20
+    - Aptitude              17
+    - Quiz                  10
+  Careers                   6
+  Jobs                      5
+  Companies                 3
+  Skills                    10
+  Challenges                2
+  Colleges                  4
+  Badges                    5
+  Market Insights           2
+========================================
+
+  TOTAL RECORDS: 114
+
+  ALL DONE!

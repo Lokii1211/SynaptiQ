@@ -5,7 +5,7 @@
  * URL Strategy:
  * - Local dev: hits localhost:8000 directly (NEXT_PUBLIC_BACKEND_URL=http://localhost:8000)
  * - Production (Vercel): uses a RELATIVE path '' so requests go to same origin.
- *   The vercel.json rewrite then forwards /api/* → skillten.vercel.app/api/*
+ *   The vercel.json rewrite then forwards /api/* → mentixy backend /api/*
  *   This avoids CORS entirely since same-origin requests don't need CORS headers.
  */
 function getBackendUrl(): string {
@@ -93,7 +93,7 @@ export const api = {
 
     // ═══════════ NOTIFICATIONS ═══════════
     getNotifications: (unread_only: boolean = false, page: number = 1) =>
-        request(`/notifications/?unread_only=${unread_only}&page=${page}`),
+        request(`/notifications?unread_only=${unread_only}&page=${page}`),
 
     markRead: (notification_id: string) =>
         request('/notifications/mark-read', { method: 'POST', body: JSON.stringify({ notification_id }) }),
@@ -145,7 +145,7 @@ export const api = {
     getResults: () => request('/assessment/results'),
 
     // ═══════════ CAREERS ═══════════
-    getCareers: () => request('/careers/'),
+    getCareers: (category?: string) => request(`/careers${category ? `?category=${category}` : ''}`),
 
     getCareerDetail: (slug: string) => request(`/careers/${slug}`),
 
@@ -154,7 +154,7 @@ export const api = {
     // ═══════════ JOBS ═══════════
     getJobs: (params?: Record<string, string>) => {
         const q = params ? '?' + new URLSearchParams(params).toString() : '';
-        return request(`/jobs/${q}`);
+        return request(`/jobs${q}`);
     },
 
     getJobDetail: (id: string) => request(`/jobs/${id}`),
@@ -165,7 +165,7 @@ export const api = {
     getMyApplications: () => request('/jobs/applications/me'),
 
     // ═══════════ INTERNSHIPS ═══════════
-    getInternships: () => request('/internships/'),
+    getInternships: () => request('/internships'),
 
     // ═══════════ CODING ═══════════
     getCodingProblems: (params?: Record<string, string>) => {
@@ -207,7 +207,7 @@ export const api = {
     getRoadmap: (id: string) => request(`/learning/roadmaps/${id}`),
 
     // ═══════════ CHALLENGES ═══════════
-    getChallenges: () => request('/challenges/'),
+    getChallenges: () => request('/challenges'),
 
     getChallengeDetail: (slug: string) => request(`/challenges/${slug}`),
 
@@ -217,7 +217,7 @@ export const api = {
     // ═══════════ COMPANIES ═══════════
     getCompanies: (params?: Record<string, string>) => {
         const q = params ? '?' + new URLSearchParams(params).toString() : '';
-        return request(`/companies/${q}`);
+        return request(`/companies${q}`);
     },
 
     getCompanyDetail: (slug: string) => request(`/companies/${slug}`),
@@ -238,12 +238,12 @@ export const api = {
         request('/notifications/mark-read', { method: 'POST', body: JSON.stringify({ notification_id: id }) }),
 
 
-    getResumes: () => request('/resume/'),
+    getResumes: () => request('/resume'),
 
     createResume: (data: { title: string; template?: string; content: any; target_role: string }) =>
-        request('/resume/', { method: 'POST', body: JSON.stringify(data) }),
+        request('/resume', { method: 'POST', body: JSON.stringify(data) }),
 
-    listResumes: () => request('/resume/'),
+    listResumes: () => request('/resume'),
 
     // ═══════════ CHAT ═══════════
     chat: (data: { message: string; session_id?: string }) =>
@@ -326,15 +326,20 @@ export const api = {
         request('/ai/skill-gap', { method: 'POST', body: JSON.stringify(data) }),
 
     // ═══════════ ACHIEVEMENTS ═══════════
-    getAchievements: () => request('/achievements/'),
+    getAchievements: () => request('/achievements'),
+
+    // ═══════════ MENTIXY SCORE ═══════════
+    getScore: () => request('/score'),
+    calculateScore: () => request('/score/calculate', { method: 'POST' }),
+    getScoreHistory: () => request('/score/history'),
 
     // ═══════════ STREAK TRACKER ═══════════
-    getStreak: () => request('/tracker/'),
+    getStreak: () => request('/tracker'),
     streakCheckIn: () => request('/tracker/check-in', { method: 'POST' }),
     useStreakFreeze: () => request('/tracker/freeze', { method: 'POST', body: JSON.stringify({ use_freeze: true }) }),
 
     // ═══════════ REFERRAL SYSTEM ═══════════
-    getReferrals: () => request('/referral/'),
+    getReferrals: () => request('/referral'),
     applyReferral: (code: string) => request('/referral/apply', { method: 'POST', body: JSON.stringify({ ref_code: code }) }),
 
     // ═══════════ LEADERBOARD & CAMPUS WARS ═══════════
@@ -367,6 +372,7 @@ export const api = {
 
     submitBattle: (battle_id: string, data: { language: string; code: string }) =>
         request(`/battle/${battle_id}/submit`, { method: 'POST', body: JSON.stringify(data) }),
+
 };
 
 // Auth helpers

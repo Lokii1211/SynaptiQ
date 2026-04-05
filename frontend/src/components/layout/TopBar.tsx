@@ -251,7 +251,7 @@ export function TopBar() {
 
                             {/* Mentixy Score Badge */}
                             <Link href="/score" className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 rounded-lg hover:border-indigo-200 transition-colors">
-                                <span className="text-xs font-bold text-indigo-700">742</span>
+                                <span className="text-xs font-bold text-indigo-700">{user.profile?.mentixy_score || 0}</span>
                                 <span className="text-[10px] text-indigo-500 font-medium">Score</span>
                             </Link>
                         </>

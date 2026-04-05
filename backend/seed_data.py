@@ -9,7 +9,7 @@ def seed_all(db):
     """Master seed function — call from main.py lifespan"""
     _seed_careers(db)
     _seed_skills(db)
-    _seed_coding_problems(db)
+    # NOTE: coding problems are seeded by seed_problems.py (30 problems) — not the inline _seed_coding_problems
     _seed_jobs(db)
     _seed_companies(db)
     _seed_challenges(db)
@@ -22,16 +22,30 @@ def seed_all(db):
         from seed_problems import seed_coding_problems
         count = seed_coding_problems(db)
         if count:
-            print(f"  ✅ Seeded {count} coding problems (GFG/LeetCode/HackerRank)")
+            print(f"  [OK] Seeded {count} coding problems (GFG/LeetCode/HackerRank)")
     except Exception as e:
-        print(f"  ⚠️ Coding problems seed: {e}")
+        print(f"  [WARN] Coding problems seed: {e}")
     try:
         from seed_aptitude import seed_aptitude_questions
         count = seed_aptitude_questions(db)
         if count:
-            print(f"  ✅ Seeded {count} aptitude questions (TCS/Infosys/Wipro)")
+            print(f"  [OK] Seeded {count} aptitude questions (TCS/Infosys/Wipro)")
     except Exception as e:
-        print(f"  ⚠️ Aptitude seed: {e}")
+        print(f"  [WARN] Aptitude seed: {e}")
+    try:
+        from seed_community import seed_community_posts
+        count = seed_community_posts(db)
+        if count:
+            print(f"  [OK] Seeded {count} community posts")
+    except Exception as e:
+        print(f"  [WARN] Community posts seed: {e}")
+    try:
+        from seed_internships import seed_internships
+        count = seed_internships(db)
+        if count:
+            print(f"  [OK] Seeded {count} internship listings")
+    except Exception as e:
+        print(f"  [WARN] Internships seed: {e}")
     db.commit()
 
 
