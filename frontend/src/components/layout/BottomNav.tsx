@@ -60,7 +60,7 @@ export function BottomNav() {
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
             {/* Glassmorphism background */}
-            <div className="bg-white/90 backdrop-blur-xl border-t border-slate-200/80 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+            <div className="bg-[#0a1628]/90 backdrop-blur-xl border-t border-[#1f2a3d]/60 shadow-[0_-4px_20px_rgba(3,14,32,0.4)]">
                 <div className="flex items-center justify-around px-1 pb-[env(safe-area-inset-bottom,0px)]">
                     {NAV_ITEMS.map((item) => {
                         const active = isActive(item);
@@ -69,13 +69,13 @@ export function BottomNav() {
                                 key={item.href}
                                 href={item.href}
                                 className={`relative flex flex-col items-center justify-center gap-0.5 py-2 px-3 min-w-[56px] transition-all duration-200 ${active
-                                    ? 'text-indigo-600'
-                                    : 'text-slate-400'
+                                    ? 'text-[#ffb955]'
+                                    : 'text-[#8e909d]'
                                     }`}
                             >
                                 {/* Active indicator bar */}
                                 {active && (
-                                    <div className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-[3px] bg-gradient-to-r from-indigo-500 to-violet-500 rounded-b-full" />
+                                    <div className="absolute -top-px left-1/2 -translate-x-1/2 w-8 h-[3px] bg-gradient-to-r from-[#ffb955] to-[#e09a30] rounded-b-full" />
                                 )}
 
                                 {/* Icon with badge */}
@@ -87,7 +87,7 @@ export function BottomNav() {
                                 </div>
 
                                 {/* Label */}
-                                <span className={`text-[10px] font-medium leading-tight ${active ? 'text-indigo-600' : 'text-slate-400'}`}>
+                                <span className={`text-[10px] font-medium leading-tight ${active ? 'text-[#ffb955]' : 'text-[#8e909d]'}`}>
                                     {item.label}
                                 </span>
                             </Link>

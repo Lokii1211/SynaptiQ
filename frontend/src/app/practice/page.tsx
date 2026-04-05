@@ -32,7 +32,7 @@ export default function CodingArenaPage() {
     );
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-[#071325]">
             <div className="flex-1 flex flex-col">
                 <TopBar />
                 <main className="flex-1 pb-24 md:pb-8">
@@ -60,11 +60,11 @@ export default function CodingArenaPage() {
                     </div>
 
                     {/* Filters */}
-                    <div className="px-6 py-4 bg-white border-b border-slate-200">
+                    <div className="px-6 py-4 bg-[#0d1a2d] border-b border-[#1f2a3d]">
                         <div className="flex gap-2">
                             {['all', 'easy', 'medium', 'hard'].map(f => (
                                 <button key={f} onClick={() => setFilter(f)}
-                                    className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize transition-colors ${filter === f ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    className={`px-4 py-1.5 rounded-full text-sm font-medium capitalize transition-colors ${filter === f ? 'bg-[#ffb955] text-[#071325]' : 'bg-[#1f2a3d] text-[#b4c5e0] hover:bg-[#2a3548]'
                                         }`}
                                 >{f}</button>
                             ))}
@@ -96,14 +96,14 @@ export default function CodingArenaPage() {
                                         <div className="flex items-center justify-between">
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center gap-2 mb-1">
-                                                    <h3 className="font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors text-sm truncate">
+                                                    <h3 className="font-semibold text-[#d7e3fc] group-hover:text-[#ffb955] transition-colors text-sm truncate">
                                                         {problem.title}
                                                     </h3>
                                                     <span className={`text-[11px] px-2 py-0.5 rounded-md font-medium border ${difficultyColor(problem.difficulty)}`}>
                                                         {problem.difficulty}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center gap-3 text-xs text-slate-500">
+                                                <div className="flex items-center gap-3 text-xs text-[#8e909d]">
                                                     {problem.category && <span>{problem.category}</span>}
                                                     {problem.company_tags?.length > 0 && (
                                                         <span className="text-indigo-500">{problem.company_tags.slice(0, 2).join(', ')}</span>
@@ -111,7 +111,7 @@ export default function CodingArenaPage() {
                                                     {problem.acceptance_rate && <span>{problem.acceptance_rate}% acceptance</span>}
                                                 </div>
                                             </div>
-                                            <div className="text-slate-400 group-hover:text-indigo-500 transition-colors ml-3">→</div>
+                                            <div className="text-[#8e909d] group-hover:text-[#ffb955] transition-colors ml-3">→</div>
                                         </div>
                                     </Link>
                                 </motion.div>

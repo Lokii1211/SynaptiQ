@@ -120,7 +120,7 @@ export function TopBar() {
         nav.items.some(i => pathname === i.href || pathname?.startsWith(i.href + '/'));
 
     return (
-        <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-sm">
+        <header className="sticky top-0 z-50 bg-[#0a1628]/90 backdrop-blur-xl border-b border-[#1f2a3d]/60 shadow-[0_4px_20px_rgba(3,14,32,0.4)]">
             <div className="max-w-[1400px] mx-auto flex items-center justify-between px-4 lg:px-6 h-14" ref={dropdownRef}>
 
                 {/* Left: Logo + Dashboard shortcut */}
@@ -131,8 +131,8 @@ export function TopBar() {
                         <Link
                             href="/dashboard"
                             className={`hidden md:flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium transition-all ${pathname === '/dashboard'
-                                    ? 'text-indigo-700 bg-indigo-50'
-                                    : 'text-slate-500 hover:text-indigo-600 hover:bg-indigo-50/50'
+                                    ? 'text-[#ffb955] bg-[#ffb955]/10'
+                                    : 'text-[#8e909d] hover:text-[#ffb955] hover:bg-[#ffb955]/5'
                                 }`}
                         >
                             <svg className="w-4 h-4" fill={pathname === '/dashboard' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -150,8 +150,8 @@ export function TopBar() {
                                 onClick={() => setOpenDropdown(openDropdown === nav.label ? null : nav.label)}
                                 onMouseEnter={() => setOpenDropdown(nav.label)}
                                 className={`flex items-center gap-1 px-2.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isNavActive(nav)
-                                    ? 'text-indigo-700 bg-indigo-50'
-                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                                    ? 'text-[#ffb955] bg-[#ffb955]/10'
+                                    : 'text-[#b4c5e0] hover:text-[#d7e3fc] hover:bg-[#1f2a3d]/50'
                                     }`}
                             >
                                 {nav.label}
@@ -163,7 +163,7 @@ export function TopBar() {
                             {/* Dropdown */}
                             {openDropdown === nav.label && (
                                 <div
-                                    className="absolute top-full left-0 mt-1 w-60 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 animate-fadeInUp"
+                                    className="absolute top-full left-0 mt-1 w-60 bg-[#101c2e] rounded-xl shadow-xl border border-[#1f2a3d] py-2 z-50 animate-fadeInUp"
                                     onMouseLeave={() => setOpenDropdown(null)}
                                 >
                                     {nav.items.map((item) => (
@@ -172,8 +172,8 @@ export function TopBar() {
                                             href={item.href}
                                             onClick={() => setOpenDropdown(null)}
                                             className={`flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${pathname === item.href
-                                                ? 'bg-indigo-50 text-indigo-700'
-                                                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                                                ? 'bg-[#ffb955]/10 text-[#ffb955]'
+                                                : 'text-[#b4c5e0] hover:bg-[#1f2a3d] hover:text-[#d7e3fc]'
                                                 }`}
                                         >
                                             <span className="text-base">{item.icon}</span>
@@ -203,7 +203,7 @@ export function TopBar() {
                             localStorage.setItem('st-dark-mode', String(next));
                             document.documentElement.classList.toggle('dark', next);
                         }}
-                        className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg transition-colors"
+                        className="p-2 text-[#8e909d] hover:text-[#ffb955] hover:bg-[#1f2a3d] rounded-lg transition-colors"
                         title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
                     >
                         <span className="text-base">{darkMode ? '☀️' : '🌙'}</span>
@@ -215,7 +215,7 @@ export function TopBar() {
                             {/* Community/Feed quick link */}
                             <Link
                                 href="/community"
-                                className={`p-2 rounded-lg transition-colors ${pathname === '/community' ? 'text-indigo-600 bg-indigo-50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                className={`p-2 rounded-lg transition-colors ${pathname === '/community' ? 'text-[#ffb955] bg-[#ffb955]/10' : 'text-[#8e909d] hover:text-[#d7e3fc] hover:bg-[#1f2a3d]'
                                     }`}
                                 title="Feed & Posts"
                             >
@@ -227,7 +227,7 @@ export function TopBar() {
                             {/* Network quick link */}
                             <Link
                                 href="/network"
-                                className={`p-2 rounded-lg transition-colors ${pathname === '/network' ? 'text-indigo-600 bg-indigo-50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                className={`p-2 rounded-lg transition-colors ${pathname === '/network' ? 'text-[#ffb955] bg-[#ffb955]/10' : 'text-[#8e909d] hover:text-[#d7e3fc] hover:bg-[#1f2a3d]'
                                     }`}
                                 title="My Network"
                             >
@@ -239,7 +239,7 @@ export function TopBar() {
                             {/* Notifications */}
                             <Link
                                 href="/notifications"
-                                className={`relative p-2 rounded-lg transition-colors ${pathname?.startsWith('/notifications') ? 'text-indigo-600 bg-indigo-50' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                                className={`relative p-2 rounded-lg transition-colors ${pathname?.startsWith('/notifications') ? 'text-[#ffb955] bg-[#ffb955]/10' : 'text-[#8e909d] hover:text-[#d7e3fc] hover:bg-[#1f2a3d]'
                                     }`}
                                 title="Notifications"
                             >
@@ -250,9 +250,9 @@ export function TopBar() {
                             </Link>
 
                             {/* Mentixy Score Badge */}
-                            <Link href="/score" className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-indigo-50 to-violet-50 border border-indigo-100 rounded-lg hover:border-indigo-200 transition-colors">
-                                <span className="text-xs font-bold text-indigo-700">{user.profile?.mentixy_score || 0}</span>
-                                <span className="text-[10px] text-indigo-500 font-medium">Score</span>
+                            <Link href="/score" className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 bg-[#ffb955]/10 border border-[#ffb955]/20 rounded-lg hover:border-[#ffb955]/40 transition-colors">
+                                <span className="text-xs font-bold text-[#ffb955]">{user.profile?.mentixy_score || 0}</span>
+                                <span className="text-[10px] text-[#ffb955]/70 font-medium">Score</span>
                             </Link>
                         </>
                     )}
@@ -263,35 +263,35 @@ export function TopBar() {
                             <div className="relative">
                                 <button
                                     onClick={() => { setProfileOpen(!profileOpen); setOpenDropdown(null); }}
-                                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-50 transition-colors"
+                                    className="flex items-center gap-2 p-1 rounded-lg hover:bg-[#1f2a3d] transition-colors"
                                 >
-                                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold ring-2 ring-white shadow-sm">
+                                    <div className="w-8 h-8 bg-gradient-to-br from-[#ffb955] to-[#e09a30] rounded-full flex items-center justify-center text-[#071325] text-xs font-bold ring-2 ring-[#1f2a3d] shadow-sm">
                                         {user.profile?.display_name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                                     </div>
                                 </button>
 
                                 {profileOpen && (
-                                    <div className="absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-xl border border-slate-100 py-2 z-50 animate-fadeInUp">
+                                    <div className="absolute right-0 top-full mt-2 w-60 bg-[#101c2e] rounded-xl shadow-xl border border-[#1f2a3d] py-2 z-50 animate-fadeInUp">
                                         {/* User info */}
-                                        <div className="px-4 py-3 border-b border-slate-100">
-                                            <p className="text-sm font-semibold text-slate-900 truncate">{user.profile?.display_name || user.email.split('@')[0]}</p>
-                                            <p className="text-xs text-slate-400 truncate">{user.email}</p>
+                                        <div className="px-4 py-3 border-b border-[#1f2a3d]">
+                                            <p className="text-sm font-semibold text-[#d7e3fc] truncate">{user.profile?.display_name || user.email.split('@')[0]}</p>
+                                            <p className="text-xs text-[#8e909d] truncate">{user.email}</p>
                                         </div>
                                         {PROFILE_MENU.map((item) => (
                                             <Link
                                                 key={item.href}
                                                 href={item.href}
                                                 onClick={() => setProfileOpen(false)}
-                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#b4c5e0] hover:bg-[#1f2a3d] hover:text-[#d7e3fc] transition-colors"
                                             >
                                                 <span>{item.icon}</span>
                                                 <span className="font-medium">{item.label}</span>
                                             </Link>
                                         ))}
-                                        <div className="border-t border-slate-100 mt-1 pt-1">
+                                        <div className="border-t border-[#1f2a3d] mt-1 pt-1">
                                             <button
                                                 onClick={() => { logout(); setProfileOpen(false); }}
-                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition-colors w-full text-left"
+                                                className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#ffb4ab] hover:bg-[#ffb4ab]/10 transition-colors w-full text-left"
                                             >
                                                 <span>🚪</span>
                                                 <span className="font-medium">Sign Out</span>
@@ -302,24 +302,24 @@ export function TopBar() {
                             </div>
                         ) : (
                             <div className="flex items-center gap-2">
-                                <Link href="/login" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors hidden sm:block">Sign In</Link>
-                                <Link href="/signup" className="st-btn-primary text-sm py-2 px-4">Get Started</Link>
+                                <Link href="/login" className="text-sm font-medium text-[#b4c5e0] hover:text-[#ffb955] transition-colors hidden sm:block">Sign In</Link>
+                                <Link href="/signup" className="st-btn-primary text-sm py-2 px-4">GET STARTED</Link>
                             </div>
                         )
                     ) : (
                         /* Skeleton placeholder during SSR to prevent hydration mismatch */
-                        <div className="w-8 h-8 bg-slate-100 rounded-full animate-pulse" />
+                        <div className="w-8 h-8 bg-[#1f2a3d] rounded-full animate-pulse" />
                     )}
                 </div>
             </div>
 
             {/* Mobile menu toggle (lg:hidden) */}
             {mounted && user && (
-                <div className="lg:hidden border-t border-slate-100">
+                <div className="lg:hidden border-t border-[#1f2a3d]">
                     <div className="flex items-center justify-around px-2 py-1.5">
                         <Link
                             href="/community"
-                            className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs ${pathname === '/community' ? 'text-indigo-600' : 'text-slate-400'
+                            className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs ${pathname === '/community' ? 'text-[#ffb955]' : 'text-[#8e909d]'
                                 }`}
                         >
                             <svg className="w-4 h-4" fill={pathname === '/community' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -329,7 +329,7 @@ export function TopBar() {
                         </Link>
                         <Link
                             href="/network"
-                            className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs ${pathname === '/network' ? 'text-indigo-600' : 'text-slate-400'
+                            className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs ${pathname === '/network' ? 'text-[#ffb955]' : 'text-[#8e909d]'
                                 }`}
                         >
                             <svg className="w-4 h-4" fill={pathname === '/network' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -339,7 +339,7 @@ export function TopBar() {
                         </Link>
                         <Link
                             href="/messages"
-                            className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs ${pathname === '/messages' ? 'text-indigo-600' : 'text-slate-400'
+                            className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-xs ${pathname === '/messages' ? 'text-[#ffb955]' : 'text-[#8e909d]'
                                 }`}
                         >
                             <svg className="w-4 h-4" fill={pathname === '/messages' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">

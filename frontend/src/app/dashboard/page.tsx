@@ -17,7 +17,7 @@ function generateHeatmapData() {
 
 const EMPTY_HEATMAP = new Array(91).fill(0);
 
-const HEAT_COLORS = ['bg-slate-100', 'bg-emerald-200', 'bg-emerald-300', 'bg-emerald-400', 'bg-emerald-600'];
+const HEAT_COLORS = ['bg-[#1f2a3d]', 'bg-emerald-800', 'bg-emerald-600', 'bg-emerald-400', 'bg-emerald-300'];
 
 /* ─── Score Ring ─── */
 function ScoreRing({ score, size = 120 }: { score: number; size?: number }) {
@@ -29,12 +29,12 @@ function ScoreRing({ score, size = 120 }: { score: number; size?: number }) {
     return (
         <div className="relative" style={{ width: size, height: size }}>
             <svg className="st-progress-ring" width={size} height={size}>
-                <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="currentColor" className="text-slate-100" strokeWidth={10} />
+                <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="currentColor" className="text-[#1f2a3d]" strokeWidth={10} />
                 <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="url(#scoreGrad)" strokeWidth={10} strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={offset} />
-                <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#6366F1" /><stop offset="100%" stopColor="#A855F7" /></linearGradient></defs>
+                <defs><linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#ffb955" /><stop offset="100%" stopColor="#e09a30" /></linearGradient></defs>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-bold text-slate-900 tabular-nums">{score}</span>
+                <span className="text-3xl font-bold text-[#d7e3fc] tabular-nums">{score}</span>
                 <span className={`text-[11px] font-semibold ${gradeColor}`}>{grade}</span>
             </div>
         </div>
@@ -73,7 +73,7 @@ export default function DashboardPage() {
     }, []);
 
     if (loading) return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-[#071325]">
             <TopBar />
             <main className="max-w-6xl mx-auto px-4 lg:px-6 py-6 pb-24 lg:pb-8">
                 <div className="grid lg:grid-cols-3 gap-5">
@@ -104,7 +104,7 @@ export default function DashboardPage() {
 
     // TODO: Fetch from /api/recommended-problems → setRecommendedProblems()
 
-    const diffColor = (d: string) => d === 'Easy' ? 'bg-emerald-50 text-emerald-700' : d === 'Medium' ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700';
+    const diffColor = (d: string) => d === 'Easy' ? 'bg-emerald-900/50 text-emerald-400' : d === 'Medium' ? 'bg-amber-900/50 text-amber-400' : 'bg-rose-900/50 text-rose-400';
 
     const hour = new Date().getHours();
     const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : hour < 21 ? 'Good evening' : 'Night owl mode';
@@ -117,16 +117,16 @@ export default function DashboardPage() {
                 : `Last chance to maintain your ${streak}-day streak!`;
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-[#071325]">
             <TopBar />
 
             <main className="max-w-6xl mx-auto px-4 lg:px-6 py-5 pb-28 lg:pb-8">
                 {/* Smart Greeting (PRO Bible 5.1) */}
                 <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
-                    <p className="text-sm text-slate-500">{greeting}</p>
-                    <h1 className="text-xl font-bold text-slate-900 st-font-heading">{displayName} 👋</h1>
+                    <p className="text-sm text-[#8e909d]">{greeting}</p>
+                    <h1 className="text-xl font-bold text-[#d7e3fc] st-font-heading">{displayName} 👋</h1>
                     {archetype && <p className="text-xs text-indigo-500 mt-0.5">🧬 {archetype}</p>}
-                    <p className="text-xs text-slate-400 mt-1">{smartMessage}</p>
+                    <p className="text-xs text-[#8e909d] mt-1">{smartMessage}</p>
                 </motion.div>
 
                 {/* Assessment CTA (if no assessment yet) */}
@@ -159,10 +159,10 @@ export default function DashboardPage() {
                                 <Link href="/score" className="block st-card p-5 hover:shadow-xl group h-full">
                                     <div className="flex items-center justify-between mb-3">
                                         <div>
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Mentixy Score™</p>
+                                            <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Mentixy Score™</p>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+12 ↑</span>
-                                                <span className="text-[10px] text-slate-400">vs yesterday</span>
+                                                <span className="text-xs font-semibold text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded-full">+12 ↑</span>
+                                                <span className="text-[10px] text-[#8e909d]">vs yesterday</span>
                                             </div>
                                         </div>
                                         <ScoreRing score={score} size={100} />
@@ -176,10 +176,10 @@ export default function DashboardPage() {
                                             { label: 'Skills', w: 70, color: 'bg-violet-400' },
                                         ].map(c => (
                                             <div key={c.label} className="flex-1">
-                                                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                <div className="h-1.5 bg-[#1f2a3d] rounded-full overflow-hidden">
                                                     <div className={`h-full ${c.color} rounded-full transition-all`} style={{ width: `${c.w}%` }} />
                                                 </div>
-                                                <p className="text-[9px] text-slate-400 mt-0.5 text-center">{c.label}</p>
+                                                <p className="text-[9px] text-[#8e909d] mt-0.5 text-center">{c.label}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -192,16 +192,16 @@ export default function DashboardPage() {
                                     <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-amber-50 to-orange-50 rounded-bl-[60px] -translate-y-2 translate-x-2" />
                                     <div className="relative z-10">
                                         <div className="flex items-center justify-between mb-3">
-                                            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Daily Challenge</p>
+                                            <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Daily Challenge</p>
                                             {dailyChallenge && <span className="text-xs text-slate-400">⏱ {dailyChallenge.timeLeft} left</span>}
                                         </div>
                                         {dailyChallenge ? (
                                             <>
-                                                <h3 className="font-bold text-slate-900 mb-1 group-hover:text-indigo-600 transition-colors">{dailyChallenge.title}</h3>
+                                                <h3 className="font-bold text-[#d7e3fc] mb-1 group-hover:text-[#ffb955] transition-colors">{dailyChallenge.title}</h3>
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${diffColor(dailyChallenge.difficulty)}`}>{dailyChallenge.difficulty}</span>
-                                                    <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{dailyChallenge.company}</span>
-                                                    <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{dailyChallenge.topic}</span>
+                                                    <span className="text-[10px] text-[#8e909d] bg-[#1f2a3d] px-2 py-0.5 rounded-full">{dailyChallenge.company}</span>
+                                                    <span className="text-[10px] text-[#8e909d] bg-[#1f2a3d] px-2 py-0.5 rounded-full">{dailyChallenge.topic}</span>
                                                 </div>
                                                 <div className="flex items-center justify-between">
                                                     <span className="text-sm font-semibold text-indigo-600 group-hover:translate-x-1 transition-transform inline-block">Solve Now →</span>
@@ -211,10 +211,10 @@ export default function DashboardPage() {
                                         ) : (
                                             <div className="text-center py-4">
                                                 <p className="text-2xl mb-2">⚡</p>
-                                                <p className="text-sm font-semibold text-slate-900 mb-1">Solve Today&apos;s Problem</p>
-                                                <p className="text-xs text-slate-500 mb-2">Practice one problem daily to build consistency</p>
-                                                <span className="text-xs font-semibold text-indigo-600 group-hover:underline">Start practicing →</span>
-                                                <p className="text-xs text-slate-400 mt-2">🔥 {streak} day streak</p>
+                                                <p className="text-sm font-semibold text-[#d7e3fc] mb-1">Solve Today&apos;s Problem</p>
+                                                <p className="text-xs text-[#8e909d] mb-2">Practice one problem daily to build consistency</p>
+                                                <span className="text-xs font-semibold text-[#ffb955] group-hover:underline">Start practicing →</span>
+                                                <p className="text-xs text-[#8e909d] mt-2">🔥 {streak} day streak</p>
                                             </div>
                                         )}
                                     </div>
@@ -226,18 +226,18 @@ export default function DashboardPage() {
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                             <div className="st-card p-5">
                                 <div className="flex items-center justify-between mb-3">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Next in Your Roadmap</p>
-                                    <Link href="/roadmap" className="text-xs text-indigo-600 font-medium hover:underline">View all →</Link>
+                                    <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Next in Your Roadmap</p>
+                                    <Link href="/roadmap" className="text-xs text-[#ffb955] font-medium hover:underline">View all →</Link>
                                 </div>
-                                <div className="flex items-center gap-4 bg-gradient-to-r from-indigo-50 to-violet-50 rounded-xl p-4 border border-indigo-100">
+                                <div className="flex items-center gap-4 bg-[#ffb955]/5 rounded-xl p-4 border border-[#ffb955]/15">
                                     <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-xl flex items-center justify-center text-white text-lg shrink-0">✅</div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-sm text-slate-900">Take SQL Verification Quiz</p>
-                                        <p className="text-xs text-slate-500 mt-0.5">Closes your SQL gap — appears in 94% of Data Analyst jobs</p>
+                                        <p className="font-semibold text-sm text-[#d7e3fc]">Take SQL Verification Quiz</p>
+                                        <p className="text-xs text-[#8e909d] mt-0.5">Closes your SQL gap — appears in 94% of Data Analyst jobs</p>
                                     </div>
                                     <div className="text-right shrink-0">
-                                        <p className="text-[10px] text-slate-400">~20 min</p>
-                                        <Link href="/skills" className="text-xs font-semibold text-indigo-600 hover:underline mt-1 inline-block">Start →</Link>
+                                        <p className="text-[10px] text-[#8e909d]">~20 min</p>
+                                        <Link href="/skills" className="text-xs font-semibold text-[#ffb955] hover:underline mt-1 inline-block">Start →</Link>
                                     </div>
                                 </div>
                             </div>
@@ -247,25 +247,25 @@ export default function DashboardPage() {
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                             <div className="st-card p-5">
                                 <div className="flex items-center justify-between mb-4">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Recommended For You</p>
-                                    <Link href="/practice" className="text-xs text-indigo-600 font-medium hover:underline">All problems →</Link>
+                                    <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Recommended For You</p>
+                                    <Link href="/practice" className="text-xs text-[#ffb955] font-medium hover:underline">All problems →</Link>
                                 </div>
                                 <div className="space-y-2">
                                     {recommendedProblems.length > 0 ? recommendedProblems.map((p, i) => (
-                                        <Link key={i} href="/practice" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors group">
-                                            <div className="w-7 h-7 bg-slate-100 rounded-lg flex items-center justify-center text-xs font-bold text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">{i + 1}</div>
+                                        <Link key={i} href="/practice" className="flex items-center gap-3 p-3 rounded-xl hover:bg-[#1f2a3d] transition-colors group">
+                                            <div className="w-7 h-7 bg-[#1f2a3d] rounded-lg flex items-center justify-center text-xs font-bold text-[#8e909d] group-hover:bg-[#ffb955]/10 group-hover:text-[#ffb955] transition-colors">{i + 1}</div>
                                             <div className="flex-1 min-w-0">
-                                                <p className="text-sm font-medium text-slate-900 group-hover:text-indigo-600 transition-colors">{p.title}</p>
-                                                <p className="text-[10px] text-slate-400">{p.topic}</p>
+                                                <p className="text-sm font-medium text-[#d7e3fc] group-hover:text-[#ffb955] transition-colors">{p.title}</p>
+                                                <p className="text-[10px] text-[#8e909d]">{p.topic}</p>
                                             </div>
                                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${diffColor(p.diff)}`}>{p.diff}</span>
-                                            <span className="text-[10px] text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full hidden sm:block">{p.company}</span>
+                                            <span className="text-[10px] text-[#8e909d] bg-[#1f2a3d] px-2 py-0.5 rounded-full hidden sm:block">{p.company}</span>
                                         </Link>
                                     )) : (
                                         <div className="text-center py-6">
                                             <p className="text-2xl mb-2">💡</p>
-                                            <p className="text-xs text-slate-500">Complete your assessment to get personalized recommendations</p>
-                                            <Link href="/practice" className="text-xs text-indigo-600 font-semibold hover:underline mt-2 inline-block">Browse all problems →</Link>
+                                            <p className="text-xs text-[#8e909d]">Complete your assessment to get personalized recommendations</p>
+                                            <Link href="/practice" className="text-xs text-[#ffb955] font-semibold hover:underline mt-2 inline-block">Browse all problems →</Link>
                                         </div>
                                     )}
                                 </div>
@@ -276,8 +276,8 @@ export default function DashboardPage() {
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
                             <div className="st-card p-5">
                                 <div className="flex items-center justify-between mb-4">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Activity — Last 90 Days</p>
-                                    <span className="text-xs text-emerald-600 font-semibold">🔥 {streak} day streak</span>
+                                    <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Activity — Last 90 Days</p>
+                                    <span className="text-xs text-emerald-400 font-semibold">🔥 {streak} day streak</span>
                                 </div>
                                 <div className="grid grid-cols-13 gap-[3px]">
                                     {heatmap.map((v, i) => (
@@ -285,9 +285,9 @@ export default function DashboardPage() {
                                     ))}
                                 </div>
                                 <div className="flex items-center justify-end gap-1 mt-2">
-                                    <span className="text-[9px] text-slate-400">Less</span>
+                                    <span className="text-[9px] text-[#8e909d]">Less</span>
                                     {HEAT_COLORS.map((c, i) => <div key={i} className={`w-2.5 h-2.5 rounded-sm ${c}`} />)}
-                                    <span className="text-[9px] text-slate-400">More</span>
+                                    <span className="text-[9px] text-[#8e909d]">More</span>
                                 </div>
                             </div>
                         </motion.div>
@@ -298,28 +298,28 @@ export default function DashboardPage() {
                         {/* Campus Wars Widget */}
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                             <Link href="/leaderboard" className="block st-card p-5 hover:shadow-xl group">
-                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Campus Wars</p>
+                                <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider mb-3">Campus Wars</p>
                                 {campusRank ? (
                                     <>
                                         <div className="flex items-center gap-3 mb-3">
                                             <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-2xl shadow-sm">⚔️</div>
                                             <div>
-                                                <p className="text-2xl font-bold text-slate-900">#{campusRank.rank}</p>
-                                                <p className="text-xs text-slate-500">out of {campusRank.total} colleges</p>
+                                                <p className="text-2xl font-bold text-[#d7e3fc]">#{campusRank.rank}</p>
+                                                <p className="text-xs text-[#8e909d]">out of {campusRank.total} colleges</p>
                                             </div>
-                                            <span className="ml-auto text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">▲{campusRank.change}</span>
+                                            <span className="ml-auto text-xs font-bold text-emerald-400 bg-emerald-900/30 px-2 py-1 rounded-full">▲{campusRank.change}</span>
                                         </div>
-                                        <div className="flex items-center justify-between text-xs text-slate-500 border-t border-slate-100 pt-3">
+                                        <div className="flex items-center justify-between text-xs text-[#8e909d] border-t border-[#1f2a3d] pt-3">
                                             <span>Your contribution today</span>
-                                            <span className="font-bold text-indigo-600">+{campusRank.points} pts</span>
+                                            <span className="font-bold text-[#ffb955]">+{campusRank.points} pts</span>
                                         </div>
                                     </>
                                 ) : (
                                     <div className="flex items-center gap-3">
                                         <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-2xl shadow-sm">⚔️</div>
                                         <div>
-                                            <p className="text-sm font-semibold text-slate-900">Join Campus Wars</p>
-                                            <p className="text-xs text-slate-500">Help your college climb the ranks →</p>
+                                            <p className="text-sm font-semibold text-[#d7e3fc]">Join Campus Wars</p>
+                                            <p className="text-xs text-[#8e909d]">Help your college climb the ranks →</p>
                                         </div>
                                     </div>
                                 )}
@@ -330,8 +330,8 @@ export default function DashboardPage() {
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
                             <div className="st-card p-5">
                                 <div className="flex items-center justify-between mb-3">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Skill Health</p>
-                                    <Link href="/skills" className="text-xs text-indigo-600 font-medium hover:underline">All skills →</Link>
+                                    <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Skill Health</p>
+                                    <Link href="/skills" className="text-xs text-[#ffb955] font-medium hover:underline">All skills →</Link>
                                 </div>
                                 {skills.length > 0 ? (
                                     <div className="space-y-3">
@@ -339,15 +339,15 @@ export default function DashboardPage() {
                                             <div key={i} className="flex items-center gap-3">
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center justify-between mb-1">
-                                                        <span className="text-sm font-medium text-slate-900">{s.name}</span>
+                                                        <span className="text-sm font-medium text-[#d7e3fc]">{s.name}</span>
                                                         {s.score > 0 ? (
-                                                            <span className="text-xs font-bold text-indigo-600">{s.score}%</span>
+                                                            <span className="text-xs font-bold text-[#ffb955]">{s.score}%</span>
                                                         ) : (
-                                                            <span className="text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded-full font-medium">Verify</span>
+                                                            <span className="text-[10px] text-amber-400 bg-amber-900/30 px-1.5 py-0.5 rounded-full font-medium">Verify</span>
                                                         )}
                                                     </div>
-                                                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                                        <div className={`h-full rounded-full transition-all duration-700 ${s.score >= 70 ? 'bg-emerald-400' : s.score >= 40 ? 'bg-amber-400' : 'bg-slate-200'}`}
+                                                    <div className="h-1.5 bg-[#1f2a3d] rounded-full overflow-hidden">
+                                                        <div className={`h-full rounded-full transition-all duration-700 ${s.score >= 70 ? 'bg-emerald-400' : s.score >= 40 ? 'bg-amber-400' : 'bg-[#2a3548]'}`}
                                                             style={{ width: `${s.score}%` }} />
                                                     </div>
                                                     {s.expiry && (
@@ -370,11 +370,11 @@ export default function DashboardPage() {
                         {/* Peer Activity */}
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
                             <Link href="/community" className="block st-card p-5 hover:shadow-xl group">
-                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Community</p>
+                                <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider mb-3">Community</p>
                                 <div className="text-center py-4">
                                     <p className="text-2xl mb-2">👥</p>
-                                    <p className="text-xs text-slate-500 mb-1">Join the community to see peer activity</p>
-                                    <span className="text-xs font-semibold text-indigo-600 group-hover:underline">Explore community →</span>
+                                    <p className="text-xs text-[#8e909d] mb-1">Join the community to see peer activity</p>
+                                    <span className="text-xs font-semibold text-[#ffb955] group-hover:underline">Explore community →</span>
                                 </div>
                             </Link>
                         </motion.div>
@@ -383,12 +383,12 @@ export default function DashboardPage() {
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.32 }}>
                             <Link href="/profile" className="block st-card p-5 hover:shadow-xl group">
                                 <div className="flex items-center justify-between mb-3">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Profile Views</p>
+                                    <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider">Profile Views</p>
                                 </div>
                                 <div className="text-center py-4">
                                     <p className="text-2xl mb-2">👁️</p>
-                                    <p className="text-xs text-slate-500 mb-1">Complete your profile to attract recruiters</p>
-                                    <span className="text-xs font-semibold text-indigo-600 group-hover:underline">Complete profile →</span>
+                                    <p className="text-xs text-[#8e909d] mb-1">Complete your profile to attract recruiters</p>
+                                    <span className="text-xs font-semibold text-[#ffb955] group-hover:underline">Complete profile →</span>
                                 </div>
                             </Link>
                         </motion.div>
@@ -396,7 +396,7 @@ export default function DashboardPage() {
                         {/* Quick Tools */}
                         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
                             <div className="st-card p-5">
-                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Quick Access</p>
+                                <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider mb-3">Quick Access</p>
                                 <div className="grid grid-cols-3 gap-2">
                                     {[
                                         { icon: '💬', label: 'AI Chat', href: '/chat' },
@@ -406,9 +406,9 @@ export default function DashboardPage() {
                                         { icon: '🎭', label: 'Interview', href: '/simulator' },
                                         { icon: '👨‍👩‍👧', label: 'Parents', href: '/parent' },
                                     ].map(t => (
-                                        <Link key={t.href} href={t.href} className="flex flex-col items-center gap-1 p-2.5 rounded-xl hover:bg-slate-50 transition-colors group">
+                                        <Link key={t.href} href={t.href} className="flex flex-col items-center gap-1 p-2.5 rounded-xl hover:bg-[#1f2a3d] transition-colors group">
                                             <span className="text-lg group-hover:scale-110 transition-transform">{t.icon}</span>
-                                            <span className="text-[10px] font-medium text-slate-500">{t.label}</span>
+                                            <span className="text-[10px] font-medium text-[#8e909d]">{t.label}</span>
                                         </Link>
                                     ))}
                                 </div>
@@ -419,11 +419,11 @@ export default function DashboardPage() {
                         {trending.length > 0 && (
                             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
                                 <div className="st-card p-5">
-                                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">🔥 Trending Skills</p>
+                                    <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider mb-3">🔥 Trending Skills</p>
                                     <div className="flex flex-wrap gap-2">
                                         {trending.slice(0, 8).map((s: any, i: number) => (
                                             <Link key={i} href={`/skills?career=${encodeURIComponent(s.name || s)}`}
-                                                className="text-xs px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-slate-600 hover:border-indigo-300 hover:text-indigo-600 transition-all font-medium">
+                                                className="text-xs px-2.5 py-1 bg-[#1f2a3d] border border-[#2a3548] rounded-lg text-[#b4c5e0] hover:border-[#ffb955]/40 hover:text-[#ffb955] transition-all font-medium">
                                                 {s.name || s}
                                             </Link>
                                         ))}

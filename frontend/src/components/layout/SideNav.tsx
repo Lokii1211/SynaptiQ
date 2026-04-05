@@ -64,14 +64,14 @@ export function SideNav() {
     const user = auth.getUser();
 
     return (
-        <aside className="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 h-screen sticky top-0 overflow-y-auto">
+        <aside className="hidden md:flex flex-col w-64 bg-[#0a1628] border-r border-[#1f2a3d] h-screen sticky top-0 overflow-y-auto">
             {/* Logo */}
-            <div className="px-6 py-5 border-b border-slate-100">
+            <div className="px-6 py-5 border-b border-[#1f2a3d]">
                 <Link href="/dashboard" className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-8 h-8 bg-gradient-to-br from-[#ffb955] to-[#e09a30] rounded-lg flex items-center justify-center text-[#071325] font-bold text-sm">
                         M
                     </div>
-                    <span className="text-lg font-bold text-slate-900">Ment<span className="text-indigo-600">ixy</span></span>
+                    <span className="text-lg font-bold text-[#d7e3fc]">Ment<span className="text-[#ffb955]">ixy</span></span>
                 </Link>
             </div>
 
@@ -79,7 +79,7 @@ export function SideNav() {
             <div className="flex-1 py-4 px-3 space-y-5 overflow-y-auto">
                 {SIDE_NAV.map(({ section, items }) => (
                     <div key={section}>
-                        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider px-3 mb-1.5">{section}</p>
+                        <p className="text-[10px] font-semibold text-[#8e909d] uppercase tracking-wider px-3 mb-1.5">{section}</p>
                         <div className="space-y-0.5">
                             {items.map(({ href, icon, label }) => {
                                 const isActive = pathname === href || pathname?.startsWith(href + '/');
@@ -88,8 +88,8 @@ export function SideNav() {
                                         key={href}
                                         href={href}
                                         className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive
-                                            ? 'bg-indigo-50 text-indigo-700 shadow-sm'
-                                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                                            ? 'bg-[#ffb955]/10 text-[#ffb955] shadow-sm'
+                                            : 'text-[#b4c5e0] hover:bg-[#1f2a3d] hover:text-[#d7e3fc]'
                                             }`}
                                     >
                                         <span className="text-base">{icon}</span>
@@ -103,27 +103,27 @@ export function SideNav() {
             </div>
 
             {/* User profile */}
-            <div className="border-t border-slate-100 p-4">
-                <Link href="/notifications" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
+            <div className="border-t border-[#1f2a3d] p-4">
+                <Link href="/notifications" className="flex items-center gap-3 px-3 py-2 text-sm text-[#b4c5e0] hover:bg-[#1f2a3d] rounded-lg transition-colors mb-1">
                     <span>🔔</span><span>Notifications</span>
                 </Link>
-                <Link href="/refer" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
+                <Link href="/refer" className="flex items-center gap-3 px-3 py-2 text-sm text-[#b4c5e0] hover:bg-[#1f2a3d] rounded-lg transition-colors mb-1">
                     <span>🎁</span><span>Refer & Earn</span>
                 </Link>
-                <Link href="/help" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
+                <Link href="/help" className="flex items-center gap-3 px-3 py-2 text-sm text-[#b4c5e0] hover:bg-[#1f2a3d] rounded-lg transition-colors mb-1">
                     <span>❓</span><span>Help Center</span>
                 </Link>
-                <Link href="/settings" className="flex items-center gap-3 px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 rounded-lg transition-colors mb-1">
+                <Link href="/settings" className="flex items-center gap-3 px-3 py-2 text-sm text-[#b4c5e0] hover:bg-[#1f2a3d] rounded-lg transition-colors mb-1">
                     <span>⚙️</span><span>Settings</span>
                 </Link>
                 {user && (
                     <div className="flex items-center gap-3 px-3 py-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                        <div className="w-8 h-8 bg-gradient-to-br from-[#ffb955] to-[#e09a30] rounded-full flex items-center justify-center text-[#071325] text-xs font-bold">
                             {(user.profile?.display_name || user.display_name || 'U')[0].toUpperCase()}
                         </div>
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-slate-900 truncate">{user.profile?.display_name || user.display_name}</p>
-                            <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+                            <p className="text-sm font-medium text-[#d7e3fc] truncate">{user.profile?.display_name || user.display_name}</p>
+                            <p className="text-[10px] text-[#8e909d] truncate">{user.email}</p>
                         </div>
                     </div>
                 )}
