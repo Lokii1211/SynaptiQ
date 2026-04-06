@@ -421,12 +421,14 @@ export default function DashboardPage() {
                                 <div className="st-card p-5">
                                     <p className="text-xs font-semibold text-[#8e909d] uppercase tracking-wider mb-3">🔥 Trending Skills</p>
                                     <div className="flex flex-wrap gap-2">
-                                        {trending.slice(0, 8).map((s: any, i: number) => (
-                                            <Link key={i} href={`/skills?career=${encodeURIComponent(s.name || s)}`}
+                                        {trending.slice(0, 8).map((s: any, i: number) => {
+                                            const skillName = typeof s === 'string' ? s : (s.skill_name || s.name || s.label || 'Skill');
+                                            return (
+                                            <Link key={i} href={`/skills?career=${encodeURIComponent(skillName)}`}
                                                 className="text-xs px-2.5 py-1 bg-[#1f2a3d] border border-[#2a3548] rounded-lg text-[#b4c5e0] hover:border-[#ffb955]/40 hover:text-[#ffb955] transition-all font-medium">
-                                                {s.name || s}
-                                            </Link>
-                                        ))}
+                                                {skillName}
+                                            </Link>);
+                                        })}
                                     </div>
                                 </div>
                             </motion.div>
