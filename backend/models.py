@@ -169,7 +169,7 @@ class Question(Base):
     question_type = Column(String(20), nullable=False)
     category = Column(String(50))
     sub_category = Column(String(100))
-    difficulty = Column(Integer)
+    difficulty = Column(String(10))  # easy|medium|hard
     question_text = Column(Text, nullable=False)
     options = Column(JSON)
     correct_answer = Column(String(10))
