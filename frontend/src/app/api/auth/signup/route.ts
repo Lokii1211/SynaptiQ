@@ -6,7 +6,12 @@ import { hashPassword, createToken, jsonResponse, errorResponse } from "@/lib/se
 
 export async function POST(req: NextRequest) {
     try {
-        const { email, name, password, age, education_level, city, institution, careerInterest } = await req.json();
+        const body = await req.json();
+        const email = body.email;
+        const name = body.display_name || body.name;
+        const password = body.password;
+        const username = body.username;
+        const { age, education_level, city, institution, careerInterest } = body;
         if (!email || !name || !password) return errorResponse("Email, name and password are required");
         if (password.length < 6) return errorResponse("Password must be at least 6 characters");
 
