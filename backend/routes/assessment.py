@@ -80,12 +80,18 @@ def start_assessment(req: StartReq, user: User = Depends(require_user), db: Sess
     db.commit()
     db.refresh(session)
     questions = db.query(Question).filter(Question.is_assessment_question == True, Question.is_active == True).limit(20).all()
+    if questions:
+        return {
+            "session_id": session.id,
+            "questions": [{
+                "id": q.id, "question_text": q.question_text, "options": q.options,
+                "category": q.category, "question_type": q.question_type,
+            } for q in questions]
+        }
+    # Fallback: return built-in psychometric questions
     return {
         "session_id": session.id,
-        "questions": [{
-            "id": q.id, "question_text": q.question_text, "options": q.options,
-            "category": q.category, "question_type": q.question_type,
-        } for q in questions]
+        "questions": BUILTIN_ASSESSMENT_QUESTIONS,
     }
 
 

@@ -30,26 +30,24 @@ export default function AssessmentPage() {
         if (!sessionId) return;
 
         const q = questions[currentIndex];
-        addAnswer({
+        const newAnswer = {
             question_id: q.id,
             selected_option: selectedOption,
             time_spent_ms: timeMs,
             question_order: currentIndex + 1,
-        });
+        };
+        addAnswer(newAnswer);
 
         if (currentIndex + 1 >= questions.length) {
             setPhase('submitting');
             try {
-                const allAnswers = [
-                    ...answers,
-                    { question_id: q.id, selected_option: selectedOption, time_spent_ms: timeMs, question_order: currentIndex + 1 },
-                ];
+                const allAnswers = [...answers, newAnswer];
                 const result = await api.submitAssessment(sessionId, allAnswers);
                 setResults(result);
                 setPhase('results');
             } catch (e: any) {
-                setError(e.message || 'Submission failed');
-                setPhase('questions');
+                setError(e.message || 'Submission failed. Please try again.');
+                setPhase('submitting'); // stay on submitting screen with error, not loop back
             }
         } else {
             nextQuestion();
@@ -142,6 +140,17 @@ export default function AssessmentPage() {
 
     // Submitting
     if (phase === 'submitting') {
+        const retrySubmit = async () => {
+            setError('');
+            try {
+                const result = await api.submitAssessment(sessionId!, answers);
+                setResults(result);
+                setPhase('results');
+            } catch (e: any) {
+                setError(e.message || 'Submission failed. Please try again.');
+            }
+        };
+
         return (
             <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 flex flex-col items-center justify-center p-8">
                 <motion.div
@@ -149,32 +158,50 @@ export default function AssessmentPage() {
                     animate={{ scale: 1, opacity: 1 }}
                     className="text-center"
                 >
-                    <div className="w-20 h-20 border-4 border-white/20 border-t-white rounded-full animate-spin mb-8 mx-auto" />
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="text-white text-xl font-semibold mb-2"
-                    >
-                        Building your career profile...
-                    </motion.p>
-                    <div className="space-y-2 mt-6">
-                        {[
-                            { text: '🧬 Analyzing response patterns', delay: 0.5 },
-                            { text: '📊 Mapping your 4D dimensions', delay: 1.5 },
-                            { text: '🎯 Finding career matches', delay: 2.5 },
-                            { text: '🗺️ Generating your roadmap', delay: 3.5 },
-                        ].map((item) => (
-                            <motion.p key={item.text}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 0.7, x: 0 }}
-                                transition={{ delay: item.delay }}
-                                className="text-white/60 text-sm"
+                    {error ? (
+                        <>
+                            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <span className="text-4xl">⚠️</span>
+                            </div>
+                            <p className="text-white text-xl font-semibold mb-2">Submission Issue</p>
+                            <p className="text-white/60 text-sm mb-6 max-w-sm">{error}</p>
+                            <button
+                                onClick={retrySubmit}
+                                className="px-8 py-3 bg-white text-indigo-700 rounded-xl font-semibold hover:bg-white/90 transition-colors"
                             >
-                                {item.text}
+                                Retry Submission →
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <div className="w-20 h-20 border-4 border-white/20 border-t-white rounded-full animate-spin mb-8 mx-auto" />
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 0.3 }}
+                                className="text-white text-xl font-semibold mb-2"
+                            >
+                                Building your career profile...
                             </motion.p>
-                        ))}
-                    </div>
+                            <div className="space-y-2 mt-6">
+                                {[
+                                    { text: '🧬 Analyzing response patterns', delay: 0.5 },
+                                    { text: '📊 Mapping your 4D dimensions', delay: 1.5 },
+                                    { text: '🎯 Finding career matches', delay: 2.5 },
+                                    { text: '🗺️ Generating your roadmap', delay: 3.5 },
+                                ].map((item) => (
+                                    <motion.p key={item.text}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 0.7, x: 0 }}
+                                        transition={{ delay: item.delay }}
+                                        className="text-white/60 text-sm"
+                                    >
+                                        {item.text}
+                                    </motion.p>
+                                ))}
+                            </div>
+                        </>
+                    )}
                 </motion.div>
             </div>
         );
